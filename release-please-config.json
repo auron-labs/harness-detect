@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "include-v-in-tag": true,
+  "packages": {
+    "packages/typescript": {
+      "release-type": "node",
+      "include-component-in-tag": true,
+      "component": "typescript"
+    },
+    "packages/golang": {
+      "release-type": "go",
+      "include-component-in-tag": true,
+      "component": "packages/golang",
+      "tag-separator": "/"
+    },
+    "packages/rust": {
+      "release-type": "rust",
+      "include-component-in-tag": true,
+      "component": "rust"
+    },
+    "packages/python": {
+      "release-type": "python",
+      "include-component-in-tag": true,
+      "component": "python"
+    }
+  }
+}

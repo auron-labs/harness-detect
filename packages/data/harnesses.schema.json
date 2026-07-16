@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/auron/harness-detect/packages/data/harnesses.schema.json",
+  "title": "Harness registry",
+  "description": "Schema for the harness-detect registry (packages/data/harnesses.json).",
+  "type": "object",
+  "required": ["version", "harnesses"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "description": "Registry schema version. Additive harness metadata such as installations[] remains version 1; bump only for incompatible registry shape changes.",
+      "type": "integer",
+      "enum": [1]
+    },
+    "harnesses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "aliases", "executables", "paths", "env", "sources", "support", "installations"],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "aliases": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "executables": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "paths": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/HarnessPathSpec" }
+          },
+          "roots": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/HarnessRootDef" }
+          },
+          "env": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/HarnessEnvVar" }
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/HttpsUrl" }
+          },
+          "support": {
+            "description": "Required descriptive support metadata. All support categories and both scopes must be populated explicitly for every harness; use status/confidence 'unknown' rather than omitting unsupported or unknown data.",
+            "$ref": "#/$defs/HarnessSupport"
+          },
+          "installations": {
+            "description": "Descriptive install metadata only. This additive field does not change registry version 1 and is not detection evidence.",
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/$defs/HarnessInstallation" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "Platform": {
+      "type": "string",
+      "enum": ["aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"]
+    },
+    "HarnessPathSpec": {
+      "type": "object",
+      "required": ["id", "category", "kind", "template"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "enum": ["install", "config", "state", "cache", "project"]
+        },
+        "kind": {
+          "enum": ["file", "dir"]
+        },
+        "template": {
+          "type": "string",
+          "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{[A-Z_][A-Z0-9_]*\\})*$"
+        },
+        "platforms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Platform" }
+        }
+      }
+    },
+    "HarnessInstallation": {
+      "type": "object",
+      "required": ["method"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["npm", "homebrew", "pip", "pipx", "uv", "cargo", "go", "script", "manual", "marketplace", "binary", "unknown"]
+        },
+        "package": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": { "$ref": "#/$defs/HttpsUrl" },
+        "marketplace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "platforms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Platform" }
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HttpsUrl": {
+      "type": "string",
+      "pattern": "^https://.+$"
+    },
+    "HarnessSupport": {
+      "type": "object",
+      "required": ["config", "skills", "commands", "agents", "dotAgents"],
+      "additionalProperties": false,
+      "properties": {
+        "config": { "$ref": "#/$defs/HarnessSupportArea" },
+        "skills": { "$ref": "#/$defs/HarnessSupportArea" },
+        "commands": { "$ref": "#/$defs/HarnessSupportArea" },
+        "agents": { "$ref": "#/$defs/HarnessSupportArea" },
+        "dotAgents": { "$ref": "#/$defs/HarnessSupportArea" }
+      }
+    },
+    "HarnessSupportArea": {
+      "type": "object",
+      "required": ["global", "local"],
+      "additionalProperties": false,
+      "properties": {
+        "global": { "$ref": "#/$defs/HarnessSupportScope" },
+        "local": { "$ref": "#/$defs/HarnessSupportScope" }
+      }
+    },
+    "HarnessSupportScope": {
+      "type": "object",
+      "required": ["status", "paths", "sources", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["supported", "unsupported", "unknown"]
+        },
+        "paths": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HarnessSupportPath" }
+        },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HttpsUrl" }
+        },
+        "confidence": {
+          "type": "string",
+          "enum": ["official", "source", "observed", "inferred", "unknown"]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HarnessSupportPath": {
+      "type": "object",
+      "required": ["id", "kind", "template"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": ["file", "dir"]
+        },
+        "template": {
+          "type": "string",
+          "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{[A-Z_][A-Z0-9_]*\\})*$"
+        },
+        "platforms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Platform" }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HarnessEnvVar": {
+      "type": "object",
+      "required": ["name", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "HarnessRootDef": {
+      "type": "object",
+      "required": ["name", "fallback"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "env": {
+          "type": "string",
+          "minLength": 1
+        },
+        "use": {
+          "type": "string",
+          "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{[A-Z_][A-Z0-9_]*\\})*$"
+        },
+        "fallback": {
+          "type": "string",
+          "pattern": "^(?:[^$]|\\$(?!\\{)|\\$\\{[A-Z_][A-Z0-9_]*\\})*$"
+        }
+      }
+    }
+  }
+}

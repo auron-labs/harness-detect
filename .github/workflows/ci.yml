@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('packages/typescript/bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
+
+      - name: Install TypeScript dependencies
+        run: bun install --frozen-lockfile
+        working-directory: packages/typescript
+
+      - name: Check registry drift
+        run: bun scripts/sync-registry.mjs --check
+
+      - name: Check support matrix drift
+        run: node scripts/generate-support-matrix.mjs --check
+
+      - name: Generate Automd stats
+        run: bunx automd --dir ../..
+        working-directory: packages/typescript
+
+      - name: Check Automd docs freshness
+        run: git diff --exit-code -- README.md docs/index.md docs/api.md docs/configuration.md
+
+      - name: TypeScript tests
+        run: bun test
+        working-directory: packages/typescript
+
+      - name: TypeScript dependency audit
+        run: bun audit
+        working-directory: packages/typescript
+
+      - name: TypeScript typecheck
+        run: bun run types:check
+        working-directory: packages/typescript
+
+      - name: TypeScript smoke fixtures
+        run: bun run smoke:fixtures:local | tee smoke-output.txt
+        working-directory: packages/typescript
+
+      - name: Upload smoke output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: smoke-output
+          path: packages/typescript/smoke-output.txt
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: TypeScript pack dry-run
+        run: bun pm pack --dry-run
+        working-directory: packages/typescript
+
+      - name: Check API parity
+        run: bun scripts/check-api-parity.mjs
+
+      - name: Setup Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: packages/golang/go.mod
+          cache: true
+
+      - name: Go tests
+        run: go test ./...
+        working-directory: packages/golang
+
+      - name: Go vet
+        run: go vet ./...
+        working-directory: packages/golang
+
+      - name: Go external consumer check
+        run: node scripts/check-go-consumer.mjs
+
+      - name: Go vulnerability check
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...
+        working-directory: packages/golang
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+        with:
+          components: rustfmt, clippy
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@42dc69e1aa15d09112580998cf2ef0119e2e91ae # v2
+        with:
+          workspaces: packages/rust
+
+      - name: Rust format check
+        run: cargo fmt --check
+        working-directory: packages/rust
+
+      - name: Rust clippy
+        run: cargo clippy --all-targets
+        working-directory: packages/rust
+
+      - name: Rust tests
+        run: cargo test
+        working-directory: packages/rust
+
+      - name: Rust package validation
+        run: cargo package --allow-dirty
+        working-directory: packages/rust
+
+      - name: Rust dependency audit
+        run: |
+          cargo install cargo-audit --locked
+          cargo audit
+        working-directory: packages/rust
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: packages/python/uv.lock
+
+      - name: Install Python dependencies
+        run: uv sync --dev --frozen
+        working-directory: packages/python
+
+      - name: Check package parity
+        run: bun scripts/check-package-parity.mjs
+
+      - name: Python lint
+        run: uv run ruff check .
+        working-directory: packages/python
+
+      - name: Python format check
+        run: uv run ruff format --check .
+        working-directory: packages/python
+
+      - name: Python tests
+        run: uv run pytest
+        working-directory: packages/python
+
+      - name: Python package build
+        run: uv build
+        working-directory: packages/python
+
+      - name: Python dependency audit
+        run: uv run --with pip-audit pip-audit
+        working-directory: packages/python

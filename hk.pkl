@@ -1,0 +1,79 @@
+amends "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Builtins.pkl"
+
+local linters = new Mapping<String, Step> {
+  ["rustfmt"] = new Step {
+    check = "cargo fmt --check"
+    fix = "cargo fmt"
+    glob = "**/*.rs"
+    dir = "packages/rust"
+  }
+  ["cargo-clippy"] = new Step {
+    check = "cargo clippy --all-targets"
+    glob = "**/*.rs"
+    dir = "packages/rust"
+  }
+  ["ruff"] = new Step {
+    check = "uv run ruff check ."
+    fix = "uv run ruff check --fix ."
+    glob = "**/*.py"
+    dir = "packages/python"
+  }
+  ["ruff-format"] = new Step {
+    check = "uv run ruff format --check ."
+    fix = "uv run ruff format ."
+    glob = "**/*.py"
+    dir = "packages/python"
+  }
+  ["go-fmt"] = new Step {
+    check = "gofmt -l {{files}}"
+    fix = "gofmt -w {{files}}"
+    glob = "**/*.go"
+  }
+  ["go-vet"] = new Step {
+    check = "go vet ./..."
+    glob = "**/*.go"
+    dir = "packages/golang"
+  }
+  ["automd-docs"] = new Step {
+    check = "mise run docs:stats:generate && git diff --exit-code -- README.md docs/index.md docs/api.md docs/configuration.md"
+    fix = "mise run docs:stats:generate && git add README.md docs/index.md docs/api.md docs/configuration.md"
+    glob = "{README.md,docs/index.md,docs/api.md,docs/configuration.md,packages/data/harnesses.json}"
+  }
+  ["trailing-whitespace"] = Builtins.trailing_whitespace
+  ["check-merge-conflict"] = Builtins.check_merge_conflict
+  ["detect-private-key"] = Builtins.detect_private_key
+}
+
+hooks {
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+
+  ["commit-msg"] {
+    steps {
+      ["conventional-commit"] {
+        check = "hk util check-conventional-commit {{commit_msg_file}}"
+      }
+    }
+  }
+
+  ["pre-push"] {
+    steps {
+      ["registry-sync"] {
+        check = "node scripts/sync-registry.mjs --check"
+      }
+    }
+  }
+
+  ["check"] {
+    steps = linters
+  }
+
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+}

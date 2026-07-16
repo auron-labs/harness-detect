@@ -1,0 +1,56 @@
+{
+  "name": "@auron-labs/harness-detect",
+  "version": "0.1.0",
+  "description": "Detect installed LLM harnesses and their config/state locations.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auron/harness-detect.git"
+  },
+  "bugs": {
+    "url": "https://github.com/auron/harness-detect/issues"
+  },
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./index.d.ts",
+  "packageManager": "bun@1.3.14",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./data": "./data/harnesses.json"
+  },
+  "files": [
+    "src",
+    "data",
+    "index.d.ts"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "parity:check": "node ../../scripts/check-package-parity.mjs",
+    "perf": "node scripts/perf-smoke.js",
+    "registry:check": "node ../../scripts/sync-registry.mjs --check",
+    "registry:sync": "node ../../scripts/sync-registry.mjs",
+    "preinstall": "bunx only-allow bun",
+    "prepack": "bun run registry:sync",
+    "test": "bun test",
+    "types:check": "tsc --noEmit -p tsconfig.types.json",
+    "smoke:fixtures": "docker run --rm -v \"$PWD:/repo\" -w /repo oven/bun:1.3 bun run smoke:fixtures:local",
+    "smoke:fixtures:local": "bun scripts/smoke-fixtures.js"
+  },
+  "keywords": [
+    "llm",
+    "agent",
+    "harness",
+    "codex",
+    "claude",
+    "gemini"
+  ],
+  "devDependencies": {
+    "automd": "0.4.3",
+    "typescript": "^5.9.2"
+  },
+  "license": "MIT"
+}

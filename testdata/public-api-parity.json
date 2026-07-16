@@ -1,0 +1,344 @@
+{
+  "schemaVersion": 1,
+  "packages": {
+    "typescript": "@auron-labs/harness-detect",
+    "go": "github.com/auron/harness-detect/packages/golang/harnessdetect",
+    "rust": "harness-detect",
+    "python": "harness-detect"
+  },
+  "functions": [
+    {
+      "typescript": "checkHarness",
+      "go": "CheckHarness",
+      "rust": "check_harness",
+      "python": "check_harness"
+    },
+    {
+      "typescript": "detectHarnesses",
+      "go": "DetectHarnesses",
+      "rust": "detect_harnesses",
+      "python": "detect_harnesses"
+    },
+    {
+      "typescript": "detectInstalledHarnesses",
+      "go": "DetectInstalledHarnesses",
+      "rust": "detect_installed_harnesses",
+      "python": "detect_installed_harnesses"
+    },
+    {
+      "typescript": "getHarnessMatrix",
+      "go": "GetHarnessMatrix",
+      "rust": "get_harness_matrix",
+      "python": "get_harness_matrix"
+    },
+    {
+      "typescript": "getHarnessSupport",
+      "go": "GetHarnessSupport",
+      "rust": "get_harness_support",
+      "python": "get_harness_support"
+    },
+    {
+      "typescript": "getRawHarnessData",
+      "go": "GetRawHarnessData",
+      "rust": "get_raw_harness_data",
+      "python": "get_raw_harness_data"
+    },
+    {
+      "typescript": "listHarnessSupport",
+      "go": "ListHarnessSupport",
+      "rust": "list_harness_support",
+      "python": "list_harness_support"
+    },
+    {
+      "typescript": "listHarnesses",
+      "go": "ListHarnesses",
+      "rust": "list_harnesses",
+      "python": "list_harnesses"
+    }
+  ],
+  "coreFields": {
+    "HarnessMatrix": [
+      {
+        "json": "version",
+        "typescript": "version",
+        "go": "Version"
+      },
+      {
+        "json": "harnesses",
+        "typescript": "harnesses",
+        "go": "Harnesses"
+      }
+    ],
+    "HarnessDefinition": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "aliases",
+        "typescript": "aliases",
+        "go": "Aliases"
+      },
+      {
+        "json": "executables",
+        "typescript": "executables",
+        "go": "Executables"
+      },
+      {
+        "json": "installations",
+        "typescript": "installations",
+        "go": "Installations"
+      },
+      {
+        "json": "paths",
+        "typescript": "paths",
+        "go": "Paths"
+      },
+      {
+        "json": "roots",
+        "typescript": "roots",
+        "go": "Roots"
+      },
+      {
+        "json": "support",
+        "typescript": "support",
+        "go": "Support"
+      },
+      {
+        "json": "env",
+        "typescript": "env",
+        "go": "Env"
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      }
+    ],
+    "HarnessInstallation": [
+      {
+        "json": "method",
+        "typescript": "method",
+        "go": "Method"
+      },
+      {
+        "json": "package",
+        "typescript": "package",
+        "go": "Package",
+        "nullable": true
+      },
+      {
+        "json": "command",
+        "typescript": "command",
+        "go": "Command",
+        "nullable": true
+      },
+      {
+        "json": "url",
+        "typescript": "url",
+        "go": "URL",
+        "nullable": true
+      },
+      {
+        "json": "marketplace",
+        "typescript": "marketplace",
+        "go": "Marketplace",
+        "nullable": true
+      },
+      {
+        "json": "id",
+        "typescript": "id",
+        "go": "ID",
+        "nullable": true
+      },
+      {
+        "json": "platforms",
+        "typescript": "platforms",
+        "go": "Platforms",
+        "nullable": true
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes",
+        "nullable": true
+      }
+    ],
+    "HarnessSupportPath": [
+      {
+        "json": "id",
+        "typescript": "id",
+        "go": "ID"
+      },
+      {
+        "json": "kind",
+        "typescript": "kind",
+        "go": "Kind"
+      },
+      {
+        "json": "template",
+        "typescript": "template",
+        "go": "Template"
+      },
+      {
+        "json": "platforms",
+        "typescript": "platforms",
+        "go": "Platforms",
+        "nullable": true
+      },
+      {
+        "json": "description",
+        "typescript": "description",
+        "go": "Description",
+        "nullable": true
+      }
+    ],
+    "HarnessSupportLeaf": [
+      {
+        "json": "status",
+        "typescript": "status",
+        "go": "Status"
+      },
+      {
+        "json": "paths",
+        "typescript": "paths",
+        "go": "Paths"
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      },
+      {
+        "json": "confidence",
+        "typescript": "confidence",
+        "go": "Confidence"
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes",
+        "nullable": true
+      }
+    ],
+    "HarnessSupportArea": [
+      {
+        "json": "global",
+        "typescript": "global",
+        "go": "Global"
+      },
+      {
+        "json": "local",
+        "typescript": "local",
+        "go": "Local"
+      }
+    ],
+    "HarnessSupport": [
+      {
+        "json": "config",
+        "typescript": "config",
+        "go": "Config"
+      },
+      {
+        "json": "skills",
+        "typescript": "skills",
+        "go": "Skills"
+      },
+      {
+        "json": "commands",
+        "typescript": "commands",
+        "go": "Commands"
+      },
+      {
+        "json": "agents",
+        "typescript": "agents",
+        "go": "Agents"
+      },
+      {
+        "json": "dotAgents",
+        "typescript": "dotAgents",
+        "go": "DotAgents"
+      }
+    ],
+    "ResolvedHarnessPath": [
+      {
+        "json": "path",
+        "typescript": "path",
+        "go": "Path",
+        "nullable": true
+      },
+      {
+        "json": "exists",
+        "typescript": "exists",
+        "go": "Exists"
+      }
+    ],
+    "HarnessCheckResult": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "installed",
+        "typescript": "installed",
+        "go": "Installed"
+      },
+      {
+        "json": "executablePath",
+        "typescript": "executablePath",
+        "go": "ExecutablePath",
+        "nullable": true
+      },
+      {
+        "json": "harness",
+        "typescript": "harness",
+        "go": "Harness"
+      },
+      {
+        "json": "paths",
+        "typescript": "paths",
+        "go": "Paths"
+      },
+      {
+        "json": "matchedPaths",
+        "typescript": "matchedPaths",
+        "go": "MatchedPaths"
+      },
+      {
+        "json": "reasons",
+        "typescript": "reasons",
+        "go": "Reasons"
+      }
+    ],
+    "HarnessSupportRecord": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "support",
+        "typescript": "support",
+        "go": "Support",
+        "nullable": true
+      }
+    ]
+  }
+}

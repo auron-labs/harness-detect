@@ -1,0 +1,18 @@
+[package]
+name = "harness-detect"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Detect installed LLM harnesses and resolve their config/state paths from an embedded JSON registry."
+repository = "https://github.com/auron/harness-detect"
+keywords = ["llm", "harness", "detect", "codex", "claude"]
+categories = ["filesystem"]
+readme = "README.md"
+
+[lib]
+name = "harness_detect"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

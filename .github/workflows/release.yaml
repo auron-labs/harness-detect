@@ -1,0 +1,235 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      ecosystem:
+        description: Ecosystem to republish
+        required: true
+        type: choice
+        options:
+          - npm
+          - go
+          - cargo
+          - pypi
+      version:
+        description: Release version (semver without a leading v)
+        required: true
+        type: string
+      tag:
+        description: Release tag or ref to publish
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+      "packages/typescript--release_created": ${{ steps.release.outputs['packages/typescript--release_created'] }}
+      "packages/typescript--tag_name": ${{ steps.release.outputs['packages/typescript--tag_name'] }}
+      "packages/typescript--version": ${{ steps.release.outputs['packages/typescript--version'] }}
+      "packages/golang--release_created": ${{ steps.release.outputs['packages/golang--release_created'] }}
+      "packages/golang--tag_name": ${{ steps.release.outputs['packages/golang--tag_name'] }}
+      "packages/golang--version": ${{ steps.release.outputs['packages/golang--version'] }}
+      "packages/rust--release_created": ${{ steps.release.outputs['packages/rust--release_created'] }}
+      "packages/rust--tag_name": ${{ steps.release.outputs['packages/rust--tag_name'] }}
+      "packages/rust--version": ${{ steps.release.outputs['packages/rust--version'] }}
+      "packages/python--release_created": ${{ steps.release.outputs['packages/python--release_created'] }}
+      "packages/python--tag_name": ${{ steps.release.outputs['packages/python--tag_name'] }}
+      "packages/python--version": ${{ steps.release.outputs['packages/python--version'] }}
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@8b8fd2cc23b2e18957157a9d923d75aa0c6f6ad5 # v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  # Go has no separate registry publish step here: the packages/golang module is
+  # published by the git tag that release-please creates from the manifest config
+  # (`packages/golang/vX.Y.Z`). Go consumers still request it as `@vX.Y.Z`.
+
+  go-publish:
+    needs:
+      - release-please
+    if: ${{ always() && ((github.event_name == 'workflow_dispatch' && inputs.ecosystem == 'go') || (github.event_name == 'push' && needs.release-please.outputs['packages/golang--release_created'] == 'true')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/golang--tag_name'] }}
+      - name: Validate tag and version
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/golang--version'] }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/golang--tag_name'] }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "VERSION must be a semver version without a leading v"
+            exit 1
+          fi
+          test "$TAG" = "packages/golang/v$VERSION"
+      - name: Setup Go
+        uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: packages/golang/go.mod
+          cache: true
+      - name: Go tests
+        run: go test ./...
+        working-directory: packages/golang
+      - name: Go vet
+        run: go vet ./...
+        working-directory: packages/golang
+
+  npm-publish:
+    needs:
+      - release-please
+    if: ${{ always() && ((github.event_name == 'workflow_dispatch' && inputs.ecosystem == 'npm') || (github.event_name == 'push' && needs.release-please.outputs['packages/typescript--release_created'] == 'true')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: packages/typescript
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/typescript--tag_name'] }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.14
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-${{ hashFiles('packages/typescript/bun.lock') }}
+          restore-keys: ${{ runner.os }}-bun-
+      - run: bun install --frozen-lockfile
+      - name: Validate tag and version
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/typescript--version'] }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/typescript--tag_name'] }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "VERSION must be a semver version without a leading v"
+            exit 1
+          fi
+          test "$TAG" = "typescript-v$VERSION"
+          test "$VERSION" = "$(bun -e 'console.log(require("./package.json").version)')"
+      - run: bun test
+      - run: bun run types:check
+      - run: bun pm pack --dry-run
+      - name: Publish npm package if absent
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/typescript--version'] }}
+          NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          status="$(curl --location --silent --show-error --output /dev/null --write-out '%{http_code}' "https://registry.npmjs.org/%40auron-labs%2fharness-detect/$VERSION")"
+          case "$status" in
+            200) echo "@auron-labs/harness-detect@$VERSION is already published; skipping." ;;
+            404) bun publish --access public ;;
+            *) echo "Unable to determine npm publication status (HTTP $status)"; exit 1 ;;
+          esac
+
+  cargo-publish:
+    needs:
+      - release-please
+    if: ${{ always() && ((github.event_name == 'workflow_dispatch' && inputs.ecosystem == 'cargo') || (github.event_name == 'push' && needs.release-please.outputs['packages/rust--release_created'] == 'true')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: packages/rust
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/rust--tag_name'] }}
+      - uses: dtolnay/rust-toolchain@4be7066ada62dd38de10e7b70166bc74ed198c30 # stable
+      - uses: Swatinem/rust-cache@42dc69e1aa15d09112580998cf2ef0119e2e91ae # v2
+        with:
+          workspaces: packages/rust
+      - name: Validate tag and version
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/rust--version'] }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/rust--tag_name'] }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "VERSION must be a semver version without a leading v"
+            exit 1
+          fi
+          test "$TAG" = "rust-v$VERSION"
+          test "$VERSION" = "$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "harness-detect") | .version')"
+      - run: cargo test
+      - run: cargo package --allow-dirty
+      - name: Publish crate if absent
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/rust--version'] }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          status="$(curl --location --silent --show-error --output /dev/null --write-out '%{http_code}' "https://crates.io/api/v1/crates/harness-detect/$VERSION")"
+          case "$status" in
+            200) echo "harness-detect@$VERSION is already published; skipping." ;;
+            404) cargo publish ;;
+            *) echo "Unable to determine crates.io publication status (HTTP $status)"; exit 1 ;;
+          esac
+
+  pypi-publish:
+    needs:
+      - release-please
+    if: ${{ always() && ((github.event_name == 'workflow_dispatch' && inputs.ecosystem == 'pypi') || (github.event_name == 'push' && needs.release-please.outputs['packages/python--release_created'] == 'true')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: packages/python
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/python--tag_name'] }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('packages/python/uv.lock') }}
+          restore-keys: ${{ runner.os }}-uv-
+      - name: Validate tag and version
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/python--version'] }}
+          TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || needs.release-please.outputs['packages/python--tag_name'] }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "VERSION must be a semver version without a leading v"
+            exit 1
+          fi
+          test "$TAG" = "python-v$VERSION"
+          test "$VERSION" = "$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')"
+      - run: uv sync --dev --frozen
+      - run: uv run pytest
+      - run: uv build
+      - name: Publish PyPI package if absent
+        env:
+          VERSION: ${{ github.event_name == 'workflow_dispatch' && inputs.version || needs.release-please.outputs['packages/python--version'] }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          status="$(curl --location --silent --show-error --output /dev/null --write-out '%{http_code}' "https://pypi.org/pypi/harness-detect/$VERSION/json")"
+          case "$status" in
+            200) echo "harness-detect==$VERSION is already published; skipping." ;;
+            404) uv publish --token "$PYPI_TOKEN" ;;
+            *) echo "Unable to determine PyPI publication status (HTTP $status)"; exit 1 ;;
+          esac

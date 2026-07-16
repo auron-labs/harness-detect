@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "placeholders": {
+    "${TMP}": "Per-run temporary root created by the parity runner.",
+    "${HOME}": "Hermetic home directory inside ${TMP}.",
+    "${CWD}": "Hermetic working directory inside ${TMP} passed as the runner cwd option.",
+    "${BIN}": "Hermetic PATH directory inside ${TMP} used for fake executables."
+  },
+  "cases": [
+    {
+      "id": "check-key-codex",
+      "operation": "checkHarness",
+      "input": "codex",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "codex",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${HOME}/.codex/config.toml",
+            "exists": false
+          },
+          {
+            "id": "project-config",
+            "path": "${CWD}/.codex/config.toml",
+            "exists": false
+          },
+          {
+            "id": "home-root",
+            "path": "${HOME}/.codex",
+            "exists": false
+          },
+          {
+            "id": "sqlite-home",
+            "path": null,
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-alias-claude",
+      "operation": "checkHarness",
+      "input": "claude",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "claude-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "config-root-env",
+            "path": "${HOME}/.claude",
+            "exists": false
+          },
+          {
+            "id": "settings",
+            "path": "${HOME}/.claude/settings.json",
+            "exists": false
+          },
+          {
+            "id": "project-settings",
+            "path": "${CWD}/.claude/settings.json",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-env-root-override-codex",
+      "operation": "checkHarness",
+      "input": "codex",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "CODEX_HOME": "${TMP}/codex-home",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "codex",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${TMP}/codex-home/config.toml",
+            "exists": false
+          },
+          {
+            "id": "home-root",
+            "path": "${TMP}/codex-home",
+            "exists": false
+          },
+          {
+            "id": "project-config",
+            "path": "${CWD}/.codex/config.toml",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-unresolved-placeholder-amazon-q",
+      "operation": "checkHarness",
+      "input": "amazon-q-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "amazon-q-cli",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "data-root-env",
+            "path": null,
+            "exists": false
+          },
+          {
+            "id": "sqlite",
+            "path": null,
+            "exists": false
+          },
+          {
+            "id": "global-root",
+            "path": "${HOME}/.aws/amazonq",
+            "exists": false
+          },
+          {
+            "id": "workspace-root",
+            "path": "${CWD}/.amazonq",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-cwd-project-path-opencode",
+      "operation": "checkHarness",
+      "input": "opencode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "CWD": "${TMP}/wrong-cwd-from-env",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "opencode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "config-dir-env",
+            "path": "${HOME}/.config/opencode",
+            "exists": false
+          },
+          {
+            "id": "config-file-env",
+            "path": "${HOME}/.config/opencode/opencode.json",
+            "exists": false
+          },
+          {
+            "id": "project-config",
+            "path": "${CWD}/.opencode",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-install-claude",
+      "operation": "checkHarness",
+      "input": "claude-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.claude"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/settings.json",
+          "content": "{}"
+        }
+      ],
+      "expect": {
+        "key": "claude-code",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${HOME}/.claude/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-executable-only-install-codex",
+      "operation": "checkHarness",
+      "input": "codex",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "codex",
+        "installed": true,
+        "executablePath": "${BIN}/codex",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-no-match-opencode",
+      "operation": "checkHarness",
+      "input": "opencode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "opencode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "support-record-codex",
+      "operation": "getHarnessSupport",
+      "input": "codex"
+    },
+    {
+      "id": "support-list-all",
+      "operation": "listHarnessSupport"
+    },
+    {
+      "id": "detect-all-count-empty-fixture",
+      "operation": "detectHarnesses",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "count": 44,
+        "installedCount": 0,
+        "installedKeys": []
+      }
+    }
+  ]
+}
