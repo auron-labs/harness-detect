@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "harness-detect"
-version = "0.1.0"
+version = "0.2.0"
 description = "Detect installed LLM harnesses and resolve their config/state paths from a JSON registry."
 readme = "README.md"
 license = "MIT"
