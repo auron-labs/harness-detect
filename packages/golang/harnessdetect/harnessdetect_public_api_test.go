@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	harnessdetect "github.com/auron/harness-detect/packages/golang/harnessdetect"
+	harnessdetect "github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 var (

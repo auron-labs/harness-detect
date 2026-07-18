@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "packages": {
     "typescript": "@auron-labs/harness-detect",
-    "go": "github.com/auron/harness-detect/packages/golang/harnessdetect",
+    "go": "github.com/auron-labs/harness-detect/packages/golang/harnessdetect",
     "rust": "harness-detect",
     "python": "harness-detect"
   },

@@ -4,10 +4,10 @@
   "description": "Detect installed LLM harnesses and their config/state locations.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/auron/harness-detect.git"
+    "url": "https://github.com/auron-labs/harness-detect.git"
   },
   "bugs": {
-    "url": "https://github.com/auron/harness-detect/issues"
+    "url": "https://github.com/auron-labs/harness-detect/issues"
   },
   "type": "module",
   "main": "./src/index.js",

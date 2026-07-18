@@ -2,7 +2,7 @@
 //! embedded JSON registry.
 //!
 //! This is a Rust port of the `@auron-labs/harness-detect` TypeScript package and
-//! the Go package at `github.com/auron/harness-detect/packages/golang/harnessdetect`.
+//! the Go package at `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`.
 //! It shares
 //! the same harness registry (`data/harnesses.json`) and exposes the same
 //! public API surface, adapted to idiomatic Rust naming.

@@ -391,8 +391,8 @@ This exports the file at `packages/typescript/data/harnesses.json`. Prefer
 
 ## Go API
 
-Import path: `github.com/auron/harness-detect/packages/golang/harnessdetect`
-Module root: `github.com/auron/harness-detect/packages/golang`
+Import path: `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`
+Module root: `github.com/auron-labs/harness-detect/packages/golang`
 Entry point: `packages/golang/harnessdetect/harnessdetect.go`
 
 ### `GetHarnessMatrix()`
@@ -579,7 +579,7 @@ package main
 import (
     "fmt"
 
-    "github.com/auron/harness-detect/packages/golang/harnessdetect"
+    "github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 func main() {

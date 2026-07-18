@@ -3,7 +3,7 @@
 ## Project Overview
 
 `harness-detect` is a Python port of the `@auron-labs/harness-detect` Node package,
-the Go package at `github.com/auron/harness-detect/packages/golang/harnessdetect`, and the
+the Go package at `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, and the
 `harness-detect` Rust crate. It detects installed LLM harnesses and resolves
 their config/state paths from a bundled JSON registry.
 

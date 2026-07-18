@@ -1,7 +1,7 @@
 # harness-detect
 
 [![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-[![CI](https://github.com/auron/harness-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/auron/harness-detect/actions/workflows/ci.yml)
+[![CI](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml)
 
 Detect installed LLM harnesses (Codex, Claude Code, Gemini CLI, Cursor, and
 others) and resolve their config/state paths from an embedded JSON registry.
@@ -17,7 +17,7 @@ surface, adapted to idiomatic Rust naming.
 harness-detect = "0.1"
 ```
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 ## Quick usage
 

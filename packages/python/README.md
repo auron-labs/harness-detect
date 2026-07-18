@@ -14,7 +14,7 @@ surface, adapted to idiomatic Python naming.
 pip install harness-detect
 ```
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 ## Usage
 
@@ -46,5 +46,5 @@ print(len(list_harness_support()))
 - `detect_harnesses(options=None)` checks every registry entry.
 - `detect_installed_harnesses(options=None)` returns only installed harnesses.
 
-See the [package docs](https://github.com/auron/harness-detect) for the full
+See the [package docs](https://github.com/auron-labs/harness-detect) for the full
 API reference.

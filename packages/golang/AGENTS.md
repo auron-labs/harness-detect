@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The consumable Go package import path is `github.com/auron/harness-detect/packages/golang/harnessdetect` (module root: `github.com/auron/harness-detect/packages/golang`). It is a Go port of the `@auron-labs/harness-detect` Node package and detects installed LLM harnesses while resolving their config/state paths from an embedded JSON registry.
+The consumable Go package import path is `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` (module root: `github.com/auron-labs/harness-detect/packages/golang`). It is a Go port of the `@auron-labs/harness-detect` Node package and detects installed LLM harnesses while resolving their config/state paths from an embedded JSON registry.
 
 - Package entrypoint: `harnessdetect/harnessdetect.go`
 - Canonical registry: `packages/data/harnesses.json`

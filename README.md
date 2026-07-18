@@ -1,8 +1,8 @@
 # harness-detect
 
 [![License](https://img.shields.io/github/license/auron/harness-detect?style=flat-square)](./LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/auron/harness-detect/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/auron/harness-detect/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/auron/harness-detect?style=flat-square)](https://github.com/auron/harness-detect/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/auron/harness-detect/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/auron/harness-detect?style=flat-square)](https://github.com/auron-labs/harness-detect/releases)
 
 Detect installed LLM harnesses such as Codex, Claude Code, Gemini CLI, Cursor,
 and others, then resolve their known config, state, cache, install, and project
@@ -18,11 +18,11 @@ so the TypeScript, Go, Rust, and Python packages stay aligned.
 | Language | Package | Install |
 |---|---|---|
 | TypeScript / Node.js | `@auron-labs/harness-detect` | `bun add @auron-labs/harness-detect` |
-| Go | `github.com/auron/harness-detect/packages/golang/harnessdetect` | `go get github.com/auron/harness-detect/packages/golang/harnessdetect` |
+| Go | `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` | `go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect` |
 | Rust | `harness-detect` | `cargo add harness-detect` |
 | Python | `harness-detect` | `pip install harness-detect` |
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 There is no CLI binary in this repository. These packages are libraries for
 embedding detection in your own tools.
@@ -49,7 +49,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/auron/harness-detect/packages/golang/harnessdetect"
+	"github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 func main() {
@@ -190,7 +190,7 @@ Releases are managed by release-please. Use conventional commits such as
 `feat:`, `fix:`, and `feat!:` so release notes and versions are generated
 correctly. For the Go subdirectory module, the repository tag format is
 `packages/golang/vX.Y.Z` even though consumers install it as
-`go get github.com/auron/harness-detect/packages/golang/harnessdetect@vX.Y.Z`.
+`go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect@vX.Y.Z`.
 
 ## License
 

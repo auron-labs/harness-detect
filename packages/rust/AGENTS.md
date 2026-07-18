@@ -3,7 +3,7 @@
 ## Project Overview
 
 `harness-detect` is a Rust port of the `@auron-labs/harness-detect` Node package
-and the Go package at `github.com/auron/harness-detect/packages/golang/harnessdetect`. It detects
+and the Go package at `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`. It detects
 installed LLM harnesses and resolves their config/state paths from an embedded
 JSON registry.
 

@@ -1,3 +1,3 @@
-module github.com/auron/harness-detect/packages/golang
+module github.com/auron-labs/harness-detect/packages/golang
 
 go 1.26.4

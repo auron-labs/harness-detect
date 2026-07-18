@@ -16,12 +16,12 @@ We will acknowledge reports as soon as practical and coordinate a fix and disclo
 
 ## Scope
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 All four supported distribution targets are covered:
 
 - `@auron-labs/harness-detect` (`packages/typescript`) — npm
-- `github.com/auron/harness-detect/packages/golang/harnessdetect` (`packages/golang`) — Go module
+- `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` (`packages/golang`) — Go module
 - `harness-detect` (`packages/rust`) — Rust crate
 - `harness-detect` (`packages/python`) — Python package
 

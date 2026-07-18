@@ -11,7 +11,7 @@ that read the same harness registry:
 
 - **TypeScript** — `@auron-labs/harness-detect`, an ESM Node.js package
   (`packages/typescript`).
-- **Go** — `github.com/auron/harness-detect/packages/golang/harnessdetect`
+- **Go** — `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`
   (`packages/golang`). A library-only port that embeds the registry into the
   binary.
 - **Rust** — `harness-detect` crate (`packages/rust`). A library-only port
@@ -26,7 +26,7 @@ found on `PATH` **or** one or more known config/state/cache/install/project
 paths exist on disk. New registry `support` metadata and support-list APIs are
 descriptive only; they do not change detection behavior.
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 Prefer a clean aligned API/schema over backwards-compatibility layers, while
 keeping registry `version: 1` unless internal tooling truly requires a bump.

@@ -8,7 +8,7 @@ See [architecture.md](./architecture.md) for the full tree. Key directories:
 |---|---|
 | `packages/data/` | Canonical shared registry |
 | `packages/typescript/` | TypeScript package (`@auron-labs/harness-detect`) |
-| `packages/golang/` | Go package (`github.com/auron/harness-detect/packages/golang/harnessdetect`) |
+| `packages/golang/` | Go package (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`) |
 | `packages/rust/` | Rust crate (`harness-detect`) |
 | `packages/python/` | Python package (`harness-detect`) |
 | `docs/` | This documentation |

@@ -11,7 +11,7 @@ Code, Gemini CLI, Cursor, etc.) on a filesystem and resolving their
 config/state/install paths. Package implementations share one JSON registry:
 
 - **TypeScript** — `@auron-labs/harness-detect`, ESM Node package (`packages/typescript`).
-- **Go** — consumable package import path `github.com/auron/harness-detect/packages/golang/harnessdetect` (`packages/golang`; module root `github.com/auron/harness-detect/packages/golang`).
+- **Go** — consumable package import path `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` (`packages/golang`; module root `github.com/auron-labs/harness-detect/packages/golang`).
 - **Rust** — `harness-detect` crate (`packages/rust`).
 - **Python** — `harness-detect` package (`packages/python`).
 

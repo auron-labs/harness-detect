@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/auron/harness-detect/packages/data/harnesses.schema.json",
+  "$id": "https://github.com/auron-labs/harness-detect/packages/data/harnesses.schema.json",
   "title": "Harness registry",
   "description": "Schema for the harness-detect registry (packages/data/harnesses.json).",
   "type": "object",

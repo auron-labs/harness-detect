@@ -16,9 +16,9 @@ try {
 
 go 1.26.4
 
-require github.com/auron/harness-detect/packages/golang v0.0.0
+require github.com/auron-labs/harness-detect/packages/golang v0.0.0
 
-replace github.com/auron/harness-detect/packages/golang => ${goModulePath}
+replace github.com/auron-labs/harness-detect/packages/golang => ${goModulePath}
 `,
   );
   await writeFile(
@@ -28,7 +28,7 @@ replace github.com/auron/harness-detect/packages/golang => ${goModulePath}
 import (
 	"fmt"
 
-	harnessdetect "github.com/auron/harness-detect/packages/golang/harnessdetect"
+	harnessdetect "github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 func main() {

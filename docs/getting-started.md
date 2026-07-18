@@ -29,7 +29,7 @@ bun add @auron-labs/harness-detect
 ## Install the Go package (consumer)
 
 ```sh
-go get github.com/auron/harness-detect/packages/golang/harnessdetect
+go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect
 ```
 
 ## Install the Rust package (consumer)
@@ -81,7 +81,7 @@ go test ./...
 ```
 
 This is the quickest verification path in this repository. For consumer code,
-import `github.com/auron/harness-detect/packages/golang/harnessdetect` and call the public API.
+import `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` and call the public API.
 
 ### Rust
 

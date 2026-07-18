@@ -2,7 +2,7 @@
 
 Single source of truth for build/test commands, the registry editing
 procedure, and change-aware validation. Other docs and `AGENTS.md` files
-link here instead of duplicating this content. Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+link here instead of duplicating this content. Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 Compatibility policy: prefer a clean aligned API/schema over backwards
 compatibility layers, and keep registry `version: 1` unless internal tooling

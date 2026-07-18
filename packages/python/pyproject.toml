@@ -21,8 +21,8 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/auron/harness-detect"
-Issues = "https://github.com/auron/harness-detect/issues"
+Repository = "https://github.com/auron-labs/harness-detect"
+Issues = "https://github.com/auron-labs/harness-detect/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/harness_detect"]

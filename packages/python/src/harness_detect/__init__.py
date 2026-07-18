@@ -1,7 +1,7 @@
 """Detect installed LLM harnesses and resolve their config/state paths.
 
 This is a Python port of the ``@auron-labs/harness-detect`` TypeScript package,
-the Go package at ``github.com/auron/harness-detect/packages/golang/harnessdetect``,
+the Go package at ``github.com/auron-labs/harness-detect/packages/golang/harnessdetect``,
 and the ``harness-detect`` Rust crate. It shares the same harness registry
 (``data/harnesses.json``) and exposes the same API surface, adapted to
 idiomatic Python naming.

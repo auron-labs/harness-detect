@@ -7,11 +7,11 @@
 
 ## Supported package expectations
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 - Supported packages:
   - `@auron-labs/harness-detect` on npm, runtime target Node.js `>=18`
-  - `github.com/auron/harness-detect/packages/golang/harnessdetect` as a Go module
+  - `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` as a Go module
   - `harness-detect` on crates.io
   - `harness-detect` on PyPI, runtime target Python `>=3.10`
 - Source of truth for harness metadata: `packages/data/harnesses.json`

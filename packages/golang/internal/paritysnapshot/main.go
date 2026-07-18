@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/auron/harness-detect/packages/golang/harnessdetect"
+	"github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 type parityInput struct {

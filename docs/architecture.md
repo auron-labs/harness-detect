@@ -66,7 +66,7 @@ harness-detect/
 | Package | Language | Module | Registry access | Dependencies |
 |---|---|---|---|---|
 | TypeScript | JS (ESM) | `@auron-labs/harness-detect` | Reads `data/harnesses.json` via relative path at import time | Zero runtime; `typescript` dev-only |
-| Go | Go | `github.com/auron/harness-detect/packages/golang/harnessdetect` | Embeds `data/harnesses.json` via `//go:embed` | Zero external |
+| Go | Go | `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` | Embeds `data/harnesses.json` via `//go:embed` | Zero external |
 | Rust | Rust | `harness-detect` | Embeds `data/harnesses.json` via `include_str!` | `serde` + `serde_json` (stdlib has no JSON) |
 | Python | Python | `harness-detect` | Bundles `data/harnesses.json`, reads at load time via `importlib.resources` | Zero runtime (stdlib only); `pytest` + `ruff` dev |
 

@@ -1,17 +1,17 @@
-# github.com/auron/harness-detect/packages/golang/harnessdetect
+# github.com/auron-labs/harness-detect/packages/golang/harnessdetect
 
 Detect installed LLM harnesses and resolve their config/state paths from a curated JSON registry. This is the Go port of `@auron-labs/harness-detect`.
 
 ## Status
 
-Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
+Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
 This package is maintained as the Go port of the shared registry-backed library. It is library-only; there is no GoReleaser, Homebrew tap, or binary artifact.
 
 ## Installation
 
 ```sh
-go get github.com/auron/harness-detect/packages/golang/harnessdetect
+go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect
 ```
 
 ## Quick usage
@@ -22,7 +22,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/auron/harness-detect/packages/golang/harnessdetect"
+	"github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 func main() {
@@ -82,8 +82,8 @@ validation.
 
 Validate the real consumer experience from a temporary module outside this
 repo. The `require`/`replace` target is the Go module root
-`github.com/auron/harness-detect/packages/golang`; the import in Go source is
-the subpackage `github.com/auron/harness-detect/packages/golang/harnessdetect`.
+`github.com/auron-labs/harness-detect/packages/golang`; the import in Go source is
+the subpackage `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`.
 
 ```sh
 REPO_ROOT="/absolute/path/to/harness-detect"
@@ -91,8 +91,8 @@ tmpdir="$(mktemp -d)"
 
 cd "$tmpdir"
 go mod init example.com/harness-detect-consumer
-go mod edit -require=github.com/auron/harness-detect/packages/golang@v0.0.0
-go mod edit -replace=github.com/auron/harness-detect/packages/golang="$REPO_ROOT/packages/golang"
+go mod edit -require=github.com/auron-labs/harness-detect/packages/golang@v0.0.0
+go mod edit -replace=github.com/auron-labs/harness-detect/packages/golang="$REPO_ROOT/packages/golang"
 
 cat > main.go <<'EOF'
 package main
@@ -100,7 +100,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/auron/harness-detect/packages/golang/harnessdetect"
+	"github.com/auron-labs/harness-detect/packages/golang/harnessdetect"
 )
 
 func main() {
@@ -120,7 +120,7 @@ Go release tag such as `packages/golang/v0.1.1` exists, replace the local
 `go mod edit -require ...@v0.0.0` / `-replace ...` steps with:
 
 ```sh
-go get github.com/auron/harness-detect/packages/golang/harnessdetect@v0.1.1
+go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect@v0.1.1
 ```
 
 Related guides:
