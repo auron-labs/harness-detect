@@ -50,7 +50,7 @@
   ],
   "devDependencies": {
     "automd": "0.4.3",
-    "typescript": "^5.9.2"
+    "typescript": "^7.0.2"
   },
   "license": "MIT"
 }
