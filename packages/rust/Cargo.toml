@@ -1,6 +1,6 @@
 [package]
 name = "harness-detect"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 license = "MIT"
 description = "Detect installed LLM harnesses and resolve their config/state paths from an embedded JSON registry."
