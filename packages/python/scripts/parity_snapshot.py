@@ -27,7 +27,7 @@ from harness_detect import (
 def main() -> None:
     try:
         run()
-    except Exception as error:  # noqa: BLE001 - CLI helper should print concise errors.
+    except Exception as error:
         print(f"parity_snapshot: {error}", file=sys.stderr)
         raise SystemExit(1) from error
 
@@ -36,7 +36,7 @@ def run() -> None:
     parsed = json.loads(read_input())
     cases = parsed.get("cases")
     if not isinstance(cases, list):
-        raise ValueError("Parity input must be an object with a cases array.")
+        raise TypeError("Parity input must be an object with a cases array.")
 
     roots = create_sandbox()
     try:

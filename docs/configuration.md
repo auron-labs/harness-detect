@@ -30,7 +30,7 @@ The TypeScript package also exports its registry copy as a public subpath:
 |---|---|
 | `packages/typescript/package.json` | Package metadata, scripts, exports, engines |
 | `packages/typescript/tsconfig.types.json` | TypeScript type-check config (`tsc --noEmit`) |
-| `packages/golang/go.mod` | Go module declaration (`go 1.26.4`, no deps) |
+| `packages/golang/go.mod` | Go module declaration (`go 1.26.9`, no deps) |
 | `packages/rust/Cargo.toml` | Rust crate metadata (`serde` + `serde_json` deps) |
 | `packages/python/pyproject.toml` | Python package metadata (stdlib-only runtime; `pytest` + `ruff` dev) |
 | `mise.toml` | mise task definitions (root-level shortcuts) |
@@ -324,6 +324,7 @@ registry may list additional variables that are informational only.
 | `crush` | `CRUSH_GLOBAL_DATA` | `CRUSH_DATA_ROOT` | `${XDG_DATA_HOME}/crush` |
 | `crush` | — | `CRUSH_DATA_FILE` | `${CRUSH_DATA_ROOT}/crush.json` |
 | `crush` | `CRUSH_SKILLS_DIR` | `CRUSH_SKILLS_ROOT` | `${CRUSH_CONFIG_ROOT}/skills` |
+| `deepagents-code` | `DEEPAGENTS_HOME` | `DEEPAGENTS_ROOT` | `${HOME}/.deepagents` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
@@ -334,6 +335,9 @@ registry may list additional variables that are informational only.
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_STATE_ROOT` | `${GOOSE_PATH_ROOT}/state` (use) or `${XDG_STATE_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_CONFIG_HOME}/goose/history.txt` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
+| `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
+| `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |
+| `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_WINDOWS_ROOT` | `${LOCALAPPDATA}/mini-swe-agent/mini-swe-agent` |
 | `mistral-vibe` | `VIBE_HOME` | `VIBE_HOME` | `${HOME}/.vibe` |
 | `oh-my-pi` | `PI_CODING_AGENT_DIR` | `OMP_ROOT` | `${HOME}/.omp/agent` |
 | `openclaw` | `OPENCLAW_HOME` | `OPENCLAW_ROOT` | `${HOME}/.openclaw` |
@@ -434,7 +438,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 51
+console.log(harnesses.harnesses.length);  // 56
 ```
 
 <!-- /automd -->

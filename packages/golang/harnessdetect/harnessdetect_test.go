@@ -96,8 +96,8 @@ func TestGetHarnessMatrix(t *testing.T) {
 
 func TestGoInstallationMetadataCompleteness(t *testing.T) {
 	matrix := GetRawHarnessData()
-	if len(matrix.Harnesses) != 51 {
-		t.Fatalf("harness count = %d, want 51", len(matrix.Harnesses))
+	if len(matrix.Harnesses) != 56 {
+		t.Fatalf("harness count = %d, want 56", len(matrix.Harnesses))
 	}
 
 	allowedMethods := make(map[string]struct{}, len(supportedInstallMethods))

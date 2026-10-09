@@ -16,8 +16,8 @@ See [architecture.md](./architecture.md) for the full tree. Key directories:
 
 ## Prerequisites
 
-- Bun 1.3.14 for the TypeScript package
-- Go 1.26.4
+- Bun 1.4.2 for the TypeScript package
+- Go 1.26.9
 - Rust stable
 - Python >= 3.10 and uv
 - Optional: [mise](https://mise.jdx.dev/) for task shortcuts

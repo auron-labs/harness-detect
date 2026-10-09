@@ -22,7 +22,6 @@ import sys
 from dataclasses import dataclass, field
 from importlib import resources
 from pathlib import Path
-from typing import Optional
 
 __all__ = [
     "CheckOptions",
@@ -43,11 +42,11 @@ __all__ = [
     "check_harness",
     "detect_harnesses",
     "detect_installed_harnesses",
-    "get_raw_harness_data",
     "get_harness_matrix",
     "get_harness_support",
-    "list_harnesses",
+    "get_raw_harness_data",
     "list_harness_support",
+    "list_harnesses",
 ]
 
 __version__ = "0.2.1"
@@ -72,7 +71,7 @@ def _load_matrix() -> HarnessMatrix:
     )
 
 
-_MATRIX: Optional[HarnessMatrix] = None
+_MATRIX: HarnessMatrix | None = None
 
 
 def _matrix() -> HarnessMatrix:
@@ -95,7 +94,7 @@ class HarnessEnvVar:
     description: str
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessEnvVar":
+    def from_dict(cls, d: dict) -> HarnessEnvVar:
         return cls(name=d["name"], description=d["description"])
 
 
@@ -110,7 +109,7 @@ class HarnessPathSpec:
     platforms: tuple[str, ...] = ()
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessPathSpec":
+    def from_dict(cls, d: dict) -> HarnessPathSpec:
         return cls(
             id=d["id"],
             category=d["category"],
@@ -131,7 +130,7 @@ class HarnessSupportPath:
     description: str = ""
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessSupportPath":
+    def from_dict(cls, d: dict) -> HarnessSupportPath:
         return cls(
             id=d["id"],
             kind=d["kind"],
@@ -152,7 +151,7 @@ class HarnessSupportScope:
     notes: str = ""
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessSupportScope":
+    def from_dict(cls, d: dict) -> HarnessSupportScope:
         return cls(
             status=d["status"],
             paths=tuple(HarnessSupportPath.from_dict(p) for p in d.get("paths", [])),
@@ -170,7 +169,7 @@ class HarnessSupportArea:
     local: HarnessSupportScope
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessSupportArea":
+    def from_dict(cls, d: dict) -> HarnessSupportArea:
         return cls(
             global_=HarnessSupportScope.from_dict(d["global"]),
             local=HarnessSupportScope.from_dict(d["local"]),
@@ -188,7 +187,7 @@ class HarnessSupport:
     dot_agents: HarnessSupportArea
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessSupport":
+    def from_dict(cls, d: dict) -> HarnessSupport:
         return cls(
             config=HarnessSupportArea.from_dict(d["config"]),
             skills=HarnessSupportArea.from_dict(d["skills"]),
@@ -212,7 +211,7 @@ class HarnessRootDef:
     fallback: str = ""
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessRootDef":
+    def from_dict(cls, d: dict) -> HarnessRootDef:
         return cls(
             name=d["name"],
             env=d.get("env", ""),
@@ -235,7 +234,7 @@ class HarnessInstallation:
     notes: str = ""
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessInstallation":
+    def from_dict(cls, d: dict) -> HarnessInstallation:
         return cls(
             method=d["method"],
             package=d.get("package", ""),
@@ -264,7 +263,7 @@ class HarnessDefinition:
     sources: tuple[str, ...]
 
     @classmethod
-    def from_dict(cls, d: dict) -> "HarnessDefinition":
+    def from_dict(cls, d: dict) -> HarnessDefinition:
         return cls(
             key=d["key"],
             name=d["name"],
@@ -308,7 +307,7 @@ class ResolvedHarnessPath:
     kind: str
     template: str
     platforms: tuple[str, ...]
-    path: Optional[str]
+    path: str | None
     exists: bool
 
 
@@ -321,8 +320,8 @@ class CheckOptions:
     still filled in for ``HOME``, ``XDG_*``, ``TMPDIR``, ``CWD``).
     """
 
-    env: Optional[dict[str, str]] = None
-    cwd: Optional[str] = None
+    env: dict[str, str] | None = None
+    cwd: str | None = None
 
 
 @dataclass
@@ -332,7 +331,7 @@ class HarnessCheckResult:
     key: str
     name: str
     installed: bool
-    executable_path: Optional[str]
+    executable_path: str | None
     harness: HarnessDefinition
     paths: list[ResolvedHarnessPath] = field(default_factory=list)
     matched_paths: list[ResolvedHarnessPath] = field(default_factory=list)
@@ -384,7 +383,7 @@ def list_harness_support() -> list[HarnessSupportRecord]:
 
 
 def check_harness(
-    input: str, options: Optional[CheckOptions] = None
+    input: str, options: CheckOptions | None = None
 ) -> HarnessCheckResult:
     """Check a single harness by key or alias (case-insensitive, trimmed).
 
@@ -422,7 +421,7 @@ def check_harness(
 
 
 def detect_harnesses(
-    options: Optional[CheckOptions] = None,
+    options: CheckOptions | None = None,
 ) -> list[HarnessCheckResult]:
     """Check every harness in the registry, returning one result per entry."""
     opts = options or CheckOptions()
@@ -430,7 +429,7 @@ def detect_harnesses(
 
 
 def detect_installed_harnesses(
-    options: Optional[CheckOptions] = None,
+    options: CheckOptions | None = None,
 ) -> list[HarnessCheckResult]:
     """Return the subset of :func:`detect_harnesses` results whose ``installed``
     field is ``True``."""
@@ -442,7 +441,7 @@ def detect_installed_harnesses(
 # ---------------------------------------------------------------------------
 
 
-def _find_harness_definition(input: str) -> Optional[HarnessDefinition]:
+def _find_harness_definition(input: str) -> HarnessDefinition | None:
     key = input.strip().lower()
     for harness in _matrix().harnesses:
         if harness.key.lower() == key:
@@ -458,8 +457,8 @@ def _find_harness_definition(input: str) -> Optional[HarnessDefinition]:
 
 
 def _with_defaults(
-    env: Optional[dict[str, str]],
-    cwd: Optional[str],
+    env: dict[str, str] | None,
+    cwd: str | None,
 ) -> dict[str, str]:
     """Compute the universal base-variable map (HOME, XDG_*, TMPDIR, CWD)
     plus any caller-supplied env vars. Harness-specific derived roots are
@@ -548,7 +547,7 @@ def _resolve_harness_roots(
 _TEMPLATE_VAR = re.compile(r"\$\{([^}]+)\}")
 
 
-def _resolve_template(template: str, env: dict[str, str]) -> Optional[str]:
+def _resolve_template(template: str, env: dict[str, str]) -> str | None:
     """Replace all ``${VAR}`` placeholders with values from ``env``.
 
     If any placeholder value is missing or empty, the **entire template
@@ -656,7 +655,7 @@ def _resolve_paths(
 def _find_executable(
     executables: tuple[str, ...],
     env: dict[str, str],
-) -> Optional[str]:
+) -> str | None:
     if not executables:
         return None
 

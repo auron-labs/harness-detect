@@ -13214,6 +13214,913 @@
           }
         }
       }
+    },
+    {
+      "key": "neovate-code",
+      "name": "Neovate Code",
+      "aliases": [
+        "neovate",
+        "neovateai/neovate-code"
+      ],
+      "executables": [
+        "neovate"
+      ],
+      "paths": [
+        {
+          "id": "config-dir",
+          "category": "config",
+          "kind": "dir",
+          "template": "${HOME}/.neovate"
+        },
+        {
+          "id": "config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.neovate/config.json"
+        },
+        {
+          "id": "project-dir",
+          "category": "project",
+          "kind": "dir",
+          "template": "${CWD}/.neovate"
+        },
+        {
+          "id": "project-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.neovate/config.json"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/package.json",
+        "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/paths.ts",
+        "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/config.ts"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@neovate/code",
+          "command": "npm install -g @neovate/code",
+          "url": "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/README.md"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config-dir",
+                "kind": "dir",
+                "template": "${HOME}/.neovate"
+              },
+              {
+                "id": "config",
+                "kind": "file",
+                "template": "${HOME}/.neovate/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/paths.ts",
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/config.ts"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-dir",
+                "kind": "dir",
+                "template": "${CWD}/.neovate"
+              },
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.neovate/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/paths.ts",
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/config.ts"
+            ],
+            "confidence": "source"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${HOME}/.neovate/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/skill.ts"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "local-skills",
+                "kind": "dir",
+                "template": "${CWD}/.neovate/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/skill.ts"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-commands",
+                "kind": "dir",
+                "template": "${HOME}/.neovate/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/slashCommand.ts"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "local-commands",
+                "kind": "dir",
+                "template": "${CWD}/.neovate/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/slashCommand.ts"
+            ],
+            "confidence": "source"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents",
+                "kind": "dir",
+                "template": "${HOME}/.neovate/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/agent/agentManager.ts"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "local-agents",
+                "kind": "dir",
+                "template": "${CWD}/.neovate/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/neovateai/neovate-code/blob/0a24b363ecbe24eb87a0190a88fcb78c80593b4b/src/agent/agentManager.ts"
+            ],
+            "confidence": "source"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "key": "mini-swe-agent",
+      "name": "mini-SWE-agent",
+      "aliases": [
+        "mini",
+        "SWE-agent/mini-swe-agent"
+      ],
+      "executables": [
+        "mini",
+        "mini-swe-agent"
+      ],
+      "paths": [
+        {
+          "id": "config-dir-linux",
+          "category": "config",
+          "kind": "dir",
+          "template": "${MINI_SWE_LINUX_ROOT}",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "config-linux",
+          "category": "config",
+          "kind": "file",
+          "template": "${MINI_SWE_LINUX_ROOT}/.env",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "config-dir-darwin",
+          "category": "config",
+          "kind": "dir",
+          "template": "${MINI_SWE_MACOS_ROOT}",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "config-darwin",
+          "category": "config",
+          "kind": "file",
+          "template": "${MINI_SWE_MACOS_ROOT}/.env",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "config-dir-win32",
+          "category": "config",
+          "kind": "dir",
+          "template": "${MINI_SWE_WINDOWS_ROOT}",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "config-win32",
+          "category": "config",
+          "kind": "file",
+          "template": "${MINI_SWE_WINDOWS_ROOT}/.env",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "MSWEA_GLOBAL_CONFIG_DIR",
+          "description": "Overrides the global configuration directory on every platform."
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Redirects the Linux platformdirs config root."
+        }
+      ],
+      "sources": [
+        "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/pyproject.toml",
+        "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/__init__.py",
+        "https://platformdirs.readthedocs.io/en/latest/api.html"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "mini-swe-agent",
+          "command": "pip install mini-swe-agent",
+          "url": "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/README.md"
+        }
+      ],
+      "roots": [
+        {
+          "name": "MINI_SWE_LINUX_ROOT",
+          "env": "MSWEA_GLOBAL_CONFIG_DIR",
+          "fallback": "${XDG_CONFIG_HOME}/mini-swe-agent"
+        },
+        {
+          "name": "MINI_SWE_MACOS_ROOT",
+          "env": "MSWEA_GLOBAL_CONFIG_DIR",
+          "fallback": "${HOME}/Library/Application Support/mini-swe-agent"
+        },
+        {
+          "name": "MINI_SWE_WINDOWS_ROOT",
+          "env": "MSWEA_GLOBAL_CONFIG_DIR",
+          "fallback": "${LOCALAPPDATA}/mini-swe-agent/mini-swe-agent"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config-dir-linux",
+                "kind": "dir",
+                "template": "${MINI_SWE_LINUX_ROOT}",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "config-linux",
+                "kind": "file",
+                "template": "${MINI_SWE_LINUX_ROOT}/.env",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "config-dir-darwin",
+                "kind": "dir",
+                "template": "${MINI_SWE_MACOS_ROOT}",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "config-darwin",
+                "kind": "file",
+                "template": "${MINI_SWE_MACOS_ROOT}/.env",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "config-dir-win32",
+                "kind": "dir",
+                "template": "${MINI_SWE_WINDOWS_ROOT}",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "config-win32",
+                "kind": "file",
+                "template": "${MINI_SWE_WINDOWS_ROOT}/.env",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/SWE-agent/mini-swe-agent/blob/04d809ceab9df28f9adaed044884180159172930/src/minisweagent/__init__.py",
+              "https://platformdirs.readthedocs.io/en/latest/api.html"
+            ],
+            "confidence": "source",
+            "notes": "Uses platformdirs.user_config_dir(\"mini-swe-agent\"); MSWEA_GLOBAL_CONFIG_DIR overrides each platform default. macOS XDG_CONFIG_HOME relocation is not modeled; use MSWEA_GLOBAL_CONFIG_DIR for that location."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "key": "deepagents-code",
+      "name": "Deep Agents Code",
+      "aliases": [
+        "dcode",
+        "langchain-ai/deepagents"
+      ],
+      "executables": [
+        "deepagents-code",
+        "dcode"
+      ],
+      "paths": [
+        {
+          "id": "config-dir",
+          "category": "config",
+          "kind": "dir",
+          "template": "${DEEPAGENTS_ROOT}"
+        },
+        {
+          "id": "config",
+          "category": "config",
+          "kind": "file",
+          "template": "${DEEPAGENTS_ROOT}/config.toml"
+        },
+        {
+          "id": "state-dir",
+          "category": "state",
+          "kind": "dir",
+          "template": "${DEEPAGENTS_ROOT}/.state"
+        },
+        {
+          "id": "project-dir",
+          "category": "project",
+          "kind": "dir",
+          "template": "${CWD}/.deepagents"
+        }
+      ],
+      "env": [
+        {
+          "name": "DEEPAGENTS_HOME",
+          "description": "Relocates the user profile containing config, agent profiles, and state; use an absolute path for detection."
+        }
+      ],
+      "sources": [
+        "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/pyproject.toml",
+        "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "deepagents-code",
+          "command": "pip install deepagents-code",
+          "url": "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/README.md"
+        }
+      ],
+      "roots": [
+        {
+          "name": "DEEPAGENTS_ROOT",
+          "env": "DEEPAGENTS_HOME",
+          "fallback": "${HOME}/.deepagents"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config-dir",
+                "kind": "dir",
+                "template": "${DEEPAGENTS_ROOT}"
+              },
+              {
+                "id": "config",
+                "kind": "file",
+                "template": "${DEEPAGENTS_ROOT}/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-agent-skills",
+                "kind": "dir",
+                "template": "${DEEPAGENTS_ROOT}/agent/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source",
+            "notes": "Default agent profile; named agents use <profile-root>/<agent-name>/skills."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.deepagents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents",
+                "kind": "dir",
+                "template": "${CWD}/.deepagents/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source",
+            "notes": "Tool-agnostic skills remain relative to the launch home or project when DEEPAGENTS_HOME relocates the profile."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "local-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/langchain-ai/deepagents/blob/efd88ff8fd1279361de77a83c9f75d98ed2f36d5/libs/code/deepagents_code/_paths.py"
+            ],
+            "confidence": "source",
+            "notes": "Tool-agnostic skills remain relative to the launch home or project when DEEPAGENTS_HOME relocates the profile."
+          }
+        }
+      }
+    },
+    {
+      "key": "shai",
+      "name": "SHAI",
+      "aliases": [
+        "ovh/shai"
+      ],
+      "executables": [
+        "shai"
+      ],
+      "paths": [
+        {
+          "id": "config-dir",
+          "category": "config",
+          "kind": "dir",
+          "template": "${XDG_CONFIG_HOME}/shai"
+        },
+        {
+          "id": "auth-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/shai/auth.config.json"
+        },
+        {
+          "id": "tui-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/shai/tui.config.json"
+        },
+        {
+          "id": "agents",
+          "category": "config",
+          "kind": "dir",
+          "template": "${XDG_CONFIG_HOME}/shai/agents"
+        },
+        {
+          "id": "skills",
+          "category": "config",
+          "kind": "dir",
+          "template": "${XDG_CONFIG_HOME}/shai/skills"
+        },
+        {
+          "id": "project-skills",
+          "category": "project",
+          "kind": "dir",
+          "template": "${CWD}/.shai/skills"
+        }
+      ],
+      "env": [
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Redirects global auth, TUI, agent, and skill configuration."
+        }
+      ],
+      "sources": [
+        "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/README.md",
+        "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/shai-core/src/config/config.rs",
+        "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/skills.md",
+        "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/configurations/agents.md",
+        "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/configurations/tui.md"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "url": "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/README.md",
+          "notes": "Official install.sh installs the shai binary in ~/.local/bin."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config-dir",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/shai"
+              },
+              {
+                "id": "auth-config",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/shai/auth.config.json"
+              },
+              {
+                "id": "tui-config",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/shai/tui.config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/shai-core/src/config/config.rs",
+              "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/configurations/tui.md"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "skills",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/shai/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/skills.md"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.shai/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/skills.md"
+            ],
+            "confidence": "official",
+            "notes": "SHAI discovers this directory at the Git project root."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agents",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/shai/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/ovh/shai/blob/fcb14377ee6b6da1cc7f302326612d9946b239ca/docs/configurations/agents.md"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "key": "codebuddy-code",
+      "name": "CodeBuddy Code",
+      "aliases": [
+        "codebuddy",
+        "cbc"
+      ],
+      "executables": [
+        "codebuddy",
+        "cbc",
+        "codebuddy-code"
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://registry.npmjs.org/@tencent-ai/codebuddy-code/latest",
+        "https://cnb.cool/codebuddy/codebuddy-code"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@tencent-ai/codebuddy-code",
+          "command": "npm install -g @tencent-ai/codebuddy-code",
+          "url": "https://www.npmjs.com/package/@tencent-ai/codebuddy-code",
+          "notes": "Executable detection only; configuration paths and support surfaces are not yet verified."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
     }
   ]
 }

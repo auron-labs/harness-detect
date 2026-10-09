@@ -28,8 +28,8 @@ from harness_detect import (
     detect_installed_harnesses,
     get_harness_matrix,
     get_harness_support,
-    list_harnesses,
     list_harness_support,
+    list_harnesses,
 )
 
 # ---------------------------------------------------------------------------
@@ -129,15 +129,13 @@ def test_support_api_is_immutable():
     record = get_harness_support("codex")
 
     with pytest.raises(FrozenInstanceError):
-        setattr(record, "name", "mutated")
+        record.name = "mutated"
 
     with pytest.raises(FrozenInstanceError):
-        setattr(record.support.config.global_, "status", "mutated")
+        record.support.config.global_.status = "mutated"
 
     with pytest.raises(AttributeError):
-        getattr(record.support.commands.local.sources, "append")(
-            "https://example.com/mutated"
-        )
+        record.support.commands.local.sources.append("https://example.com/mutated")
 
     refreshed = get_harness_support("codex")
     assert refreshed == record
