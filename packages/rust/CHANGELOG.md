@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/auron-labs/harness-detect/compare/rust-v0.2.1...rust-v0.3.0) (2026-10-09)
+
+
+### Features
+
+* detect five more harnesses and refresh dependencies ([3894145](https://github.com/auron-labs/harness-detect/commit/38941452cfa80ddae23d2ae740dd11a652408710))
+
 ## [0.2.1](https://github.com/auron-labs/harness-detect/compare/rust-v0.2.0...rust-v0.2.1) (2026-07-18)
 
 
