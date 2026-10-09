@@ -14,7 +14,7 @@ try {
     path.join(consumerDir, "go.mod"),
     `module harness-detect-consumer
 
-go 1.26.4
+go 1.26.9
 
 require github.com/auron-labs/harness-detect/packages/golang v0.0.0
 

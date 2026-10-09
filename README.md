@@ -104,7 +104,7 @@ each package for distribution.
 
 <!-- automd:repo-stats section="harness-count-sentence" -->
 
-The registry currently covers **51 harnesses**.
+The registry currently covers **56 harnesses**.
 
 <!-- /automd -->
 

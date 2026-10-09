@@ -214,6 +214,7 @@
         "installed": true,
         "executablePath": null,
         "matchedPathIds": [
+          "config-root-env",
           "settings"
         ],
         "pathAssertions": [
@@ -288,9 +289,823 @@
       },
       "setup": [],
       "expect": {
-        "count": 44,
+        "count": 56,
         "installedCount": 0,
         "installedKeys": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "neovate-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "id": "check-no-match-neovate-code",
+      "expect": {
+        "key": "neovate-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "neovate-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/neovate",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-neovate-code-neovate",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "neovate-code",
+        "installed": true,
+        "executablePath": "${BIN}/neovate",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "neovate-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "# Shared instructions"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env",
+          "content": ""
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "id": "check-shared-paths-neovate-code",
+      "expect": {
+        "key": "neovate-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "id": "check-no-match-mini-swe-agent",
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/mini",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-mini-swe-agent-mini",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": "${BIN}/mini",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/mini-swe-agent",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-mini-swe-agent-mini-swe-agent",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": "${BIN}/mini-swe-agent",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "# Shared instructions"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env",
+          "content": ""
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "id": "check-shared-paths-mini-swe-agent",
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "deepagents-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "id": "check-no-match-deepagents-code",
+      "expect": {
+        "key": "deepagents-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "deepagents-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/deepagents-code",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-deepagents-code-deepagents-code",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "deepagents-code",
+        "installed": true,
+        "executablePath": "${BIN}/deepagents-code",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "deepagents-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/dcode",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-deepagents-code-dcode",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "deepagents-code",
+        "installed": true,
+        "executablePath": "${BIN}/dcode",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "deepagents-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "# Shared instructions"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env",
+          "content": ""
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "id": "check-shared-paths-deepagents-code",
+      "expect": {
+        "key": "deepagents-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "shai",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "id": "check-no-match-shai",
+      "expect": {
+        "key": "shai",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "shai",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/shai",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-shai-shai",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "shai",
+        "installed": true,
+        "executablePath": "${BIN}/shai",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "shai",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "# Shared instructions"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env",
+          "content": ""
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "id": "check-shared-paths-shai",
+      "expect": {
+        "key": "shai",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "codebuddy-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "id": "check-no-match-codebuddy-code",
+      "expect": {
+        "key": "codebuddy-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "codebuddy-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codebuddy",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-codebuddy-code-codebuddy",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "codebuddy-code",
+        "installed": true,
+        "executablePath": "${BIN}/codebuddy",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "codebuddy-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cbc",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-codebuddy-code-cbc",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "codebuddy-code",
+        "installed": true,
+        "executablePath": "${BIN}/cbc",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "codebuddy-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codebuddy-code",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "id": "check-executable-codebuddy-code-codebuddy-code",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "expect": {
+        "key": "codebuddy-code",
+        "installed": true,
+        "executablePath": "${BIN}/codebuddy-code",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "input": "codebuddy-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "# Shared instructions"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env",
+          "content": ""
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "id": "check-shared-paths-codebuddy-code",
+      "expect": {
+        "key": "codebuddy-code",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-config-neovate-code",
+      "operation": "checkHarness",
+      "input": "neovate-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.neovate/config.json",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "neovate-code",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config",
+          "project-dir"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-config",
+            "path": "${CWD}/.neovate/config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-config-deepagents-code",
+      "operation": "checkHarness",
+      "input": "deepagents-code",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DEEPAGENTS_HOME": "${TMP}/custom-deepagents"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-deepagents/config.toml",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "deepagents-code",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config",
+          "config-dir"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${TMP}/custom-deepagents/config.toml",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-config-shai",
+      "operation": "checkHarness",
+      "input": "shai",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/custom-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-xdg/shai/auth.config.json",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "shai",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "auth-config",
+          "config-dir"
+        ],
+        "pathAssertions": [
+          {
+            "id": "auth-config",
+            "path": "${TMP}/custom-xdg/shai/auth.config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-linux-default",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/mini-swe-agent/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-linux",
+          "config-linux"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-linux",
+            "path": "${HOME}/.config/mini-swe-agent/.env",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-linux-override",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata",
+        "MSWEA_GLOBAL_CONFIG_DIR": "${TMP}/custom-mini"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-mini/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-linux",
+          "config-linux"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-linux",
+            "path": "${TMP}/custom-mini/.env",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-darwin-default",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/mini-swe-agent/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-darwin",
+          "config-darwin"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-darwin",
+            "path": "${HOME}/Library/Application Support/mini-swe-agent/.env",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-darwin-override",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata",
+        "MSWEA_GLOBAL_CONFIG_DIR": "${TMP}/custom-mini"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-mini/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-darwin",
+          "config-darwin"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-darwin",
+            "path": "${TMP}/custom-mini/.env",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-win32-default",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/appdata/mini-swe-agent/mini-swe-agent/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-win32",
+          "config-win32"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-win32",
+            "path": "${TMP}/appdata/mini-swe-agent/mini-swe-agent/.env",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-mini-config-win32-override",
+      "operation": "checkHarness",
+      "input": "mini-swe-agent",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/appdata",
+        "MSWEA_GLOBAL_CONFIG_DIR": "${TMP}/custom-mini"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-mini/.env",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "mini-swe-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config-dir-win32",
+          "config-win32"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config-win32",
+            "path": "${TMP}/custom-mini/.env",
+            "exists": true
+          }
+        ]
       }
     }
   ]

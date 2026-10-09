@@ -161,7 +161,7 @@ empty).
 `.github/workflows/ci.yml` runs on every push and pull request:
 
 1. Checkout code
-2. Setup Bun 1.3.14
+2. Setup Bun 1.4.2
 3. Install TypeScript dependencies (`bun install --frozen-lockfile`)
 4. Check registry drift (`bun scripts/sync-registry.mjs --check`)
 5. Check support matrix drift (`node scripts/generate-support-matrix.mjs --check`)

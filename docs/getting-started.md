@@ -7,10 +7,10 @@ This guide gets you from a fresh clone to a working detection call in minutes.
 | Requirement | Version | Why |
 |---|---|---|
 | Node.js | >= 18 | TypeScript package runtime (`package.json` `engines.node`) |
-| Go | 1.26.4 | Go package (`go.mod`); only needed for Go development |
+| Go | 1.26.9 | Go package (`go.mod`); only needed for Go development |
 | Rust | stable | Rust package (`packages/rust`); only needed for Rust development |
 | Python | >= 3.10 | Python package (`pyproject.toml` `requires-python`); only needed for Python development |
-| [bun](https://bun.sh) | 1.3.14 | Package manager and script runner for the TypeScript package |
+| [bun](https://bun.sh) | 1.4.2 | Package manager and script runner for the TypeScript package |
 | [uv](https://docs.astral.sh/uv/) | latest | Python package manager and test runner |
 | Docker | optional | Only for the Docker smoke test (`bun run smoke:fixtures`) |
 | [mise](https://mise.jdx.dev/) | optional | Provides task shortcuts from the repo root |
