@@ -1,48 +1,39 @@
-amends "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.50.0/hk@1.50.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Config.pkl"
+
+import "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
-  ["rustfmt"] = new Step {
-    check = "cargo fmt --check"
-    fix = "cargo fmt"
-    glob = "**/*.rs"
-    dir = "packages/rust"
+  ["betterleaks"] = Builtins.betterleaks
+  ["byte_order_marker"] = Builtins.byte_order_marker
+  ["cargo_check"] = Builtins.cargo_check
+  ["cargo_clippy"] = Builtins.cargo_clippy
+  ["cargo_deny"] = Builtins.cargo_deny
+  ["cargo_fmt"] = Builtins.cargo_fmt
+  ["check_added_large_files"] = Builtins.check_added_large_files
+  ["check_case_conflict"] = Builtins.check_case_conflict
+  ["check_executables_have_shebangs"] = Builtins.check_executables_have_shebangs
+  ["check_merge_conflict"] = Builtins.check_merge_conflict
+  ["check_symlinks"] = Builtins.check_symlinks
+  ["detect_private_key"] = Builtins.detect_private_key
+  ["fix_smart_quotes"] = Builtins.fix_smart_quotes
+  ["go_fmt"] = Builtins.go_fmt
+  ["golangci_lint"] = Builtins.golangci_lint
+  ["golangci_lint_fmt"] = Builtins.golangci_lint_fmt
+  ["gomod_tidy"] = Builtins.gomod_tidy
+  ["mixed_line_ending"] = Builtins.mixed_line_ending
+  ["newlines"] = Builtins.newlines
+  ["oxfmt"] = (Builtins.oxfmt) {
+    prefix = List("bun", "run", "--")
   }
-  ["cargo-clippy"] = new Step {
-    check = "cargo clippy --all-targets"
-    glob = "**/*.rs"
-    dir = "packages/rust"
+  ["ox_lint"] = (Builtins.ox_lint) {
+    prefix = List("bun", "run", "--")
   }
-  ["ruff"] = new Step {
-    check = "uv run ruff check ."
-    fix = "uv run ruff check --fix ."
-    glob = "**/*.py"
-    dir = "packages/python"
-  }
-  ["ruff-format"] = new Step {
-    check = "uv run ruff format --check ."
-    fix = "uv run ruff format ."
-    glob = "**/*.py"
-    dir = "packages/python"
-  }
-  ["go-fmt"] = new Step {
-    check = "gofmt -l {{files}}"
-    fix = "gofmt -w {{files}}"
-    glob = "**/*.go"
-  }
-  ["go-vet"] = new Step {
-    check = "go vet ./..."
-    glob = "**/*.go"
-    dir = "packages/golang"
-  }
-  ["automd-docs"] = new Step {
-    check = "mise run docs:stats:generate && git diff --exit-code -- README.md docs/index.md docs/api.md docs/configuration.md"
-    fix = "mise run docs:stats:generate && git add README.md docs/index.md docs/api.md docs/configuration.md"
-    glob = "{README.md,docs/index.md,docs/api.md,docs/configuration.md,packages/data/harnesses.json}"
-  }
-  ["trailing-whitespace"] = Builtins.trailing_whitespace
-  ["check-merge-conflict"] = Builtins.check_merge_conflict
-  ["detect-private-key"] = Builtins.detect_private_key
+  ["pinact_update"] = Builtins.pinact_update
+  ["pkl_format"] = Builtins.pkl_format
+  ["sort_package_json"] = Builtins.sort_package_json
+  ["tombi_format"] = Builtins.tombi_format
+  ["trailing_whitespace"] = Builtins.trailing_whitespace
+  ["zizmor"] = Builtins.zizmor
 }
 
 hooks {
@@ -56,14 +47,6 @@ hooks {
     steps {
       ["conventional-commit"] {
         check = "hk util check-conventional-commit {{commit_msg_file}}"
-      }
-    }
-  }
-
-  ["pre-push"] {
-    steps {
-      ["registry-sync"] {
-        check = "node scripts/sync-registry.mjs --check"
       }
     }
   }

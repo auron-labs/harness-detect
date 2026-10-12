@@ -1,0 +1,17 @@
+scope: project
+agent:
+  - codex
+  - opencode
+
+skills:
+  - source: https://github.com/Jeffallan/claude-skills
+    skills:
+      - architecture-designer
+      - code-documenter
+      - fullstack-guardian
+      - test-master
+      - the-fool
+      - golang-pro
+      - rust-engineer
+      - python-pro
+      - typescript-pro

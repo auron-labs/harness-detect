@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "devDependencies": {
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "ultracite": "^7.12.4"
+  }
+}

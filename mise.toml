@@ -1,10 +1,18 @@
 [tools]
+betterleaks = "1.9.0"
 bun = "1.4.2"
-go = "1.26.9"
+"cargo:cargo-deny" = "0.20.2"
+go = "1.27.1"
+golangci-lint = "2.14.0"
+hk = { version = "2.5.0", workflow = "release.yml" }
+node = "26.11.1"
+"npm:sort-package-json" = "4.0.0"
+pinact = "5.0.0"
+pkl = "0.32.1"
 rust = "1.99.0"
-uv = "0.12.19"
-hk = "1.50.0"
-ruff = "latest"
+tombi = "1.7.3"
+uv = "0.12.23"
+zizmor = "1.30.1"
 
 [tasks."ts:test"]
 description = "Run TypeScript package tests"
@@ -78,10 +86,7 @@ run = "cargo test"
 [tasks."rust:audit"]
 description = "Audit Rust dependencies for vulnerabilities"
 dir = "packages/rust"
-run = [
-  "cargo install cargo-audit --locked",
-  "cargo audit",
-]
+run = ["cargo install cargo-audit --locked", "cargo audit"]
 
 [tasks."rust:lint"]
 description = "Run Rust clippy"
@@ -151,11 +156,7 @@ run = "node scripts/check-api-parity.mjs"
 
 [tasks."docs:generate"]
 description = "Regenerate generated docs from the registry"
-run = [
-  "mise run docs:env-vars:generate",
-  "mise run docs:support-matrix:generate",
-  "mise run docs:stats:generate",
-]
+run = ["mise run docs:env-vars:generate", "mise run docs:support-matrix:generate", "mise run docs:stats:generate"]
 
 [tasks."docs:env-vars:generate"]
 description = "Regenerate the env-var table in docs/configuration.md from the registry"
@@ -187,11 +188,7 @@ run = "bunx automd --dir ../.. && git -C ../.. diff --exit-code -- README.md doc
 
 [tasks."docs:check"]
 description = "Verify generated docs are up to date"
-run = [
-  "mise run docs:env-vars:check",
-  "mise run docs:support-matrix:check",
-  "mise run docs:stats:check",
-]
+run = ["mise run docs:env-vars:check", "mise run docs:support-matrix:check", "mise run docs:stats:check"]
 
 [tasks.test]
 description = "Run package tests"
@@ -219,41 +216,11 @@ depends = ["smoke:docker"]
 
 [tasks.verify]
 description = "Run all local release verification checks"
-run = [
-  "mise run registry:check",
-  "mise run docs:check",
-  "mise run ts:test",
-  "mise run ts:audit",
-  "mise run ts:types",
-  "mise run ts:smoke",
-  "mise run ts:pack",
-  "mise run api:check",
-  "mise run go:test",
-  "mise run go:vet",
-  "mise run go:vuln",
-  "mise run go:consumer",
-  "mise run rust:fmt",
-  "mise run rust:lint",
-  "mise run rust:test",
-  "mise run rust:package",
-  "mise run rust:audit",
-  "mise run python:sync",
-  "mise run parity:check",
-  "mise run python:lint",
-  "mise run python:fmt",
-  "mise run python:test",
-  "mise run python:build",
-  "mise run python:audit",
-]
+run = ["mise run registry:check", "mise run docs:check", "mise run ts:test", "mise run ts:audit", "mise run ts:types", "mise run ts:smoke", "mise run ts:pack", "mise run api:check", "mise run go:test", "mise run go:vet", "mise run go:vuln", "mise run go:consumer", "mise run rust:fmt", "mise run rust:lint", "mise run rust:test", "mise run rust:package", "mise run rust:audit", "mise run python:sync", "mise run parity:check", "mise run python:lint", "mise run python:fmt", "mise run python:test", "mise run python:build", "mise run python:audit"]
 
 [tasks.perf]
 description = "Run hermetic performance reports for all packages"
-run = [
-  "mise run ts:perf",
-  "mise run go:perf",
-  "mise run rust:perf",
-  "mise run python:perf",
-]
+run = ["mise run ts:perf", "mise run go:perf", "mise run rust:perf", "mise run python:perf"]
 
 [tasks.lint]
 description = "Run all linters"
@@ -270,3 +237,6 @@ run = "hk check --all"
 [tasks.fix]
 description = "Auto-fix lint and format issues via hk"
 run = "hk fix"
+
+[env]
+BETTERLEAKS_CONFIG = "{{ config_root }}/.betterleaks.toml"
