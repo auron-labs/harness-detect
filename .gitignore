@@ -319,3 +319,10 @@ vite.config.ts.timestamp-*
 !.env.ci
 .env.test
 # END genignore
+
+# Share the repository harness skill while keeping other local agent skills ignored.
+!/.agents/
+/.agents/*
+!/.agents/skills/
+/.agents/skills/*
+!/.agents/skills/add-harness/
