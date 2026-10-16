@@ -289,7 +289,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 56,
+        "count": 57,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1106,6 +1106,305 @@
             "exists": true
           }
         ]
+      }
+    },
+    {
+      "id": "check-alias-perch-pearch",
+      "operation": "checkHarness",
+      "input": "pearch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "perch",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-alias-perch-perchai-cli",
+      "operation": "checkHarness",
+      "input": "perchai-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "perch",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-alias-perch-perch-ai",
+      "operation": "checkHarness",
+      "input": "perch-ai",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "perch",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-executable-only-perch",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/perch",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": "${BIN}/perch",
+        "matchedPathIds": []
+      },
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
+    },
+    {
+      "id": "check-path-only-perch-global-mcp",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.perch/mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-mcp"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-mcp",
+            "path": "${HOME}/.perch/mcp.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-perch-global-manual",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Documents/Perch/PERCH.md"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-manual"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-manual",
+            "path": "${HOME}/Documents/Perch/PERCH.md",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-perch-project-mcp",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.perch/mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-mcp"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-mcp",
+            "path": "${CWD}/.perch/mcp.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-perch-project-manual",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.perch/PERCH.md"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-manual"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-manual",
+            "path": "${CWD}/.perch/PERCH.md",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-perch-project-rules",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.perch/rules"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-rules"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-rules",
+            "path": "${CWD}/.perch/rules",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-perch-project-memory",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.perch/memory"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-memory"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-memory",
+            "path": "${CWD}/.perch/memory",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-shared-paths-perch",
+      "operation": "checkHarness",
+      "input": "perch",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.perch"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.perch"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/AGENTS.md",
+          "content": "Shared instructions"
+        }
+      ],
+      "expect": {
+        "key": "perch",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
       }
     }
   ]
