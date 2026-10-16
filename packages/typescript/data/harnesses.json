@@ -14121,6 +14121,179 @@
           }
         }
       }
+    },
+    {
+      "key": "perch",
+      "name": "Perch",
+      "aliases": [
+        "pearch",
+        "perchai-cli",
+        "perch-ai"
+      ],
+      "executables": [
+        "perch"
+      ],
+      "paths": [
+        {
+          "id": "global-mcp",
+          "kind": "file",
+          "template": "${HOME}/.perch/mcp.json",
+          "category": "config"
+        },
+        {
+          "id": "global-manual",
+          "kind": "file",
+          "template": "${HOME}/Documents/Perch/PERCH.md",
+          "category": "config"
+        },
+        {
+          "id": "project-mcp",
+          "kind": "file",
+          "template": "${CWD}/.perch/mcp.json",
+          "category": "project"
+        },
+        {
+          "id": "project-manual",
+          "kind": "file",
+          "template": "${CWD}/.perch/PERCH.md",
+          "category": "project"
+        },
+        {
+          "id": "project-rules",
+          "kind": "dir",
+          "template": "${CWD}/.perch/rules",
+          "category": "project"
+        },
+        {
+          "id": "project-memory",
+          "kind": "dir",
+          "template": "${CWD}/.perch/memory",
+          "category": "state"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://www.perchai.app/docs/using-perch/cli",
+        "https://www.perchai.app/docs/concepts/mcp-servers",
+        "https://www.perchai.app/docs/concepts/memory",
+        "https://registry.npmjs.org/perchai-cli/2.4.109"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "perchai-cli",
+          "command": "npm install -g perchai-cli",
+          "url": "https://www.perchai.app/docs/using-perch/cli",
+          "notes": "The current npm package requires Node.js 20 or newer; the CLI documentation still lists Node.js 18."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-mcp",
+                "kind": "file",
+                "template": "${HOME}/.perch/mcp.json"
+              },
+              {
+                "id": "global-manual",
+                "kind": "file",
+                "template": "${HOME}/Documents/Perch/PERCH.md"
+              }
+            ],
+            "sources": [
+              "https://www.perchai.app/docs/concepts/mcp-servers",
+              "https://www.perchai.app/docs/concepts/memory"
+            ],
+            "confidence": "official",
+            "notes": "MCP server configuration and the global standing-instructions manual."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-mcp",
+                "kind": "file",
+                "template": "${CWD}/.perch/mcp.json"
+              },
+              {
+                "id": "project-manual",
+                "kind": "file",
+                "template": "${CWD}/.perch/PERCH.md"
+              },
+              {
+                "id": "project-rules",
+                "kind": "dir",
+                "template": "${CWD}/.perch/rules"
+              }
+            ],
+            "sources": [
+              "https://www.perchai.app/docs/concepts/mcp-servers",
+              "https://www.perchai.app/docs/concepts/memory"
+            ],
+            "confidence": "official",
+            "notes": "MCP server configuration and standing instructions; project MCP servers override global servers by name."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
     }
   ]
 }
