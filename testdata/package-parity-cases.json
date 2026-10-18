@@ -1187,6 +1187,174 @@
       ]
     },
     {
+      "id": "check-path-only-devin-user-mcp",
+      "operation": "checkHarness",
+      "input": "devin",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/devin/mcp_config.json"
+        }
+      ],
+      "expect": {
+        "key": "devin-for-terminal",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-mcp"
+        ],
+        "pathAssertions": [
+          {
+            "id": "user-mcp",
+            "path": "${HOME}/.config/devin/mcp_config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-devin-user-mcp-xdg",
+      "operation": "checkHarness",
+      "input": "devin-cli",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${HOME}/custom-config"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/custom-config/devin/mcp_config.json"
+        }
+      ],
+      "expect": {
+        "key": "devin-for-terminal",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-mcp"
+        ],
+        "pathAssertions": [
+          {
+            "id": "user-mcp",
+            "path": "${HOME}/custom-config/devin/mcp_config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-devin-user-mcp-windows",
+      "operation": "checkHarness",
+      "input": "devin",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${HOME}/AppData/Roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/AppData/Roaming/devin/mcp_config.json"
+        }
+      ],
+      "expect": {
+        "key": "devin-for-terminal",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-mcp-windows"
+        ],
+        "pathAssertions": [
+          {
+            "id": "user-mcp-windows",
+            "path": "${HOME}/AppData/Roaming/devin/mcp_config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-devin-project-mcp",
+      "operation": "checkHarness",
+      "input": "devin",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.devin/mcp_config.json"
+        }
+      ],
+      "expect": {
+        "key": "devin-for-terminal",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-mcp"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-mcp",
+            "path": "${CWD}/.devin/mcp_config.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-devin-project-mcp-local",
+      "operation": "checkHarness",
+      "input": "devin-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.devin/mcp_config.local.json"
+        }
+      ],
+      "expect": {
+        "key": "devin-for-terminal",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-mcp-local"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-mcp-local",
+            "path": "${CWD}/.devin/mcp_config.local.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
       "id": "check-path-only-perch-global-mcp",
       "operation": "checkHarness",
       "input": "perch",

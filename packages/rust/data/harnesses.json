@@ -6302,6 +6302,37 @@
           "template": "${CWD}/.devin/config.local.json"
         },
         {
+          "id": "user-mcp",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/devin/mcp_config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "user-mcp-windows",
+          "category": "config",
+          "kind": "file",
+          "template": "${APPDATA}/devin/mcp_config.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "project-mcp",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.devin/mcp_config.json"
+        },
+        {
+          "id": "project-mcp-local",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.devin/mcp_config.local.json"
+        },
+        {
           "id": "data-root",
           "category": "state",
           "kind": "dir",
@@ -6367,7 +6398,8 @@
       "sources": [
         "https://docs.devin.ai/cli/reference/configuration/config-file",
         "https://docs.devin.ai/cli/troubleshooting",
-        "https://docs.devin.ai/cli/changelog/stable"
+        "https://docs.devin.ai/cli/changelog/stable",
+        "https://docs.devin.ai/cli/extensibility/mcp/configuration"
       ],
       "installations": [
         {
@@ -6385,14 +6417,33 @@
                 "id": "user-config",
                 "kind": "file",
                 "template": "${XDG_CONFIG_HOME}/devin/config.json"
+              },
+              {
+                "id": "user-mcp",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/devin/mcp_config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-mcp-windows",
+                "kind": "file",
+                "template": "${APPDATA}/devin/mcp_config.json",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
               "https://docs.devin.ai/cli/reference/configuration/config-file",
               "https://docs.devin.ai/cli/troubleshooting",
-              "https://docs.devin.ai/cli/changelog/stable"
+              "https://docs.devin.ai/cli/changelog/stable",
+              "https://docs.devin.ai/cli/extensibility/mcp/configuration"
             ],
-            "confidence": "inferred"
+            "confidence": "inferred",
+            "notes": "MCP servers use the mcpServers key in dedicated mcp_config.json files since v3000.3; older main-config entries are migrated automatically. Remote servers use url; stdio servers use command and args."
           },
           "local": {
             "status": "supported",
@@ -6406,14 +6457,26 @@
                 "id": "project-config-local",
                 "kind": "file",
                 "template": "${CWD}/.devin/config.local.json"
+              },
+              {
+                "id": "project-mcp",
+                "kind": "file",
+                "template": "${CWD}/.devin/mcp_config.json"
+              },
+              {
+                "id": "project-mcp-local",
+                "kind": "file",
+                "template": "${CWD}/.devin/mcp_config.local.json"
               }
             ],
             "sources": [
               "https://docs.devin.ai/cli/reference/configuration/config-file",
               "https://docs.devin.ai/cli/troubleshooting",
-              "https://docs.devin.ai/cli/changelog/stable"
+              "https://docs.devin.ai/cli/changelog/stable",
+              "https://docs.devin.ai/cli/extensibility/mcp/configuration"
             ],
-            "confidence": "inferred"
+            "confidence": "official",
+            "notes": "MCP servers use the mcpServers key in dedicated mcp_config.json files since v3000.3; older main-config entries are migrated automatically. Remote servers use url; stdio servers use command and args."
           }
         },
         "skills": {
