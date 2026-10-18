@@ -8,6 +8,17 @@ title: "Add harness: "
 
 ### Project or documentation link
 
-### Detection details (optional)
+### Version and platform (if known)
 
-<!-- Executable name, config paths, or anything else that could help detect it. -->
+<!-- Upstream version, operating system, and installation method. -->
+
+### Detection signals and evidence
+
+<!-- List executable names, config/state paths, root overrides, or platform restrictions.
+Link the exact official documentation or source that supports each proposed rule.
+Leave unverified details unknown; shared AGENTS.md or .agents files alone may cause false positives. -->
+
+### Support metadata (optional)
+
+<!-- Document global and project support separately for config, skills, commands, agents,
+and .agents. Include supporting URLs; absence from docs means unknown. -->

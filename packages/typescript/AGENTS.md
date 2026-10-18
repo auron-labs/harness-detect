@@ -22,9 +22,7 @@
 
 ## Commands
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the full
-command reference, the registry editing procedure, and change-aware
-validation.
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command reference, the registry editing procedure, and change-aware validation.
 
 ## Working Rules
 
@@ -41,22 +39,15 @@ validation.
   - `checkHarness()`
   - `detectHarnesses()`
   - `detectInstalledHarnesses()`
-- Raw-registry APIs, `listHarnesses()`, and detection results that embed
-  `harness` now expose required `support` metadata wherever they expose full
-  harness definitions.
-- `support` is descriptive only. Detection still depends on executable matches
-  and existing resolved `paths[]` entries.
-- The repo is still unpublished, so prefer a clean aligned API/schema over
-  compatibility-only layers. Keep registry `version: 1` unless internal
-  tooling truly requires a bump.
+- Raw-registry APIs, `listHarnesses()`, and detection results that embed `harness` now expose required `support` metadata wherever they expose full harness definitions.
+- `support` is descriptive only. Detection still depends on executable matches and existing resolved `paths[]` entries.
+- The repo is still unpublished, so prefer a clean aligned API/schema over compatibility-only layers. Keep registry `version: 1` unless internal tooling truly requires a bump.
 
 ## Matrix Editing
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the
-registry editing rules and post-edit verification. Package-specific
-notes:
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the registry editing rules and post-edit verification. Package-specific notes:
 
-- Follow [../../docs/harness-guide.md](../../docs/harness-guide.md) for the canonical edit flow: edit `packages/data/harnesses.json`, run `mise run registry:sync`, then `mise run registry:check`.
+- Follow [../../docs/harness-guide.md](../../docs/harness-guide.md) for the canonical edit flow: edit `packages/data/harnesses.json`, run `mise run harness:refresh`, then `mise run harness:check`.
 - `data/harnesses.json` is a derived package copy. Do not hand-edit it.
 - CI uses the read-only `mise run registry:check` step to catch drift.
 
@@ -65,7 +56,8 @@ notes:
 
 ## Testing
 
-- The current tests only cover matrix readability, alias lookup, full-registry iteration, and a sample env override case.
+- The TypeScript suite also checks the canonical registry with the shared Ajv validator and covers repository-tool regressions in `test/registry-tools.test.js`.
+- Local smoke runs every executable and fixtureable detection path independently in a fresh temporary tree; external and unresolved paths are reported as skipped.
 - `bun run smoke:fixtures` uses a temporary isolated `HOME`, fake executables, and fake config/state paths inside Docker. It does not install real harnesses.
 - If you change root-resolution behavior in `src/index.js`, add or update a focused `node:test` case in `test/index.test.js`.
 

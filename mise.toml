@@ -146,6 +146,26 @@ run = "node scripts/sync-registry.mjs --check"
 description = "Sync registry copies from the canonical registry"
 run = "node scripts/sync-registry.mjs"
 
+[tasks."registry:validate"]
+description = "Validate the registry against JSON Schema and semantic invariants"
+run = "node scripts/validate-registry.mjs"
+
+[tasks."harness:new"]
+description = "Print an incomplete harness entry: <key> <name> [--alias <alias>]"
+run = "node scripts/scaffold-harness.mjs"
+
+[tasks."harness:summary"]
+description = "Summarize canonical registry changes against HEAD or --base <git-ref>"
+run = "node scripts/summarize-harness-changes.mjs"
+
+[tasks."harness:refresh"]
+description = "Validate the canonical registry, sync copies, and regenerate docs"
+run = ["mise run registry:validate", "mise run registry:sync", "mise run docs:generate"]
+
+[tasks."harness:check"]
+description = "Check a harness change across validation, docs, all packages, smoke, and parity"
+run = ["mise run registry:validate", "mise run registry:check", "mise run docs:check", "mise run ts:test", "mise run ts:types", "mise run ts:smoke", "mise run go:test", "mise run go:vet", "mise run rust:test", "mise run python:test", "mise run parity:check", "mise run api:check", "mise run harness:summary"]
+
 [tasks."parity:check"]
 description = "Compare package snapshots on the shared parity fixtures"
 run = "node scripts/check-package-parity.mjs"
@@ -183,8 +203,7 @@ run = "bunx automd --dir ../.."
 
 [tasks."docs:stats:check"]
 description = "Verify Automd repository stats in documentation are up to date"
-dir = "packages/typescript"
-run = "bunx automd --dir ../.. && git -C ../.. diff --exit-code -- README.md docs/index.md docs/api.md docs/configuration.md"
+run = "node scripts/check-doc-stats.mjs"
 
 [tasks."docs:check"]
 description = "Verify generated docs are up to date"
@@ -216,7 +235,7 @@ depends = ["smoke:docker"]
 
 [tasks.verify]
 description = "Run all local release verification checks"
-run = ["mise run registry:check", "mise run docs:check", "mise run ts:test", "mise run ts:audit", "mise run ts:types", "mise run ts:smoke", "mise run ts:pack", "mise run api:check", "mise run go:test", "mise run go:vet", "mise run go:vuln", "mise run go:consumer", "mise run rust:fmt", "mise run rust:lint", "mise run rust:test", "mise run rust:package", "mise run rust:audit", "mise run python:sync", "mise run parity:check", "mise run python:lint", "mise run python:fmt", "mise run python:test", "mise run python:build", "mise run python:audit"]
+run = ["mise run registry:validate", "mise run registry:check", "mise run docs:check", "mise run ts:test", "mise run ts:audit", "mise run ts:types", "mise run ts:smoke", "mise run ts:pack", "mise run api:check", "mise run go:test", "mise run go:vet", "mise run go:vuln", "mise run go:consumer", "mise run rust:fmt", "mise run rust:lint", "mise run rust:test", "mise run rust:package", "mise run rust:audit", "mise run python:sync", "mise run parity:check", "mise run python:lint", "mise run python:fmt", "mise run python:test", "mise run python:build", "mise run python:audit"]
 
 [tasks.perf]
 description = "Run hermetic performance reports for all packages"

@@ -2,10 +2,7 @@
 
 ## Test strategy
 
-Packages use the same testing approach: behavior tests that verify
-detection logic, registry integrity, support-metadata parity, and API
-correctness. Tests are hermetic — they do not require real harnesses to be
-installed.
+Packages use the same testing approach: behavior tests that verify detection logic, registry integrity, support-metadata parity, and API correctness. Tests are hermetic — they do not require real harnesses to be installed.
 
 ## Commands
 
@@ -13,13 +10,13 @@ installed.
 
 Run from `packages/typescript`:
 
-| Purpose | Command |
-|---|---|
-| Unit tests | `bun test` |
-| Dependency audit | `bun audit` |
-| Type-check | `bun run types:check` |
+| Purpose                   | Command                        |
+| ------------------------- | ------------------------------ |
+| Unit tests                | `bun test`                     |
+| Dependency audit          | `bun audit`                    |
+| Type-check                | `bun run types:check`          |
 | Local hermetic smoke test | `bun run smoke:fixtures:local` |
-| Docker smoke test | `bun run smoke:fixtures` |
+| Docker smoke test         | `bun run smoke:fixtures`       |
 
 `bun test` runs the test suite with Bun's built-in test runner.
 
@@ -28,7 +25,7 @@ Run from `packages/typescript`:
 Run from `packages/golang`:
 
 | Purpose | Command |
-|---|---|
+| --- | --- |
 | Unit tests | `go test ./...` |
 | Vet | `go vet ./...` |
 | Vulnerability check | `go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...` |
@@ -37,64 +34,62 @@ Run from `packages/golang`:
 
 Run from `packages/rust`:
 
-| Purpose | Command |
-|---|---|
-| Tests | `cargo test` |
-| Lint | `cargo clippy --all-targets` |
-| Format check | `cargo fmt --check` |
-| Dependency audit | `cargo install cargo-audit --locked && cargo audit` |
-| Hermetic perf smoke | `cargo run --quiet --release --example perf_smoke` |
+| Purpose             | Command                                             |
+| ------------------- | --------------------------------------------------- |
+| Tests               | `cargo test`                                        |
+| Lint                | `cargo clippy --all-targets`                        |
+| Format check        | `cargo fmt --check`                                 |
+| Dependency audit    | `cargo install cargo-audit --locked && cargo audit` |
+| Hermetic perf smoke | `cargo run --quiet --release --example perf_smoke`  |
 
 ### Python
 
 Run from `packages/python`:
 
-| Purpose | Command |
-|---|---|
-| Install dev deps | `uv sync --dev` |
-| Tests | `uv run pytest` |
-| Lint | `uv run ruff check .` |
-| Format check | `uv run ruff format --check .` |
-| Dependency audit | `uv run --with pip-audit pip-audit` |
+| Purpose             | Command                               |
+| ------------------- | ------------------------------------- |
+| Install dev deps    | `uv sync --dev`                       |
+| Tests               | `uv run pytest`                       |
+| Lint                | `uv run ruff check .`                 |
+| Format check        | `uv run ruff format --check .`        |
+| Dependency audit    | `uv run --with pip-audit pip-audit`   |
 | Hermetic perf smoke | `uv run python scripts/perf_smoke.py` |
 
 ### mise shortcuts (from repo root)
 
-| Purpose | Command |
-|---|---|
-| Package tests | `mise run test` |
-| Local smoke test | `mise run smoke` |
-| Regenerate generated docs | `mise run docs:generate` |
-| Check generated docs freshness | `mise run docs:check` |
-| Package perf reports | `mise run perf` |
-| Full release verification | `mise run verify` |
+| Purpose                                 | Command                      |
+| --------------------------------------- | ---------------------------- |
+| Package tests                           | `mise run test`              |
+| Local smoke test                        | `mise run smoke`             |
+| Registry schema and semantic validation | `mise run registry:validate` |
+| Complete harness-change checks          | `mise run harness:check`     |
+| Regenerate generated docs               | `mise run docs:generate`     |
+| Check generated docs freshness          | `mise run docs:check`        |
+| Package perf reports                    | `mise run perf`              |
+| Full release verification               | `mise run verify`            |
 
 ## Pre-publication package validation
 
-These checks validate local package artifacts and an external Go consumer. They
-never publish packages or install them from remote registries.
+These checks validate local package artifacts and an external Go consumer. They never publish packages or install them from remote registries.
 
 | Distribution | Command | What it validates |
-|---|---|---|
+| --- | --- | --- |
 | npm | `mise run ts:pack` / `cd packages/typescript && bun pm pack --dry-run` | npm tarball contents. |
 | Go module | `mise run go:consumer` | A deterministic temporary consumer module imports the local Go module through a `replace` directive; the temporary module is removed afterward. |
 | Rust crate | `mise run rust:package` / `cd packages/rust && cargo package --allow-dirty` | Local crate packaging without publication. |
 | Python | `mise run python:build` / `cd packages/python && uv build` | Local wheel and source-distribution builds without publication. |
 
-`mise run verify` runs all of these checks. The Rust and Python build commands
-leave their standard local outputs in `packages/rust/target/package/` and
-`packages/python/dist/`; no package is uploaded.
+`mise run verify` runs all of these checks. The Rust and Python build commands leave their standard local outputs in `packages/rust/target/package/` and `packages/python/dist/`; no package is uploaded.
 
 ## What CI runs
 
-`.github/workflows/ci.yml` runs on every push and pull request, from
-package directories via `working-directory`:
+`.github/workflows/ci.yml` runs on every push and pull request, from package directories via `working-directory`:
 
 1. `bun install --frozen-lockfile` (TypeScript)
-2. `bun scripts/sync-registry.mjs --check` (repo root)
+2. `node scripts/validate-registry.mjs`, then `bun scripts/sync-registry.mjs --check` (repo root)
 3. `node scripts/generate-support-matrix.mjs --check` (repo root)
-4. `bunx automd --dir ../..` (TypeScript)
-5. `git diff --exit-code -- README.md docs/index.md docs/api.md docs/configuration.md` (repo root)
+4. On PRs, `node scripts/summarize-harness-changes.mjs --base <PR-base-SHA>` writes the registry summary to the job summary.
+5. `node scripts/check-doc-stats.mjs` checks generated stats without rewriting working files (repo root).
 6. `bun test` (TypeScript)
 7. `bun audit` (TypeScript)
 8. `bun run types:check` (TypeScript)
@@ -118,18 +113,18 @@ package directories via `working-directory`:
 26. `uv build` (Python)
 27. `uv run --with pip-audit pip-audit` (Python)
 
-Locally, `mise run verify` also runs `mise run docs:check` near the start of
-the sequence, so generated-doc freshness — including the support matrix — is a
-required verification gate before handoff.
+Locally, `mise run verify` also runs `mise run docs:check` near the start of the sequence, so generated-doc freshness — including the support matrix — is a required verification gate before handoff.
 
 ## TypeScript tests
 
 Source: `packages/typescript/test/index.test.js`
 
+Repository-tool regression tests live in `packages/typescript/test/registry-tools.test.js` and run with `bun test`. They cover schema failures, evidence requirements, identifier collisions, duplicate path/root IDs, scaffold safety, review summaries, independent detection signals, and read-only docs freshness. Canonical registry validation uses the same Ajv CLI as `mise run registry:validate` and CI, rather than handwritten schema rules.
+
 ### Test cases
 
 | Test | What it verifies |
-|---|---|
+| --- | --- |
 | `matrix is readable` | `getHarnessMatrix()` returns version 1 and >= 10 harnesses |
 | `packaged registry stays byte-for-byte synced` | `packages/typescript/data/harnesses.json` matches `packages/data/harnesses.json` byte-for-byte |
 | `verified harness additions are present` | Specific harness keys exist in the registry |
@@ -150,9 +145,7 @@ Source: `packages/typescript/test/index.test.js`
 
 Source: `packages/typescript/test/types-consumer.ts`
 
-This file imports from `@auron-labs/harness-detect` and exercises the type
-declarations in `index.d.ts`. It is compiled by `tsc --noEmit` via
-`tsconfig.types.json`. Run with:
+This file imports from `@auron-labs/harness-detect` and exercises the type declarations in `index.d.ts`. It is compiled by `tsc --noEmit` via `tsconfig.types.json`. Run with:
 
 ```sh
 cd packages/typescript && bun run types:check
@@ -165,7 +158,7 @@ Source: `packages/golang/harnessdetect/harnessdetect_test.go`
 ### Test cases
 
 | Test | What it verifies |
-|---|---|
+| --- | --- |
 | `TestEmbeddedDataMatchesSharedFile` | Embedded `harnesses.json` matches `packages/data/harnesses.json` byte-for-byte |
 | `TestGetHarnessMatrix` | `GetHarnessMatrix()` returns version 1 and >= 10 harnesses |
 | `TestListHarnesses` | `ListHarnesses()` length matches `GetHarnessMatrix().Harnesses` |
@@ -189,7 +182,7 @@ Source: `packages/rust/tests/behavior.rs` (integration tests), `packages/rust/sr
 ### Test cases
 
 | Test | What it verifies |
-|---|---|
+| --- | --- |
 | `embedded_data_matches_shared_file` | Embedded `harnesses.json` matches `packages/data/harnesses.json` byte-for-byte |
 | `test_get_harness_matrix` | `get_harness_matrix()` returns version 1 and >= 10 harnesses |
 | `test_list_harnesses` | `list_harnesses()` length matches `get_harness_matrix().harnesses` |
@@ -221,7 +214,7 @@ Source: `packages/python/tests/test_behavior.py`
 ### Test cases
 
 | Test | What it verifies |
-|---|---|
+| --- | --- |
 | `test_bundled_data_matches_shared_file` | Bundled `harnesses.json` matches `packages/data/harnesses.json` byte-for-byte |
 | `test_get_harness_matrix` | `get_harness_matrix()` returns version 1 and >= 10 harnesses |
 | `test_list_harnesses` | `list_harnesses()` length matches `get_harness_matrix().harnesses` |
@@ -254,15 +247,16 @@ Source: `packages/typescript/scripts/smoke-fixtures.js`
 
 The smoke test is a hermetic, end-to-end fixture test. It:
 
-1. Creates a temp directory with a fake `HOME`, `CWD`, `bin` (PATH), and XDG
-   directories.
-2. Sets env overrides for harnesses that support them (e.g. `CODEX_HOME`,
-   `CLAUDE_CONFIG_DIR`, `GEMINI_CLI_HOME`, etc.).
+1. Creates fresh temp directories with a fake `HOME`, `CWD`, `bin` (PATH), and XDG directories for every detection signal.
+2. Sets env overrides for harnesses that support them (e.g. `CODEX_HOME`, `CLAUDE_CONFIG_DIR`, `GEMINI_CLI_HOME`, etc.).
 3. For each harness in the registry:
-   - Verifies it starts as **not installed** in the isolated environment.
-   - Creates a fake executable and/or fake config/state path.
-   - Verifies the harness becomes **installed** after fixture setup.
-4. Prints a JSON summary: `{ platform, exercisedCount, skippedCount, exercised, skipped }`.
+   - Verifies there is no executable or matching path in the clean fixture tree.
+   - Tests every executable on its own, without creating detection paths.
+   - Tests every fixtureable config/state/install/project path on its own, without an executable. Checks the exact expected path ID matches.
+   - Verifies detection succeeds for each scenario and removes its tree.
+4. Prints a JSON summary with `platform`, `exercisedCount`, `scenarioCount`, `skippedCount`, harness keys in `exercised`, individual `scenarios`, and `skipped`.
+
+Absolute host paths outside the temporary tree and unresolved paths are never created; they appear in `skipped`. Platform-gated rules only run on their matching platform. Shared paths and executable names cannot leak from a prior scenario because every scenario gets a separate tree.
 
 ### Local smoke test
 
@@ -273,8 +267,7 @@ cd packages/typescript && bun run smoke:fixtures:local
 - **Prerequisites:** Node.js 18+ and installed package dependencies.
 - **CI behavior:** This is the smoke path CI runs.
 - **Expected output:** Exit 0 and a JSON summary.
-- **What it proves:** Hermetic fixture detection works. It does **not** install
-  real harnesses.
+- **What it proves:** Hermetic fixture detection works. It does **not** install real harnesses.
 
 ### Docker smoke test
 
@@ -285,27 +278,23 @@ cd packages/typescript && bun run smoke:fixtures
 - **Prerequisites:** Docker running locally; may pull `oven/bun:1.3`.
 - **Expected output:** Exit 0 and the same JSON summary shape.
 - **What it proves:** The same fixture smoke inside Linux/Docker.
-- **Note:** This path has not been confirmed to run successfully in all local
-  environments. Use the local smoke test for routine verification.
+- **Note:** This path has not been confirmed to run successfully in all local environments. Use the local smoke test for routine verification.
 
 ### Skipped harnesses
 
-Some harnesses may be skipped in the smoke test if they have no fixtureable
-path or executable on the current platform. The `skipped` array in the JSON
-output explains why each was skipped.
+Some harnesses may be skipped in the smoke test if they have no fixtureable path or executable on the current platform. The `skipped` array in the JSON output explains why each was skipped.
 
 ## How to add tests
 
 ### TypeScript
 
-Add a new test case to `packages/typescript/test/index.test.js` using Bun's
-built-in test runner (which supports `node:test` APIs):
+Add a new test case to `packages/typescript/test/index.test.js` using Bun's built-in test runner (which supports `node:test` APIs):
 
 ```js
 test("my new test", () => {
   const result = checkHarness("codex", {
     env: { HOME: "/tmp/test", PATH: "" },
-    cwd: "/repo"
+    cwd: "/repo",
   });
   assert.equal(result.key, "codex");
 });
@@ -313,8 +302,7 @@ test("my new test", () => {
 
 ### Go
 
-Add a new test function to
-`packages/golang/harnessdetect/harnessdetect_test.go`:
+Add a new test function to `packages/golang/harnessdetect/harnessdetect_test.go`:
 
 ```go
 func TestMyNewTest(t *testing.T) {
@@ -366,30 +354,21 @@ def test_my_new_test():
 
 ## Registry sync tests
 
-Every package with a bundled/embedded registry copy includes a test that
-verifies that copy matches the canonical `packages/data/harnesses.json`
-byte-for-byte:
+Every package with a bundled/embedded registry copy includes a test that verifies that copy matches the canonical `packages/data/harnesses.json` byte-for-byte:
 
-- TypeScript: `packaged registry stays byte-for-byte synced with the shared
-  registry`
+- TypeScript: `packaged registry stays byte-for-byte synced with the shared registry`
 - Go: `TestEmbeddedDataMatchesSharedFile`
 - Rust: `embedded_data_matches_shared_file`
 - Python: `test_bundled_data_matches_shared_file`
 
-These tests fail if you edit the canonical registry without syncing it to all
-package copies. See [troubleshooting.md](./troubleshooting.md) for the fix.
+These tests fail if you edit the canonical registry without syncing it to all package copies. See [troubleshooting.md](./troubleshooting.md) for the fix.
 
-Support metadata does not change the detection contract under test: installed
-status still comes only from executable matches and existing `paths[]` entries.
+Support metadata does not change the detection contract under test: installed status still comes only from executable matches and existing `paths[]` entries.
 
 ## Documentation verification
 
-- `mise run docs:generate` regenerates the env-var table in
-  `docs/configuration.md`, the generated `docs/support-matrix.md`, and Automd
-  repository stats.
+- `mise run docs:generate` regenerates the env-var table in `docs/configuration.md`, the generated `docs/support-matrix.md`, and Automd repository stats.
 - `mise run docs:support-matrix:generate` regenerates only the support matrix.
 - `mise run docs:check` runs the stale checks for all generated docs and stats.
-- The TypeScript test suite checks that generated table stays in sync with the
-  registry.
-- `mise run docs:support-matrix:check` verifies the matrix still matches
-  registry `support` data.
+- The TypeScript test suite checks that generated table stays in sync with the registry.
+- `mise run docs:support-matrix:check` verifies the matrix still matches registry `support` data.

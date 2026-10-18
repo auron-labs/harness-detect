@@ -2,44 +2,6 @@
   "name": "@auron-labs/harness-detect",
   "version": "0.2.1",
   "description": "Detect installed LLM harnesses and their config/state locations.",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/auron-labs/harness-detect.git"
-  },
-  "bugs": {
-    "url": "https://github.com/auron-labs/harness-detect/issues"
-  },
-  "type": "module",
-  "main": "./src/index.js",
-  "types": "./index.d.ts",
-  "packageManager": "bun@1.4.2",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "default": "./src/index.js"
-    },
-    "./data": "./data/harnesses.json"
-  },
-  "files": [
-    "src",
-    "data",
-    "index.d.ts"
-  ],
-  "engines": {
-    "node": ">=18"
-  },
-  "scripts": {
-    "parity:check": "node ../../scripts/check-package-parity.mjs",
-    "perf": "node scripts/perf-smoke.js",
-    "registry:check": "node ../../scripts/sync-registry.mjs --check",
-    "registry:sync": "node ../../scripts/sync-registry.mjs",
-    "preinstall": "bunx only-allow bun",
-    "prepack": "bun run registry:sync",
-    "test": "bun test",
-    "types:check": "tsc --noEmit -p tsconfig.types.json",
-    "smoke:fixtures": "docker run --rm -v \"$PWD:/repo\" -w /repo oven/bun:1.3 bun run smoke:fixtures:local",
-    "smoke:fixtures:local": "bun scripts/smoke-fixtures.js"
-  },
   "keywords": [
     "llm",
     "agent",
@@ -48,9 +10,49 @@
     "claude",
     "gemini"
   ],
+  "bugs": {
+    "url": "https://github.com/auron-labs/harness-detect/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/auron-labs/harness-detect.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./data": "./data/harnesses.json"
+  },
+  "main": "./src/index.js",
+  "types": "./index.d.ts",
+  "files": [
+    "src",
+    "data",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "preinstall": "bunx only-allow bun",
+    "prepack": "bun run registry:sync",
+    "parity:check": "node ../../scripts/check-package-parity.mjs",
+    "perf": "node scripts/perf-smoke.js",
+    "registry:check": "node ../../scripts/sync-registry.mjs --check",
+    "registry:sync": "node ../../scripts/sync-registry.mjs",
+    "registry:validate": "node ../../scripts/validate-registry.mjs",
+    "smoke:fixtures": "docker run --rm -v \"$PWD:/repo\" -w /repo oven/bun:1.3 bun run smoke:fixtures:local",
+    "smoke:fixtures:local": "bun scripts/smoke-fixtures.js",
+    "test": "bun test",
+    "types:check": "tsc --noEmit -p tsconfig.types.json"
+  },
   "devDependencies": {
+    "ajv": "8.20.0",
     "automd": "0.4.3",
     "typescript": "^7.0.2"
   },
-  "license": "MIT"
+  "packageManager": "bun@1.4.2",
+  "engines": {
+    "node": ">=18"
+  }
 }

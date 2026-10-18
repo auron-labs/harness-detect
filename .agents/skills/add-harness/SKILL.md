@@ -34,7 +34,7 @@ Edit only `packages/data/harnesses.json`; generate all four package copies later
 - Use supported `${UPPERCASE_VARIABLE}` templates. Anchor project paths at `${CWD}`; runtime `cwd` comes from the caller or process, not an environment variable. Check current resolver defaults before assuming a placeholder is populated. Unresolved placeholders produce null paths.
 - For a documented root override, define `roots[]` with `name`, `env`, and `fallback`, then reference the derived root in affected paths. Use `use` when the override needs transformation. Keep `env[]` descriptions aligned and preserve both override and fallback behavior.
 - Add `platforms` only for evidenced restrictions, using schema values such as `darwin`, `linux`, and `win32`. Do not infer OS parity or invent platform gating fields on executables; check the resolver's executable behavior.
-- Record documented installation methods without running installers. Include an evidence `url` for each installation: current package tests require it even though the JSON schema marks it optional. For an underspecified method, use `method: "unknown"` with an upstream URL and factual `notes`, rather than guessing a package name, command, or marketplace ID.
+- Record documented installation methods without running installers. The schema requires an HTTPS evidence `url` for each installation. For an underspecified method, use `method: "unknown"` with an upstream URL and factual `notes`, rather than guessing a package name, command, or marketplace ID.
 
 Populate all ten support leaves: `config`, `skills`, `commands`, `agents`, and `dotAgents`, each with `global` and `local`. Each leaf needs `status`, `paths`, `sources`, and `confidence`; `notes` is optional. Use confidence `official` for explicit first-party documentation, `source` for upstream implementation, `observed` for reproduced behavior, or `inferred` sparingly for reasoned evidence. An unverified leaf is:
 
@@ -48,38 +48,28 @@ If the current schema cannot model verified behavior, explain the limitation and
 
 ## Cover behavior and refresh generated files
 
-Check existing coverage before adding tests. The TypeScript registry tests check entry structure, and the local smoke runner enumerates all harnesses. Extend [shared parity fixtures](../../../testdata/package-parity-cases.json) when the new entry introduces behavior those checks do not exercise: alias lookup, path-only or executable-only detection, root overrides and fallbacks, project paths, or platform restrictions. Include explicit `expect` results so agreement between packages is also checked against intended behavior. Reuse existing fixture conventions and isolate `HOME`, `PATH`, and `cwd` in temporary directories.
+For a new entry, use `mise run harness:new -- <key> "<name>" [--alias <alias>]` to print an incomplete JSON draft without editing the registry. Fill in verified detection signals, sources, and installations before inserting it into the canonical registry. All ten support leaves start independently as `unknown`. The command rejects collisions with existing keys and aliases.
+
+Check existing coverage before adding tests. The shared Ajv validator checks the schema and semantic invariants, and the local smoke runner exercises each executable and fixtureable path separately in a fresh temporary tree. Extend [shared parity fixtures](../../../testdata/package-parity-cases.json) when the new entry introduces behavior those checks do not exercise: alias lookup, root overrides and fallbacks, project paths, or platform restrictions. Include explicit `expect` results so agreement between packages is also checked against intended behavior. Reuse existing fixture conventions and isolate `HOME`, `PATH`, and `cwd` in temporary directories.
 
 Run from the repository root after editing:
 
 ```sh
-mise run registry:sync
-mise run registry:check
-mise run docs:generate
+mise run harness:refresh
 ```
 
-Sync updates the TypeScript, Go, Rust, and Python registry copies. Docs generation updates the support matrix, environment-variable table, and repository statistics. Review those outputs and update affected explanatory docs. Do not hand-edit generated copies, tables, or counts.
+Refresh validates the canonical registry, syncs the TypeScript, Go, Rust, and Python copies, and generates the support matrix, environment-variable table, and repository statistics. Review those outputs and update affected explanatory docs. Do not hand-edit generated copies, tables, or counts.
 
 ## Validate and hand off
 
 Use the current commands in `mise.toml` and `docs/maintainers.md`. For a new harness entry, run from the repository root:
 
 ```sh
-mise run ts:test
-mise run ts:types
-mise run ts:smoke
-mise run go:test
-mise run go:vet
-mise run rust:test
-mise run python:test
-mise run parity:check
-mise run api:check
-mise run registry:check
-mise run docs:check
+mise run harness:check
 ```
 
 Add package-specific lint/format checks when changing implementation code; `mise run verify` is the broader release check. Prefer the local hermetic smoke task; Docker smoke is unverified locally. Package-native commands must run in their package directories because the root has no package manifests.
 
-`docs:stats:check` (included in `docs:check`) regenerates content and compares it with Git, so intended, uncommitted generated changes can produce a nonzero exit. Inspect the diff and confirm regeneration leaves the working files unchanged before attributing that result to intended edits. Do not stage or commit merely to make the check pass, and report its actual outcome.
+`harness:check` covers schema/semantic validation, registry and docs freshness, all package tests, TypeScript types and smoke, Go vet, API/package parity, and a registry summary. The docs checks are read-only and compare generated content with working files, so correctly refreshed uncommitted changes pass. For a quick structural check use `mise run registry:validate`. For committed branch changes use `mise run harness:summary -- --base <git-ref>`; the default summary compares working files with `HEAD`. CI publishes the PR-base summary in the job summary.
 
 Review the final diff for unrelated changes, missing evidence, and generated drift. Report the added key and aliases, detection signals, verified platforms and overrides, remaining support unknowns, and checks run with their outcomes. Call out skipped platform coverage or unavailable tools without claiming they passed.

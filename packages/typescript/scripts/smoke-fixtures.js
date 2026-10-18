@@ -2,34 +2,40 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { checkHarness, listHarnesses } from "../src/index.js";
 
-function makeDir(dirPath) {
+const makeDir = (dirPath) => {
   fs.mkdirSync(dirPath, { recursive: true });
-}
+};
 
-function makeFile(filePath, content = "fixture") {
+const makeFile = (filePath, content = "fixture") => {
   makeDir(path.dirname(filePath));
   fs.writeFileSync(filePath, content);
-}
+};
 
-function makeExecutable(binDir, name) {
-  const executablePath = path.join(binDir, name);
+const makeExecutable = (binDir, name) => {
+  assert.equal(path.basename(name), name, "executable must be a basename");
+  const executablePath = path.join(
+    binDir,
+    process.platform === "win32" ? `${name}.EXE` : name
+  );
   makeFile(executablePath, "#!/bin/sh\nexit 0\n");
   fs.chmodSync(executablePath, 0o755);
-}
+  return executablePath;
+};
 
-function makeFixtureForPath(entry) {
+const makeFixtureForPath = (entry) => {
   if (entry.kind === "dir") {
     makeDir(entry.path);
     return;
   }
 
   makeFile(entry.path);
-}
+};
 
-function buildEnv(rootDir) {
+const buildEnv = (rootDir) => {
   const home = path.join(rootDir, "home");
   const cwd = path.join(rootDir, "cwd");
   const bin = path.join(rootDir, "bin");
@@ -43,87 +49,168 @@ function buildEnv(rootDir) {
   makeDir(bin);
 
   return {
-    cwd,
     bin,
+    cwd,
     env: {
+      AMP_DATA_HOME: path.join(rootDir, "overrides", "amp-data"),
+      APPDATA: path.join(home, "AppData", "Roaming"),
+      AUTOGENSTUDIO_APPDIR: path.join(rootDir, "overrides", "autogenstudio"),
+      CLAUDE_CONFIG_DIR: path.join(rootDir, "overrides", "claude"),
+      CLINE_DIR: path.join(rootDir, "overrides", "cline"),
+      CODEX_HOME: path.join(rootDir, "overrides", "codex"),
+      COPILOT_CACHE_HOME: path.join(rootDir, "overrides", "copilot-cache"),
+      COPILOT_HOME: path.join(rootDir, "overrides", "copilot"),
+      GEMINI_CLI_HOME: path.join(rootDir, "overrides", "gemini-home"),
+      GOOSE_PATH_ROOT: path.join(rootDir, "overrides", "goose"),
+      HERMES_HOME: path.join(rootDir, "overrides", "hermes"),
       HOME: home,
+      LOCALAPPDATA: path.join(home, "AppData", "Local"),
+      OPENCLAW_HOME: path.join(rootDir, "overrides", "openclaw"),
+      OPENCLAW_STATE_DIR: path.join(rootDir, "overrides", "openclaw-state"),
+      OPENCODE_CONFIG_DIR: path.join(rootDir, "overrides", "opencode-config"),
       PATH: bin,
+      Q_CLI_DATA_DIR: path.join(rootDir, "overrides", "amazon-q"),
+      TMPDIR: path.join(rootDir, "tmp"),
+      XDG_CACHE_HOME: xdgCacheHome,
       XDG_CONFIG_HOME: xdgConfigHome,
       XDG_DATA_HOME: xdgDataHome,
       XDG_STATE_HOME: xdgStateHome,
-      XDG_CACHE_HOME: xdgCacheHome,
-      CODEX_HOME: path.join(rootDir, "overrides", "codex"),
-      CLAUDE_CONFIG_DIR: path.join(rootDir, "overrides", "claude"),
-      GEMINI_CLI_HOME: path.join(rootDir, "overrides", "gemini-home"),
-      OPENCODE_CONFIG_DIR: path.join(rootDir, "overrides", "opencode-config"),
-      GOOSE_PATH_ROOT: path.join(rootDir, "overrides", "goose"),
-      CLINE_DIR: path.join(rootDir, "overrides", "cline"),
-      Q_CLI_DATA_DIR: path.join(rootDir, "overrides", "amazon-q"),
-      COPILOT_HOME: path.join(rootDir, "overrides", "copilot"),
-      COPILOT_CACHE_HOME: path.join(rootDir, "overrides", "copilot-cache"),
-      AMP_DATA_HOME: path.join(rootDir, "overrides", "amp-data"),
-      HERMES_HOME: path.join(rootDir, "overrides", "hermes"),
-      OPENCLAW_HOME: path.join(rootDir, "overrides", "openclaw"),
-      OPENCLAW_STATE_DIR: path.join(rootDir, "overrides", "openclaw-state"),
-      AUTOGENSTUDIO_APPDIR: path.join(rootDir, "overrides", "autogenstudio")
-    }
+    },
   };
-}
+};
 
-const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "harness-detect-smoke-"));
-const { cwd, bin, env } = buildEnv(rootDir);
-const harnesses = listHarnesses();
-const exercised = [];
-const skipped = [];
+const isWithinRoot = (rootDir, candidate) => {
+  if (!candidate) {
+    return false;
+  }
+  const relative = path.relative(rootDir, candidate);
+  return (
+    relative !== ".." &&
+    !relative.startsWith(`..${path.sep}`) &&
+    !path.isAbsolute(relative)
+  );
+};
 
-try {
+const isolated = (run) => {
+  const rootDir = fs.mkdtempSync(
+    path.join(os.tmpdir(), "harness-detect-smoke-")
+  );
+  try {
+    return run(rootDir, buildEnv(rootDir));
+  } finally {
+    fs.rmSync(rootDir, { force: true, recursive: true });
+  }
+};
+
+export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
+  const exercised = [];
+  const skipped = [];
+  const scenarios = [];
+
   for (const harness of harnesses) {
-    const before = checkHarness(harness.key, { env, cwd });
-
-    // only consider paths inside the temp fixture tree for hermetic testing
-    const inTreePaths = before.paths.filter((entry) => entry.path && entry.path.startsWith(rootDir));
-    const hostMatched = before.paths.filter((entry) => entry.path && !entry.path.startsWith(rootDir) && entry.exists);
-    const hermeticInstalled = Boolean(before.executablePath || inTreePaths.some((entry) => entry.exists));
-
-    assert.equal(hermeticInstalled, false, `${harness.key} should start as not installed in isolated env`);
-
-    const fixturePath = inTreePaths.find((entry) => entry.path);
-    const canCreateExecutable = (harness.executables || []).length > 0;
-
-    if (!fixturePath && !canCreateExecutable) {
-      const reasonParts = ["no fixtureable path or executable on this platform"];
-      if (hostMatched.length > 0) {
-        reasonParts.push(`(host-only evidence skipped: ${hostMatched.map((p) => p.id).join(", ")})`);
+    const signals = isolated((rootDir, { env, cwd }) => {
+      const initial = check(harness.key, { cwd, env });
+      const fixtureable = initial.paths.filter((entry) =>
+        isWithinRoot(rootDir, entry.path)
+      );
+      for (const entry of initial.paths.filter(
+        (candidate) => !isWithinRoot(rootDir, candidate.path)
+      )) {
+        skipped.push({
+          key: harness.key,
+          pathId: entry.id,
+          reason: entry.path ? "path outside fixture tree" : "unresolved path",
+        });
       }
-      skipped.push({ key: harness.key, reason: reasonParts.join(" ") });
+      return [
+        ...harness.executables.map((name) => ({ executable: name })),
+        ...fixtureable.map((entry) => ({ pathId: entry.id })),
+      ];
+    });
+
+    if (!signals.length) {
+      skipped.push({
+        key: harness.key,
+        reason: "no fixtureable path or executable on this platform",
+      });
       continue;
     }
 
-    if (canCreateExecutable) {
-      makeExecutable(bin, harness.executables[0]);
+    for (const signal of signals) {
+      isolated((rootDir, { env, cwd, bin }) => {
+        const before = check(harness.key, { cwd, env });
+        assert.equal(
+          before.executablePath,
+          null,
+          `${harness.key}: clean PATH must not match`
+        );
+        assert.ok(
+          !before.matchedPaths.some((entry) =>
+            isWithinRoot(rootDir, entry.path)
+          ),
+          `${harness.key}: clean fixture tree must not match`
+        );
+
+        if (signal.executable) {
+          const executablePath = makeExecutable(bin, signal.executable);
+          const after = check(harness.key, { cwd, env });
+          assert.equal(
+            after.installed,
+            true,
+            `${harness.key}: executable-only detection must work for ${signal.executable}`
+          );
+          assert.equal(after.executablePath, executablePath);
+          assert.ok(
+            !after.matchedPaths.some((entry) =>
+              isWithinRoot(rootDir, entry.path)
+            ),
+            "executable-only scenario must not create detection paths"
+          );
+        } else {
+          const entry = before.paths.find(
+            (candidate) => candidate.id === signal.pathId
+          );
+          assert.ok(
+            isWithinRoot(rootDir, entry?.path),
+            "fixture path must remain inside its temporary tree"
+          );
+          makeFixtureForPath(entry);
+          const after = check(harness.key, { cwd, env });
+          assert.equal(
+            after.installed,
+            true,
+            `${harness.key}: path-only detection must work for ${signal.pathId}`
+          );
+          assert.equal(
+            after.executablePath,
+            null,
+            "path-only scenario must not match an executable"
+          );
+          assert.ok(
+            after.matchedPaths.some(
+              (match) => match.id === signal.pathId && match.path === entry.path
+            ),
+            `${harness.key}: expected path match ${signal.pathId}`
+          );
+        }
+        scenarios.push({ key: harness.key, ...signal });
+      });
     }
-
-    if (fixturePath) {
-      makeFixtureForPath(fixturePath);
-    }
-
-    const after = checkHarness(harness.key, { env, cwd });
-    assert.equal(after.installed, true, `${harness.key} should become installed after fixture setup`);
-
-    exercised.push({
-      key: harness.key,
-      executable: canCreateExecutable ? harness.executables[0] : null,
-      path: fixturePath ? fixturePath.path : null
-    });
+    exercised.push(harness.key);
   }
-
-  console.log(JSON.stringify({
-    platform: process.platform,
-    exercisedCount: exercised.length,
-    skippedCount: skipped.length,
+  return {
     exercised,
-    skipped
-  }, null, 2));
-} finally {
-  fs.rmSync(rootDir, { recursive: true, force: true });
+    exercisedCount: exercised.length,
+    platform: process.platform,
+    scenarioCount: scenarios.length,
+    scenarios,
+    skipped,
+    skippedCount: skipped.length,
+  };
+};
+
+// eslint-disable-next-line unicorn/prefer-import-meta-properties -- Keep Node 18 support for the smoke script.
+const scriptPath = fileURLToPath(import.meta.url);
+if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
+  console.log(JSON.stringify(runSmoke(), null, 2));
 }

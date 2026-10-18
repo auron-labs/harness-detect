@@ -10,7 +10,7 @@ Thanks for helping improve `harness-detect`.
 
 ## Registry changes
 
-The shared registry lives at `packages/data/harnesses.json` and is public API for both implementations.
+The shared registry lives at `packages/data/harnesses.json` and is public API for all four packages.
 
 Follow [docs/harness-guide.md](./docs/harness-guide.md) for the canonical edit/sync/check workflow and [docs/package-guide.md](./docs/package-guide.md) for the cross-package API contract.
 
@@ -23,13 +23,16 @@ When proposing a harness change:
 - if a path cannot be verified, omit it
 - use derived env roots such as `${CODEX_ROOT}` when a harness documents a root override
 
-Required local workflow from the repo root:
+For a new entry, generate a draft with `mise run harness:new -- example-harness "Example Harness" --alias example-alias`. It prints JSON without editing the registry. Add verified detection signals, evidence URLs, and installation metadata; all support leaves start as `unknown`.
 
-- edit `packages/data/harnesses.json`
-- run `mise run registry:sync`
-- run `mise run registry:check`
+After editing only `packages/data/harnesses.json`, run from the repository root:
 
-CI uses the read-only `mise run registry:check` step to verify package copies remain byte-for-byte aligned; do not hand-edit the generated package copies.
+```sh
+mise run harness:refresh
+mise run harness:check
+```
+
+Refresh validates the canonical JSON, syncs all package copies, and generates docs. Check verifies schema and semantic rules, generated-file freshness, all package tests, types, smoke, vet, and parity, then prints the registry changes. Do not hand-edit generated package copies. See the [maintainer reference](./docs/maintainers.md#after-editing-the-registry) for individual commands and summary options.
 
 ## Pull requests
 
@@ -41,26 +44,6 @@ Keep PRs focused and include:
 
 ## Local verification
 
-For registry-only changes, start from the repo root:
+Use `mise run harness:check` for registry changes and `mise run verify` for the broader release checks, including packaging and dependency audits. Install TypeScript dev dependencies with `cd packages/typescript && bun install --frozen-lockfile` first. The schema validator uses development-only Ajv; the published detection package remains runtime dependency-free.
 
-- `mise run registry:sync`
-- `mise run registry:check`
-
-From `packages/typescript`:
-
-- `bun test`
-- `bun run smoke:fixtures:local` when detection behavior or registry shape changes
-
-From `packages/golang`:
-
-- `go test ./...`
-
-From `packages/rust`:
-
-- `cargo test`
-
-From `packages/python`:
-
-- `uv run pytest`
-
-Cross-package parity is part of the normal contribution path. Keep the shared registry and package copies aligned with `mise run registry:sync`, confirm the read-only drift gate with `mise run registry:check`, and run the relevant package verification that matches the implemented CI scope.
+For implementation changes, use the package-specific checks in [docs/maintainers.md](./docs/maintainers.md#change-aware-validation).
