@@ -131,7 +131,7 @@ If a harness is not detected:
 
 1. Confirm the harness executable is on the same `PATH` visible to your process.
 2. Confirm the harness has created one of its known config or state paths.
-3. Pass explicit `env` or `cwd` overrides when testing against a fixture or non-standard home directory.
+3. Pass explicit `env` or `cwd` overrides when testing against a fixture or a non-standard home directory.
 4. Check the registry entry in `packages/data/harnesses.json` to see which executable names and paths are currently recognized.
 
 If the registry is missing a harness or path, open an issue or pull request with a source URL for each new executable, path, or environment variable rule.
