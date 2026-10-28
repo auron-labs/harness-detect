@@ -275,6 +275,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `autogenstudio` | `AUTOGENSTUDIO_APPDIR` | `AUTOGENSTUDIO_ROOT` | `${HOME}/.autogenstudio` |
 | `claude-code` | `CLAUDE_CONFIG_DIR` | `CLAUDE_ROOT` | `${HOME}/.claude` |
 | `claude-code` | — | `CLAUDE_JSON_STATE` | `${HOME}/.claude.json` |
+| `claudexor` | `CLAUDEXOR_CONFIG_DIR` | `CLAUDEXOR_ROOT` | `${HOME}/.claudexor/v3` |
 | `cline` | `CLINE_DIR` | `CLINE_ROOT` | `${HOME}/.cline` |
 | `cline` | — | `CLINE_DATA_ROOT` | `${CLINE_ROOT}/data` |
 | `codebuff` | — | `CODEBUFF_CONFIG_ROOT` | `${HOME}/.config/manicode` |
@@ -307,6 +308,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `ouroboros-razzant` | `OUROBOROS_APP_ROOT` | `OUROBOROS_HOME` | `${HOME}/Ouroboros` |
+| `ouroboros-razzant` | `OUROBOROS_DATA_DIR` | `OUROBOROS_DATA_ROOT` | `${OUROBOROS_HOME}/data` |
+| `ouroboros-razzant` | `OUROBOROS_SETTINGS_PATH` | `OUROBOROS_SETTINGS_FILE` | `${OUROBOROS_DATA_ROOT}/settings.json` |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
 
 <!-- END: env-var-table -->
@@ -385,7 +389,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 57
+console.log(harnesses.harnesses.length);  // 59
 ```
 
 <!-- /automd -->

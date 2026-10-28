@@ -8,6 +8,369 @@
   },
   "cases": [
     {
+      "id": "ouroboros-default-settings",
+      "operation": "checkHarness",
+      "input": "razzant/ouroboros",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Ouroboros/data/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${HOME}/Ouroboros/data/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ouroboros-q00-path-is-not-razzant",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/credentials.yaml"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${HOME}/Ouroboros/data/settings.json",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "ouroboros-bare-executable-is-ambiguous",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/ouroboros"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${HOME}/Ouroboros/data/settings.json",
+            "exists": false
+          }
+        ]
+      },
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
+    },
+    {
+      "id": "ouroboros-app-root-override",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OUROBOROS_APP_ROOT": "${TMP}/ouro-app"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ouro-app/data/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/Ouroboros/data/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${TMP}/ouro-app/data/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ouroboros-data-root-override",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OUROBOROS_APP_ROOT": "${TMP}/ouro-app",
+        "OUROBOROS_DATA_DIR": "${TMP}/ouro-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ouro-data/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${TMP}/ouro-data/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ouroboros-settings-file-override",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OUROBOROS_APP_ROOT": "${TMP}/ouro-app",
+        "OUROBOROS_DATA_DIR": "${TMP}/ouro-data",
+        "OUROBOROS_SETTINGS_PATH": "${TMP}/custom/owner-settings.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom/owner-settings.json"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${TMP}/custom/owner-settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ouroboros-override-does-not-use-default",
+      "operation": "checkHarness",
+      "input": "ouroboros-razzant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OUROBOROS_SETTINGS_PATH": "${TMP}/custom/missing.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Ouroboros/data/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-razzant",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "settings",
+            "path": "${TMP}/custom/missing.json",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "claudexor-default-config",
+      "operation": "checkHarness",
+      "input": "razzant/claudexor",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.claudexor/v3/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "claudexor",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${HOME}/.claudexor/v3/config.yaml",
+            "exists": true
+          },
+          {
+            "id": "project-config",
+            "path": "${CWD}/.claudexor/config.yaml",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "claudexor-config-root-override",
+      "operation": "checkHarness",
+      "input": "claudexor",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "CLAUDEXOR_CONFIG_DIR": "${TMP}/managed-cx"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/managed-cx/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "claudexor",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config"
+        ],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${TMP}/managed-cx/config.yaml",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "claudexor-override-does-not-use-default",
+      "operation": "checkHarness",
+      "input": "claudexor",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "CLAUDEXOR_CONFIG_DIR": "${TMP}/missing-cx"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.claudexor/v3/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "claudexor",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": [],
+        "pathAssertions": [
+          {
+            "id": "config",
+            "path": "${TMP}/missing-cx/config.yaml",
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "claudexor-project-config",
+      "operation": "checkHarness",
+      "input": "claudexor",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.claudexor/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "claudexor",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-config",
+            "path": "${CWD}/.claudexor/config.yaml",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
       "id": "check-key-codex",
       "operation": "checkHarness",
       "input": "codex",
@@ -289,7 +652,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 57,
+        "count": 59,
         "installedCount": 0,
         "installedKeys": []
       }
