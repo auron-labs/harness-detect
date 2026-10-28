@@ -148,14 +148,16 @@ Roots declare derived template variables that are resolved before paths. They al
 | `name` | string | yes | The template variable name to define (e.g. `CODEX_ROOT`). |
 | `env` | string | no | Environment variable to check for an override (e.g. `CODEX_HOME`). |
 | `use` | string | no | Template to resolve when the env var is set (can reference the env var itself). |
-| `fallback` | string | yes | Template to resolve when the env var is not set. |
+| `fallbackEnv` | string | no | Secondary environment variable to use when `env` is unset or empty. |
+| `fallback` | string | yes | Template to resolve when neither override is set. |
 
 **Resolution order for each root:**
 
 1. If `env` is set and the env var has a non-empty value:
    - If `use` is provided, resolve `use` against the current env + resolved roots + the env var itself.
    - Otherwise, use the env var value directly.
-2. If the env var is not set (or `env` is omitted), resolve `fallback` against the current env + previously resolved roots.
+2. If `env` is unset or empty and `fallbackEnv` is set and non-empty, use that secondary env-var value.
+3. Otherwise, resolve `fallback` against the current env + previously resolved roots.
 
 Roots are resolved in declaration order, so later roots can reference earlier ones in their `fallback` and `use` templates.
 
@@ -307,6 +309,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
+| `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
 
 <!-- END: env-var-table -->
@@ -385,7 +389,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 57
+console.log(harnesses.harnesses.length);  // 58
 ```
 
 <!-- /automd -->

@@ -206,6 +206,29 @@ def test_check_harness_resolves_derived_roots():
     assert sessions.path == os.path.normpath("/tmp/hermes-home/sessions")
 
 
+def test_check_harness_expands_tilde_root_overrides():
+    env = _env_home("/Users/test")
+    env["PRIME_AGENT_CODING_AGENT_DIR"] = "~/prime-agent"
+
+    result = check_harness("prime-agent", CheckOptions(env=env, cwd="/repo"))
+
+    settings = _find_path(result, "global-settings")
+    assert settings is not None
+    assert settings.path == os.path.normpath("/Users/test/prime-agent/settings.json")
+
+
+def test_check_harness_prime_agent_session_override_precedence():
+    env = _env_home("/Users/test")
+    env["PRIME_AGENT_CODING_AGENT_SESSION_DIR"] = "/tmp/legacy-sessions"
+    env["PRIME_AGENT_SESSION_DIR"] = "/tmp/current-sessions"
+
+    result = check_harness("prime-agent", CheckOptions(env=env, cwd="/repo"))
+
+    sessions = _find_path(result, "sessions")
+    assert sessions is not None
+    assert sessions.path == os.path.normpath("/tmp/current-sessions")
+
+
 # ---------------------------------------------------------------------------
 # Alias lookup
 # ---------------------------------------------------------------------------

@@ -40,6 +40,7 @@ export interface HarnessRootDef {
   name: string;
   env?: string;
   use?: string;
+  fallbackEnv?: string;
   fallback: string;
 }
 

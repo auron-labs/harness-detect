@@ -289,7 +289,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 57,
+        "count": 58,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1573,6 +1573,211 @@
         "installed": false,
         "executablePath": null,
         "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-alias-prime-agent",
+      "operation": "checkHarness",
+      "input": "PrimeIntellect-ai/prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "prime-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-executable-only-prime-agent",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/prime-agent",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": "${BIN}/prime-agent",
+        "matchedPathIds": []
+      },
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
+    },
+    {
+      "id": "check-path-only-prime-agent-global-settings",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.prime/agent/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "root",
+          "global-settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-settings",
+            "path": "${HOME}/.prime/agent/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-root-tilde-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_CODING_AGENT_DIR": "~/custom-prime"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/custom-prime/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "root",
+          "global-settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-settings",
+            "path": "${HOME}/custom-prime/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-project-settings",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.prime/agent/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-settings",
+            "path": "${CWD}/.prime/agent/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-primary-session-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_SESSION_DIR": "${TMP}/sessions-primary",
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR": "${TMP}/sessions-legacy"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/sessions-primary"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sessions"
+        ],
+        "pathAssertions": [
+          {
+            "id": "sessions",
+            "path": "${TMP}/sessions-primary",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-legacy-session-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR": "${TMP}/sessions-legacy"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/sessions-legacy"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sessions"
+        ],
+        "pathAssertions": [
+          {
+            "id": "sessions",
+            "path": "${TMP}/sessions-legacy",
+            "exists": true
+          }
+        ]
       }
     }
   ]

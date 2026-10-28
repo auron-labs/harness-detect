@@ -208,6 +208,7 @@ class HarnessRootDef:
     name: str
     env: str = ""
     use: str = ""
+    fallback_env: str = ""
     fallback: str = ""
 
     @classmethod
@@ -216,6 +217,7 @@ class HarnessRootDef:
             name=d["name"],
             env=d.get("env", ""),
             use=d.get("use", ""),
+            fallback_env=d.get("fallbackEnv", ""),
             fallback=d["fallback"],
         )
 
@@ -522,6 +524,9 @@ def _resolve_harness_roots(
     for root in harness.roots:
         env_val = base_env.get(root.env, "") if root.env else ""
         env_val_nonempty = env_val if env_val else ""
+        fallback_env_val = (
+            base_env.get(root.fallback_env, "") if root.fallback_env else ""
+        )
 
         if root.env and env_val_nonempty:
             if root.use:
@@ -531,13 +536,27 @@ def _resolve_harness_roots(
                 value = _resolve_template(root.use, tmp)
             else:
                 value = env_val_nonempty
+        elif root.fallback_env and fallback_env_val:
+            # Use the documented legacy override before the static fallback.
+            value = fallback_env_val
         else:
             value = _resolve_template(root.fallback, out)
 
         if value is not None and value != "":
-            out[root.name] = os.path.normpath(value)
+            out[root.name] = os.path.normpath(
+                _expand_leading_tilde(value, base_env["HOME"])
+            )
 
     return out
+
+
+def _expand_leading_tilde(value: str, home: str) -> str:
+    r"""Expand a leading ``~``, ``~/``, or ``~\`` against ``home``."""
+    if value == "~":
+        return home
+    if value.startswith(("~/", "~\\")):
+        return os.path.join(home, value[2:])
+    return value
 
 
 # ---------------------------------------------------------------------------
