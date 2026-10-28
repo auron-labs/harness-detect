@@ -2,6 +2,304 @@
   "version": 1,
   "harnesses": [
     {
+      "key": "ouroboros-razzant",
+      "name": "Ouroboros (razzant)",
+      "aliases": [
+        "razzant/ouroboros",
+        "ouroboros-agent"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${OUROBOROS_SETTINGS_FILE}"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OUROBOROS_HOME",
+          "env": "OUROBOROS_APP_ROOT",
+          "fallback": "${HOME}/Ouroboros"
+        },
+        {
+          "name": "OUROBOROS_DATA_ROOT",
+          "env": "OUROBOROS_DATA_DIR",
+          "fallback": "${OUROBOROS_HOME}/data"
+        },
+        {
+          "name": "OUROBOROS_SETTINGS_FILE",
+          "env": "OUROBOROS_SETTINGS_PATH",
+          "fallback": "${OUROBOROS_DATA_ROOT}/settings.json"
+        }
+      ],
+      "env": [
+        {
+          "name": "OUROBOROS_APP_ROOT",
+          "description": "Overrides the application root, which defaults to ~/Ouroboros."
+        },
+        {
+          "name": "OUROBOROS_DATA_DIR",
+          "description": "Overrides the runtime data directory, which defaults to <app root>/data."
+        },
+        {
+          "name": "OUROBOROS_SETTINGS_PATH",
+          "description": "Overrides the settings file, which defaults to <data directory>/settings.json."
+        }
+      ],
+      "sources": [
+        "https://github.com/razzant/ouroboros/blob/6f3ddff05ff3e6c6f8d007ff96358df6af872e83/ouroboros/config.py#L153",
+        "https://github.com/razzant/ouroboros/blob/v7.8.0/README.md#download-ouroboros"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://ouroboros-agent.ai/install/",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Packaged desktop downloads. macOS is Apple silicon; Linux is x86_64 and Windows is x64. The optional ouroboros executable is shared with an unrelated project and is not used as a detection signal."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "settings",
+                "kind": "file",
+                "template": "${OUROBOROS_SETTINGS_FILE}"
+              }
+            ],
+            "sources": [
+              "https://github.com/razzant/ouroboros/blob/6f3ddff05ff3e6c6f8d007ff96358df6af872e83/ouroboros/config.py#L153"
+            ],
+            "confidence": "source",
+            "notes": "Application-level settings are stored outside user project workspaces. Detection requires the settings file; a bare ouroboros executable or Q00's ~/.ouroboros/config.yaml is insufficient."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "key": "claudexor",
+      "name": "Claudexor",
+      "aliases": [
+        "razzant/claudexor"
+      ],
+      "executables": [
+        "claudexor"
+      ],
+      "paths": [
+        {
+          "id": "config",
+          "category": "config",
+          "kind": "file",
+          "template": "${CLAUDEXOR_ROOT}/config.yaml"
+        },
+        {
+          "id": "project-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.claudexor/config.yaml"
+        }
+      ],
+      "roots": [
+        {
+          "name": "CLAUDEXOR_ROOT",
+          "env": "CLAUDEXOR_CONFIG_DIR",
+          "fallback": "${HOME}/.claudexor/v3"
+        }
+      ],
+      "env": [
+        {
+          "name": "CLAUDEXOR_CONFIG_DIR",
+          "description": "Overrides the complete Claudexor config and state root. The default root is ~/.claudexor/v3."
+        }
+      ],
+      "sources": [
+        "https://github.com/razzant/claudexor/blob/v4.7.0/packages/util/src/index.ts#L298",
+        "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#install",
+        "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#uninstall--where-your-data-lives",
+        "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#reviewers-and-approvals"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "claudexor",
+          "command": "npm install -g claudexor",
+          "url": "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#install",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "The documented standalone CLI/daemon platforms. Windows backend and embedding support has separate limitations."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/razzant/claudexor/releases",
+          "platforms": [
+            "darwin"
+          ],
+          "notes": "The macOS desktop app bundles its engine. It does not by itself certify a configured harness or account."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config",
+                "kind": "file",
+                "template": "${CLAUDEXOR_ROOT}/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/razzant/claudexor/blob/v4.7.0/packages/util/src/index.ts#L298",
+              "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#uninstall--where-your-data-lives"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.claudexor/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/razzant/claudexor/blob/v4.7.0/README.md#reviewers-and-approvals"
+            ],
+            "confidence": "official"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
       "key": "codex",
       "name": "OpenAI Codex CLI",
       "aliases": [
