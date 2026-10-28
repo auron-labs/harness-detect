@@ -107,10 +107,11 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 		"Platforms": "platforms,omitempty",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessRootDef{}), map[string]string{
-		"Name":     "name",
-		"Env":      "env,omitempty",
-		"Use":      "use,omitempty",
-		"Fallback": "fallback",
+		"Name":        "name",
+		"Env":         "env,omitempty",
+		"Use":         "use,omitempty",
+		"FallbackEnv": "fallbackEnv,omitempty",
+		"Fallback":    "fallback",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessSupportPath{}), map[string]string{
 		"ID":          "id",

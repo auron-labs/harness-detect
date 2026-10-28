@@ -60,7 +60,7 @@ import { getHarnessMatrix } from "@auron-labs/harness-detect";
 
 const matrix = getHarnessMatrix();
 console.log(matrix.version);           // 1
-console.log(matrix.harnesses.length);  // 57
+console.log(matrix.harnesses.length);  // 58
 ```
 
 <!-- /automd -->
@@ -226,6 +226,7 @@ interface HarnessRootDef {
   name: string;
   env?: string;
   use?: string;
+  fallbackEnv?: string;
   fallback: string;
 }
 
@@ -380,7 +381,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 57
+console.log(harnesses.harnesses.length);  // 58
 ```
 
 <!-- /automd -->

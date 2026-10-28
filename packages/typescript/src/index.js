@@ -33,11 +33,26 @@ function withDefaults(env = process.env, cwd = process.cwd()) {
   };
 }
 
+function expandLeadingTilde(value, home) {
+  if (value === "~") {
+    return home;
+  }
+
+  if (value.startsWith("~/") || value.startsWith("~\\")) {
+    return path.join(home, value.slice(2));
+  }
+
+  return value;
+}
+
 function resolveHarnessRoots(harness, baseEnv) {
   const resolved = { ...baseEnv };
 
   for (const root of (harness.roots || [])) {
     const envVal = root.env ? baseEnv[root.env] : undefined;
+    // fallbackEnv preserves products that use a legacy override when the
+    // preferred override is absent, before applying their static fallback.
+    const fallbackEnvVal = root.fallbackEnv ? baseEnv[root.fallbackEnv] : undefined;
 
     let value;
     if (root.env && envVal) {
@@ -48,12 +63,14 @@ function resolveHarnessRoots(harness, baseEnv) {
       } else {
         value = envVal;
       }
+    } else if (root.fallbackEnv && fallbackEnvVal) {
+      value = fallbackEnvVal;
     } else {
       value = resolveTemplate(root.fallback, resolved);
     }
 
     if (value !== null && value !== "") {
-      resolved[root.name] = path.normalize(value);
+      resolved[root.name] = path.normalize(expandLeadingTilde(value, baseEnv.HOME));
     }
   }
 

@@ -134,7 +134,7 @@ Preferred pattern:
 Rules:
 
 - Prefer derived roots like `${CODEX_ROOT}` or `${GEMINI_ROOT}` over repeating raw `${HOME}/...` templates.
-- Use `use` when the documented override needs transformation before becoming the effective root.
+- Use `use` when the documented override needs transformation before becoming the effective root. Use `fallbackEnv` when an upstream primary override falls back to a legacy environment variable before the static fallback.
 - Keep `env[]` descriptions in sync with any root overrides you model.
 - Do not add env vars to `env[]` unless they are real, documented variables.
 
