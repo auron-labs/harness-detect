@@ -214,6 +214,7 @@ const VERIFIED_NEW_HARNESS_KEYS = [
   "nanocoder",
   "openblock",
   "pi",
+  "prime-agent",
   "qoder-cli",
   "rovo-dev-cli",
   "toad",
@@ -261,6 +262,35 @@ test("checkHarness resolves harness-specific derived roots", () => {
 
   assert.equal(config?.path, "/tmp/hermes-home/config.yaml");
   assert.equal(sessions?.path, "/tmp/hermes-home/sessions");
+});
+
+test("checkHarness expands tilde root overrides", () => {
+  const result = checkHarness("prime-agent", {
+    cwd: "/repo",
+    env: {
+      HOME: "/Users/test",
+      PATH: "",
+      PRIME_AGENT_CODING_AGENT_DIR: "~/prime-agent",
+    },
+  });
+
+  const settings = result.paths.find((entry) => entry.id === "global-settings");
+  assert.equal(settings?.path, "/Users/test/prime-agent/settings.json");
+});
+
+test("checkHarness honors Prime Agent session override precedence", () => {
+  const result = checkHarness("prime-agent", {
+    cwd: "/repo",
+    env: {
+      HOME: "/Users/test",
+      PATH: "",
+      PRIME_AGENT_CODING_AGENT_SESSION_DIR: "/tmp/legacy-sessions",
+      PRIME_AGENT_SESSION_DIR: "/tmp/current-sessions",
+    },
+  });
+
+  const sessions = result.paths.find((entry) => entry.id === "sessions");
+  assert.equal(sessions?.path, "/tmp/current-sessions");
 });
 
 test("aliases map to the same harness", () => {

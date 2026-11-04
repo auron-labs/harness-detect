@@ -62,7 +62,7 @@ const firstInstalledDetectedKey: string | undefined = detectedInstalled[0]?.key;
 
 type _CheckResultExecutablePathIsNullable = Assert<IsExact<typeof checkResult.executablePath, string | null>>;
 type _ResolvedPathPathIsNullable = Assert<IsExact<typeof firstResolvedPath.path, string | null>>;
-type _HarnessRootsStayOptional = Assert<IsExact<typeof checkResult.harness.roots, { name: string; env?: string; use?: string; fallback: string }[] | undefined>>;
+type _HarnessRootsStayOptional = Assert<IsExact<typeof checkResult.harness.roots, { name: string; env?: string; use?: string; fallbackEnv?: string; fallback: string }[] | undefined>>;
 
 void version;
 void rawVersion;

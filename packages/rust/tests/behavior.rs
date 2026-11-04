@@ -264,6 +264,55 @@ fn test_check_harness_resolves_derived_roots() {
     assert_eq!(sessions.path.as_deref(), Some("/tmp/hermes-home/sessions"));
 }
 
+#[test]
+fn test_check_harness_expands_tilde_root_overrides() {
+    let mut env = env_home("/Users/test");
+    env.insert(
+        "PRIME_AGENT_CODING_AGENT_DIR".to_string(),
+        "~/prime-agent".to_string(),
+    );
+
+    let result = check_harness(
+        "prime-agent",
+        CheckOptions {
+            env: Some(env),
+            cwd: Some("/repo".to_string()),
+        },
+    )
+    .expect("unexpected error");
+
+    let settings = find_path(&result, "global-settings").expect("missing global-settings path");
+    assert_eq!(
+        settings.path.as_deref(),
+        Some("/Users/test/prime-agent/settings.json")
+    );
+}
+
+#[test]
+fn test_check_harness_prime_agent_session_override_precedence() {
+    let mut env = env_home("/Users/test");
+    env.insert(
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR".to_string(),
+        "/tmp/legacy-sessions".to_string(),
+    );
+    env.insert(
+        "PRIME_AGENT_SESSION_DIR".to_string(),
+        "/tmp/current-sessions".to_string(),
+    );
+
+    let result = check_harness(
+        "prime-agent",
+        CheckOptions {
+            env: Some(env),
+            cwd: Some("/repo".to_string()),
+        },
+    )
+    .expect("unexpected error");
+
+    let sessions = find_path(&result, "sessions").expect("missing sessions path");
+    assert_eq!(sessions.path.as_deref(), Some("/tmp/current-sessions"));
+}
+
 // ---------------------------------------------------------------------------
 // Alias lookup
 // ---------------------------------------------------------------------------

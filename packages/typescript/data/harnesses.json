@@ -14357,6 +14357,207 @@
           }
         }
       }
+    },
+    {
+      "key": "prime-agent",
+      "name": "Prime Agent",
+      "aliases": [
+        "PrimeIntellect-ai/prime-agent",
+        "prime"
+      ],
+      "executables": [
+        "prime-agent"
+      ],
+      "paths": [
+        {
+          "id": "root",
+          "category": "config",
+          "kind": "dir",
+          "template": "${PRIME_AGENT_ROOT}"
+        },
+        {
+          "id": "global-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${PRIME_AGENT_ROOT}/settings.json"
+        },
+        {
+          "id": "project-settings",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.prime/agent/settings.json"
+        },
+        {
+          "id": "sessions",
+          "category": "state",
+          "kind": "dir",
+          "template": "${PRIME_AGENT_SESSION_ROOT}"
+        }
+      ],
+      "roots": [
+        {
+          "name": "PRIME_AGENT_ROOT",
+          "env": "PRIME_AGENT_CODING_AGENT_DIR",
+          "fallback": "${HOME}/.prime/agent"
+        },
+        {
+          "name": "PRIME_AGENT_SESSION_ROOT",
+          "env": "PRIME_AGENT_SESSION_DIR",
+          "fallback": "${PRIME_AGENT_ROOT}/sessions",
+          "fallbackEnv": "PRIME_AGENT_CODING_AGENT_SESSION_DIR"
+        }
+      ],
+      "env": [
+        {
+          "name": "PRIME_AGENT_CODING_AGENT_DIR",
+          "description": "Overrides the Prime Agent root directory; a leading tilde is expanded."
+        },
+        {
+          "name": "PRIME_AGENT_SESSION_DIR",
+          "description": "Overrides Prime Agent session storage; takes precedence over the legacy session override."
+        },
+        {
+          "name": "PRIME_AGENT_CODING_AGENT_SESSION_DIR",
+          "description": "Legacy fallback override for Prime Agent session storage."
+        }
+      ],
+      "sources": [
+        "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/README.md",
+        "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-cli/src/config.rs",
+        "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/settings/storage.rs",
+        "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/skills/loader.rs"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "command": "curl -fsSL https://app.primeintellect.ai/prime-agent/install.sh | sh",
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/README.md",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "script",
+          "command": "irm https://app.primeintellect.ai/prime-agent/install.ps1 | iex",
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/README.md",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "root",
+                "kind": "dir",
+                "template": "${PRIME_AGENT_ROOT}"
+              },
+              {
+                "id": "global-settings",
+                "kind": "file",
+                "template": "${PRIME_AGENT_ROOT}/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-cli/src/config.rs",
+              "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/settings/storage.rs"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-settings",
+                "kind": "file",
+                "template": "${CWD}/.prime/agent/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/settings/storage.rs"
+            ],
+            "confidence": "source"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${PRIME_AGENT_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/skills/loader.rs"
+            ],
+            "confidence": "source",
+            "notes": "Prime Agent loads skills from the global skills directory, including SKILL.md and root Markdown skill files."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.prime/agent/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/crates/pa-core/src/skills/loader.rs"
+            ],
+            "confidence": "source",
+            "notes": "Prime Agent loads project skills from .prime/agent/skills, including SKILL.md and root Markdown skill files."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
     }
   ]
 }

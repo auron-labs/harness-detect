@@ -98,10 +98,11 @@ type HarnessSupport struct {
 
 // HarnessRootDef declares a derived template variable for a harness.
 type HarnessRootDef struct {
-	Name     string `json:"name"`
-	Env      string `json:"env,omitempty"`
-	Use      string `json:"use,omitempty"`
-	Fallback string `json:"fallback"`
+	Name        string `json:"name"`
+	Env         string `json:"env,omitempty"`
+	Use         string `json:"use,omitempty"`
+	Fallback    string `json:"fallback"`
+	FallbackEnv string `json:"fallbackEnv,omitempty"`
 }
 
 // HarnessInstallation describes one documented installation method.
@@ -504,6 +505,10 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 		if root.Env != "" {
 			envVal = baseEnv[root.Env]
 		}
+		fallbackEnvVal := ""
+		if root.FallbackEnv != "" {
+			fallbackEnvVal = baseEnv[root.FallbackEnv]
+		}
 
 		if root.Env != "" && envVal != "" {
 			// Env var is set. Resolve the "use" template if provided,
@@ -519,17 +524,30 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 			} else {
 				value = envVal
 			}
+		} else if root.FallbackEnv != "" && fallbackEnvVal != "" {
+			// Use the documented legacy override before the static fallback.
+			value = fallbackEnvVal
 		} else {
-			// Env var is not set. Resolve the fallback template.
+			// Env vars are not set. Resolve the fallback template.
 			value = resolveTemplate(root.Fallback, out)
 		}
 
 		if value != "" {
-			out[root.Name] = filepath.Clean(value)
+			out[root.Name] = filepath.Clean(expandLeadingTilde(value, baseEnv["HOME"]))
 		}
 	}
 
 	return out
+}
+
+func expandLeadingTilde(value, home string) string {
+	if value == "~" {
+		return home
+	}
+	if strings.HasPrefix(value, "~/") || strings.HasPrefix(value, `~\`) {
+		return filepath.Join(home, value[2:])
+	}
+	return value
 }
 
 func first(a, b string) string {

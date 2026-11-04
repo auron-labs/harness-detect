@@ -108,6 +108,12 @@ pub struct HarnessRootDef {
     pub env: String,
     #[serde(rename = "use", default, skip_serializing_if = "String::is_empty")]
     pub use_: String,
+    #[serde(
+        rename = "fallbackEnv",
+        default,
+        skip_serializing_if = "String::is_empty"
+    )]
+    pub fallback_env: String,
     pub fallback: String,
 }
 
@@ -438,6 +444,11 @@ fn resolve_harness_roots(
             base_env.get(&root.env).map(|s| s.as_str())
         };
         let env_val_nonempty = env_val.filter(|s| !s.is_empty());
+        let fallback_env_val = if root.fallback_env.is_empty() {
+            None
+        } else {
+            base_env.get(&root.fallback_env).filter(|s| !s.is_empty())
+        };
 
         let value: Option<String> = if !root.env.is_empty() {
             if let Some(val) = env_val_nonempty {
@@ -449,6 +460,9 @@ fn resolve_harness_roots(
                 } else {
                     Some(val.to_string())
                 }
+            } else if let Some(val) = fallback_env_val {
+                // Use the documented legacy override before the static fallback.
+                Some(val.to_string())
             } else {
                 resolve_template(&root.fallback, &out)
             }
@@ -458,12 +472,33 @@ fn resolve_harness_roots(
 
         if let Some(v) = value {
             if !v.is_empty() {
-                out.insert(root.name.clone(), normalize_path(&v));
+                out.insert(
+                    root.name.clone(),
+                    normalize_path(&expand_leading_tilde(
+                        &v,
+                        base_env.get("HOME").map(String::as_str).unwrap_or(""),
+                    )),
+                );
             }
         }
     }
 
     out
+}
+
+fn expand_leading_tilde(value: &str, home: &str) -> String {
+    if value == "~" {
+        return home.to_string();
+    }
+    if let Some(rest) = value.strip_prefix("~/") {
+        return format!("{}/{}", home.trim_end_matches('/'), rest);
+    }
+    if cfg!(windows) {
+        if let Some(rest) = value.strip_prefix(r"~\") {
+            return format!(r"{}\{}", home.trim_end_matches(['/', '\\']), rest);
+        }
+    }
+    value.to_string()
 }
 
 // ---------------------------------------------------------------------------

@@ -96,8 +96,8 @@ func TestGetHarnessMatrix(t *testing.T) {
 
 func TestGoInstallationMetadataCompleteness(t *testing.T) {
 	matrix := GetRawHarnessData()
-	if len(matrix.Harnesses) != 57 {
-		t.Fatalf("harness count = %d, want 57", len(matrix.Harnesses))
+	if len(matrix.Harnesses) != 58 {
+		t.Fatalf("harness count = %d, want 58", len(matrix.Harnesses))
 	}
 
 	allowedMethods := make(map[string]struct{}, len(supportedInstallMethods))
@@ -675,6 +675,45 @@ func TestCheckHarness_ResolvesDerivedRoots(t *testing.T) {
 	}
 	if sessions == nil || sessions.Path == nil || *sessions.Path != "/tmp/hermes-home/sessions" {
 		t.Fatalf("sessions path = %v, want /tmp/hermes-home/sessions", sessions)
+	}
+}
+
+func TestCheckHarness_ExpandsTildeRootOverrides(t *testing.T) {
+	result, err := CheckHarness("prime-agent", CheckOptions{
+		CWD: "/repo",
+		Env: map[string]string{
+			"HOME":                         "/Users/test",
+			"PATH":                         "",
+			"PRIME_AGENT_CODING_AGENT_DIR": "~/prime-agent",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	settings := findPath(result, "global-settings")
+	if settings == nil || settings.Path == nil || *settings.Path != "/Users/test/prime-agent/settings.json" {
+		t.Fatalf("global settings path = %v, want /Users/test/prime-agent/settings.json", settings)
+	}
+}
+
+func TestCheckHarness_PrimeAgentSessionOverridePrecedence(t *testing.T) {
+	result, err := CheckHarness("prime-agent", CheckOptions{
+		CWD: "/repo",
+		Env: map[string]string{
+			"HOME":                                 "/Users/test",
+			"PATH":                                 "",
+			"PRIME_AGENT_CODING_AGENT_SESSION_DIR": "/tmp/legacy-sessions",
+			"PRIME_AGENT_SESSION_DIR":              "/tmp/current-sessions",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	sessions := findPath(result, "sessions")
+	if sessions == nil || sessions.Path == nil || *sessions.Path != "/tmp/current-sessions" {
+		t.Fatalf("sessions path = %v, want /tmp/current-sessions", sessions)
 	}
 }
 
