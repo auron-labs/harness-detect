@@ -1,4 +1,4 @@
-import { checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
+import { getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
 
 type Assert<T extends true> = T;
 type IsExact<T, U> =
@@ -87,3 +87,15 @@ void firstResolvedPathPlatforms;
 void linuxPlatform;
 void firstDetectedKey;
 void firstInstalledDetectedKey;
+
+const acp = getHarnessAcp("codex").acp;
+const acpRecords = listHarnessAcp();
+const optionalAcp: HarnessAcp | undefined = rawMatrix.harnesses[0]?.acp;
+const directAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", launch: { command: "example", args: [] } };
+const adapterAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", adapter: "example-bridge" };
+// @ts-expect-error supported ACP needs exactly one launch or adapter
+const invalidAcp: HarnessAcp = { status: "supported", sources: [], confidence: "unknown" };
+// @ts-expect-error unsupported ACP has no launch
+const invalidLaunch: HarnessAcp = { status: "unsupported", sources: [], confidence: "source", launch: { command: "example", args: [] } };
+const optionalLaunch: HarnessAcpLaunch | undefined = acp.launch;
+void [acpRecords, optionalAcp, directAcp, adapterAcp, invalidAcp, invalidLaunch, optionalLaunch];

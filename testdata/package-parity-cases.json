@@ -1779,6 +1779,18 @@
           }
         ]
       }
+    },
+    {
+      "id": "acp-alias",
+      "operation": "getHarnessAcp",
+      "input": " OPENAI/CODEX ",
+      "expect": {
+        "key": "codex"
+      }
+    },
+    {
+      "id": "acp-list",
+      "operation": "listHarnessAcp"
     }
   ]
 }

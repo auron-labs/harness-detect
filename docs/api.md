@@ -81,6 +81,36 @@ console.log(harnesses.map((h) => h.key));
 console.log(harnesses[0].support);
 ```
 
+### `getHarnessAcp(input)` and `listHarnessAcp()`
+
+```ts
+function getHarnessAcp(input: string): HarnessAcpRecord
+function listHarnessAcp(): HarnessAcpRecord[]
+```
+
+Return `{key, name, acp}` records using the same key/alias normalization,
+unknown-harness error, and independent snapshots as the support APIs. Stored ACP
+is optional during this rollout; these getters return explicit `unknown` when
+it is absent. Raw/list/detection surfaces retain stored omission. Python uses
+immutable records and represents absent stored ACP as `None`.
+
+Go names these operations `GetHarnessACP` and `ListHarnessACP`; Rust and Python
+use `get_harness_acp` and `list_harness_acp`. Support getters continue returning
+only support metadata. ACP has no effect on installed status.
+
+```ts
+import { getHarnessAcp } from "@auron-labs/harness-detect";
+
+const record = getHarnessAcp("codex");
+const acp = record.acp;
+const owner = acp.adapter ? getHarnessAcp(acp.adapter) : record;
+console.log(owner.acp.launch); // undefined until supported launch metadata exists
+```
+
+Supported ACP describes either a direct local stdio `launch` or one `adapter`
+registry key leading to a supported direct launch. The launch is metadata; the
+library does not execute it. See [ACP fields and evidence rules](./configuration.md#acp-metadata-acp).
+
 ### `getHarnessSupport(input)`
 
 Returns one harness's support metadata by key or alias.
@@ -266,6 +296,7 @@ interface HarnessDefinition {
   env: HarnessEnvVar[];
   sources: string[];
   support: HarnessSupport;
+  acp?: HarnessAcp;
 }
 
 interface HarnessMatrix {
@@ -308,6 +339,28 @@ interface HarnessSupport {
   commands: HarnessSupportScopePair;
   agents: HarnessSupportScopePair;
   dotAgents: HarnessSupportScopePair;
+}
+
+interface HarnessAcpLaunch {
+  command: string;
+  args: string[];
+  platforms?: HarnessPlatform[];
+}
+
+type HarnessAcp = {
+  sources: string[];
+  confidence: HarnessSupportConfidence;
+  notes?: string;
+} & (
+  | { status: "supported"; launch: HarnessAcpLaunch; adapter?: never }
+  | { status: "supported"; adapter: string; launch?: never }
+  | { status: "unsupported" | "unknown"; launch?: never; adapter?: never }
+);
+
+interface HarnessAcpRecord {
+  key: string;
+  name: string;
+  acp: HarnessAcp;
 }
 
 interface HarnessSupportRecord {
@@ -423,6 +476,16 @@ Returns a copy of the harness definitions slice.
 func ListHarnesses() []HarnessDefinition
 ```
 
+### `GetHarnessACP(input)` and `ListHarnessACP()`
+
+```go
+func GetHarnessACP(input string) (HarnessACPRecord, error)
+func ListHarnessACP() []HarnessACPRecord
+```
+
+Return ACP records with the same lookup and copy behavior as support records.
+See the [shared ACP API contract](#getharnessacpinput-and-listharnessacp).
+
 ### `GetHarnessSupport(input)`
 
 Returns one harness's support metadata by key or alias.
@@ -502,6 +565,7 @@ type HarnessDefinition struct {
     Paths       []HarnessPathSpec
     Roots       []HarnessRootDef
     Support     HarnessSupport
+    ACP         *HarnessACP
     Env         []HarnessEnvVar
     Sources     []string
 }
@@ -535,7 +599,10 @@ type ResolvedHarnessPath struct {
 `GetRawHarnessData()`, `GetHarnessMatrix()`, `ListHarnesses()`, and
 `HarnessCheckResult.Harness` all expose the same registry metadata, including
 `Installations` and required `Support`. `GetHarnessSupport()` and
-`ListHarnessSupport()` expose just the support subset. That metadata is
+`ListHarnessSupport()` expose just the support subset. Optional `ACP` is a
+`*HarnessACP` containing `Status`, `Launch`, `Adapter`, `Sources`, `Confidence`,
+and `Notes`. `HarnessACPLaunch` holds `Command`, `Args`, and `Platforms`;
+`HarnessACPRecord` holds `Key`, `Name`, and `ACP`. That metadata is
 descriptive only and does not make a harness count as installed.
 
 ## Rust API
@@ -546,6 +613,8 @@ Entry point: `packages/rust/src/lib.rs`
 - `get_raw_harness_data() -> HarnessMatrix`
 - `get_harness_matrix() -> HarnessMatrix`
 - `list_harnesses() -> Vec<HarnessDefinition>`
+- `get_harness_acp(input) -> Result<HarnessAcpRecord, HarnessError>`
+- `list_harness_acp() -> Vec<HarnessAcpRecord>`
 - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>`
 - `list_harness_support() -> Vec<HarnessSupportRecord>`
 - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
@@ -553,7 +622,10 @@ Entry point: `packages/rust/src/lib.rs`
 - `detect_installed_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
 
 Rust uses the same raw registry shape, including `installations[]` and required
-`support`, and the same detection semantics.
+`support`, and the same detection semantics. Optional ACP is
+`Option<HarnessAcp>` on `HarnessDefinition`; `HarnessAcpLaunch` describes the
+command and argv, and `HarnessAcpRecord` is the getter/list result. See the
+[shared ACP API contract](#getharnessacpinput-and-listharnessacp).
 
 ## Python API
 
@@ -563,6 +635,8 @@ Entry point: `packages/python/src/harness_detect/__init__.py`
 - `get_raw_harness_data() -> HarnessMatrix`
 - `get_harness_matrix() -> HarnessMatrix`
 - `list_harnesses() -> list[HarnessDefinition]`
+- `get_harness_acp(input) -> HarnessAcpRecord`
+- `list_harness_acp() -> list[HarnessAcpRecord]`
 - `get_harness_support(input) -> HarnessSupportRecord`
 - `list_harness_support() -> list[HarnessSupportRecord]`
 - `check_harness(input, options=None) -> HarnessCheckResult`
@@ -570,7 +644,10 @@ Entry point: `packages/python/src/harness_detect/__init__.py`
 - `detect_installed_harnesses(options=None) -> list[HarnessCheckResult]`
 
 Python uses the same raw registry shape, including `installations[]` and
-required `support`, and the same detection semantics.
+required `support`, and the same detection semantics. `HarnessDefinition.acp`
+is `HarnessAcp | None`; the frozen `HarnessAcp`, `HarnessAcpLaunch`, and
+`HarnessAcpRecord` dataclasses use tuples for arrays. See the
+[shared ACP API contract](#getharnessacpinput-and-listharnessacp).
 
 ### Go usage example
 

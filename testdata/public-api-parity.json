@@ -54,6 +54,18 @@
       "go": "ListHarnesses",
       "rust": "list_harnesses",
       "python": "list_harnesses"
+    },
+    {
+      "typescript": "getHarnessAcp",
+      "go": "GetHarnessACP",
+      "rust": "get_harness_acp",
+      "python": "get_harness_acp"
+    },
+    {
+      "typescript": "listHarnessAcp",
+      "go": "ListHarnessACP",
+      "rust": "list_harness_acp",
+      "python": "list_harness_acp"
     }
   ],
   "coreFields": {
@@ -119,6 +131,12 @@
         "json": "sources",
         "typescript": "sources",
         "go": "Sources"
+      },
+      {
+        "json": "acp",
+        "typescript": "acp",
+        "go": "ACP",
+        "nullable": true
       }
     ],
     "HarnessInstallation": [
@@ -338,6 +356,76 @@
         "typescript": "support",
         "go": "Support",
         "nullable": true
+      }
+    ],
+    "HarnessAcpLaunch": [
+      {
+        "json": "command",
+        "typescript": "command",
+        "go": "Command"
+      },
+      {
+        "json": "args",
+        "typescript": "args",
+        "go": "Args"
+      },
+      {
+        "json": "platforms",
+        "typescript": "platforms",
+        "go": "Platforms",
+        "nullable": true
+      }
+    ],
+    "HarnessAcp": [
+      {
+        "json": "status",
+        "typescript": "status",
+        "go": "Status"
+      },
+      {
+        "json": "launch",
+        "typescript": "launch",
+        "go": "Launch",
+        "nullable": true
+      },
+      {
+        "json": "adapter",
+        "typescript": "adapter",
+        "go": "Adapter",
+        "nullable": true
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      },
+      {
+        "json": "confidence",
+        "typescript": "confidence",
+        "go": "Confidence"
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes",
+        "nullable": true
+      }
+    ],
+    "HarnessAcpRecord": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "acp",
+        "typescript": "acp",
+        "go": "ACP"
       }
     ]
   }

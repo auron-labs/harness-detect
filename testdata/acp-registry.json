@@ -1,0 +1,613 @@
+{
+  "version": 1,
+  "harnesses": [
+    {
+      "key": "native",
+      "name": "Native",
+      "aliases": [
+        "native-alias"
+      ],
+      "executables": [
+        "missing-native"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "sources": [
+          "https://example.com/acp"
+        ],
+        "confidence": "official",
+        "launch": {
+          "command": "example-agent",
+          "args": [
+            "--acp",
+            "two words",
+            ""
+          ],
+          "platforms": [
+            "linux",
+            "darwin"
+          ]
+        }
+      }
+    },
+    {
+      "key": "bridge",
+      "name": "Bridge",
+      "aliases": [
+        "bridge-alias"
+      ],
+      "executables": [
+        "missing-bridge"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "sources": [
+          "https://example.com/acp"
+        ],
+        "confidence": "official",
+        "launch": {
+          "command": "example-bridge",
+          "args": []
+        }
+      }
+    },
+    {
+      "key": "host",
+      "name": "Host",
+      "aliases": [
+        "host-alias"
+      ],
+      "executables": [
+        "missing-host"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "sources": [
+          "https://example.com/acp"
+        ],
+        "confidence": "official",
+        "adapter": "bridge"
+      }
+    },
+    {
+      "key": "unsupported",
+      "name": "Unsupported",
+      "aliases": [
+        "unsupported-alias"
+      ],
+      "executables": [
+        "missing-unsupported"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      },
+      "acp": {
+        "status": "unsupported",
+        "sources": [
+          "https://example.com/acp"
+        ],
+        "confidence": "source"
+      }
+    },
+    {
+      "key": "unknown",
+      "name": "Unknown",
+      "aliases": [
+        "unknown-alias"
+      ],
+      "executables": [
+        "missing-unknown"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "missing",
+      "name": "Missing",
+      "aliases": [
+        "missing-alias"
+      ],
+      "executables": [
+        "missing-missing"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://example.com/install"
+        }
+      ],
+      "paths": [],
+      "env": [],
+      "sources": [
+        "https://example.com"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          },
+          "local": {
+            "status": "unknown",
+            "sources": [],
+            "confidence": "unknown",
+            "paths": []
+          }
+        }
+      }
+    }
+  ]
+}

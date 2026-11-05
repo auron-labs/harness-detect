@@ -260,6 +260,16 @@ func runCase(rawCase fixtureCase, roots sandboxRoots) (snapshotCase, error) {
 		}
 		result.Result = normalizeDetectResult(actual, roots)
 		return result, nil
+	case "getHarnessAcp":
+		actual, err := harnessdetect.GetHarnessACP(c.Input)
+		if err != nil {
+			return snapshotCase{}, fmt.Errorf("getHarnessAcp(%q): %w", c.Input, err)
+		}
+		result.Result = actual
+		return result, nil
+	case "listHarnessAcp":
+		result.Result = harnessdetect.ListHarnessACP()
+		return result, nil
 	case "getHarnessSupport":
 		actual, err := harnessdetect.GetHarnessSupport(c.Input)
 		if err != nil {

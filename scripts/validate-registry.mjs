@@ -58,7 +58,14 @@ export const validateRegistry = (registry) => {
       seen.add(entry[field]);
     }
   };
+  const byKey = new Map(registry.harnesses.map((harness) => [harness.key, harness]));
   for (const harness of registry.harnesses) {
+    if (harness.acp?.adapter !== undefined) {
+      const target = byKey.get(harness.acp.adapter);
+      if (target === harness || target?.acp?.status !== "supported" || !target.acp.launch) {
+        errors.push(`${harness.key}.acp.adapter must reference a different registry key with a supported direct ACP launch`);
+      }
+    }
     checkIds(harness.paths, `${harness.key}.paths`);
     checkIds(harness.roots || [], `${harness.key}.roots`, "name");
     for (const [area, scopes] of Object.entries(harness.support)) {

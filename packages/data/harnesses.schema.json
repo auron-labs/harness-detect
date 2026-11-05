@@ -71,6 +71,10 @@
             "minItems": 1,
             "items": { "$ref": "#/$defs/HttpsUrl" }
           },
+          "acp": {
+            "description": "Optional during the staged ACP rollout. Describes a local stdio launch or a direct adapter registry key; never detection evidence.",
+            "$ref": "#/$defs/HarnessAcp"
+          },
           "support": {
             "description": "Required descriptive support metadata. All support categories and both scopes must be populated explicitly for every harness; use status/confidence 'unknown' rather than omitting unsupported or unknown data.",
             "$ref": "#/$defs/HarnessSupport"
@@ -86,6 +90,63 @@
     }
   },
   "$defs": {
+    "HarnessAcp": {
+      "type": "object",
+      "required": ["status", "sources", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["supported", "unsupported", "unknown"] },
+        "launch": { "$ref": "#/$defs/HarnessAcpLaunch" },
+        "adapter": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HttpsUrl" }
+        },
+        "confidence": {
+          "enum": ["official", "source", "observed", "inferred", "unknown"]
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "supported" } } },
+          "then": {
+            "oneOf": [{ "required": ["launch"] }, { "required": ["adapter"] }]
+          },
+          "else": {
+            "not": {
+              "anyOf": [{ "required": ["launch"] }, { "required": ["adapter"] }]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "enum": ["supported", "unsupported"] } }
+          },
+          "then": {
+            "properties": {
+              "sources": { "type": "array", "minItems": 1 },
+              "confidence": { "not": { "const": "unknown" } }
+            }
+          }
+        }
+      ]
+    },
+    "HarnessAcpLaunch": {
+      "type": "object",
+      "required": ["command", "args"],
+      "additionalProperties": false,
+      "properties": {
+        "command": { "type": "string", "pattern": "\\S" },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/Platform" }
+        }
+      }
+    },
     "Platform": {
       "type": "string",
       "enum": [

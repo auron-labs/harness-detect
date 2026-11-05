@@ -5,9 +5,9 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use harness_detect::{
-    check_harness, detect_harnesses, get_harness_support, list_harness_support, CheckOptions,
-    HarnessCheckResult, HarnessSupport, HarnessSupportArea, HarnessSupportPath,
-    HarnessSupportRecord, HarnessSupportScope,
+    check_harness, detect_harnesses, get_harness_acp, get_harness_support, list_harness_acp,
+    list_harness_support, CheckOptions, HarnessCheckResult, HarnessSupport, HarnessSupportArea,
+    HarnessSupportPath, HarnessSupportRecord, HarnessSupportScope,
 };
 use serde_json::{json, Value};
 
@@ -135,6 +135,14 @@ fn run_case(raw_case: &Value, roots: &SandboxRoots) -> Result<Value, String> {
             "detectHarnesses" => {
                 let results = detect_harnesses(options).map_err(|error| error.to_string())?;
                 normalize_detect_results(&results, roots)
+            }
+            "getHarnessAcp" => {
+                let input = required_string(&expanded_case, "input")?;
+                serde_json::to_value(get_harness_acp(&input).map_err(|error| error.to_string())?)
+                    .map_err(|error| error.to_string())?
+            }
+            "listHarnessAcp" => {
+                serde_json::to_value(list_harness_acp()).map_err(|error| error.to_string())?
             }
             "getHarnessSupport" => {
                 let input = required_string(&expanded_case, "input")?;

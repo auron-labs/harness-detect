@@ -222,6 +222,26 @@ export function listHarnessSupport() {
   return matrix.harnesses.map(cloneHarnessSupportRecord);
 }
 
+function cloneHarnessAcpRecord(harness) {
+  return {
+    key: harness.key,
+    name: harness.name,
+    acp: clone(harness.acp ?? { status: "unknown", sources: [], confidence: "unknown" })
+  };
+}
+
+export function getHarnessAcp(input) {
+  const harness = getHarnessDefinition(input);
+  if (!harness) {
+    throw new Error(`Unknown harness: ${input}`);
+  }
+  return cloneHarnessAcpRecord(harness);
+}
+
+export function listHarnessAcp() {
+  return matrix.harnesses.map(cloneHarnessAcpRecord);
+}
+
 export function checkHarness(input, options = {}) {
   const harness = getHarnessDefinition(input);
 

@@ -25,6 +25,9 @@ from pathlib import Path
 
 __all__ = [
     "CheckOptions",
+    "HarnessAcp",
+    "HarnessAcpLaunch",
+    "HarnessAcpRecord",
     "HarnessCheckResult",
     "HarnessDefinition",
     "HarnessEnvVar",
@@ -42,9 +45,11 @@ __all__ = [
     "check_harness",
     "detect_harnesses",
     "detect_installed_harnesses",
+    "get_harness_acp",
     "get_harness_matrix",
     "get_harness_support",
     "get_raw_harness_data",
+    "list_harness_acp",
     "list_harness_support",
     "list_harnesses",
 ]
@@ -250,6 +255,51 @@ class HarnessInstallation:
 
 
 @dataclass(frozen=True)
+class HarnessAcpLaunch:
+    """A local stdio command with discrete argv values."""
+
+    command: str
+    args: tuple[str, ...]
+    platforms: tuple[str, ...] = ()
+
+    @classmethod
+    def from_dict(cls, d: dict) -> HarnessAcpLaunch:
+        return cls(d["command"], tuple(d["args"]), tuple(d.get("platforms", [])))
+
+
+@dataclass(frozen=True)
+class HarnessAcp:
+    """ACP metadata, independently of file-location support."""
+
+    status: str = "unknown"
+    sources: tuple[str, ...] = ()
+    confidence: str = "unknown"
+    launch: HarnessAcpLaunch | None = None
+    adapter: str = ""
+    notes: str = ""
+
+    @classmethod
+    def from_dict(cls, d: dict) -> HarnessAcp:
+        return cls(
+            status=d["status"],
+            sources=tuple(d["sources"]),
+            confidence=d["confidence"],
+            launch=HarnessAcpLaunch.from_dict(d["launch"]) if "launch" in d else None,
+            adapter=d.get("adapter", ""),
+            notes=d.get("notes", ""),
+        )
+
+
+@dataclass(frozen=True)
+class HarnessAcpRecord:
+    """One harness ACP entry."""
+
+    key: str
+    name: str
+    acp: HarnessAcp
+
+
+@dataclass(frozen=True)
 class HarnessDefinition:
     """A single LLM harness definition."""
 
@@ -263,6 +313,7 @@ class HarnessDefinition:
     support: HarnessSupport
     env: tuple[HarnessEnvVar, ...]
     sources: tuple[str, ...]
+    acp: HarnessAcp | None = None
 
     @classmethod
     def from_dict(cls, d: dict) -> HarnessDefinition:
@@ -277,6 +328,7 @@ class HarnessDefinition:
             paths=tuple(HarnessPathSpec.from_dict(p) for p in d.get("paths", [])),
             roots=tuple(HarnessRootDef.from_dict(r) for r in d.get("roots", [])),
             support=HarnessSupport.from_dict(d["support"]),
+            acp=HarnessAcp.from_dict(d["acp"]) if "acp" in d else None,
             env=tuple(HarnessEnvVar.from_dict(e) for e in d.get("env", [])),
             sources=tuple(d.get("sources", [])),
         )
@@ -380,6 +432,22 @@ def list_harness_support() -> list[HarnessSupportRecord]:
     """Return support metadata for all harnesses."""
     return [
         HarnessSupportRecord(key=h.key, name=h.name, support=h.support)
+        for h in _matrix().harnesses
+    ]
+
+
+def get_harness_acp(input: str) -> HarnessAcpRecord:
+    """Return ACP metadata by key or alias; missing metadata is unknown."""
+    harness = _find_harness_definition(input)
+    if harness is None:
+        raise HarnessError(f"Unknown harness: {input}")
+    return HarnessAcpRecord(harness.key, harness.name, harness.acp or HarnessAcp())
+
+
+def list_harness_acp() -> list[HarnessAcpRecord]:
+    """Return ACP metadata for all harnesses (immutable)."""
+    return [
+        HarnessAcpRecord(h.key, h.name, h.acp or HarnessAcp())
         for h in _matrix().harnesses
     ]
 

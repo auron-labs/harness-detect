@@ -96,6 +96,30 @@ type HarnessSupport struct {
 	DotAgents HarnessSupportArea `json:"dotAgents"`
 }
 
+// HarnessACPLaunch describes a local stdio command and discrete argv values.
+type HarnessACPLaunch struct {
+	Command   string   `json:"command"`
+	Args      []string `json:"args"`
+	Platforms []string `json:"platforms,omitempty"`
+}
+
+// HarnessACP describes ACP metadata, independently of file-location support.
+type HarnessACP struct {
+	Status     string            `json:"status"`
+	Launch     *HarnessACPLaunch `json:"launch,omitempty"`
+	Adapter    string            `json:"adapter,omitempty"`
+	Sources    []string          `json:"sources"`
+	Confidence string            `json:"confidence"`
+	Notes      string            `json:"notes,omitempty"`
+}
+
+// HarnessACPRecord exposes one harness ACP entry.
+type HarnessACPRecord struct {
+	Key  string     `json:"key"`
+	Name string     `json:"name"`
+	ACP  HarnessACP `json:"acp"`
+}
+
 // HarnessRootDef declares a derived template variable for a harness.
 type HarnessRootDef struct {
 	Name        string `json:"name"`
@@ -126,6 +150,7 @@ type HarnessDefinition struct {
 	Paths         []HarnessPathSpec     `json:"paths"`
 	Roots         []HarnessRootDef      `json:"roots,omitempty"`
 	Support       HarnessSupport        `json:"support"`
+	ACP           *HarnessACP           `json:"acp,omitempty"`
 	Env           []HarnessEnvVar       `json:"env"`
 	Sources       []string              `json:"sources"`
 	Installations []HarnessInstallation `json:"installations"`
@@ -207,6 +232,48 @@ func ListHarnessSupport() []HarnessSupportRecord {
 		out[i] = cloneHarnessSupportRecord(harness)
 	}
 	return out
+}
+
+// GetHarnessACP returns ACP metadata for one harness by key or alias.
+func GetHarnessACP(input string) (HarnessACPRecord, error) {
+	h, ok := getHarnessDefinition(input)
+	if !ok {
+		return HarnessACPRecord{}, errors.New("Unknown harness: " + input)
+	}
+	return cloneHarnessACPRecord(h), nil
+}
+
+// ListHarnessACP returns ACP metadata for all harnesses.
+func ListHarnessACP() []HarnessACPRecord {
+	loadMatrix()
+	out := make([]HarnessACPRecord, len(matrix.Harnesses))
+	for i, h := range matrix.Harnesses {
+		out[i] = cloneHarnessACPRecord(h)
+	}
+	return out
+}
+
+func cloneACP(acp *HarnessACP) *HarnessACP {
+	if acp == nil {
+		return nil
+	}
+	out := *acp
+	out.Sources = append([]string{}, acp.Sources...)
+	if acp.Launch != nil {
+		launch := *acp.Launch
+		launch.Args = append([]string{}, acp.Launch.Args...)
+		launch.Platforms = append([]string(nil), acp.Launch.Platforms...)
+		out.Launch = &launch
+	}
+	return &out
+}
+
+func cloneHarnessACPRecord(h HarnessDefinition) HarnessACPRecord {
+	acp := cloneACP(h.ACP)
+	if acp == nil {
+		acp = &HarnessACP{Status: "unknown", Sources: []string{}, Confidence: "unknown"}
+	}
+	return HarnessACPRecord{Key: h.Key, Name: h.Name, ACP: *acp}
 }
 
 func cloneMatrix(m HarnessMatrix) HarnessMatrix {
@@ -313,6 +380,7 @@ func cloneHarnessDefinition(h HarnessDefinition) HarnessDefinition {
 		Paths:         clonePathSpecs(h.Paths),
 		Roots:         append([]HarnessRootDef(nil), h.Roots...),
 		Support:       cloneSupport(h.Support),
+		ACP:           cloneACP(h.ACP),
 		Env:           append([]HarnessEnvVar(nil), h.Env...),
 		Sources:       append([]string(nil), h.Sources...),
 		Installations: cloneInstallations(h.Installations),

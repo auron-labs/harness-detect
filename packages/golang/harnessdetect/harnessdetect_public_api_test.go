@@ -8,6 +8,8 @@ import (
 )
 
 var (
+	_ func(string) (harnessdetect.HarnessACPRecord, error)                               = harnessdetect.GetHarnessACP
+	_ func() []harnessdetect.HarnessACPRecord                                            = harnessdetect.ListHarnessACP
 	_ func() harnessdetect.HarnessMatrix                                                 = harnessdetect.GetRawHarnessData
 	_ func() harnessdetect.HarnessMatrix                                                 = harnessdetect.GetHarnessMatrix
 	_ func() []harnessdetect.HarnessDefinition                                           = harnessdetect.ListHarnesses
@@ -138,6 +140,16 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 		"Agents":    "agents",
 		"DotAgents": "dotAgents",
 	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACPLaunch{}), map[string]string{
+		"Command": "command", "Args": "args", "Platforms": "platforms,omitempty",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACP{}), map[string]string{
+		"Status": "status", "Launch": "launch,omitempty", "Adapter": "adapter,omitempty",
+		"Sources": "sources", "Confidence": "confidence", "Notes": "notes,omitempty",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACPRecord{}), map[string]string{
+		"Key": "key", "Name": "name", "ACP": "acp",
+	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessDefinition{}), map[string]string{
 		"Key":           "key",
 		"Name":          "name",
@@ -146,6 +158,7 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 		"Paths":         "paths",
 		"Roots":         "roots,omitempty",
 		"Support":       "support",
+		"ACP":           "acp,omitempty",
 		"Env":           "env",
 		"Sources":       "sources",
 		"Installations": "installations",

@@ -40,6 +40,8 @@ print(len(list_harness_support()))
 - `get_raw_harness_data()` returns the full registry object.
 - `get_harness_matrix()` returns the full registry object.
 - `list_harnesses()` returns the registry's harness definitions.
+- `get_harness_acp` returns ACP metadata for one harness key or alias.
+- `list_harness_acp` returns ACP metadata for every harness; absent metadata is `unknown`.
 - `get_harness_support(input)` returns support metadata for one harness key or alias.
 - `list_harness_support()` returns support metadata for every harness.
 - `check_harness(input, options=None)` checks one harness key or alias.
@@ -48,3 +50,8 @@ print(len(list_harness_support()))
 
 See the [package docs](https://github.com/auron-labs/harness-detect) for the full
 API reference.
+
+ACP metadata describes local stdio launches and optional adapter registry keys,
+independently of file-location support. The current rollout leaves registry ACP
+metadata unpopulated. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
+for the optional stored shape and adapter lookup rules.

@@ -23,7 +23,7 @@ This guide defines the minimum contract for adding a new package implementation
 
 ## 2. Required public API
 
-Every package must expose the same eight public operations already locked by
+Every package must expose the same ten public operations already locked by
  `testdata/public-api-parity.json`:
 
 1. raw registry accessor
@@ -67,6 +67,17 @@ Every package must expose the same eight public operations already locked by
    - Rust: `detect_installed_harnesses`
    - Python: `detect_installed_harnesses`
 
+9. get ACP metadata for one harness by key or alias
+   - TypeScript: `getHarnessAcp`
+   - Go: `GetHarnessACP`
+   - Rust: `get_harness_acp`
+   - Python: `get_harness_acp`
+10. list ACP metadata for every harness
+   - TypeScript: `listHarnessAcp`
+   - Go: `ListHarnessACP`
+   - Rust: `list_harness_acp`
+   - Python: `list_harness_acp`
+
 Public naming may be idiomatic per language, but the operation set and behavior
  must stay equivalent. Prefer a clean aligned cross-language API over adding
 compatibility-only layers.
@@ -99,6 +110,22 @@ The package must preserve the shared registry schema and the JSON/result fields
     only.
  5. `getHarnessMatrix`/`GetHarnessMatrix` must remain a compatibility alias for
     the raw-registry accessor, not a divergent data shape.
+
+### ACP metadata
+
+Harness definitions preserve optional top-level `acp` separately from `support`.
+During this staged rollout, stored omission stays omitted in JSON-returning
+surfaces; Python represents it as `None` in its immutable typed definition.
+ACP getters return `{key, name, acp}` and normalize omission to
+`{status: "unknown", sources: [], confidence: "unknown"}`. They share support
+getters' alias lookup, unknown-harness errors, and snapshot/immutability contract.
+Support getters continue returning only `{key, name, support}`.
+
+A supported ACP entry has exactly one direct local stdio `launch` or `adapter`
+key. Adapter references resolve to another entry with a supported direct launch;
+consumers can make a second getter call to read that launch. See
+[configuration.md](./configuration.md#acp-metadata-acp) for validation rules.
+ACP never changes installation detection.
 
 ### Detection APIs
 

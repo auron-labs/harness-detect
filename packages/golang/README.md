@@ -47,6 +47,8 @@ A harness counts as installed when either of these is true:
 - `GetRawHarnessData()` returns the full registry object and is the preferred raw-registry API.
 - `GetHarnessMatrix()` is a compatibility alias for `GetRawHarnessData()`.
 - `ListHarnesses()` returns the registry's `harnesses` slice.
+- `GetHarnessACP` returns ACP metadata for one harness key or alias.
+- `ListHarnessACP` returns ACP metadata for every harness; absent metadata is `unknown`.
 - `GetHarnessSupport` returns the support metadata for one harness key or alias.
 - `ListHarnessSupport()` returns support metadata for every harness.
 - `CheckHarness(input, options)` checks one harness key or alias and returns resolved paths, matches, and reasons.
@@ -129,3 +131,8 @@ Related guides:
 - Package parity/API contract: [../../docs/package-guide.md](../../docs/package-guide.md)
 
 When editing registry data, update `packages/data/harnesses.json`, run `mise run registry:sync`, then `mise run registry:check`. CI uses the read-only `registry:check` step to verify the embedded package copy stays aligned.
+
+ACP metadata describes local stdio launches and optional adapter registry keys,
+independently of file-location support. The current rollout leaves registry ACP
+metadata unpopulated. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
+for the optional stored shape and adapter lookup rules.

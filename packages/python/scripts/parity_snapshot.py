@@ -11,6 +11,7 @@ from typing import Any
 
 from harness_detect import (
     CheckOptions,
+    HarnessAcpRecord,
     HarnessCheckResult,
     HarnessSupport,
     HarnessSupportArea,
@@ -19,7 +20,9 @@ from harness_detect import (
     HarnessSupportScope,
     check_harness,
     detect_harnesses,
+    get_harness_acp,
     get_harness_support,
+    list_harness_acp,
     list_harness_support,
 )
 
@@ -90,6 +93,10 @@ def run_case(raw_case: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
             )
         elif operation == "detectHarnesses":
             result = normalize_detect_results(detect_harnesses(options), roots)
+        elif operation == "getHarnessAcp":
+            result = normalize_acp_record(get_harness_acp(case["input"]))
+        elif operation == "listHarnessAcp":
+            result = [normalize_acp_record(r) for r in list_harness_acp()]
         elif operation == "getHarnessSupport":
             result = normalize_support_record(get_harness_support(case["input"]))
         elif operation == "listHarnessSupport":
@@ -237,6 +244,27 @@ def normalize_path_value(value: str | None, roots: dict[str, str]) -> str | None
         if normalized.startswith(prefix):
             return placeholder + normalized[len(root) :]
     return normalized
+
+
+def normalize_acp_record(record: HarnessAcpRecord) -> dict[str, Any]:
+    acp = record.acp
+    metadata = {
+        "status": acp.status,
+        "sources": list(acp.sources),
+        "confidence": acp.confidence,
+    }
+    if acp.launch is not None:
+        metadata["launch"] = {
+            "command": acp.launch.command,
+            "args": list(acp.launch.args),
+        }
+        if acp.launch.platforms:
+            metadata["launch"]["platforms"] = list(acp.launch.platforms)
+    if acp.adapter:
+        metadata["adapter"] = acp.adapter
+    if acp.notes:
+        metadata["notes"] = acp.notes
+    return {"key": record.key, "name": record.name, "acp": metadata}
 
 
 def normalize_support_path(path: HarnessSupportPath) -> dict[str, Any]:

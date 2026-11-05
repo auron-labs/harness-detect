@@ -34,6 +34,7 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
     );
   }
   const draft = {
+    acp: { status: "unknown", sources: [], confidence: "unknown" },
     aliases,
     env: [],
     executables: [],

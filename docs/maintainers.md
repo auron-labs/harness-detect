@@ -300,7 +300,7 @@ Install TypeScript dev dependencies first (`cd packages/typescript && bun instal
 mise run harness:new -- example-harness "Example Harness" --alias example-alias
 ```
 
-The scaffold refuses existing keys/aliases after case and whitespace normalization and writes JSON only to stdout. It includes every required field and ten independent `unknown` support leaves. It deliberately leaves detection, sources, and installation arrays empty: supply verified facts before adding the entry to `packages/data/harnesses.json`; the draft is not a valid registry entry yet. Update an existing entry in place and keep its key stable.
+The scaffold refuses existing keys/aliases after case and whitespace normalization and writes JSON only to stdout. It includes every required field, ten independent `unknown` support leaves, and optional `unknown` ACP metadata. It deliberately leaves detection, sources, and installation arrays empty: supply verified facts before adding the entry to `packages/data/harnesses.json`; the draft is not a valid registry entry yet. Update an existing entry in place and keep its key stable.
 
 After editing the canonical registry, run from the repository root:
 
@@ -325,7 +325,7 @@ The validator CLI also accepts a registry JSON filename:
 node scripts/validate-registry.mjs /tmp/candidate-registry.json
 ```
 
-The schema owns field requirements, supported values, installation evidence, and evidence/confidence for non-`unknown` support claims. Semantic checks cover normalized key/alias collisions across entries and duplicate detection/support path IDs or root names within their owning scope. A self-alias is permitted. Validation cannot prove that a URL substantiates a rule; reviewers still check the upstream evidence and possible shared-file false positives.
+The schema owns field requirements, supported values, installation evidence, and evidence/confidence for non-`unknown` support claims. ACP is optional during the staged rollout; see [ACP metadata](./configuration.md#acp-metadata-acp) for the launch/adapter contract. Schema validation checks ACP claims and launch shapes; semantic validation requires adapter keys to target a different supported entry with a direct launch. Semantic checks also cover normalized key/alias collisions across entries and duplicate detection/support path IDs or root names within their owning scope. A self-alias is permitted. Validation cannot prove that a URL substantiates a rule; reviewers still check the upstream evidence and possible shared-file false positives.
 
 The Markdown summary compares the working canonical registry against `HEAD` by default, including staged and unstaged edits. Use `--base` for committed branch changes; missing revisions fail explicitly. It lists additions, removals, and changed fields, with support broken down by area and scope. CI uses the PR base revision and publishes the result in the job summary.
 

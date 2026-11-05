@@ -20,6 +20,8 @@ const LOCKED_RUNTIME_EXPORTS = [
   "checkHarness",
   "detectHarnesses",
   "detectInstalledHarnesses",
+  "getHarnessAcp",
+  "listHarnessAcp",
   "getHarnessMatrix",
   "getHarnessSupport",
   "getRawHarnessData",

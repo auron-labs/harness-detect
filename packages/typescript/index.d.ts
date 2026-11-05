@@ -36,6 +36,28 @@ export interface HarnessSupportLeaf {
 
 export type HarnessSupport = Record<HarnessSupportArea, Record<HarnessSupportScope, HarnessSupportLeaf>>;
 
+export interface HarnessAcpLaunch {
+  command: string;
+  args: string[];
+  platforms?: HarnessPlatform[];
+}
+
+export type HarnessAcp = {
+  sources: string[];
+  confidence: HarnessSupportConfidence;
+  notes?: string;
+} & (
+  | { status: "supported"; launch: HarnessAcpLaunch; adapter?: never }
+  | { status: "supported"; adapter: string; launch?: never }
+  | { status: "unsupported" | "unknown"; launch?: never; adapter?: never }
+);
+
+export interface HarnessAcpRecord {
+  key: string;
+  name: string;
+  acp: HarnessAcp;
+}
+
 export interface HarnessRootDef {
   name: string;
   env?: string;
@@ -78,6 +100,7 @@ export interface HarnessDefinition {
   paths: HarnessPathSpec[];
   roots?: HarnessRootDef[];
   support: HarnessSupport;
+  acp?: HarnessAcp;
   env: HarnessEnvVar[];
   sources: string[];
 }
@@ -117,6 +140,8 @@ export interface HarnessSupportRecord {
 export declare function getRawHarnessData(): HarnessMatrix;
 export declare function getHarnessMatrix(): HarnessMatrix;
 export declare function listHarnesses(): HarnessDefinition[];
+export declare function getHarnessAcp(input: string): HarnessAcpRecord;
+export declare function listHarnessAcp(): HarnessAcpRecord[];
 export declare function getHarnessSupport(input: string): HarnessSupportRecord;
 export declare function listHarnessSupport(): HarnessSupportRecord[];
 export declare function checkHarness(input: string, options?: CheckHarnessOptions): HarnessCheckResult;

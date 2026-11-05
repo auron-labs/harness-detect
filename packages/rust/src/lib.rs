@@ -97,6 +97,50 @@ pub struct HarnessSupport {
     pub dot_agents: HarnessSupportArea,
 }
 
+/// A local stdio command with discrete argv values.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcpLaunch {
+    pub command: String,
+    pub args: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub platforms: Vec<String>,
+}
+
+/// ACP metadata, independently of file-location support.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcp {
+    pub status: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub launch: Option<HarnessAcpLaunch>,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub adapter: String,
+    pub sources: Vec<String>,
+    pub confidence: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub notes: String,
+}
+
+impl Default for HarnessAcp {
+    fn default() -> Self {
+        Self {
+            status: "unknown".into(),
+            launch: None,
+            adapter: String::new(),
+            sources: vec![],
+            confidence: "unknown".into(),
+            notes: String::new(),
+        }
+    }
+}
+
+/// One harness ACP entry.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcpRecord {
+    pub key: String,
+    pub name: String,
+    pub acp: HarnessAcp,
+}
+
 /// A derived template variable declared by a harness.
 ///
 /// Roots are resolved in declaration order before path templates, allowing
@@ -150,6 +194,8 @@ pub struct HarnessDefinition {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub roots: Vec<HarnessRootDef>,
     pub support: HarnessSupport,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub acp: Option<HarnessAcp>,
     pub env: Vec<HarnessEnvVar>,
     pub sources: Vec<String>,
 }
@@ -254,6 +300,30 @@ pub fn list_harness_support() -> Vec<HarnessSupportRecord> {
         .iter()
         .map(clone_harness_support_record)
         .collect()
+}
+
+/// Returns ACP metadata for one harness by key or alias; missing metadata is unknown.
+pub fn get_harness_acp(input: &str) -> Result<HarnessAcpRecord, HarnessError> {
+    let harness = find_harness_definition(input)
+        .ok_or_else(|| HarnessError(format!("Unknown harness: {}", input)))?;
+    Ok(clone_harness_acp_record(&harness))
+}
+
+/// Returns ACP metadata for all harnesses.
+pub fn list_harness_acp() -> Vec<HarnessAcpRecord> {
+    matrix()
+        .harnesses
+        .iter()
+        .map(clone_harness_acp_record)
+        .collect()
+}
+
+fn clone_harness_acp_record(harness: &HarnessDefinition) -> HarnessAcpRecord {
+    HarnessAcpRecord {
+        key: harness.key.clone(),
+        name: harness.name.clone(),
+        acp: harness.acp.clone().unwrap_or_default(),
+    }
 }
 
 /// Checks a single harness by key or alias (case-insensitive, trimmed).
@@ -739,5 +809,88 @@ mod tests {
             resolve_template("${HOME}/.codex/config.toml", &env),
             Some("/Users/test/.codex/config.toml".to_string())
         );
+    }
+
+    #[test]
+    fn acp_synthetic_public_flows() {
+        // Unit tests have a separate binary from integration tests using the real registry.
+        let fixture_json = fs::read_to_string(
+            Path::new(env!("CARGO_MANIFEST_DIR")).join("../../testdata/acp-registry.json"),
+        )
+        .expect("read ACP fixture");
+        let fixture: HarnessMatrix = serde_json::from_str(&fixture_json).unwrap();
+        MATRIX
+            .set(fixture.clone())
+            .expect("unit-test matrix must be unused");
+        assert_eq!(get_raw_harness_data(), fixture);
+        assert_eq!(get_harness_acp(" NATIVE-ALIAS ").unwrap().key, "native");
+        assert_eq!(
+            get_harness_acp("absent").unwrap_err().0,
+            "Unknown harness: absent"
+        );
+        let host = get_harness_acp("host").unwrap();
+        let bridge = get_harness_acp(&host.acp.adapter).unwrap();
+        assert_eq!(
+            bridge.acp.launch.as_ref().unwrap().command,
+            "example-bridge"
+        );
+        assert_eq!(
+            serde_json::to_value(&bridge).unwrap()["acp"]["launch"]["args"],
+            serde_json::json!([])
+        );
+        for key in ["unknown", "missing"] {
+            assert_eq!(get_harness_acp(key).unwrap().acp, HarnessAcp::default());
+        }
+        assert_eq!(
+            get_harness_acp("unsupported").unwrap().acp.status,
+            "unsupported"
+        );
+        let mut records = list_harness_acp();
+        assert_eq!(records.len(), fixture.harnesses.len());
+        records[0]
+            .acp
+            .sources
+            .push("https://example.com/mutated".into());
+        let launch = records[0].acp.launch.as_mut().unwrap();
+        launch.args.push("mutated".into());
+        launch.platforms.push("win32".into());
+        for mut harness in list_harnesses() {
+            let options = CheckOptions {
+                env: Some(HashMap::from([("PATH".into(), "".into())])),
+                cwd: None,
+            };
+            let mut result = check_harness(&harness.key, options).unwrap();
+            assert!(!result.installed, "ACP is not detection evidence");
+            assert_eq!(result.harness, harness);
+            if harness.key == "missing" {
+                assert!(serde_json::to_value(&result).unwrap()["harness"]
+                    .get("acp")
+                    .is_none());
+            }
+            if let Some(acp) = harness.acp.as_mut() {
+                acp.sources.push("mutated".into());
+            }
+            if let Some(acp) = result.harness.acp.as_mut() {
+                acp.sources.push("mutated".into());
+            }
+        }
+        let mut raw = get_raw_harness_data();
+        raw.harnesses[0]
+            .acp
+            .as_mut()
+            .unwrap()
+            .launch
+            .as_mut()
+            .unwrap()
+            .command = "mutated".into();
+        assert_eq!(get_raw_harness_data(), fixture);
+        assert_eq!(
+            get_harness_acp("native").unwrap().acp,
+            fixture.harnesses[0].acp.clone().unwrap()
+        );
+        assert!(serde_json::to_value(get_harness_support("native").unwrap())
+            .unwrap()
+            .get("acp")
+            .is_none());
     }
 }

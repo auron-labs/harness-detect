@@ -1210,3 +1210,33 @@ fn validate_template(s: &str) -> bool {
     }
     true
 }
+
+#[test]
+fn acp_omission_and_default_getters() {
+    let raw = harness_detect::get_raw_harness_data();
+    for h in &raw.harnesses {
+        assert_eq!(
+            harness_detect::get_harness_acp(&h.key).unwrap().acp,
+            h.acp.clone().unwrap_or_default()
+        );
+        if h.acp.is_none() {
+            assert!(serde_json::to_value(h).unwrap().get("acp").is_none());
+        }
+    }
+    let record = harness_detect::get_harness_acp(" OPENAI/CODEX ").unwrap();
+    assert_eq!(record.key, "codex");
+    assert_eq!(
+        record.acp,
+        raw.harnesses
+            .iter()
+            .find(|h| h.key == "codex")
+            .unwrap()
+            .acp
+            .clone()
+            .unwrap_or_default()
+    );
+    assert_eq!(
+        harness_detect::list_harness_acp().len(),
+        raw.harnesses.len()
+    );
+}

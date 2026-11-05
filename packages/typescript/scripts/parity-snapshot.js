@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { checkHarness, detectHarnesses, getHarnessSupport, listHarnessSupport } from "../src/index.js";
+import { getHarnessAcp, listHarnessAcp, checkHarness, detectHarnesses, getHarnessSupport, listHarnessSupport } from "../src/index.js";
 
 function readInput(sourceArg) {
   if (sourceArg && sourceArg !== "-") {
@@ -332,6 +332,14 @@ function runCase(rawCase, roots) {
         id: testCase.id,
         operation: testCase.operation,
         result: normalizeDetectResults(detectHarnesses(options), roots)
+      };
+    }
+
+    if (testCase.operation === "getHarnessAcp" || testCase.operation === "listHarnessAcp") {
+      return {
+        id: testCase.id,
+        operation: testCase.operation,
+        result: testCase.operation === "getHarnessAcp" ? getHarnessAcp(testCase.input) : listHarnessAcp()
       };
     }
 
