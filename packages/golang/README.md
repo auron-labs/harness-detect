@@ -133,6 +133,7 @@ Related guides:
 When editing registry data, update `packages/data/harnesses.json`, run `mise run registry:sync`, then `mise run registry:check`. CI uses the read-only `registry:check` step to verify the embedded package copy stays aligned.
 
 ACP metadata describes local stdio launches and optional adapter registry keys,
-independently of file-location support. The current rollout leaves registry ACP
-metadata unpopulated. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
+independently of file-location support. Read `acp.status`, follow `acp.adapter`
+when present, and select a platform-matching recipe from `acp.launches`. Read the
+owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
 for the optional stored shape and adapter lookup rules.

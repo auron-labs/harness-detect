@@ -253,13 +253,13 @@ def normalize_acp_record(record: HarnessAcpRecord) -> dict[str, Any]:
         "sources": list(acp.sources),
         "confidence": acp.confidence,
     }
-    if acp.launch is not None:
-        metadata["launch"] = {
-            "command": acp.launch.command,
-            "args": list(acp.launch.args),
-        }
-        if acp.launch.platforms:
-            metadata["launch"]["platforms"] = list(acp.launch.platforms)
+    if acp.launches:
+        metadata["launches"] = []
+        for launch in acp.launches:
+            item = {"command": launch.command, "args": list(launch.args)}
+            if launch.platforms:
+                item["platforms"] = list(launch.platforms)
+            metadata["launches"].append(item)
     if acp.adapter:
         metadata["adapter"] = acp.adapter
     if acp.notes:

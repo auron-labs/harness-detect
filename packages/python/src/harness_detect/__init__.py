@@ -274,7 +274,7 @@ class HarnessAcp:
     status: str = "unknown"
     sources: tuple[str, ...] = ()
     confidence: str = "unknown"
-    launch: HarnessAcpLaunch | None = None
+    launches: tuple[HarnessAcpLaunch, ...] = ()
     adapter: str = ""
     notes: str = ""
 
@@ -284,7 +284,9 @@ class HarnessAcp:
             status=d["status"],
             sources=tuple(d["sources"]),
             confidence=d["confidence"],
-            launch=HarnessAcpLaunch.from_dict(d["launch"]) if "launch" in d else None,
+            launches=tuple(
+                HarnessAcpLaunch.from_dict(item) for item in d.get("launches", [])
+            ),
             adapter=d.get("adapter", ""),
             notes=d.get("notes", ""),
         )

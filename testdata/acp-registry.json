@@ -99,18 +99,29 @@
           "https://example.com/acp"
         ],
         "confidence": "official",
-        "launch": {
-          "command": "example-agent",
-          "args": [
-            "--acp",
-            "two words",
-            ""
-          ],
-          "platforms": [
-            "linux",
-            "darwin"
-          ]
-        }
+        "launches": [
+          {
+            "command": "example-agent",
+            "args": [
+              "--acp",
+              "two words",
+              ""
+            ],
+            "platforms": [
+              "linux",
+              "darwin"
+            ]
+          },
+          {
+            "command": "example-agent.exe",
+            "args": [
+              "--acp-windows"
+            ],
+            "platforms": [
+              "win32"
+            ]
+          }
+        ]
       }
     },
     {
@@ -211,10 +222,12 @@
           "https://example.com/acp"
         ],
         "confidence": "official",
-        "launch": {
-          "command": "example-bridge",
-          "args": []
-        }
+        "launches": [
+          {
+            "command": "example-bridge",
+            "args": []
+          }
+        ]
       }
     },
     {

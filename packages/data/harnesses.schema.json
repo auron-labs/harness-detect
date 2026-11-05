@@ -33,7 +33,18 @@
           {
             "properties": { "executables": { "type": "array", "minItems": 1 } }
           },
-          { "properties": { "paths": { "type": "array", "minItems": 1 } } }
+          { "properties": { "paths": { "type": "array", "minItems": 1 } } },
+          {
+            "description": "An ACP launch record may lack portable detection signals; notes must explain its setup requirements.",
+            "required": ["acp"],
+            "properties": {
+              "acp": {
+                "type": "object",
+                "required": ["status", "launches", "notes"],
+                "properties": { "status": { "const": "supported" } }
+              }
+            }
+          }
         ],
         "properties": {
           "key": {
@@ -72,7 +83,7 @@
             "items": { "$ref": "#/$defs/HttpsUrl" }
           },
           "acp": {
-            "description": "Optional during the staged ACP rollout. Describes a local stdio launch or a direct adapter registry key; never detection evidence.",
+            "description": "Describes platform-scoped local stdio launches or a direct adapter registry key; never detection evidence. Omitted metadata is unknown.",
             "$ref": "#/$defs/HarnessAcp"
           },
           "support": {
@@ -96,7 +107,11 @@
       "additionalProperties": false,
       "properties": {
         "status": { "enum": ["supported", "unsupported", "unknown"] },
-        "launch": { "$ref": "#/$defs/HarnessAcpLaunch" },
+        "launches": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/HarnessAcpLaunch" }
+        },
         "adapter": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
         "sources": {
           "type": "array",
@@ -111,11 +126,11 @@
         {
           "if": { "properties": { "status": { "const": "supported" } } },
           "then": {
-            "oneOf": [{ "required": ["launch"] }, { "required": ["adapter"] }]
+            "oneOf": [{ "required": ["launches"] }, { "required": ["adapter"] }]
           },
           "else": {
             "not": {
-              "anyOf": [{ "required": ["launch"] }, { "required": ["adapter"] }]
+              "anyOf": [{ "required": ["launches"] }, { "required": ["adapter"] }]
             }
           }
         },

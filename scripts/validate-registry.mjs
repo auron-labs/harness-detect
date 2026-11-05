@@ -62,8 +62,21 @@ export const validateRegistry = (registry) => {
   for (const harness of registry.harnesses) {
     if (harness.acp?.adapter !== undefined) {
       const target = byKey.get(harness.acp.adapter);
-      if (target === harness || target?.acp?.status !== "supported" || !target.acp.launch) {
+      if (target === harness || target?.acp?.status !== "supported" || !target.acp.launches) {
         errors.push(`${harness.key}.acp.adapter must reference a different registry key with a supported direct ACP launch`);
+      }
+    }
+    const launches = harness.acp?.launches ?? [];
+    const platforms = new Set();
+    for (const launch of launches) {
+      if (launches.length > 1 && !launch.platforms) {
+        errors.push(`${harness.key}.acp.launches must specify platforms when there is more than one launch`);
+      }
+      for (const platform of launch.platforms ?? []) {
+        if (platforms.has(platform)) {
+          errors.push(`${harness.key}.acp.launches has overlapping platform ${platform}`);
+        }
+        platforms.add(platform);
       }
     }
     checkIds(harness.paths, `${harness.key}.paths`);

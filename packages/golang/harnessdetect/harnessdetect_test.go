@@ -53,12 +53,14 @@ var expectedUnknownInstallationHarnesses = []string{
 	"windsurf",
 }
 
-var allowedPlatforms = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
-var expectedUsedPlatforms = []string{"darwin", "linux", "win32"}
-var supportAreas = []string{"config", "skills", "commands", "agents", "dotAgents"}
-var supportScopes = []string{"global", "local"}
-var supportStatuses = []string{"supported", "unsupported", "unknown"}
-var supportConfidenceLevels = []string{"official", "source", "observed", "inferred", "unknown"}
+var (
+	allowedPlatforms        = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
+	expectedUsedPlatforms   = []string{"darwin", "linux", "win32"}
+	supportAreas            = []string{"config", "skills", "commands", "agents", "dotAgents"}
+	supportScopes           = []string{"global", "local"}
+	supportStatuses         = []string{"supported", "unsupported", "unknown"}
+	supportConfidenceLevels = []string{"official", "source", "observed", "inferred", "unknown"}
+)
 
 func tempDir(t *testing.T) string {
 	t.Helper()
@@ -96,8 +98,8 @@ func TestGetHarnessMatrix(t *testing.T) {
 
 func TestGoInstallationMetadataCompleteness(t *testing.T) {
 	matrix := GetRawHarnessData()
-	if len(matrix.Harnesses) != 58 {
-		t.Fatalf("harness count = %d, want 58", len(matrix.Harnesses))
+	if len(matrix.Harnesses) != 67 {
+		t.Fatalf("harness count = %d, want 67", len(matrix.Harnesses))
 	}
 
 	allowedMethods := make(map[string]struct{}, len(supportedInstallMethods))

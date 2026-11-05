@@ -50,18 +50,18 @@ func TestACPSyntheticPublicFlows(t *testing.T) {
 	if err != nil || got.Key != "native" {
 		t.Fatalf("alias: %#v %v", got, err)
 	}
-	if !reflect.DeepEqual(got.ACP.Launch.Args, []string{"--acp", "two words", ""}) {
-		t.Fatalf("argv changed: %#v", got.ACP.Launch.Args)
+	if !reflect.DeepEqual(got.ACP.Launches[0].Args, []string{"--acp", "two words", ""}) {
+		t.Fatalf("argv changed: %#v", got.ACP.Launches[0].Args)
 	}
 	host, err := GetHarnessACP("host")
 	if err != nil {
 		t.Fatal(err)
 	}
 	bridge, err := GetHarnessACP(host.ACP.Adapter)
-	if err != nil || bridge.ACP.Launch.Command != "example-bridge" {
+	if err != nil || bridge.ACP.Launches[0].Command != "example-bridge" {
 		t.Fatalf("adapter: %#v %v", bridge, err)
 	}
-	empty, err := json.Marshal(bridge.ACP.Launch)
+	empty, err := json.Marshal(bridge.ACP.Launches[0])
 	if err != nil || !strings.Contains(string(empty), `"args":[]`) {
 		t.Fatalf("empty argv lost: %s, %v", empty, err)
 	}
@@ -79,10 +79,11 @@ func TestACPSyntheticPublicFlows(t *testing.T) {
 	if len(records) != len(expected.Harnesses) {
 		t.Fatal("list length")
 	}
-	records[0].ACP.Launch.Args[0] = "mutated"
-	records[0].ACP.Launch.Platforms[0] = "win32"
+	records[0].ACP.Launches[0].Args[0] = "mutated"
+	records[0].ACP.Launches[0].Platforms[0] = "win32"
+	records[0].ACP.Launches[1].Args[0] = "mutated"
 	records[0].ACP.Sources[0] = "https://example.com/mutated"
-	got.ACP.Launch.Command = "mutated"
+	got.ACP.Launches[0].Command = "mutated"
 	for _, h := range ListHarnesses() {
 		result, err := CheckHarness(h.Key, CheckOptions{Env: map[string]string{"HOME": t.TempDir(), "PATH": ""}})
 		if err != nil || result.Installed {
@@ -91,11 +92,11 @@ func TestACPSyntheticPublicFlows(t *testing.T) {
 		if !reflect.DeepEqual(result.Harness, h) {
 			t.Fatal("detection lost metadata")
 		}
-		if h.ACP != nil && h.ACP.Launch != nil {
-			h.ACP.Launch.Args = append(h.ACP.Launch.Args, "mutated")
+		if h.ACP != nil && h.ACP.Launches != nil {
+			h.ACP.Launches[0].Args = append(h.ACP.Launches[0].Args, "mutated")
 		}
-		if result.Harness.ACP != nil && result.Harness.ACP.Launch != nil {
-			result.Harness.ACP.Launch.Command = "mutated"
+		if result.Harness.ACP != nil && result.Harness.ACP.Launches != nil {
+			result.Harness.ACP.Launches[0].Command = "mutated"
 		}
 		encoded, err := json.Marshal(result.Harness)
 		if err != nil {
@@ -106,7 +107,7 @@ func TestACPSyntheticPublicFlows(t *testing.T) {
 		}
 	}
 	raw := GetRawHarnessData()
-	raw.Harnesses[0].ACP.Launch.Command = "mutated"
+	raw.Harnesses[0].ACP.Launches[0].Command = "mutated"
 	if !reflect.DeepEqual(GetRawHarnessData(), expected) {
 		t.Fatal("ACP snapshot mutation reached registry")
 	}

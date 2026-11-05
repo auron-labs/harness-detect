@@ -91,11 +91,15 @@ void firstInstalledDetectedKey;
 const acp = getHarnessAcp("codex").acp;
 const acpRecords = listHarnessAcp();
 const optionalAcp: HarnessAcp | undefined = rawMatrix.harnesses[0]?.acp;
-const directAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", launch: { command: "example", args: [] } };
+const directAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", launches: [{ command: "example", args: [] }] };
 const adapterAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", adapter: "example-bridge" };
 // @ts-expect-error supported ACP needs exactly one launch or adapter
 const invalidAcp: HarnessAcp = { status: "supported", sources: [], confidence: "unknown" };
 // @ts-expect-error unsupported ACP has no launch
-const invalidLaunch: HarnessAcp = { status: "unsupported", sources: [], confidence: "source", launch: { command: "example", args: [] } };
-const optionalLaunch: HarnessAcpLaunch | undefined = acp.launch;
+const invalidLaunch: HarnessAcp = { status: "unsupported", sources: [], confidence: "source", launches: [{ command: "example", args: [] }] };
+const optionalLaunch: HarnessAcpLaunch | undefined = acp.launches?.[0];
 void [acpRecords, optionalAcp, directAcp, adapterAcp, invalidAcp, invalidLaunch, optionalLaunch];
+
+// @ts-expect-error supported ACP requires a nonempty launch list
+const emptyLaunches: HarnessAcp = { status: "supported", sources: [], confidence: "source", launches: [] };
+void emptyLaunches;

@@ -289,7 +289,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 58,
+        "count": 67,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1791,6 +1791,108 @@
     {
       "id": "acp-list",
       "operation": "listHarnessAcp"
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "adapter-install-does-not-install-host",
+      "input": "codex",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "codex",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "adapter-alias-detection",
+      "input": "@agentclientprotocol/codex-acp",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "codex-acp",
+        "installed": true,
+        "executablePath": "${BIN}/codex-acp",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "source-only-adapter-does-not-detect-generic-runtime",
+      "input": "aider-acp",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "aider-acp",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-adapter-alias",
+      "operation": "getHarnessAcp",
+      "input": " @agentclientprotocol/claude-agent-acp ",
+      "expect": {
+        "key": "claude-agent-acp"
+      }
+    },
+    {
+      "id": "acp-platform-launches",
+      "operation": "getHarnessAcp",
+      "input": "antigravity-acp",
+      "expect": {
+        "key": "antigravity-acp"
+      }
     }
   ]
 }

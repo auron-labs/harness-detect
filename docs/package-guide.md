@@ -114,16 +114,18 @@ The package must preserve the shared registry schema and the JSON/result fields
 ### ACP metadata
 
 Harness definitions preserve optional top-level `acp` separately from `support`.
-During this staged rollout, stored omission stays omitted in JSON-returning
+Stored omission stays omitted in JSON-returning
 surfaces; Python represents it as `None` in its immutable typed definition.
 ACP getters return `{key, name, acp}` and normalize omission to
 `{status: "unknown", sources: [], confidence: "unknown"}`. They share support
 getters' alias lookup, unknown-harness errors, and snapshot/immutability contract.
 Support getters continue returning only `{key, name, support}`.
 
-A supported ACP entry has exactly one direct local stdio `launch` or `adapter`
-key. Adapter references resolve to another entry with a supported direct launch;
-consumers can make a second getter call to read that launch. See
+A supported ACP entry has either a nonempty local stdio `launches` list or an
+`adapter` key. Adapter references resolve to another entry with supported
+direct launches; consumers make a second getter call and select the recipe for
+their platform. Multiple launches have explicit, disjoint platform restrictions.
+All packages preserve the list order, argv boundaries, and setup notes. See
 [configuration.md](./configuration.md#acp-metadata-acp) for validation rules.
 ACP never changes installation detection.
 

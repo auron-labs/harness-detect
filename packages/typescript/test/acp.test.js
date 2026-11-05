@@ -32,27 +32,28 @@ test("synthetic ACP getters, raw/list/detection snapshots and adapter lookup", a
     assert.deepEqual(api.getRawHarnessData(), expected);
     assert.equal(api.getHarnessAcp(" NATIVE-ALIAS ").key, "native");
     const host = api.getHarnessAcp("host");
-    assert.equal(api.getHarnessAcp(host.acp.adapter).acp.launch.command, "example-bridge");
-    assert.deepEqual(api.getHarnessAcp("bridge").acp.launch.args, []);
+    assert.equal(api.getHarnessAcp(host.acp.adapter).acp.launches[0].command, "example-bridge");
+    assert.deepEqual(api.getHarnessAcp("bridge").acp.launches[0].args, []);
     assert.deepEqual(api.getHarnessAcp("missing").acp, unknown);
     assert.equal(api.getHarnessAcp("unsupported").acp.status, "unsupported");
     assert.deepEqual(api.getHarnessAcp("unknown").acp, unknown);
     const records = api.listHarnessAcp();
     assert.equal(records.length, expected.harnesses.length);
-    records[0].acp.launch.args.push("mutated");
-    records[0].acp.launch.platforms.push("win32");
+    records[0].acp.launches[0].args.push("mutated");
+    records[0].acp.launches[0].platforms.push("win32");
+    records[0].acp.launches[1].args.push("mutated");
     records[0].acp.sources.push("https://example.com/mutated");
     const first = api.getHarnessAcp("native");
-    first.acp.launch.command = "mutated";
+    first.acp.launches[0].command = "mutated";
     for (const h of api.listHarnesses()) {
       const result = api.checkHarness(h.key, { cwd: root, env: { HOME: root, PATH: "" } });
       assert.equal(result.installed, false, "ACP is not installation evidence");
       assert.deepEqual(result.harness, h);
-      if (h.acp?.launch) h.acp.launch.args.push("mutated");
-      if (result.harness.acp?.launch) result.harness.acp.launch.args.push("mutated");
+      if (h.acp?.launches) h.acp.launches[0].args.push("mutated");
+      if (result.harness.acp?.launches) result.harness.acp.launches[0].args.push("mutated");
     }
     const raw = api.getRawHarnessData();
-    raw.harnesses[0].acp.launch.args.push("mutated");
+    raw.harnesses[0].acp.launches[0].args.push("mutated");
     assert.deepEqual(api.getRawHarnessData(), expected);
     assert.deepEqual(api.getHarnessAcp("native").acp, expected.harnesses[0].acp);
     assert.ok(!Object.hasOwn(api.getHarnessSupport("native"), "acp"));

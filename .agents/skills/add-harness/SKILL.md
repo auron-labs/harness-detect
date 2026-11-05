@@ -5,7 +5,7 @@ description: Add a new LLM harness to the harness-detect monorepo, including evi
 
 # Add a harness
 
-Implement harness support through the shared registry whenever the existing schema can express it. Detection uses executable matches or existing resolved `paths[]`; `installations` and `support` are descriptive metadata only.
+Implement harness support through the shared registry whenever the existing schema can express it. Detection uses executable matches or existing resolved `paths[]`; `installations`, `support`, and `acp` are descriptive metadata only.
 
 ## Read the repository contract
 
@@ -24,11 +24,41 @@ For each support category, investigate global and local/project behavior separat
 
 Distinguish evidence that a product reads a shared file from evidence that it is installed. A generic `AGENTS.md`, `.agents/skills`, or parent config directory can be shared by many products. Do not automatically promote every supported path into an installation signal; assess false positives before adding it to `paths`. Require at least one verified executable or usable detection path for a new detection entry. If neither can be established, report the evidence gap.
 
+## Find and research ACP records
+
+Read [the ACP lookup workflow](../../../docs/harness-guide.md#finding-and-updating-acp-records).
+The canonical record is the harness's top-level `acp`, separate from `support`.
+Package consumers use `getHarnessAcp` / `listHarnessAcp` (TypeScript),
+`GetHarnessACP` / `ListHarnessACP` (Go), or `get_harness_acp` /
+`list_harness_acp` (Rust/Python). These return all registered records, including
+adapters and unknowns; missing metadata becomes `unknown` in dedicated getters.
+
+Check `status`. A supported record has either `launches` or one exact `adapter`
+registry key. Follow that key once; the target owns the launch list. Select the
+launch matching the caller's platform and read both records' `acp.notes` plus
+the owner's `installations` and `env` before describing how to run it. Commands
+and argv are literal; the library does not execute them or expand placeholders.
+
+Verify agent/server-side ACP, not merely client integration, MCP, an RFC, or a
+similarly named product. Cite upstream documentation, source, or distribution
+manifests in `acp.sources` with appropriate `confidence`. Record requirements
+such as optional dependencies, bundled versus separate CLIs, authentication,
+working directories, and architecture limits in notes. Keep absent evidence
+`unknown`; only mark `unsupported` with evidence.
+
+Add a separate adapter entry for a verified adapter launch. Use its own
+executable for detection, never the host CLI or a generic runtime such as
+`node` or `npx`. Exception to the detection-entry rule above: a documented ACP
+launch record can have empty `executables` and `paths` when there is no portable,
+unambiguous signal, provided `acp.notes` explains the setup limitation. This is
+how the source-only `aider-acp` record is represented. Such records remain
+discoverable through ACP APIs but never count as installed from metadata.
+
 ## Author the canonical entry
 
 Edit only `packages/data/harnesses.json`; generate all four package copies later. Preserve surrounding formatting and keep registry `version: 1` for a normal harness addition.
 
-- Include `key`, `name`, `aliases`, `executables`, `paths`, `env`, `sources`, `installations`, and `support`. Optional `roots` models derived locations. `aliases`, `executables`, `paths`, and `env` may be empty arrays; `sources` and `installations` each require at least one entry.
+- Include `key`, `name`, `aliases`, `executables`, `paths`, `env`, `sources`, `installations`, `support`, and explicit `acp` metadata. Use `acp: {"status":"unknown","sources":[],"confidence":"unknown"}` when unverified. Optional `roots` models derived locations. `aliases`, `executables`, `paths`, and `env` may be empty arrays; `sources` and `installations` each require at least one entry.
 - Choose a unique key matching `^[a-z][a-z0-9-]*$`. Use documented executable basenames and aliases that identify this product unambiguously.
 - Each detection path needs `id`, `category`, `kind`, and `template`. Categories are `install`, `config`, `state`, `cache`, or `project`; kinds are `file` or `dir`. Use distinct path IDs within the harness.
 - Use supported `${UPPERCASE_VARIABLE}` templates. Anchor project paths at `${CWD}`; runtime `cwd` comes from the caller or process, not an environment variable. Check current resolver defaults before assuming a placeholder is populated. Unresolved placeholders produce null paths.
@@ -43,6 +73,12 @@ Populate all ten support leaves: `config`, `skills`, `commands`, `agents`, and `
 ```
 
 Support paths use `id`, `kind`, and `template`, with optional `platforms` and `description`; they do not have a detection `category`. Anchor local/project support at `${CWD}` and apply documented root overrides to global support paths. Attach supporting URLs and a non-unknown confidence to established support claims.
+
+For supported ACP, use a nonempty `launches` list of `{command, args, platforms?}`
+or an `adapter` key pointing directly to another supported launch record. Multiple
+launches require explicit, non-overlapping platforms. Unknown/unsupported records
+have neither launches nor an adapter. Do not turn a version-pinned example into
+an inferred minimum version or use a local-path placeholder as executable argv.
 
 If the current schema cannot model verified behavior, explain the limitation and make the smallest shared extension needed for the requested harness. Update the schema, all affected implementations/types, and parity fixtures together; avoid a harness-specific branch in one language. Keep version 1 unless tooling actually requires a document-version change.
 

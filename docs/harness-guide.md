@@ -83,6 +83,7 @@ Required fields on every harness entry:
 Optional but supported when needed:
 
 - `roots`
+- `acp` (populate explicitly for new entries, even when status is `unknown`)
 
 Checklist:
 
@@ -195,3 +196,72 @@ Do **not**:
 6. Use the printed `supported` / `unsupported` / `unknown` totals as the live scouting progress report; do not maintain a parallel checklist.
 
 This is the canonical-first workflow. If you follow it, you do not need to guess which registry file is authoritative.
+
+## Finding and updating ACP records
+
+ACP records describe the agent/server side of Agent Client Protocol. They live
+at `harness.acp` in the canonical registry, independently of file-location
+`support`. Use `getHarnessAcp` / `listHarnessAcp` in TypeScript,
+`GetHarnessACP` / `ListHarnessACP` in Go, or `get_harness_acp` /
+`list_harness_acp` in Rust and Python. Getters accept a harness key or alias and
+return `{key, name, acp}`; list APIs include adapters and entries with unknown
+support. A known harness with omitted metadata reads as `unknown`; an unknown
+harness key is a lookup error.
+
+From the repository root, inspect Codex's adapter and the launch for this OS
+without installing or executing an agent:
+
+```sh
+node --input-type=module <<'JS'
+import { getHarnessAcp, listHarnesses } from './packages/typescript/src/index.js';
+const host = getHarnessAcp('codex');
+const owner = host.acp.adapter ? getHarnessAcp(host.acp.adapter) : host;
+const launch = owner.acp.launches?.find(
+  item => !item.platforms || item.platforms.includes(process.platform)
+);
+const definition = listHarnesses().find(item => item.key === owner.key);
+console.log({ host, owner, launch, installations: definition.installations, env: definition.env });
+JS
+```
+
+Interpret and maintain the records as follows:
+
+- Check `status` before using a launch. `supported` has either a nonempty
+  `launches` list or one `adapter` key. `unknown` and `unsupported` have neither.
+  No matching platform means no recorded launch for that platform.
+- Follow an adapter by its exact registry key once. Adapter chains are invalid.
+  Examples are `codex` → `codex-acp` and `claude-code` → `claude-agent-acp`.
+  The target owns launch commands and installation requirements; the host's
+  detection result does not establish that its adapter is installed.
+- Read `acp.notes` on both records and the launch owner's `installations` and
+  `env`. These document separate or bundled CLIs, provider authentication,
+  optional dependencies, and working directories. Preserve argv boundaries;
+  these are literal arguments, not shell commands or expandable templates.
+- Multiple launches must have explicit, non-overlapping `platforms` using
+  `darwin`, `linux`, `win32`, or another schema-approved value. Antigravity's
+  Linux, macOS, and Windows recipes differ. Do not reuse the first launch on
+  every platform or treat an OS restriction as an architecture guarantee.
+- Source-only adapters may lack an unambiguous detection signal. `aider-acp`
+  records `node dist/index.js` with a required built-checkout working directory;
+  callers can instead configure the absolute script path. Its empty
+  `executables` and `paths` deliberately prevent false installation claims.
+  Do not use `node`, `npx`, or a generic `dist/index.js` as detection evidence.
+- Research the exact registered product using upstream documentation, source,
+  and ACP distribution manifests. Client-only integration, an RFC, a similarly
+  named product, or absence from the ACP registry does not establish agent-side
+  support or explicit non-support. For example, `warp-acp` requires the separate
+  Warp Agent CLI; the `warp` key detects Warp Terminal and remains unknown.
+- Record HTTPS evidence in `acp.sources`, its `confidence`, and material caveats
+  in `acp.notes`. Keep unresolved results explicitly `unknown`. Only use
+  `unsupported` with evidence. Pinned runner versions are verified recipes,
+  not inferred minimum supported versions.
+- Add adapters as ordinary registry entries with verified detection signals
+  where available, installation metadata, and explicit support leaves. A
+  documented source-only adapter can have no detection signals if its notes
+  explain the limitation. Never invent a portable install path.
+
+Use the same canonical edit, `mise run harness:refresh`, and
+`mise run harness:check` workflow as other registry changes. The APIs only return
+metadata: they do not launch agents, install dependencies, authenticate, or
+verify an ACP handshake. See the [schema reference](configuration.md#acp-metadata-acp)
+and [API reference](api.md#getharnessacpinput-and-listharnessacp).

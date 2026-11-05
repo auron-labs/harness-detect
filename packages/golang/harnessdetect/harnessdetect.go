@@ -105,12 +105,12 @@ type HarnessACPLaunch struct {
 
 // HarnessACP describes ACP metadata, independently of file-location support.
 type HarnessACP struct {
-	Status     string            `json:"status"`
-	Launch     *HarnessACPLaunch `json:"launch,omitempty"`
-	Adapter    string            `json:"adapter,omitempty"`
-	Sources    []string          `json:"sources"`
-	Confidence string            `json:"confidence"`
-	Notes      string            `json:"notes,omitempty"`
+	Status     string             `json:"status"`
+	Launches   []HarnessACPLaunch `json:"launches,omitempty"`
+	Adapter    string             `json:"adapter,omitempty"`
+	Sources    []string           `json:"sources"`
+	Confidence string             `json:"confidence"`
+	Notes      string             `json:"notes,omitempty"`
 }
 
 // HarnessACPRecord exposes one harness ACP entry.
@@ -259,11 +259,13 @@ func cloneACP(acp *HarnessACP) *HarnessACP {
 	}
 	out := *acp
 	out.Sources = append([]string{}, acp.Sources...)
-	if acp.Launch != nil {
-		launch := *acp.Launch
-		launch.Args = append([]string{}, acp.Launch.Args...)
-		launch.Platforms = append([]string(nil), acp.Launch.Platforms...)
-		out.Launch = &launch
+	if acp.Launches != nil {
+		out.Launches = make([]HarnessACPLaunch, len(acp.Launches))
+		for i, launch := range acp.Launches {
+			out.Launches[i] = launch
+			out.Launches[i].Args = append([]string{}, launch.Args...)
+			out.Launches[i].Platforms = append([]string(nil), launch.Platforms...)
+		}
 	}
 	return &out
 }

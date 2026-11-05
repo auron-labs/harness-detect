@@ -58,7 +58,7 @@ A machine-checked JSON Schema (draft 2020-12) is published at `packages/data/har
 | `roots` | object[] | no | Derived template variables resolved before paths. |
 | `env` | object[] | yes | Documented environment variables. May be empty. |
 | `sources` | string[] | yes | Evidence URLs for the path/executable rules. |
-| `acp` | object | no | Local stdio ACP launch or adapter metadata; optional during the staged rollout. |
+| `acp` | object | no | Local stdio ACP launch or adapter metadata; optional in stored definitions; current entries populate it explicitly. |
 | `support` | object | yes | Required additive support metadata contract. Every category and both scopes must be explicit. |
 | `installations` | object[] | yes | Descriptive install metadata only; not detection evidence. |
 
@@ -69,22 +69,22 @@ ACP (Agent Client Protocol) metadata is a top-level harness field, separate from
 ACP is descriptive and never counts as installation evidence. Registry version
 remains `1`.
 
-This phase adds the schema and APIs without populating the canonical registry or
-its four bundled copies. `acp` is optional in stored definitions. Raw/list/detection
-JSON surfaces preserve omission; Python's immutable typed definitions expose
+The canonical registry and bundled copies contain researched ACP records,
+including explicit unknowns and separate adapter entries. `acp` remains optional
+in stored definitions. Raw/list/detection JSON surfaces preserve omission; Python's immutable typed definitions expose
 `acp=None`. Dedicated ACP getters normalize absent metadata to
 `{"status":"unknown","sources":[],"confidence":"unknown"}`.
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `status` | string | yes | `supported`, `unsupported`, or `unknown`. |
-| `launch` | object | conditional | Direct local stdio launch: nonblank `command`, required `args` string array, optional `platforms`. |
-| `adapter` | string | conditional | Exact registry key of a different entry with supported ACP and a direct `launch`. |
+| `launches` | object[] | conditional | Nonempty list of local stdio recipes: nonblank `command`, required `args` string array, optional `platforms`. |
+| `adapter` | string | conditional | Exact registry key of a different entry with supported ACP and direct `launches`. |
 | `sources` | string[] | yes | HTTPS evidence URLs; nonempty for `supported` and `unsupported`. |
 | `confidence` | string | yes | Same values as support confidence; cannot be `unknown` for a known status. |
 | `notes` | string | no | Nonempty factual qualifier. |
 
-A `supported` entry has exactly one of `launch` or `adapter`. An `unsupported`
+A `supported` entry has exactly one of `launches` or `adapter`. An `unsupported`
 or `unknown` entry has neither. An adapter target must use its exact registry
 key; aliases, self references, missing targets, adapter chains, and cycles are
 invalid. The referenced entry owns the launch and describes its installation
@@ -92,11 +92,14 @@ requirements through its existing `installations`, `env`, and installation notes
 Those requirements may include bundled components; a separate host CLI is not
 inherently required.
 
-`launch.command` is the executable name or path. Each `launch.args` value is one
+`launches[].command` is the executable name or path. Each `launches[].args` value is one
 argv argument, with no shell parsing or template expansion. An empty argv array
-and empty individual arguments are valid. Optional `launch.platforms` is a
+and empty individual arguments are valid. Optional `launches[].platforms` is a
 nonempty, unique array of the registry's approved platform values; omission
-applies no platform restriction. Launches describe local stdio only. These APIs
+applies no platform restriction and is allowed only for a sole recipe. When there
+are multiple recipes, each must specify platforms, with no overlap between
+recipes. Consumers select the matching platform; the list is not an ordered
+fallback chain. Launches describe local stdio only. These APIs
 do not execute commands, install adapters, authenticate, or probe ACP at runtime.
 
 Synthetic direct-launch example:
@@ -104,15 +107,23 @@ Synthetic direct-launch example:
 ```json
 {
   "status": "supported",
-  "launch": { "command": "example-agent", "args": ["--acp"] },
+  "launches": [{ "command": "example-agent", "args": ["--acp"] }],
   "sources": ["https://example.com/acp"],
   "confidence": "official"
 }
 ```
 
-An adapter-backed entry would replace `launch` with `"adapter": "example-bridge"`
+An adapter-backed entry would replace `launches` with `"adapter": "example-bridge"`
 and cite evidence for that relationship. Consumers read the host's ACP record,
-then look up `acp.adapter` once to read the owning entry's launch.
+then look up `acp.adapter` once to read the owning entry's launch list.
+
+A documented ACP launch record may omit detection signals when no portable,
+unambiguous signal exists, but must include setup `notes`. For example,
+`aider-acp` runs `node dist/index.js` from its built checkout; the caller must
+choose that working directory or supply the absolute script path. This entry
+is discoverable as metadata and never counts as installed from ACP alone.
+See [the lookup workflow](harness-guide.md#finding-and-updating-acp-records) for
+real examples and adapter discovery.
 
 ### Support metadata fields (`support`)
 
@@ -442,7 +453,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 58
+console.log(harnesses.harnesses.length);  // 67
 ```
 
 <!-- /automd -->

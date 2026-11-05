@@ -35,6 +35,8 @@ validation.
   - `ListHarnesses()`
   - `GetHarnessSupport()`
   - `ListHarnessSupport()`
+  - `GetHarnessACP(input)`
+  - `ListHarnessACP()`
   - `CheckHarness()`
   - `DetectHarnesses()`
   - `DetectInstalledHarnesses()`
@@ -69,3 +71,15 @@ notes:
 
 - `packages/data/harnesses.json` is the canonical registry, but the Go binary embeds `packages/golang/harnessdetect/data/harnesses.json`; keep that copy, plus `packages/typescript/data/harnesses.json`, byte-for-byte aligned via `mise run registry:sync` and verify with `mise run registry:check` after registry edits.
 - Detection is intentionally evidence-based: a harness can count as installed from either an executable match or existing config/state paths.
+
+## Finding ACP metadata
+
+Use `GetHarnessACP(input)` for a key or alias and `ListHarnessACP()` to list all
+ACP records, including adapters and unknowns. Read the record's `acp` metadata
+(`ACP` in Go), and check `status` before using a launch. Follow `adapter` once to the owning
+registry record, then select from `launches` for the caller's platform. Read both
+records' notes and the owner's installation requirements; ACP support and
+installation detection are independent.
+
+See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
+for examples, platform selection, evidence rules, and source-only adapters.

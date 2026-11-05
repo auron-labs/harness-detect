@@ -60,7 +60,7 @@ import { getHarnessMatrix } from "@auron-labs/harness-detect";
 
 const matrix = getHarnessMatrix();
 console.log(matrix.version);           // 1
-console.log(matrix.harnesses.length);  // 58
+console.log(matrix.harnesses.length);  // 67
 ```
 
 <!-- /automd -->
@@ -104,12 +104,18 @@ import { getHarnessAcp } from "@auron-labs/harness-detect";
 const record = getHarnessAcp("codex");
 const acp = record.acp;
 const owner = acp.adapter ? getHarnessAcp(acp.adapter) : record;
-console.log(owner.acp.launch); // undefined until supported launch metadata exists
+const launch = owner.acp.launches?.find(
+  item => !item.platforms || item.platforms.includes(process.platform)
+);
+console.log(launch); // undefined if no supported launch matches this OS
+console.log(record.acp.notes, owner.acp.notes);
 ```
 
-Supported ACP describes either a direct local stdio `launch` or one `adapter`
-registry key leading to a supported direct launch. The launch is metadata; the
-library does not execute it. See [ACP fields and evidence rules](./configuration.md#acp-metadata-acp).
+Supported ACP describes either a nonempty `launches` list for local stdio or
+one `adapter` registry key leading to the launch owner. Multiple recipes have
+explicit, non-overlapping platforms. Read the owning harness definition's
+`installations` and `env` plus both records' notes for setup requirements.
+The library returns metadata; it does not execute commands or check readiness. See [ACP fields and evidence rules](./configuration.md#acp-metadata-acp).
 
 ### `getHarnessSupport(input)`
 
@@ -352,9 +358,9 @@ type HarnessAcp = {
   confidence: HarnessSupportConfidence;
   notes?: string;
 } & (
-  | { status: "supported"; launch: HarnessAcpLaunch; adapter?: never }
-  | { status: "supported"; adapter: string; launch?: never }
-  | { status: "unsupported" | "unknown"; launch?: never; adapter?: never }
+  | { status: "supported"; launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]]; adapter?: never }
+  | { status: "supported"; adapter: string; launches?: never }
+  | { status: "unsupported" | "unknown"; launches?: never; adapter?: never }
 );
 
 interface HarnessAcpRecord {
@@ -434,7 +440,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 58
+console.log(harnesses.harnesses.length);  // 67
 ```
 
 <!-- /automd -->
@@ -600,8 +606,8 @@ type ResolvedHarnessPath struct {
 `HarnessCheckResult.Harness` all expose the same registry metadata, including
 `Installations` and required `Support`. `GetHarnessSupport()` and
 `ListHarnessSupport()` expose just the support subset. Optional `ACP` is a
-`*HarnessACP` containing `Status`, `Launch`, `Adapter`, `Sources`, `Confidence`,
-and `Notes`. `HarnessACPLaunch` holds `Command`, `Args`, and `Platforms`;
+`*HarnessACP` containing `Status`, `Launches`, `Adapter`, `Sources`, `Confidence`,
+and `Notes`. `Launches` is a slice of `HarnessACPLaunch` values holding `Command`, `Args`, and `Platforms`;
 `HarnessACPRecord` holds `Key`, `Name`, and `ACP`. That metadata is
 descriptive only and does not make a harness count as installed.
 

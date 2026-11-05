@@ -34,12 +34,14 @@ def test_acp_synthetic_public_flows(monkeypatch, tmp_path):
     assert hd.get_raw_harness_data() == matrix
     native = hd.get_harness_acp(" NATIVE-ALIAS ")
     assert native.key == "native"
-    assert native.acp.launch.args == ("--acp", "two words", "")
-    assert native.acp.launch.platforms == ("linux", "darwin")
+    assert native.acp.launches[0].args == ("--acp", "two words", "")
+    assert native.acp.launches[0].platforms == ("linux", "darwin")
+    assert native.acp.launches[1].command == "example-agent.exe"
+    assert native.acp.launches[1].platforms == ("win32",)
     host = hd.get_harness_acp("host")
     bridge = hd.get_harness_acp(host.acp.adapter)
-    assert bridge.acp.launch.command == "example-bridge"
-    assert bridge.acp.launch.args == ()
+    assert bridge.acp.launches[0].command == "example-bridge"
+    assert bridge.acp.launches[0].args == ()
     assert hd.get_harness_acp("missing").acp == hd.HarnessAcp()
     assert hd.get_harness_acp("unknown").acp == hd.HarnessAcp()
     assert hd.get_harness_acp("unsupported").acp.status == "unsupported"
@@ -54,9 +56,9 @@ def test_acp_synthetic_public_flows(monkeypatch, tmp_path):
     with pytest.raises(FrozenInstanceError):
         native.acp.status = "mutated"
     with pytest.raises(FrozenInstanceError):
-        native.acp.launch.command = "mutated"
+        native.acp.launches[0].command = "mutated"
     with pytest.raises(AttributeError):
-        native.acp.launch.args.append("mutated")
+        native.acp.launches[0].args.append("mutated")
     listed = hd.list_harness_acp()
     listed.clear()
     assert hd.get_raw_harness_data() == matrix

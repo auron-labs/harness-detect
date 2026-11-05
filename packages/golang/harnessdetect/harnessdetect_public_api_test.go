@@ -144,7 +144,7 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 		"Command": "command", "Args": "args", "Platforms": "platforms,omitempty",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACP{}), map[string]string{
-		"Status": "status", "Launch": "launch,omitempty", "Adapter": "adapter,omitempty",
+		"Status": "status", "Launches": "launches,omitempty", "Adapter": "adapter,omitempty",
 		"Sources": "sources", "Confidence": "confidence", "Notes": "notes,omitempty",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACPRecord{}), map[string]string{

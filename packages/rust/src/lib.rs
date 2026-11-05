@@ -110,8 +110,8 @@ pub struct HarnessAcpLaunch {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct HarnessAcp {
     pub status: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub launch: Option<HarnessAcpLaunch>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub launches: Vec<HarnessAcpLaunch>,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub adapter: String,
     pub sources: Vec<String>,
@@ -124,7 +124,7 @@ impl Default for HarnessAcp {
     fn default() -> Self {
         Self {
             status: "unknown".into(),
-            launch: None,
+            launches: vec![],
             adapter: String::new(),
             sources: vec![],
             confidence: "unknown".into(),
@@ -830,12 +830,9 @@ mod tests {
         );
         let host = get_harness_acp("host").unwrap();
         let bridge = get_harness_acp(&host.acp.adapter).unwrap();
+        assert_eq!(bridge.acp.launches[0].command, "example-bridge");
         assert_eq!(
-            bridge.acp.launch.as_ref().unwrap().command,
-            "example-bridge"
-        );
-        assert_eq!(
-            serde_json::to_value(&bridge).unwrap()["acp"]["launch"]["args"],
+            serde_json::to_value(&bridge).unwrap()["acp"]["launches"][0]["args"],
             serde_json::json!([])
         );
         for key in ["unknown", "missing"] {
@@ -851,9 +848,10 @@ mod tests {
             .acp
             .sources
             .push("https://example.com/mutated".into());
-        let launch = records[0].acp.launch.as_mut().unwrap();
+        let launch = &mut records[0].acp.launches[0];
         launch.args.push("mutated".into());
         launch.platforms.push("win32".into());
+        records[0].acp.launches[1].args.push("mutated".into());
         for mut harness in list_harnesses() {
             let options = CheckOptions {
                 env: Some(HashMap::from([("PATH".into(), "".into())])),
@@ -875,14 +873,7 @@ mod tests {
             }
         }
         let mut raw = get_raw_harness_data();
-        raw.harnesses[0]
-            .acp
-            .as_mut()
-            .unwrap()
-            .launch
-            .as_mut()
-            .unwrap()
-            .command = "mutated".into();
+        raw.harnesses[0].acp.as_mut().unwrap().launches[0].command = "mutated".into();
         assert_eq!(get_raw_harness_data(), fixture);
         assert_eq!(
             get_harness_acp("native").unwrap().acp,

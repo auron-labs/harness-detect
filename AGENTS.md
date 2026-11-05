@@ -42,6 +42,29 @@ See [docs/maintainers.md](./docs/maintainers.md) for the full command reference,
 - Agent skill for adding or extending a harness: [.agents/skills/add-harness/SKILL.md](./.agents/skills/add-harness/SKILL.md)
 - Package parity/API contract: `docs/package-guide.md`
 
+## Finding ACP records
+
+ACP (Agent Client Protocol) metadata lives in each harness's top-level `acp`
+field in `packages/data/harnesses.json`, separately from file-location `support`.
+For package consumers, use the public getters rather than reading bundled JSON:
+
+| Package | One key or alias | All ACP records |
+| --- | --- | --- |
+| TypeScript | `getHarnessAcp(input)` | `listHarnessAcp()` |
+| Go | `GetHarnessACP(input)` | `ListHarnessACP()` |
+| Rust / Python | `get_harness_acp(input)` | `list_harness_acp()` |
+
+Check `acp.status` first. For supported entries, follow `acp.adapter` once by its
+exact registry key if present; the target owns `acp.launches`. Select the launch
+whose `platforms` includes the caller's platform, or the sole launch without a
+platform restriction. Read the host and adapter `acp.notes`, plus the owning
+entry's `installations` and `env`, for dependencies, authentication, and working
+directory requirements. `unknown` is not `unsupported`; installed does not imply
+ACP-ready, and ACP support does not imply installed.
+
+See [the ACP lookup and research workflow](docs/harness-guide.md#finding-and-updating-acp-records)
+for an executable lookup example, source-only adapters, and evidence rules.
+
 ## Monorepo layout
 
 - `packages/data/harnesses.json` — canonical shared registry.

@@ -57,6 +57,8 @@ There is no root `pyproject.toml`; always `cd` into `packages/python` first.
   - `list_harnesses()`
   - `get_harness_support(input)`
   - `list_harness_support()`
+  - `get_harness_acp(input)`
+  - `list_harness_acp()`
   - `check_harness(input, options=None)`
   - `detect_harnesses(options=None)`
   - `detect_installed_harnesses(options=None)`
@@ -111,3 +113,15 @@ notes:
   the `force-include` config in `pyproject.toml`).
 - Detection is intentionally evidence-based: a harness can count as installed
   from either an executable match or existing config/state paths.
+
+## Finding ACP metadata
+
+Use `get_harness_acp(input)` for a key or alias and `list_harness_acp()` to list all
+ACP records, including adapters and unknowns. Read the record's `acp` metadata
+and check `status` before using a launch. Follow `adapter` once to the owning
+registry record, then select from `launches` for the caller's platform. Read both
+records' notes and the owner's installation requirements; ACP support and
+installation detection are independent.
+
+See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
+for examples, platform selection, evidence rules, and source-only adapters.

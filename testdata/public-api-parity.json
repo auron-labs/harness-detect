@@ -383,9 +383,9 @@
         "go": "Status"
       },
       {
-        "json": "launch",
-        "typescript": "launch",
-        "go": "Launch",
+        "json": "launches",
+        "typescript": "launches",
+        "go": "Launches",
         "nullable": true
       },
       {

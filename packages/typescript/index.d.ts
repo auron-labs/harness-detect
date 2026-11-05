@@ -47,9 +47,9 @@ export type HarnessAcp = {
   confidence: HarnessSupportConfidence;
   notes?: string;
 } & (
-  | { status: "supported"; launch: HarnessAcpLaunch; adapter?: never }
-  | { status: "supported"; adapter: string; launch?: never }
-  | { status: "unsupported" | "unknown"; launch?: never; adapter?: never }
+  | { status: "supported"; launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]]; adapter?: never }
+  | { status: "supported"; adapter: string; launches?: never }
+  | { status: "unsupported" | "unknown"; launches?: never; adapter?: never }
 );
 
 export interface HarnessAcpRecord {

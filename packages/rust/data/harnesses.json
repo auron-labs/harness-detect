@@ -264,6 +264,16 @@
             "notes": ".agents/skills is a project-level skills discovery root."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "codex-acp",
+        "sources": [
+          "https://github.com/agentclientprotocol/codex-acp",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires Node.js/npm to run the npx package. Authentication can use ChatGPT login, CODEX_API_KEY, OPENAI_API_KEY, or a client-provided custom OpenAI-compatible gateway. The package includes a compatible @openai/codex dependency; CODEX_PATH is optional to select another Codex executable. The harness itself is not confirmed to speak ACP natively; supported route uses the separate current ACP adapter. The project moved to agentclientprotocol/codex-acp from the older Zed Industries repository."
       }
     },
     {
@@ -559,6 +569,28 @@
             "notes": "OpenCode discovers skills from .agents/skills/<name>/SKILL.md as an agent-compatible path."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "opencode",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://opencode.ai/docs/acp/",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires an installed OpenCode executable and an ACP-compatible host; the server communicates over stdio using JSON-RPC."
       }
     },
     {
@@ -812,6 +844,16 @@
             "notes": "Claude Code discovers skills only from .claude/skills/ and .claude/commands/. No support for the cross-tool .agents/skills path."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "claude-agent-acp",
+        "sources": [
+          "https://github.com/agentclientprotocol/claude-agent-acp",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires Node.js/npm to run the npx package. The adapter uses Anthropic's Claude Agent SDK. Standalone release archives bundle both the adapter and Claude CLI; those archives do not require a separate Node.js installation. Use the current agentclientprotocol/claude-agent-acp project; the earlier @zed-industries adapter repository has moved."
       }
     },
     {
@@ -1142,6 +1184,25 @@
             "notes": ".agents/skills/ is an alias for workspace-level skills discovery."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@google/gemini-cli",
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://github.com/google-gemini/gemini-cli"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires Node.js/npm to run the documented npx package route. The current actionable launch evidence is the package-runner invocation from the ACP registry; no native installed-executable ACP command or minimum version was confirmed."
       }
     },
     {
@@ -1351,6 +1412,17 @@
             "notes": "Aider does not support the .agents/skills standard."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "aider-acp",
+        "sources": [
+          "https://github.com/jorgejhms/aider-acp",
+          "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/README.md",
+          "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Requires Node.js 20+. Requires the separate Aider Python CLI installed in the environment (upstream documents `pip install aider-chat`). Requires Git and a Git repository for Aider's change tracking. The launch path must point to the built dist/index.js in the adapter checkout. This is a community adapter, not native Aider ACP support. It reports basic ACP session/prompt support; listed roadmap items remain incomplete."
       }
     },
     {
@@ -1607,6 +1679,28 @@
             "notes": "Goose does not support the .agents/skills standard; uses recipes instead."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "goose",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://github.com/block/goose"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires the Goose executable to be installed."
       }
     },
     {
@@ -1871,6 +1965,26 @@
             "notes": "Cline reads AGENTS.md for rules but does not discover skills from .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "cline",
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://cline.bot/cli",
+          "https://docs.cline.bot/",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires Node.js 22+ according to Cline's official CLI page. The documented ACP-registry package-runner route uses npm/npx. The ACP launch was verified through the official ACP registry entry; the Cline CLI page itself describes CLI usage but does not document the ACP flag."
       }
     },
     {
@@ -2127,6 +2241,14 @@
             "notes": "Roo Code discovers skills from .agents/skills/ as cross-agent shared locations."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/RooCodeInc/Roo-Code-Docs/blob/main/docs/sunset.md"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official Roo Code notice says its extension, cloud, and router shut down on 2026-05-15. No ACP agent launch evidence was confirmed for the product identity. Unknown rather than unsupported: a sunset notice and absence from the ACP registry do not prove the product cannot expose ACP. The historical Roo Code product was an editor extension; its official notice recommends Cline and directs users to a successor project."
       }
     },
     {
@@ -2414,6 +2536,15 @@
             "notes": "Continue does not discover skills from .agents/skills/; reads .continue/skills/ and .claude/skills/ instead"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://docs.continue.dev/cli/tui-mode",
+          "https://docs.continue.dev/cli/headless-mode"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Official Continue documentation describes an interactive CLI agent (`cn`) and headless prompt mode. No ACP server command, ACP adapter, or Continue entry in the current ACP agent registry was confirmed. Continue's CLI and agent mode alone do not establish ACP server support. Unknown is retained because absence of a registry entry or docs is not evidence of impossibility."
       }
     },
     {
@@ -2666,6 +2797,15 @@
             "notes": "Amazon Q CLI does not discover skills from .agents/skills/; uses .amazonq/cli-agents/ and .amazonq/rules/ instead"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/aws/amazon-q-developer-cli/issues/2703",
+          "https://github.com/aws/amazon-q-developer-cli/blob/main/docs/default-agent-behavior.md"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official repository has an open feature request asking for ACP support for Q CLI, and its current docs describe Q CLI agent invocation but no ACP server command. AWS's ACP-capable successor Kiro CLI is a separate product. Unknown rather than unsupported: the feature request and missing registry entry are not proof that no implementation exists. Do not substitute Kiro CLI (`kiro-cli`) for this harness identity."
       }
     },
     {
@@ -3003,6 +3143,26 @@
             "notes": "Support for .agents/skills directory for auto-loading skills was added in v0.0.401."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@github/copilot@1.0.105",
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/github-copilot-cli/agent.json",
+          "https://docs.github.com/en/copilot/reference/copilot-cli-reference/acp-server",
+          "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Node.js/npm (the ACP registry documents an npx package-runner distribution). GitHub Copilot CLI authentication is required unless a supported BYOK provider is configured; GitHub documents API-key/provider environment configuration. The registry distribution is an npx route; the existing copilot executable itself is not needed for this launch recipe. ACP support is documented as public preview."
       }
     },
     {
@@ -3190,6 +3350,16 @@
             "notes": "Amp does not discover skills from .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "amp-acp",
+        "sources": [
+          "https://github.com/tao12345666333/amp-acp",
+          "https://ampcode.com/docs"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 18+ for the npx adapter route. Install the separate Amp CLI, sign in with amp login, and ensure amp is available on PATH; AMP_CLI_PATH can point to it when PATH is not inherited. Headless authentication can use AMP_API_KEY. The adapter is third-party; Amp itself is the harness CLI."
       }
     },
     {
@@ -3551,6 +3721,14 @@
             "notes": "Crush discovers project skills from .agents/skills."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/charmbracelet/crush"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The upstream repository describes Crush as a terminal coding assistant and documents MCP support; the checked ACP registry has no Crush entry. These sources do not establish whether Crush can serve ACP. MCP support is not evidence of ACP agent/server support. Unknown, not unsupported."
       }
     },
     {
@@ -3857,6 +4035,28 @@
             "notes": ".agents/skills/ is a project-level skills discovery path."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "cursor-agent",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://cursor.com/docs/cli/acp",
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/cursor/agent.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install Cursor CLI and authenticate with a Cursor account, API key, or auth token as documented. The registry calls its binary cursor-agent; the docs use agent as the command alias."
       }
     },
     {
@@ -4037,6 +4237,15 @@
             "notes": "BoltAI is a macOS desktop application with no CLI-style skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://docs.boltai.com/docs",
+          "https://docs.boltai.com/docs/storage-location"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. BoltAI documentation identifies a Mac AI chat app and its workflows; no actionable ACP agent/server launch was established in checked official material. The ACP registry has no matching entry. An AI app/product is not evidence that it can be launched as an ACP agent. Unknown, not unsupported."
       }
     },
     {
@@ -4278,6 +4487,15 @@
             "notes": "Windsurf uses its own skills paths (~/.codeium/windsurf/skills and .windsurf/skills) rather than the .agents/skills standard."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://docs.windsurf.com/",
+          "https://docs.devin.ai/desktop/getting-started"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The canonical Windsurf docs URL now redirects to Devin Desktop documentation, which includes ACP preview material but does not establish an ACP launch route for this Windsurf harness identity. The ACP registry has no Windsurf entry. Do not equate Devin Desktop ACP with the Windsurf registry key based on the redirect alone. Unknown, not unsupported."
       }
     },
     {
@@ -4458,6 +4676,15 @@
             "notes": "Pieces is a desktop application with no CLI-style skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://docs.pieces.app/",
+          "https://docs.pieces.app/products/core-dependencies/pieces-os/data-storage"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Pieces documentation describes an on-device memory platform, desktop app, local engine, and integrations; no actionable ACP agent/server launch was established. The ACP registry has no matching entry. Integrations/client features do not establish ACP agent/server support. Unknown, not unsupported."
       }
     },
     {
@@ -4635,6 +4862,23 @@
             "notes": "Open Interpreter has no SKILL.md-based skills, custom command files, subagent system, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "interpreter",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/openinterpreter/openinterpreter/blob/main/docs/acp.md",
+          "https://github.com/openinterpreter/openinterpreter/blob/main/docs/cli-reference.md"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install Open Interpreter CLI. Configure a provider credential or provider configuration in the usual Open Interpreter CLI home/config; ACP reuses the CLI settings. No separate ACP adapter is needed."
       }
     },
     {
@@ -4956,6 +5200,27 @@
             "notes": "OpenHands discovers skills from .agents/skills/ as the recommended project-level path."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "openhands",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/OpenHands/docs/blob/main/openhands/usage/cli/ide/overview.mdx",
+          "https://github.com/OpenHands/docs/blob/main/openhands/usage/cli/command-reference.mdx"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install the OpenHands CLI and configure LLM settings through its CLI settings; ACP reuses the CLI credentials/configuration. Windows use requires WSL according to the ACP integration guide. Native ACP support is evidenced in the legacy CLI; current docs state that the OpenHands CLI is no longer actively maintained. The ACP registry has no OpenHands entry, but upstream docs provide an actionable launch."
       }
     },
     {
@@ -5213,6 +5478,28 @@
             "notes": "Hermes does not discover .agents/skills/ from the project directory."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "hermes",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/NousResearch/hermes-agent/blob/main/website/docs/user-guide/features/acp.md",
+          "https://github.com/NousResearch/hermes-agent/blob/main/website/docs/developer-guide/programmatic-integration.md",
+          "https://github.com/NousResearch/hermes-agent/blob/main/pyproject.toml"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install Hermes Agent. Install the optional ACP dependency extra (`.[acp]`); upstream docs show syncing the ACP dependency or installing the extra. Configure Hermes provider/model credentials as for the normal CLI; ACP reuses that configuration. Native ACP support; no separate adapter is needed."
       }
     },
     {
@@ -5514,6 +5801,22 @@
             "notes": "OpenClaw discovers skills from .agents/skills/ as project agent skills."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "openclaw",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://docs.openclaw.ai/cli/acp"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. An OpenClaw Gateway must be running and reachable. Gateway authentication must be configured when required by the selected Gateway. This makes OpenClaw an ACP server for an editor/client; its separate ACP Agents feature runs external harnesses and does not make OpenClaw an ACP client. OpenClaw was not listed as an agent in the current ACP Registry index checked."
       }
     },
     {
@@ -5683,6 +5986,15 @@
             "notes": "AutoGen Studio is a web-based tool; configuration is database-driven through the UI, not file-based."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/installation.html",
+          "https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Microsoft describes AutoGen Studio as a web-based low-code UI for prototyping agents and workflows. The checked docs and current ACP Registry index did not establish an ACP server launch route. Unknown rather than unsupported: no ACP-specific server/client capability or actionable launch was confirmed in the checked primary sources."
       }
     },
     {
@@ -5886,6 +6198,17 @@
             "confidence": "inferred"
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "antigravity-acp",
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json",
+          "https://antigravity.google/docs/ide/extensions",
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/antigravity-acp/agent.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Use Google's separately distributed Antigravity ACP server runtime; this is not the `agy` CLI executable. Complete authentication using a supported Antigravity runtime authentication method. The ACP Registry's Linux launch uses `--uid=`; its macOS and Windows entries omit that argument. This is an official separate server runtime for the Antigravity product, not evidence that the existing `agy` CLI command itself speaks ACP."
       }
     },
     {
@@ -6269,6 +6592,24 @@
             "notes": "Auggie explicitly discovers skills from .agents/skills/ as an industry-standard workspace location."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "@augmentcode/auggie@0.37.0",
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/auggie/agent.json",
+          "https://docs.augmentcode.com/cli/overview"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Node.js/npm package-runner environment. Auggie authentication on the host. The ACP Registry specifies `AUGMENT_DISABLE_AUTO_UPDATE=1` for its npx distribution. Registry id is `auggie`, which maps to the canonical Auggie CLI product identity."
       }
     },
     {
@@ -6605,6 +6946,28 @@
             "notes": "Devin supports the .agents skills standards; .agents/skills/ is a project discovery path."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "devin",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/devin/agent.json",
+          "https://docs.devin.ai/cli"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Devin CLI must be installed and authenticated. The canonical key `devin-for-terminal` matches the ACP Registry's `devin` entry by product identity."
       }
     },
     {
@@ -6890,6 +7253,28 @@
             "notes": "No mention of .agents/skills in docs or source."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "autohand",
+            "args": [
+              "--acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/autohand/agent.json",
+          "https://github.com/autohandai/code-cli/blob/main/docs/guides/ACP.md"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install the platform-specific Autohand Code CLI binary. ACP Registry id is `autohand`; it identifies the same product as canonical AutoHand."
       }
     },
     {
@@ -7119,6 +7504,24 @@
             "notes": "No project-level .agents/skills/ path mentioned; project skills come from .grok/skills/ only."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "grok",
+            "args": [
+              "agent",
+              "stdio"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/grok-build/agent.json",
+          "https://docs.x.ai/build/overview"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Grok Build CLI must be installed and authenticated on the host. Registry id `grok-build` matches the canonical Grok Build CLI product; it is distinct from an xAI model id."
       }
     },
     {
@@ -7281,6 +7684,14 @@
             "notes": "Groq Code CLI has no documented skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/build-with-groq/groq-code-cli"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The checked Groq Code CLI repository documents a terminal coding agent and Groq API-key setup, but did not establish an ACP server launch route; no matching product entry was found in the current ACP Registry index. Unknown rather than unsupported: absence from the registry and lack of ACP documentation in checked sources do not establish that ACP support is impossible."
       }
     },
     {
@@ -7462,6 +7873,23 @@
             "notes": "Nanocoder has no documented SKILL.md-based skills, custom command files, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "nanocoder",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://docs.nanocollective.org/nanocoder/docs/v1.28.1/features/acp/",
+          "https://github.com/nano-collective/nanocoder"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Nanocoder CLI must be installed. A provider and model must be configured for the agent to make model requests. Nanocoder was not listed in the current ACP Registry index checked; native support is confirmed directly by project documentation."
       }
     },
     {
@@ -7632,6 +8060,16 @@
             "notes": "OB-1 has no documented skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://dashboard.openblocklabs.com/install",
+          "https://dashboard.openblocklabs.com/privacy",
+          "https://www.openblocklabs.com/pricing"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The checked official OB-1 installation, privacy, and pricing pages did not establish an ACP server launch route; no matching product entry was found in the current ACP Registry index. Unknown rather than unsupported: checked sources did not establish a server, client-only role, or adapter route."
       }
     },
     {
@@ -7804,6 +8242,16 @@
             "notes": "Rovo Dev CLI has no documented skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://support.atlassian.com/rovo/docs/rovo-dev-cli-commands/",
+          "https://developer.atlassian.com/cloud/acli/reference/commands/rovodev/",
+          "https://community.atlassian.com/forums/discussion/3315222/introducing-rovo-cli-beta/p1"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Official CLI command documentation lists interactive and non-interactive run commands plus a server mode, but no ACP agent launch route was established. ACP launch support remains unknown; absence from the checked docs is not evidence of unsupported status. Atlassian describes a newer Rovo CLI experience alongside the older Rovo Dev CLI; identity/version transition needs review."
       }
     },
     {
@@ -7969,6 +8417,14 @@
             "notes": "Toad has no documented skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/batrachianai/toad"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Toad describes itself as a terminal interface for coding agents and says third-party agents integrate with it through ACP; it is an ACP client/UI role, not an evidenced launchable ACP agent/server. Client-only role is not evidence that Toad can be launched as an ACP agent. Official project states Linux and macOS support; native Windows support is lacking. Review correction: evidence establishes ACP client usage, not an explicit prohibition on agent/server support; keep agent-side support unknown."
       }
     },
     {
@@ -8231,6 +8687,28 @@
             "notes": "Junie CLI does not discover skills from .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "junie",
+            "args": [
+              "--acp=true"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/junie/agent.json",
+          "https://github.com/JetBrains/junie-acp-release"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. JetBrains Junie CLI installation. JetBrains authentication is required before agent operations. ACP registry id is junie, matching Junie product identity despite the local key junie-cli. ACP mode is enabled with --acp=true; the required authentication flow is client-driven."
       }
     },
     {
@@ -8568,6 +9046,28 @@
             "notes": "Kilo Code discovers skills from .agents/skills/ as a project-level compatibility directory."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "kilo",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/kilo/agent.json",
+          "https://github.com/Kilo-Org/kilocode"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Kilo CLI distribution. Kilo provider/account configuration and authentication. Registry id is kilo, corresponding to Kilo Code; use the actual CLI command kilo. The registry binary distribution has no Windows ARM64 target."
       }
     },
     {
@@ -8872,6 +9372,29 @@
             "notes": "Kimi Code scans .agents/skills/ at project scope."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "kimi",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/reference/kimi-command.md",
+          "https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/guides/ides.md",
+          "https://github.com/MoonshotAI/kimi-code"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Kimi Code CLI installed and authenticated before ACP session creation. On Windows, Git for Windows is required for the bundled Git Bash shell environment. Do not match the current Kimi Code CLI to ACP registry id kimi's distribution: that registry entry points to MoonshotAI/kimi-cli, which the maintained project's migration guide says is archived. The current product itself has native ACP support. Official install docs list macOS, Linux, and Windows; no narrower architecture matrix was confirmed for the current product."
       }
     },
     {
@@ -9125,6 +9648,29 @@
             "notes": "No evidence that Kiro scans .agents/skills/ at project scope."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "kiro-cli",
+            "args": [
+              "acp",
+              "--agent-engine=v3"
+            ],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://kiro.dev/docs/cli/acp/",
+          "https://kiro.dev/docs/cli/v3/acp-migration/",
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/kiro/agent.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Kiro CLI installed and signed in, unless client-side authentication is configured. Platform-specific Kiro CLI build. The registry does not list a Windows distribution target, although Kiro CLI itself documents Windows support. V3 launch command follows the current ACP registry entry; Kiro documents V2 and V3 server generations separately."
       }
     },
     {
@@ -9415,6 +9961,16 @@
             "notes": "Letta Code scans .agents/skills/ as the preferred project-local skills directory."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "letta-acp",
+        "sources": [
+          "https://github.com/letta-ai/letta-acp/blob/main/README.md",
+          "https://github.com/letta-ai/letta-code"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node/npm package runner for npx. Local backend is default; the adapter bundles @letta-ai/letta-code and requires model access via `letta login` or provider configuration. Cloud backend requires LETTA_API_KEY; cloud-oauth requires a prior `letta login` and LETTA_AGENT_ID is optional. Adapter README documents ACP support but no explicit supported platform matrix."
       }
     },
     {
@@ -9633,6 +10189,16 @@
             "notes": "Pi has no documented SKILL.md-based skills, custom command files, subagent system, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "pi-acp",
+        "sources": [
+          "https://github.com/svkozak/pi-acp",
+          "https://github.com/agentclientprotocol/registry/blob/main/pi-acp/agent.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 22+. Pi v0.81.0+ installed on PATH and configured for a model provider. Pi provider authentication/configuration is managed by Pi. Adapter source warns that it is MVP-style and client compatibility may vary."
       }
     },
     {
@@ -9867,6 +10433,26 @@
             "notes": "Qoder CLI has no documented SKILL.md-based skills, custom command files, project agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "--yes",
+              "@qoder-ai/qodercli@0.2.14",
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/qoder/agent.json",
+          "https://docs.qoder.com/en/cli/quick-start",
+          "https://docs.qoder.com/en/cli/using-cli"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Node.js/npm package runner. Qoder CLI authentication; Qoder documents QODER_PERSONAL_ACCESS_TOKEN for non-interactive use. The official ACP registry identity is qoder; this maps to the local Qoder CLI product key. Registry provides an npx distribution but no explicit platform matrix."
       }
     },
     {
@@ -10138,6 +10724,16 @@
             "notes": "Command Code does not discover skills from .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "adapter": "commandcode-acp",
+        "sources": [
+          "https://github.com/tariqwest/commandcode-acp",
+          "https://github.com/CommandCodeAI/command-code"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 22+ for the npx/Node route (or Bun 1.1+ for Bun route). Command Code CLI (`cmd`) on PATH; install with `npm i -g command-code`. Authenticate using `cmd login` or configure a provider API key for Command Code. Adapter is community-maintained, not first-party CommandCodeAI."
       }
     },
     {
@@ -10419,6 +11015,27 @@
             "notes": "Qwen Code discovers skills from .agents/skills/ at project scope."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@qwen-code/qwen-code@0.26.7",
+              "--acp",
+              "--experimental-skills"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/qwen-code/agent.json",
+          "https://github.com/QwenLM/qwen-code",
+          "https://qwenlm.github.io/qwen-code-docs/en/users/overview"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Node.js/npm with npx for the ACP registry's package-runner distribution. A configured Qwen Code model/provider account or credentials are needed to use a model; ACP itself does not supply credentials. The ACP registry entry supplies a package-runner launch, so this report preserves that exact distribution route."
       }
     },
     {
@@ -10825,6 +11442,27 @@
             "notes": "This is the project-local Agent Skills standard directory that Vibe searches after trusted project .vibe skills."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "vibe-acp",
+            "args": [],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/mistral-vibe/agent.json",
+          "https://github.com/mistralai/mistral-vibe",
+          "https://github.com/mistralai/mistral-vibe/blob/main/pyproject.toml"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Use the platform-specific ACP binary distribution; provider authentication/configuration is needed for model use. The registry entry version checked was 3.0.4; a newer upstream Vibe release existed on the check date, so no minimum ACP-capable version is asserted."
       }
     },
     {
@@ -11029,6 +11667,14 @@
             "notes": "Plandex has no documented SKILL.md-based skills, custom command files, subagent system, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/plandex-ai/plandex"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official repository confirms Plandex is an AI coding agent, but checked official material did not establish an ACP agent/server launch. No matching entry was found in the current ACP registry index. Unknown, not unsupported: absence from the registry or checked docs does not prove the product cannot expose ACP."
       }
     },
     {
@@ -11276,6 +11922,16 @@
             "notes": "Warp is a terminal emulator; no documented skills, commands, agents, or .agents/skills support."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://docs.warp.dev/agents/cli/",
+          "https://github.com/warpdotdev/warp/blob/master/FAQ.md",
+          "https://github.com/tariqwest/warp-acp"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. ACP agent/server launch for Warp Terminal remains unverified. The separate warp-acp record describes a community adapter for the Warp Agent CLI. Detecting warp-terminal does not establish availability of the warp CLI or its adapter. Client-side ACP integration and absence from the official ACP registry do not prove unsupported status."
       }
     },
     {
@@ -11659,6 +12315,14 @@
             "notes": "San does not discover skills from .agents/skills/; uses .san/skills/ only."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/genai-io/san"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official project describes San as a native Go terminal agent with extensions, subagents, and MCP support, but checked sources did not confirm a launchable ACP server. No matching San agent was found in the ACP registry index. Unknown, not unsupported: MCP support and general agent functionality do not establish ACP server support."
       }
     },
     {
@@ -12001,6 +12665,28 @@
             "notes": "Droid uses its own .factory/skills path, not .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "droid@1.3.0",
+              "exec",
+              "--output-format",
+              "acp-daemon"
+            ]
+          }
+        ],
+        "sources": [
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://github.com/Factory-AI/factory",
+          "https://github.com/Factory-AI/factory/blob/main/docs/reference/cli-reference.mdx"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Node.js/npm with npx for the ACP registry's package-runner distribution. Factory Droid authentication/account setup is required for agent use. ACP registry id is factory-droid, while the canonical harness key is droid; product identity is confirmed by Factory's upstream repository. The raw registry source file checked lagged the published index version; launch args and package version here use the current published index."
       }
     },
     {
@@ -12392,6 +13078,23 @@
             "notes": "OMP loads skills from .agents/skills/ at project level via the agents provider."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "omp",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/can1357/oh-my-pi",
+          "https://github.com/can1357/oh-my-pi/blob/main/docs/cli-reference.md"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install the Oh My Pi CLI and configure a usable model provider/account for agent work. No matching Oh My Pi distribution was found in the current ACP registry index; native ACP server support is directly documented upstream."
       }
     },
     {
@@ -12660,6 +13363,15 @@
             "notes": "Codebuff discovers skills from .agents/skills/ as a project-level skills root."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/CodebuffAI/codebuff",
+          "https://www.codebuff.com/docs"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Official Codebuff material documents its CLI, SDK, agents, and agent runtime, but checked sources did not confirm an ACP agent/server launch. No matching Codebuff agent was found in the ACP registry index. Unknown, not unsupported: Codebuff client/SDK integration or agent concepts are not proof of ACP server support."
       }
     },
     {
@@ -12864,6 +13576,15 @@
             "notes": "Trae Agent does not support the .agents/skills standard."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/bytedance/trae-agent",
+          "https://github.com/bytedance/trae-agent/blob/main/README.md"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official README documents Trae Agent as a configurable software engineering CLI with tools and model providers, but checked sources did not establish an ACP server command. No matching Trae agent was found in the ACP registry index. Unknown, not unsupported: lack of ACP-specific evidence is not proof of incompatibility."
       }
     },
     {
@@ -13056,6 +13777,15 @@
             "notes": "SWE-agent does not support the .agents/skills standard."
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/SWE-agent/SWE-agent",
+          "https://swe-agent.com/latest/"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Official SWE-agent material documents the agent and its CLI/configuration, but checked sources did not establish an ACP server command. No matching SWE-agent was found in the ACP registry index. Unknown, not unsupported: no ACP-specific evidence was found in checked official sources."
       }
     },
     {
@@ -13276,6 +14006,26 @@
             "notes": "gptme does not discover skills from .agents/skills/."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "gptme-acp",
+            "args": [],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://gptme.org/docs/acp.html",
+          "https://gptme.org/docs/getting-started.html",
+          "https://github.com/agentclientprotocol/registry"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install gptme-acp (the thin shim depends on gptme[acp]); uvx can run it without a persistent install. Configure a supported model provider/API key or other gptme authentication before prompting. ACP support is in development; the official guide marks basic integration complete and lists tool reporting/session persistence as incomplete roadmap work. The current official ACP registry index does not contain gptme; this does not negate the documented direct launch path."
       }
     },
     {
@@ -13475,6 +14225,16 @@
             "confidence": "unknown"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/neovateai/neovate-code",
+          "https://github.com/neovateai/neovate-code/discussions/693",
+          "https://raw.githubusercontent.com/neovateai/neovate-code/master/src/cli.ts"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official repository identifies the exact Neovate Code CLI. An upstream discussion says a standalone neovate-code-acp-plugin existed and proposes integrating ACP as `neovate acp`, but the discussion is an RFC and does not establish a current, installable launch path in the product repository. ACP client-only versus server role is not established by the product README; the RFC describes server functionality but current plugin distribution/repository could not be verified. The current official ACP registry index has no Neovate entry. Registry absence is not evidence of unsupported status. Upstream discussion #693 proposes a native neovate acp command and mentions an earlier plugin. A proposal is not proof of a released launch route; implementation/package availability remains unverified."
       }
     },
     {
@@ -13708,6 +14468,16 @@
             "confidence": "unknown"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/SWE-agent/mini-swe-agent",
+          "https://github.com/SWE-agent/mini-swe-agent/blob/main/docs/usage/mini.md",
+          "https://github.com/SWE-agent/mini-swe-agent/blob/main/src/minisweagent/run/mini.py"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official project documents the `mini` CLI and its interactive modes and run script. Checked upstream docs/source and the official ACP registry did not establish an ACP server mode or launch command. No evidence establishes that the product is an ACP client or an ACP agent; lack of ACP documentation is insufficient to classify it unsupported."
       }
     },
     {
@@ -13899,6 +14669,24 @@
             "notes": "Tool-agnostic skills remain relative to the launch home or project when DEEPAGENTS_HOME relocates the profile."
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "dcode",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/langchain-ai/deepagents/blob/main/libs/acp/README.md",
+          "https://github.com/langchain-ai/deepagents/blob/main/libs/code/pyproject.toml",
+          "https://github.com/langchain-ai/deepagents/blob/main/libs/code/README.md"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install deepagents-code and deepagents-acp; upstream documents `uv tool install -U deepagents-code --with deepagents-acp`. Current upstream deepagents-code package metadata requires Python >=3.14,<3.15. Configure a model provider credential, such as ANTHROPIC_API_KEY, in the environment. The ACP registry has a separate `deepagents` entry for the JavaScript DeepAgents product; that is a different identity and is not used as evidence for this Python `deepagents-code` key."
       }
     },
     {
@@ -14083,6 +14871,15 @@
             "confidence": "unknown"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/ovh/shai",
+          "https://github.com/ovh/shai/issues/111"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. The official repository identifies SHAI as the OVH terminal coding agent and documents interactive, headless, and HTTP server modes. An upstream ACP discussion is a feature proposal for ACP compatibility, not proof of an implemented or launchable ACP server. The checked upstream README lists HTTP/OpenAI-compatible endpoints but no ACP mode; that alone does not prove ACP is unsupported. The current official ACP registry index contains no SHAI entry."
       }
     },
     {
@@ -14183,6 +14980,23 @@
             "confidence": "unknown"
           }
         }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "codebuddy",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://www.codebuddy.ai/docs/cli/acp",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install the CodeBuddy Code CLI (`@tencent-ai/codebuddy-code`); the official ACP guide requires `codebuddy` to be available on PATH. Authenticate with a CodeBuddy account or configure CODEBUDDY_API_KEY; when using the key, set CODEBUDDY_INTERNET_ENVIRONMENT according to the product version (international default, China `internal`, iOA `ioa`). The ACP route is native; no separate harness CLI adapter is documented."
       }
     },
     {
@@ -14356,6 +15170,19 @@
             "confidence": "unknown"
           }
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://www.perchai.app/docs/using-perch/cli",
+          "https://www.perchai.app/docs/concepts/mcp-servers",
+          "https://www.perchai.app/docs/concepts/memory",
+          "https://registry.npmjs.org/perchai-cli/2.4.109",
+          "https://github.com/agentclientprotocol/registry/pulls",
+          "https://github.com/agentclientprotocol/registry/pull/736"
+        ],
+        "confidence": "unknown",
+        "notes": "Checked 2026-11-05. Perch's official CLI reference documents `perch` interactive mode and `perch run` one-shot mode, and the checked official pages cover MCP/memory configuration. They do not establish an ACP agent/server launch command; the current official ACP registry index has no Perch entry. ACP client-only versus agent/server role remains unverified; documentation silence does not establish unsupported status. The ACP registry pull-request list shows an Add Perch Terminal submission (#736, opened 2026-10-31). The proposed package/command and identity could not be verified, so this is a follow-up lead, not a supported claim. Other unrelated projects named Perch must not be substituted for perchai-cli."
       }
     },
     {
@@ -14555,6 +15382,1092 @@
             "paths": [],
             "sources": [],
             "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "prime-agent",
+            "args": [
+              "--mode",
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/PrimeIntellect-ai/prime-agent",
+          "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/CHANGELOG.md",
+          "https://github.com/PrimeIntellect-ai/prime-agent/issues/620",
+          "https://raw.githubusercontent.com/PrimeIntellect-ai/prime-agent/main/crates/pa-cli/src/args.rs"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Install Prime Agent with the official shell installer on macOS/Linux or PowerShell installer on Windows x64. Prime Agent ACP mode currently runs over its daemon; the daemon must be able to start. Configure a model provider through `/login` or a provider API key before prompting. The current official ACP registry index contains no Prime Agent entry; the direct native launch path is nevertheless upstream documented. ACP support has documented feature gaps in some client/session lifecycle behaviors; these do not prevent the established launch path."
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@agentclientprotocol/codex-acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/codex-acp",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://github.com/agentclientprotocol/codex-acp/blob/main/package.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Requires Node.js/npm to run the npx package. Authentication can use ChatGPT login, CODEX_API_KEY, OPENAI_API_KEY, or a client-provided custom OpenAI-compatible gateway. The package includes a compatible @openai/codex dependency; CODEX_PATH is optional to select another Codex executable. The harness itself is not confirmed to speak ACP natively; supported route uses the separate current ACP adapter. The project moved to agentclientprotocol/codex-acp from the older Zed Industries repository."
+      },
+      "aliases": [
+        "@agentclientprotocol/codex-acp"
+      ],
+      "env": [],
+      "executables": [
+        "codex-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@agentclientprotocol/codex-acp",
+          "command": "npm install -g @agentclientprotocol/codex-acp",
+          "url": "https://github.com/agentclientprotocol/codex-acp",
+          "notes": "Requires Node.js/npm to run the npx package. Authentication can use ChatGPT login, CODEX_API_KEY, OPENAI_API_KEY, or a client-provided custom OpenAI-compatible gateway. The package includes a compatible @openai/codex dependency; CODEX_PATH is optional to select another Codex executable."
+        }
+      ],
+      "key": "codex-acp",
+      "name": "Codex ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/agentclientprotocol/codex-acp",
+        "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+        "https://github.com/agentclientprotocol/codex-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@agentclientprotocol/claude-agent-acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/claude-agent-acp",
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/package.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. The npm route requires Node.js >=22 and npm/npx. The adapter uses Anthropic's Claude Agent SDK. Standalone release archives bundle both the adapter and Claude CLI; those archives do not require a separate Node.js installation. Use the current agentclientprotocol/claude-agent-acp project; the earlier @zed-industries adapter repository has moved."
+      },
+      "aliases": [
+        "@agentclientprotocol/claude-agent-acp"
+      ],
+      "env": [],
+      "executables": [
+        "claude-agent-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@agentclientprotocol/claude-agent-acp",
+          "command": "npm install -g @agentclientprotocol/claude-agent-acp",
+          "url": "https://github.com/agentclientprotocol/claude-agent-acp",
+          "notes": "The npm route requires Node.js >=22 and npm/npx. The adapter uses Anthropic's Claude Agent SDK. Standalone release archives bundle both the adapter and Claude CLI; those archives do not require a separate Node.js installation."
+        }
+      ],
+      "key": "claude-agent-acp",
+      "name": "Claude Agent ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/agentclientprotocol/claude-agent-acp",
+        "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+        "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "node",
+            "args": [
+              "dist/index.js"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/jorgejhms/aider-acp",
+          "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/README.md",
+          "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/package.json",
+          "https://github.com/jorgejhms/aider-acp/blob/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Requires Node.js 20+. Requires the separate Aider Python CLI installed in the environment (upstream documents `pip install aider-chat`). Requires Git and a Git repository for Aider's change tracking. The launch path must point to the built dist/index.js in the adapter checkout. This is a community adapter, not native Aider ACP support. It reports basic ACP session/prompt support; listed roadmap items remain incomplete. Run node dist/index.js with the built adapter checkout as the process working directory, or replace dist/index.js with its absolute path in the client configuration. This record is discoverable through ACP APIs but has no unambiguous executable or path for installation detection."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [],
+      "installations": [
+        {
+          "method": "manual",
+          "command": "git clone https://github.com/jorgejhms/aider-acp && cd aider-acp && npm install && npm run build",
+          "url": "https://github.com/jorgejhms/aider-acp",
+          "notes": "Requires Node.js 20+. Requires the separate Aider Python CLI installed in the environment (upstream documents `pip install aider-chat`). Requires Git and a Git repository for Aider's change tracking. The launch path must point to the built dist/index.js in the adapter checkout. Build the source checkout; npm publication and a dedicated executable are not established. No portable installation detection signal is available."
+        }
+      ],
+      "key": "aider-acp",
+      "name": "Aider ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/jorgejhms/aider-acp",
+        "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/README.md",
+        "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/package.json",
+        "https://github.com/jorgejhms/aider-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "amp-acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/tao12345666333/amp-acp",
+          "https://ampcode.com/docs",
+          "https://github.com/tao12345666333/amp-acp/blob/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 18+ for the npx adapter route. Install the separate Amp CLI, sign in with amp login, and ensure amp is available on PATH; AMP_CLI_PATH can point to it when PATH is not inherited. Headless authentication can use AMP_API_KEY. The adapter is third-party; Amp itself is the harness CLI."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [
+        "amp-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "amp-acp",
+          "command": "npm install -g amp-acp",
+          "url": "https://github.com/tao12345666333/amp-acp",
+          "notes": "Node.js 18+ for the npx adapter route. Install the separate Amp CLI, sign in with amp login, and ensure amp is available on PATH; AMP_CLI_PATH can point to it when PATH is not inherited. Headless authentication can use AMP_API_KEY."
+        }
+      ],
+      "key": "amp-acp",
+      "name": "Amp ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/tao12345666333/amp-acp",
+        "https://ampcode.com/docs",
+        "https://github.com/tao12345666333/amp-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "agy_acp_server.par",
+            "args": [
+              "--uid="
+            ],
+            "platforms": [
+              "linux"
+            ]
+          },
+          {
+            "command": "agy_acp_server.par",
+            "args": [],
+            "platforms": [
+              "darwin"
+            ]
+          },
+          {
+            "command": "agy_acp_server.exe",
+            "args": [],
+            "platforms": [
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json",
+          "https://antigravity.google/docs/ide/extensions",
+          "https://raw.githubusercontent.com/agentclientprotocol/registry/main/antigravity-acp/agent.json"
+        ],
+        "confidence": "official",
+        "notes": "Checked 2026-11-05. Use Google's separately distributed Antigravity ACP server runtime; this is not the `agy` CLI executable. Complete authentication using a supported Antigravity runtime authentication method. The ACP Registry's Linux launch uses `--uid=`; its macOS and Windows entries omit that argument. This is an official separate server runtime for the Antigravity product, not evidence that the existing `agy` CLI command itself speaks ACP. Select the launch matching the client platform. The archive must match the machine architecture; this metadata does not download or locate it."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [
+        "agy_acp_server.par",
+        "agy_acp_server.exe"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Download and extract the complete Google ACP server archive for your OS and architecture (x64 or arm64) from the upstream registry manifest. Add the extracted executable directory to PATH or resolve the command there. This is separate from the agy CLI."
+        }
+      ],
+      "key": "antigravity-acp",
+      "name": "Google Antigravity ACP Server",
+      "paths": [],
+      "sources": [
+        "https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json",
+        "https://antigravity.google/docs/ide/extensions",
+        "https://raw.githubusercontent.com/agentclientprotocol/registry/main/antigravity-acp/agent.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@letta-ai/letta-acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/letta-ai/letta-acp/blob/main/README.md",
+          "https://github.com/letta-ai/letta-code",
+          "https://github.com/letta-ai/letta-acp/blob/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. The npm route requires Node.js >=22.19.0 and npm/npx. Local backend is default; the adapter bundles @letta-ai/letta-code and requires model access via `letta login` or provider configuration. Cloud backend requires LETTA_API_KEY; cloud-oauth requires a prior `letta login` and LETTA_AGENT_ID is optional. Adapter README documents ACP support but no explicit supported platform matrix."
+      },
+      "aliases": [
+        "@letta-ai/letta-acp"
+      ],
+      "env": [],
+      "executables": [
+        "letta-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@letta-ai/letta-acp",
+          "command": "npm install -g @letta-ai/letta-acp",
+          "url": "https://github.com/letta-ai/letta-acp",
+          "notes": "The npm route requires Node.js >=22.19.0 and npm/npx. Local backend is default; the adapter bundles @letta-ai/letta-code and requires model access via `letta login` or provider configuration. Cloud backend requires LETTA_API_KEY; cloud-oauth requires a prior `letta login` and LETTA_AGENT_ID is optional."
+        }
+      ],
+      "key": "letta-acp",
+      "name": "Letta ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/letta-ai/letta-acp/blob/main/README.md",
+        "https://github.com/letta-ai/letta-code",
+        "https://github.com/letta-ai/letta-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "pi-acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/svkozak/pi-acp",
+          "https://github.com/agentclientprotocol/registry/blob/main/pi-acp/agent.json",
+          "https://github.com/svkozak/pi-acp/blob/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 22+. Pi v0.81.0+ installed on PATH and configured for a model provider. Pi provider authentication/configuration is managed by Pi. Adapter source warns that it is MVP-style and client compatibility may vary."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [
+        "pi-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "pi-acp",
+          "command": "npm install -g pi-acp",
+          "url": "https://github.com/svkozak/pi-acp",
+          "notes": "Node.js 22+. Pi v0.81.0+ installed on PATH and configured for a model provider. Pi provider authentication/configuration is managed by Pi."
+        }
+      ],
+      "key": "pi-acp",
+      "name": "pi ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/svkozak/pi-acp",
+        "https://github.com/agentclientprotocol/registry/blob/main/pi-acp/agent.json",
+        "https://github.com/svkozak/pi-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "https://github.com/tariqwest/commandcode-acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/tariqwest/commandcode-acp",
+          "https://github.com/CommandCodeAI/command-code",
+          "https://github.com/tariqwest/commandcode-acp/blob/main/package.json"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Node.js 22+ for the npx/Node route (or Bun 1.1+ for Bun route). Command Code CLI (`cmd`) on PATH; install with `npm i -g command-code`. Authenticate using `cmd login` or configure a provider API key for Command Code. Adapter is community-maintained, not first-party CommandCodeAI."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [
+        "commandcode-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "https://github.com/tariqwest/commandcode-acp",
+          "command": "npm install -g https://github.com/tariqwest/commandcode-acp",
+          "url": "https://github.com/tariqwest/commandcode-acp",
+          "notes": "Node.js 22+ for the npx/Node route (or Bun 1.1+ for Bun route). Command Code CLI (`cmd`) on PATH; install with `npm i -g command-code`. Authenticate using `cmd login` or configure a provider API key for Command Code."
+        }
+      ],
+      "key": "commandcode-acp",
+      "name": "Command Code ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/tariqwest/commandcode-acp",
+        "https://github.com/CommandCodeAI/command-code",
+        "https://github.com/tariqwest/commandcode-acp/blob/main/package.json"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "warp-acp",
+            "args": []
+          }
+        ],
+        "sources": [
+          "https://github.com/tariqwest/warp-acp",
+          "https://raw.githubusercontent.com/tariqwest/warp-acp/main/package.json",
+          "https://raw.githubusercontent.com/tariqwest/warp-acp/main/src/warp.ts"
+        ],
+        "confidence": "source",
+        "notes": "Checked 2026-11-05. Community ACP adapter for the separately installed Warp Agent CLI, not the Warp Terminal app detected by the warp registry key. Separate Warp Agent CLI executable warp on PATH and Warp authentication. Node.js >=20 or Bun >=1.1; some adapter code paths can fall back to the separate oz CLI."
+      },
+      "aliases": [],
+      "env": [],
+      "executables": [
+        "warp-acp"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "https://github.com/tariqwest/warp-acp",
+          "command": "npm install -g https://github.com/tariqwest/warp-acp",
+          "url": "https://github.com/tariqwest/warp-acp",
+          "notes": "Separate Warp Agent CLI executable warp on PATH and Warp authentication. Node.js >=20 or Bun >=1.1; some adapter code paths can fall back to the separate oz CLI."
+        }
+      ],
+      "key": "warp-acp",
+      "name": "Warp ACP",
+      "paths": [],
+      "sources": [
+        "https://github.com/tariqwest/warp-acp",
+        "https://raw.githubusercontent.com/tariqwest/warp-acp/main/package.json",
+        "https://raw.githubusercontent.com/tariqwest/warp-acp/main/src/warp.ts"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "dotAgents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
           }
         }
       }
