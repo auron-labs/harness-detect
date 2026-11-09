@@ -41,9 +41,11 @@ __all__ = [
     "HarnessSupportPath",
     "HarnessSupportRecord",
     "HarnessSupportScope",
+    "InstalledAcpLaunch",
     "ResolvedHarnessPath",
     "check_harness",
     "detect_harnesses",
+    "detect_installed_acp_launches",
     "detect_installed_harnesses",
     "get_harness_acp",
     "get_harness_matrix",
@@ -275,6 +277,9 @@ class HarnessAcp:
     sources: tuple[str, ...] = ()
     confidence: str = "unknown"
     launches: tuple[HarnessAcpLaunch, ...] = ()
+    # Launches that start the agent from a binary already on PATH; never a
+    # package runner.
+    installed_launches: tuple[HarnessAcpLaunch, ...] = ()
     adapter: str = ""
     notes: str = ""
 
@@ -287,9 +292,26 @@ class HarnessAcp:
             launches=tuple(
                 HarnessAcpLaunch.from_dict(item) for item in d.get("launches", [])
             ),
+            installed_launches=tuple(
+                HarnessAcpLaunch.from_dict(item)
+                for item in d.get("installedLaunches", [])
+            ),
             adapter=d.get("adapter", ""),
             notes=d.get("notes", ""),
         )
+
+
+@dataclass(frozen=True)
+class InstalledAcpLaunch:
+    """A runnable ACP launch for an installed harness.
+
+    ``command`` is the absolute path of the resolved executable.
+    """
+
+    key: str
+    name: str
+    command: str
+    args: tuple[str, ...]
 
 
 @dataclass(frozen=True)
@@ -452,6 +474,44 @@ def list_harness_acp() -> list[HarnessAcpRecord]:
         HarnessAcpRecord(h.key, h.name, h.acp or HarnessAcp())
         for h in _matrix().harnesses
     ]
+
+
+def detect_installed_acp_launches(
+    options: CheckOptions | None = None,
+) -> list[InstalledAcpLaunch]:
+    """List ACP agents that can be started from binaries already installed.
+
+    An entry is returned when its ACP status is ``supported``, it does not
+    delegate to an ``adapter``, and the command of its launch for the current
+    platform resolves to an absolute executable path. Uses ``installed_launches``
+    when present, otherwise ``launches`` that do not use a package runner.
+    Nothing is executed.
+    """
+    opts = options or CheckOptions()
+    env = _with_defaults(opts.env, opts.cwd)
+    results: list[InstalledAcpLaunch] = []
+    for harness in _matrix().harnesses:
+        acp = harness.acp
+        if acp is None or acp.status != "supported" or acp.adapter:
+            continue
+        launches = acp.installed_launches or tuple(
+            launch for launch in acp.launches if not _is_package_runner(launch)
+        )
+        launch = next((x for x in launches if _platform_matches(x.platforms)), None)
+        if launch is None:
+            continue
+        command = _find_executable((launch.command,), env, absolute_only=True)
+        if command is not None:
+            results.append(
+                InstalledAcpLaunch(harness.key, harness.name, command, launch.args)
+            )
+    return results
+
+
+def _is_package_runner(launch: HarnessAcpLaunch) -> bool:
+    return launch.command in ("npx", "bunx", "uvx") or (
+        launch.command == "pnpm" and launch.args[:1] == ("dlx",)
+    )
 
 
 def check_harness(
@@ -744,13 +804,20 @@ def _resolve_paths(
 def _find_executable(
     executables: tuple[str, ...],
     env: dict[str, str],
+    absolute_only: bool = False,
 ) -> str | None:
+    """Search PATH for the first matching executable. With ``absolute_only``,
+    relative PATH entries are ignored."""
     if not executables:
         return None
 
     path_value = env.get("PATH", "")
     delimiter = ";" if sys.platform == "win32" else os.pathsep
-    path_parts = [p for p in path_value.split(delimiter) if p]
+    path_parts = [
+        p
+        for p in path_value.split(delimiter)
+        if p and (not absolute_only or os.path.isabs(p))
+    ]
 
     if sys.platform == "win32":
         pathext = env.get("PATHEXT", ".EXE;.CMD;.BAT;.COM")

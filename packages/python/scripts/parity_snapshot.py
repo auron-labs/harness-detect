@@ -20,6 +20,7 @@ from harness_detect import (
     HarnessSupportScope,
     check_harness,
     detect_harnesses,
+    detect_installed_acp_launches,
     get_harness_acp,
     get_harness_support,
     list_harness_acp,
@@ -97,6 +98,17 @@ def run_case(raw_case: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
             result = normalize_acp_record(get_harness_acp(case["input"]))
         elif operation == "listHarnessAcp":
             result = [normalize_acp_record(r) for r in list_harness_acp()]
+        elif operation == "detectInstalledAcpLaunches":
+            result = {
+                "launches": [
+                    {
+                        "key": launch.key,
+                        "command": normalize_path_value(launch.command, roots),
+                        "args": list(launch.args),
+                    }
+                    for launch in detect_installed_acp_launches(options)
+                ]
+            }
         elif operation == "getHarnessSupport":
             result = normalize_support_record(get_harness_support(case["input"]))
         elif operation == "listHarnessSupport":
@@ -253,13 +265,17 @@ def normalize_acp_record(record: HarnessAcpRecord) -> dict[str, Any]:
         "sources": list(acp.sources),
         "confidence": acp.confidence,
     }
-    if acp.launches:
-        metadata["launches"] = []
-        for launch in acp.launches:
-            item = {"command": launch.command, "args": list(launch.args)}
-            if launch.platforms:
-                item["platforms"] = list(launch.platforms)
-            metadata["launches"].append(item)
+    for field, launches in (
+        ("launches", acp.launches),
+        ("installedLaunches", acp.installed_launches),
+    ):
+        if launches:
+            metadata[field] = []
+            for launch in launches:
+                item = {"command": launch.command, "args": list(launch.args)}
+                if launch.platforms:
+                    item["platforms"] = list(launch.platforms)
+                metadata[field].append(item)
     if acp.adapter:
         metadata["adapter"] = acp.adapter
     if acp.notes:

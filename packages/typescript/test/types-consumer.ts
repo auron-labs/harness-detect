@@ -1,4 +1,4 @@
-import { getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
+import { detectInstalledAcpLaunches, type InstalledAcpLaunch, getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
 
 type Assert<T extends true> = T;
 type IsExact<T, U> =
@@ -103,3 +103,7 @@ void [acpRecords, optionalAcp, directAcp, adapterAcp, invalidAcp, invalidLaunch,
 // @ts-expect-error supported ACP requires a nonempty launch list
 const emptyLaunches: HarnessAcp = { status: "supported", sources: [], confidence: "source", launches: [] };
 void emptyLaunches;
+
+const installedAcpLaunches: InstalledAcpLaunch[] = detectInstalledAcpLaunches({ env: { PATH: "/usr/bin" } });
+const installedAcpCommand: string | undefined = installedAcpLaunches[0]?.command;
+void installedAcpCommand;

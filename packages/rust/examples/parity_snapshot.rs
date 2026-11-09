@@ -5,9 +5,10 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use harness_detect::{
-    check_harness, detect_harnesses, get_harness_acp, get_harness_support, list_harness_acp,
-    list_harness_support, CheckOptions, HarnessCheckResult, HarnessSupport, HarnessSupportArea,
-    HarnessSupportPath, HarnessSupportRecord, HarnessSupportScope,
+    check_harness, detect_harnesses, detect_installed_acp_launches, get_harness_acp,
+    get_harness_support, list_harness_acp, list_harness_support, CheckOptions, HarnessCheckResult,
+    HarnessSupport, HarnessSupportArea, HarnessSupportPath, HarnessSupportRecord,
+    HarnessSupportScope,
 };
 use serde_json::{json, Value};
 
@@ -143,6 +144,19 @@ fn run_case(raw_case: &Value, roots: &SandboxRoots) -> Result<Value, String> {
             }
             "listHarnessAcp" => {
                 serde_json::to_value(list_harness_acp()).map_err(|error| error.to_string())?
+            }
+            "detectInstalledAcpLaunches" => {
+                let launches: Vec<Value> = detect_installed_acp_launches(options)
+                    .iter()
+                    .map(|launch| {
+                        json!({
+                            "key": launch.key,
+                            "command": normalize_path_value(Some(&launch.command), roots),
+                            "args": launch.args,
+                        })
+                    })
+                    .collect();
+                json!({ "launches": launches })
             }
             "getHarnessSupport" => {
                 let input = required_string(&expanded_case, "input")?;

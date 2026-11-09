@@ -117,6 +117,49 @@ explicit, non-overlapping platforms. Read the owning harness definition's
 `installations` and `env` plus both records' notes for setup requirements.
 The library returns metadata; it does not execute commands or check readiness. See [ACP fields and evidence rules](./configuration.md#acp-metadata-acp).
 
+### `detectInstalledAcpLaunches(options?)`
+
+```ts
+function detectInstalledAcpLaunches(options?: CheckHarnessOptions): InstalledAcpLaunch[]
+
+interface InstalledAcpLaunch {
+  key: string;
+  name: string;
+  command: string; // absolute path
+  args: string[];
+}
+```
+
+Lists ACP agents that can be started from binaries already installed, without
+fetching packages. For each registry entry, in registry order:
+
+1. `acp.status` must be `supported`.
+2. Entries with an `adapter` are skipped. The adapter's own entry is returned
+   when it is installed, so there are no duplicates and no base CLI is offered
+   without its adapter.
+3. `installedLaunches` is used when present; otherwise `launches` without
+   package-runner recipes (`npx`, `bunx`, `uvx`, `pnpm dlx`).
+4. The recipe for the current platform is selected.
+5. `command` is resolved on `PATH` using the same lookup as harness detection,
+   honouring `options.env`. The entry is omitted unless the result is an
+   absolute path to an executable file; relative `PATH` entries are ignored.
+
+The detected `executablePath` is not used: a harness can be detected at `cursor`
+while its ACP launch is `cursor-agent`. The call does not execute, install, or
+probe anything.
+
+Go names this `DetectInstalledACPLaunches(options) ([]InstalledACPLaunch, error)`;
+Rust and Python use `detect_installed_acp_launches`, returning
+`Vec<InstalledAcpLaunch>` and `list[InstalledAcpLaunch]`.
+
+```ts
+import { detectInstalledAcpLaunches } from "@auron-labs/harness-detect";
+
+for (const { key, command, args } of detectInstalledAcpLaunches()) {
+  console.log(key, command, args); // e.g. gemini-cli /usr/local/bin/gemini ["--acp"]
+}
+```
+
 ### `getHarnessSupport(input)`
 
 Returns one harness's support metadata by key or alias.
@@ -492,6 +535,22 @@ func ListHarnessACP() []HarnessACPRecord
 Return ACP records with the same lookup and copy behavior as support records.
 See the [shared ACP API contract](#getharnessacpinput-and-listharnessacp).
 
+### `DetectInstalledACPLaunches(options)`
+
+```go
+type InstalledACPLaunch struct {
+	Key     string
+	Name    string
+	Command string // absolute path
+	Args    []string
+}
+
+func DetectInstalledACPLaunches(options CheckOptions) ([]InstalledACPLaunch, error)
+```
+
+Lists ACP agents that can be started from installed binaries. See the
+[shared contract](#detectinstalledacplaunchesoptions).
+
 ### `GetHarnessSupport(input)`
 
 Returns one harness's support metadata by key or alias.
@@ -621,6 +680,7 @@ Entry point: `packages/rust/src/lib.rs`
 - `list_harnesses() -> Vec<HarnessDefinition>`
 - `get_harness_acp(input) -> Result<HarnessAcpRecord, HarnessError>`
 - `list_harness_acp() -> Vec<HarnessAcpRecord>`
+- `detect_installed_acp_launches(options) -> Vec<InstalledAcpLaunch>`
 - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>`
 - `list_harness_support() -> Vec<HarnessSupportRecord>`
 - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
@@ -643,6 +703,7 @@ Entry point: `packages/python/src/harness_detect/__init__.py`
 - `list_harnesses() -> list[HarnessDefinition]`
 - `get_harness_acp(input) -> HarnessAcpRecord`
 - `list_harness_acp() -> list[HarnessAcpRecord]`
+- `detect_installed_acp_launches(options=None) -> list[InstalledAcpLaunch]`
 - `get_harness_support(input) -> HarnessSupportRecord`
 - `list_harness_support() -> list[HarnessSupportRecord]`
 - `check_harness(input, options=None) -> HarnessCheckResult`

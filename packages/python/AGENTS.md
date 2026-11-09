@@ -59,6 +59,7 @@ There is no root `pyproject.toml`; always `cd` into `packages/python` first.
   - `list_harness_support()`
   - `get_harness_acp(input)`
   - `list_harness_acp()`
+  - `detect_installed_acp_launches(options=None)`
   - `check_harness(input, options=None)`
   - `detect_harnesses(options=None)`
   - `detect_installed_harnesses(options=None)`

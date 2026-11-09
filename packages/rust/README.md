@@ -58,6 +58,7 @@ A harness counts as installed when either of these is true:
 - `get_harness_matrix()` returns the full registry object.
 - `list_harnesses()` returns the registry's `harnesses` vector.
 - `get_harness_acp` returns ACP metadata for one harness key or alias.
+- `detect_installed_acp_launches` lists ACP agents launchable from installed binaries, as absolute `command` paths with `args`.
 - `list_harness_acp` returns ACP metadata for every harness; absent metadata is `unknown`.
 - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>` returns support metadata for one harness key or alias.
 - `list_harness_support() -> Vec<HarnessSupportRecord>` returns support metadata for every harness.

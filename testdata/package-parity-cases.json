@@ -1764,6 +1764,214 @@
       "expect": {
         "key": "antigravity-acp"
       }
+    },
+    {
+      "id": "acp-launches-installed-binary-without-runner",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/gemini",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "gemini-cli",
+            "command": "${BIN}/gemini",
+            "args": [
+              "--acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-package-runner-alone",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/npx",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/bunx",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/uvx",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "acp-launches-adapters-installed",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/claude-agent-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "codex-acp",
+            "command": "${BIN}/codex-acp",
+            "args": []
+          },
+          {
+            "key": "claude-agent-acp",
+            "command": "${BIN}/claude-agent-acp",
+            "args": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-base-clis-skip-adapter-records",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/claude",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/codex",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "acp-launches-detected-binary-differs-from-launch-command",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cursor",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "acp-launches-launch-command-present",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cursor-agent",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "cursor",
+            "command": "${BIN}/cursor-agent",
+            "args": [
+              "acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-other-platform-recipe",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/agy_acp_server.exe",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
     }
   ]
 }

@@ -340,6 +340,28 @@ test("ACP schema accepts staged omission, direct argv launches and adapters", ()
   assert.match(summarizeHarnessChanges(before, after), /- acp:.*--new/u);
 });
 
+test("ACP installedLaunches require launches and reject package runners", () => {
+  const withInstalled = (installedLaunches) => {
+    const candidate = acpFixture();
+    candidate.harnesses[0].acp.installedLaunches = installedLaunches;
+    return candidate;
+  };
+  assert.deepEqual(validateRegistry(withInstalled([{ command: "example-agent", args: ["--acp"] }])), []);
+  for (const launch of [
+    { command: "npx", args: ["-y", "example"] },
+    { command: "bunx", args: ["example"] },
+    { command: "uvx", args: ["example"] },
+    { command: "pnpm", args: ["dlx", "example"] },
+  ]) {
+    assert.match(validateRegistry(withInstalled([launch])).join("\n"), /installedLaunches must not use a package runner/u, launch.command);
+  }
+  assert.deepEqual(validateRegistry(withInstalled([{ command: "pnpm", args: ["run", "acp"] }])), []);
+  assert.ok(validateRegistry(withInstalled([])).length, "empty list");
+  const adapter = acpFixture();
+  adapter.harnesses[2].acp.installedLaunches = [{ command: "example-agent", args: [] }];
+  assert.ok(validateRegistry(adapter).length, "adapter records cannot declare installedLaunches");
+});
+
 test("ACP validation rejects invalid claims, launch shapes and adapter targets", () => {
   const cases = [
     ["empty launches", (h) => { h.acp.launches = []; }],

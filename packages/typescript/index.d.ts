@@ -47,15 +47,28 @@ export type HarnessAcp = {
   confidence: HarnessSupportConfidence;
   notes?: string;
 } & (
-  | { status: "supported"; launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]]; adapter?: never }
-  | { status: "supported"; adapter: string; launches?: never }
-  | { status: "unsupported" | "unknown"; launches?: never; adapter?: never }
+  | {
+      status: "supported";
+      launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]];
+      installedLaunches?: [HarnessAcpLaunch, ...HarnessAcpLaunch[]];
+      adapter?: never;
+    }
+  | { status: "supported"; adapter: string; launches?: never; installedLaunches?: never }
+  | { status: "unsupported" | "unknown"; launches?: never; installedLaunches?: never; adapter?: never }
 );
 
 export interface HarnessAcpRecord {
   key: string;
   name: string;
   acp: HarnessAcp;
+}
+
+export interface InstalledAcpLaunch {
+  key: string;
+  name: string;
+  /** Absolute path of the resolved executable. */
+  command: string;
+  args: string[];
 }
 
 export interface HarnessRootDef {
@@ -147,3 +160,4 @@ export declare function listHarnessSupport(): HarnessSupportRecord[];
 export declare function checkHarness(input: string, options?: CheckHarnessOptions): HarnessCheckResult;
 export declare function detectHarnesses(options?: CheckHarnessOptions): HarnessCheckResult[];
 export declare function detectInstalledHarnesses(options?: CheckHarnessOptions): HarnessCheckResult[];
+export declare function detectInstalledAcpLaunches(options?: CheckHarnessOptions): InstalledAcpLaunch[];

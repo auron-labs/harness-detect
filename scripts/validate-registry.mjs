@@ -38,6 +38,9 @@ export const identifierErrors = (harnesses) => {
   return errors;
 };
 
+const isPackageRunner = ({ command, args }) =>
+  ["npx", "bunx", "uvx"].includes(command) || (command === "pnpm" && args[0] === "dlx");
+
 export const validateRegistry = (registry) => {
   if (!validate(registry)) {
     return validate.errors.map(
@@ -66,17 +69,22 @@ export const validateRegistry = (registry) => {
         errors.push(`${harness.key}.acp.adapter must reference a different registry key with a supported direct ACP launch`);
       }
     }
-    const launches = harness.acp?.launches ?? [];
-    const platforms = new Set();
-    for (const launch of launches) {
-      if (launches.length > 1 && !launch.platforms) {
-        errors.push(`${harness.key}.acp.launches must specify platforms when there is more than one launch`);
-      }
-      for (const platform of launch.platforms ?? []) {
-        if (platforms.has(platform)) {
-          errors.push(`${harness.key}.acp.launches has overlapping platform ${platform}`);
+    for (const field of ["launches", "installedLaunches"]) {
+      const launches = harness.acp?.[field] ?? [];
+      const platforms = new Set();
+      for (const launch of launches) {
+        if (launches.length > 1 && !launch.platforms) {
+          errors.push(`${harness.key}.acp.${field} must specify platforms when there is more than one launch`);
         }
-        platforms.add(platform);
+        for (const platform of launch.platforms ?? []) {
+          if (platforms.has(platform)) {
+            errors.push(`${harness.key}.acp.${field} has overlapping platform ${platform}`);
+          }
+          platforms.add(platform);
+        }
+        if (field === "installedLaunches" && isPackageRunner(launch)) {
+          errors.push(`${harness.key}.acp.installedLaunches must not use a package runner (${launch.command})`);
+        }
       }
     }
     checkIds(harness.paths, `${harness.key}.paths`);
