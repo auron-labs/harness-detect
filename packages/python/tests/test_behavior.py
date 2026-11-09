@@ -25,6 +25,7 @@ from harness_detect import (
     ResolvedHarnessPath,
     check_harness,
     detect_harnesses,
+    detect_installed_acp_launches,
     detect_installed_harnesses,
     get_harness_matrix,
     get_harness_support,
@@ -708,3 +709,25 @@ def test_resolve_template_unresolved_returns_none():
     assert harness_detect._resolve_template(
         "${HOME}/.codex/config.toml", env
     ) == os.path.normpath("/Users/test/.codex/config.toml")
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses POSIX executable fixtures")
+def test_installed_acp_launches_ignore_relative_path_entries(tmp_path, monkeypatch):
+    for name in ("relative-bin", "absolute-bin"):
+        binary = tmp_path / name / "gemini"
+        binary.parent.mkdir()
+        binary.write_text("#!/bin/sh\nexit 0\n")
+        binary.chmod(0o755)
+    monkeypatch.chdir(tmp_path)
+    home = str(tmp_path)
+
+    only = detect_installed_acp_launches(
+        CheckOptions(env={"HOME": home, "PATH": "relative-bin"})
+    )
+    assert only == []
+
+    path = os.pathsep.join(["relative-bin", str(tmp_path / "absolute-bin")])
+    both = detect_installed_acp_launches(CheckOptions(env={"HOME": home, "PATH": path}))
+    assert [(x.key, x.command, x.args) for x in both] == [
+        ("gemini-cli", str(tmp_path / "absolute-bin" / "gemini"), ("--acp",))
+    ]

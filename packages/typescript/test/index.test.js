@@ -8,6 +8,7 @@ import test from "node:test";
 import {
   checkHarness,
   detectHarnesses,
+  detectInstalledAcpLaunches,
   detectInstalledHarnesses,
   getHarnessMatrix,
   getHarnessSupport,
@@ -19,6 +20,7 @@ import {
 const LOCKED_RUNTIME_EXPORTS = [
   "checkHarness",
   "detectHarnesses",
+  "detectInstalledAcpLaunches",
   "detectInstalledHarnesses",
   "getHarnessAcp",
   "listHarnessAcp",
@@ -743,4 +745,29 @@ test("registry retains verified installation metadata", () => {
       )
     )
   );
+});
+
+test("detectInstalledAcpLaunches ignores relative PATH entries", { skip: process.platform === "win32" }, () => {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-launches-")));
+  const originalCwd = process.cwd();
+  try {
+    for (const dir of ["relative-bin", "absolute-bin"]) {
+      fs.mkdirSync(path.join(root, dir));
+      fs.writeFileSync(path.join(root, dir, "gemini"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+    }
+    process.chdir(root);
+
+    const only = detectInstalledAcpLaunches({ env: { HOME: root, PATH: "relative-bin" } });
+    assert.deepEqual(only, []);
+
+    const both = detectInstalledAcpLaunches({
+      env: { HOME: root, PATH: ["relative-bin", path.join(root, "absolute-bin")].join(path.delimiter) }
+    });
+    assert.deepEqual(both.map(({ key, command }) => [key, command]), [
+      ["gemini-cli", path.join(root, "absolute-bin", "gemini")]
+    ]);
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
 });

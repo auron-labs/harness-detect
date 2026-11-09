@@ -105,12 +105,24 @@ type HarnessACPLaunch struct {
 
 // HarnessACP describes ACP metadata, independently of file-location support.
 type HarnessACP struct {
-	Status     string             `json:"status"`
-	Launches   []HarnessACPLaunch `json:"launches,omitempty"`
-	Adapter    string             `json:"adapter,omitempty"`
-	Sources    []string           `json:"sources"`
-	Confidence string             `json:"confidence"`
-	Notes      string             `json:"notes,omitempty"`
+	Status   string             `json:"status"`
+	Launches []HarnessACPLaunch `json:"launches,omitempty"`
+	// InstalledLaunches start the agent from a binary already on PATH and never
+	// use a package runner.
+	InstalledLaunches []HarnessACPLaunch `json:"installedLaunches,omitempty"`
+	Adapter           string             `json:"adapter,omitempty"`
+	Sources           []string           `json:"sources"`
+	Confidence        string             `json:"confidence"`
+	Notes             string             `json:"notes,omitempty"`
+}
+
+// InstalledACPLaunch is a runnable ACP launch for an installed harness.
+// Command is the absolute path of the resolved executable.
+type InstalledACPLaunch struct {
+	Key     string   `json:"key"`
+	Name    string   `json:"name"`
+	Command string   `json:"command"`
+	Args    []string `json:"args"`
 }
 
 // HarnessACPRecord exposes one harness ACP entry.
@@ -259,15 +271,22 @@ func cloneACP(acp *HarnessACP) *HarnessACP {
 	}
 	out := *acp
 	out.Sources = append([]string{}, acp.Sources...)
-	if acp.Launches != nil {
-		out.Launches = make([]HarnessACPLaunch, len(acp.Launches))
-		for i, launch := range acp.Launches {
-			out.Launches[i] = launch
-			out.Launches[i].Args = append([]string{}, launch.Args...)
-			out.Launches[i].Platforms = append([]string(nil), launch.Platforms...)
-		}
-	}
+	out.Launches = cloneACPLaunches(acp.Launches)
+	out.InstalledLaunches = cloneACPLaunches(acp.InstalledLaunches)
 	return &out
+}
+
+func cloneACPLaunches(launches []HarnessACPLaunch) []HarnessACPLaunch {
+	if launches == nil {
+		return nil
+	}
+	out := make([]HarnessACPLaunch, len(launches))
+	for i, launch := range launches {
+		out[i] = launch
+		out[i].Args = append([]string{}, launch.Args...)
+		out[i].Platforms = append([]string(nil), launch.Platforms...)
+	}
+	return out
 }
 
 func cloneHarnessACPRecord(h HarnessDefinition) HarnessACPRecord {
@@ -437,7 +456,7 @@ func CheckHarness(input string, options CheckOptions) (HarnessCheckResult, error
 
 	baseEnv := withDefaults(options.Env, options.CWD)
 	env := resolveHarnessRoots(harness, baseEnv)
-	executablePath := findExecutable(harness.Executables, env)
+	executablePath := findExecutable(harness.Executables, env, false)
 	paths := resolvePaths(harness, env)
 	matchedPaths := make([]ResolvedHarnessPath, 0, len(paths))
 	reasons := make([]string, 0)
@@ -495,6 +514,53 @@ func DetectInstalledHarnesses(options CheckOptions) ([]HarnessCheckResult, error
 		}
 	}
 	return installed, nil
+}
+
+// DetectInstalledACPLaunches lists the ACP agents that can be started from
+// binaries already installed. An entry is returned when its ACP status is
+// supported, it does not delegate to an adapter, and the command of its launch
+// for the current platform resolves to an absolute executable path. It uses
+// installedLaunches when present, otherwise launches that do not use a package
+// runner. It never executes anything.
+func DetectInstalledACPLaunches(options CheckOptions) ([]InstalledACPLaunch, error) {
+	loadMatrix()
+	env := withDefaults(options.Env, options.CWD)
+	out := []InstalledACPLaunch{}
+	for _, harness := range matrix.Harnesses {
+		acp := harness.ACP
+		if acp == nil || acp.Status != "supported" || acp.Adapter != "" {
+			continue
+		}
+		launches := acp.InstalledLaunches
+		if launches == nil {
+			launches = acp.Launches
+		}
+		for _, launch := range launches {
+			if !platformMatches(launch.Platforms) || isPackageRunner(launch) {
+				continue
+			}
+			if command := findExecutable([]string{launch.Command}, env, true); command != nil {
+				out = append(out, InstalledACPLaunch{
+					Key:     harness.Key,
+					Name:    harness.Name,
+					Command: *command,
+					Args:    append([]string{}, launch.Args...),
+				})
+			}
+			break
+		}
+	}
+	return out, nil
+}
+
+func isPackageRunner(launch HarnessACPLaunch) bool {
+	switch launch.Command {
+	case "npx", "bunx", "uvx":
+		return true
+	case "pnpm":
+		return len(launch.Args) > 0 && launch.Args[0] == "dlx"
+	}
+	return false
 }
 
 // withDefaults computes the universal base-variable map (HOME, XDG_*, TMPDIR, CWD)
@@ -722,7 +788,9 @@ func resolvePaths(harness HarnessDefinition, env map[string]string) []ResolvedHa
 	return out
 }
 
-func findExecutable(executables []string, env map[string]string) *string {
+// findExecutable searches PATH for the first matching executable. With
+// absoluteOnly, relative PATH entries are ignored.
+func findExecutable(executables []string, env map[string]string, absoluteOnly bool) *string {
 	if len(executables) == 0 {
 		return nil
 	}
@@ -742,7 +810,7 @@ func findExecutable(executables []string, env map[string]string) *string {
 
 	for _, executable := range executables {
 		for _, dir := range pathParts {
-			if dir == "" {
+			if dir == "" || (absoluteOnly && !filepath.IsAbs(dir)) {
 				continue
 			}
 			for _, ext := range exts {

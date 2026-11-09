@@ -3,7 +3,9 @@ package harnessdetect
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -115,5 +117,35 @@ func TestACPSyntheticPublicFlows(t *testing.T) {
 	encoded, err := json.Marshal(support)
 	if err != nil || strings.Contains(string(encoded), `"acp"`) {
 		t.Fatal("support getter gained ACP")
+	}
+}
+
+func TestDetectInstalledACPLaunchesIgnoresRelativePathEntries(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX executable fixtures")
+	}
+	root := t.TempDir()
+	for _, dir := range []string{"relative-bin", "absolute-bin"} {
+		if err := os.MkdirAll(filepath.Join(root, dir), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(root, dir, "gemini"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Chdir(root)
+
+	only, err := DetectInstalledACPLaunches(CheckOptions{Env: map[string]string{"HOME": root, "PATH": "relative-bin"}})
+	if err != nil || len(only) != 0 {
+		t.Fatalf("relative PATH entry returned: %#v, %v", only, err)
+	}
+
+	both, err := DetectInstalledACPLaunches(CheckOptions{Env: map[string]string{
+		"HOME": root,
+		"PATH": strings.Join([]string{"relative-bin", filepath.Join(root, "absolute-bin")}, string(filepath.ListSeparator)),
+	}})
+	want := []InstalledACPLaunch{{Key: "gemini-cli", Name: "Gemini CLI", Command: filepath.Join(root, "absolute-bin", "gemini"), Args: []string{"--acp"}}}
+	if err != nil || !reflect.DeepEqual(both, want) {
+		t.Fatalf("got %#v, %v; want %#v", both, err, want)
 	}
 }

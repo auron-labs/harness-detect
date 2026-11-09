@@ -1197,12 +1197,21 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "gemini",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
         "sources": [
           "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
-          "https://github.com/google-gemini/gemini-cli"
+          "https://github.com/google-gemini/gemini-cli",
+          "https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/acp-mode.md"
         ],
         "confidence": "official",
-        "notes": "Checked 2026-11-05. Requires Node.js/npm to run the documented npx package route. The current actionable launch evidence is the package-runner invocation from the ACP registry; no native installed-executable ACP command or minimum version was confirmed."
+        "notes": "Checked 2026-11-05. The npx route requires Node.js/npm. An installed gemini executable serves ACP with --acp, as documented in the Gemini CLI ACP mode guide. No minimum version was confirmed."
       }
     },
     {
@@ -1978,10 +1987,19 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "cline",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
         "sources": [
           "https://cline.bot/cli",
           "https://docs.cline.bot/",
-          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json"
+          "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
+          "https://docs.cline.bot/cline-cli/acp-editor-integrations"
         ],
         "confidence": "official",
         "notes": "Checked 2026-11-05. Requires Node.js 22+ according to Cline's official CLI page. The documented ACP-registry package-runner route uses npm/npx. The ACP launch was verified through the official ACP registry entry; the Cline CLI page itself describes CLI usage but does not document the ACP flag."
@@ -3152,6 +3170,14 @@
             "args": [
               "-y",
               "@github/copilot@1.0.105",
+              "--acp"
+            ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "copilot",
+            "args": [
               "--acp"
             ]
           }
@@ -6604,9 +6630,18 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "auggie",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
         "sources": [
           "https://github.com/agentclientprotocol/registry/blob/main/auggie/agent.json",
-          "https://docs.augmentcode.com/cli/overview"
+          "https://docs.augmentcode.com/cli/overview",
+          "https://docs.augmentcode.com/cli/acp"
         ],
         "confidence": "official",
         "notes": "Checked 2026-11-05. Node.js/npm package-runner environment. Auggie authentication on the host. The ACP Registry specifies `AUGMENT_DISABLE_AUTO_UPDATE=1` for its npx distribution. Registry id is `auggie`, which maps to the canonical Auggie CLI product identity."
@@ -11029,10 +11064,19 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "qwen",
+            "args": [
+              "--acp"
+            ]
+          }
+        ],
         "sources": [
           "https://raw.githubusercontent.com/agentclientprotocol/registry/main/qwen-code/agent.json",
           "https://github.com/QwenLM/qwen-code",
-          "https://qwenlm.github.io/qwen-code-docs/en/users/overview"
+          "https://qwenlm.github.io/qwen-code-docs/en/users/overview",
+          "https://github.com/QwenLM/qwen-code/blob/main/docs/users/integration-zed.md"
         ],
         "confidence": "official",
         "notes": "Checked 2026-11-05. Node.js/npm with npx for the ACP registry's package-runner distribution. A configured Qwen Code model/provider account or credentials are needed to use a model; ACP itself does not supply credentials. The ACP registry entry supplies a package-runner launch, so this report preserves that exact distribution route."
@@ -15423,6 +15467,12 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "codex-acp",
+            "args": []
+          }
+        ],
         "sources": [
           "https://github.com/agentclientprotocol/codex-acp",
           "https://cdn.agentclientprotocol.com/registry/v1/latest/registry.json",
@@ -15538,6 +15588,12 @@
               "-y",
               "@agentclientprotocol/claude-agent-acp"
             ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "claude-agent-acp",
+            "args": []
           }
         ],
         "sources": [
@@ -15768,6 +15824,17 @@
               "-y",
               "amp-acp"
             ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "amp-acp",
+            "args": [],
             "platforms": [
               "darwin",
               "linux",
@@ -16025,6 +16092,12 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "letta-acp",
+            "args": []
+          }
+        ],
         "sources": [
           "https://github.com/letta-ai/letta-acp/blob/main/README.md",
           "https://github.com/letta-ai/letta-code",
@@ -16142,6 +16215,12 @@
             ]
           }
         ],
+        "installedLaunches": [
+          {
+            "command": "pi-acp",
+            "args": []
+          }
+        ],
         "sources": [
           "https://github.com/svkozak/pi-acp",
           "https://github.com/agentclientprotocol/registry/blob/main/pi-acp/agent.json",
@@ -16255,6 +16334,12 @@
               "-y",
               "https://github.com/tariqwest/commandcode-acp"
             ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "commandcode-acp",
+            "args": []
           }
         ],
         "sources": [

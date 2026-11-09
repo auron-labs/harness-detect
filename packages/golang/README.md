@@ -48,6 +48,7 @@ A harness counts as installed when either of these is true:
 - `GetHarnessMatrix()` is a compatibility alias for `GetRawHarnessData()`.
 - `ListHarnesses()` returns the registry's `harnesses` slice.
 - `GetHarnessACP` returns ACP metadata for one harness key or alias.
+- `DetectInstalledACPLaunches(options)` lists ACP agents launchable from installed binaries, as absolute `Command` paths with `Args`.
 - `ListHarnessACP` returns ACP metadata for every harness; absent metadata is `unknown`.
 - `GetHarnessSupport` returns the support metadata for one harness key or alias.
 - `ListHarnessSupport()` returns support metadata for every harness.

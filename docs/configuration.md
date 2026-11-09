@@ -79,6 +79,7 @@ in stored definitions. Raw/list/detection JSON surfaces preserve omission; Pytho
 | --- | --- | --- | --- |
 | `status` | string | yes | `supported`, `unsupported`, or `unknown`. |
 | `launches` | object[] | conditional | Nonempty list of local stdio recipes: nonblank `command`, required `args` string array, optional `platforms`. |
+| `installedLaunches` | object[] | no | Same shape and platform rules as `launches`, for starting the agent from a binary already on `PATH`. Requires `launches`; never a package runner (`npx`, `bunx`, `uvx`, `pnpm dlx`). |
 | `adapter` | string | conditional | Exact registry key of a different entry with supported ACP and direct `launches`. |
 | `sources` | string[] | yes | HTTPS evidence URLs; nonempty for `supported` and `unsupported`. |
 | `confidence` | string | yes | Same values as support confidence; cannot be `unknown` for a known status. |
@@ -101,6 +102,23 @@ are multiple recipes, each must specify platforms, with no overlap between
 recipes. Consumers select the matching platform; the list is not an ordered
 fallback chain. Launches describe local stdio only. These APIs
 do not execute commands, install adapters, authenticate, or probe ACP at runtime.
+
+`installedLaunches` lets an entry describe both routes: `launches` keeps the
+package-runner recipe, while `installedLaunches` starts the binary a user already
+has. Populate it only where upstream documentation or the package manifest
+confirms that binary serves ACP. Entries without that evidence are not returned
+by `detectInstalledAcpLaunches` unless their `launches` already avoid package
+runners.
+
+```json
+{
+  "status": "supported",
+  "launches": [{ "command": "npx", "args": ["-y", "@example/agent", "--acp"] }],
+  "installedLaunches": [{ "command": "example-agent", "args": ["--acp"] }],
+  "sources": ["https://example.com/acp"],
+  "confidence": "official"
+}
+```
 
 Synthetic direct-launch example:
 

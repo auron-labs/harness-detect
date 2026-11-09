@@ -66,6 +66,12 @@
       "go": "ListHarnessACP",
       "rust": "list_harness_acp",
       "python": "list_harness_acp"
+    },
+    {
+      "typescript": "detectInstalledAcpLaunches",
+      "go": "DetectInstalledACPLaunches",
+      "rust": "detect_installed_acp_launches",
+      "python": "detect_installed_acp_launches"
     }
   ],
   "coreFields": {

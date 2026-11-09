@@ -56,6 +56,7 @@ There is no root `Cargo.toml`; always `cd` into `packages/rust` first.
   - `list_harness_support()`
   - `get_harness_acp(input)`
   - `list_harness_acp()`
+  - `detect_installed_acp_launches()`
   - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
   - `detect_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
   - `detect_installed_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`

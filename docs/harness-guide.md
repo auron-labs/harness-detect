@@ -224,11 +224,22 @@ console.log({ host, owner, launch, installations: definition.installations, env:
 JS
 ```
 
+To list the agents that can be launched on a machine without fetching packages,
+use `detectInstalledAcpLaunches` (TypeScript), `DetectInstalledACPLaunches`
+(Go), or `detect_installed_acp_launches` (Rust and Python). It returns absolute
+command paths and argv for supported, non-adapter entries whose launch for the
+current platform resolves on `PATH`. See [the API reference](api.md#detectinstalledacplaunchesoptions).
+
 Interpret and maintain the records as follows:
 
 - Check `status` before using a launch. `supported` has either a nonempty
   `launches` list or one `adapter` key. `unknown` and `unsupported` have neither.
   No matching platform means no recorded launch for that platform.
+- Add `installedLaunches` when upstream documentation or the package manifest
+  confirms that a binary already on `PATH` serves ACP. It uses the same shape and
+  platform rules as `launches`, must not use a package runner, and requires
+  `launches`. Without it, only `launches` that avoid package runners are
+  returned by the installed-launch API.
 - Follow an adapter by its exact registry key once. Adapter chains are invalid.
   Examples are `codex` → `codex-acp` and `claude-code` → `claude-agent-acp`.
   The target owns launch commands and installation requirements; the host's

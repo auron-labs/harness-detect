@@ -37,6 +37,7 @@ validation.
   - `ListHarnessSupport()`
   - `GetHarnessACP(input)`
   - `ListHarnessACP()`
+  - `DetectInstalledACPLaunches()`
   - `CheckHarness()`
   - `DetectHarnesses()`
   - `DetectInstalledHarnesses()`

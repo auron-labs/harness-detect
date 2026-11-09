@@ -18,6 +18,7 @@ var (
 	_ func(string, harnessdetect.CheckOptions) (harnessdetect.HarnessCheckResult, error) = harnessdetect.CheckHarness
 	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)       = harnessdetect.DetectHarnesses
 	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)       = harnessdetect.DetectInstalledHarnesses
+	_ func(harnessdetect.CheckOptions) ([]harnessdetect.InstalledACPLaunch, error)       = harnessdetect.DetectInstalledACPLaunches
 
 	_ = harnessdetect.HarnessEnvVar{Name: "NAME", Description: "desc"}
 	_ = harnessdetect.HarnessPathSpec{ID: "id", Category: "config", Kind: "file", Template: "${HOME}/file", Platforms: []string{"darwin"}}

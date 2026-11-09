@@ -112,6 +112,14 @@ pub struct HarnessAcp {
     pub status: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub launches: Vec<HarnessAcpLaunch>,
+    /// Launches that start the agent from a binary already on `PATH`; never a
+    /// package runner.
+    #[serde(
+        default,
+        rename = "installedLaunches",
+        skip_serializing_if = "Vec::is_empty"
+    )]
+    pub installed_launches: Vec<HarnessAcpLaunch>,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub adapter: String,
     pub sources: Vec<String>,
@@ -125,6 +133,7 @@ impl Default for HarnessAcp {
         Self {
             status: "unknown".into(),
             launches: vec![],
+            installed_launches: vec![],
             adapter: String::new(),
             sources: vec![],
             confidence: "unknown".into(),
@@ -139,6 +148,16 @@ pub struct HarnessAcpRecord {
     pub key: String,
     pub name: String,
     pub acp: HarnessAcp,
+}
+
+/// A runnable ACP launch for an installed harness.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct InstalledAcpLaunch {
+    pub key: String,
+    pub name: String,
+    /// Absolute path of the resolved executable.
+    pub command: String,
+    pub args: Vec<String>,
 }
 
 /// A derived template variable declared by a harness.
@@ -339,7 +358,7 @@ pub fn check_harness(
 
     let base_env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
     let env = resolve_harness_roots(&harness, &base_env);
-    let executable_path = find_executable(&harness.executables, &env);
+    let executable_path = find_executable(&harness.executables, &env, false);
     let paths = resolve_paths(&harness, &env);
     let matched_paths: Vec<ResolvedHarnessPath> =
         paths.iter().filter(|p| p.exists).cloned().collect();
@@ -389,6 +408,57 @@ pub fn detect_installed_harnesses(
 // ---------------------------------------------------------------------------
 // Internal: lookup
 // ---------------------------------------------------------------------------
+
+/// Lists the ACP agents that can be started from binaries already installed.
+///
+/// An entry is returned when its ACP status is `supported`, it does not
+/// delegate to an `adapter`, and the command of its launch for the current
+/// platform resolves to an absolute executable path. Uses `installed_launches`
+/// when present, otherwise `launches` that do not use a package runner. Nothing
+/// is executed.
+pub fn detect_installed_acp_launches(options: CheckOptions) -> Vec<InstalledAcpLaunch> {
+    let env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
+    let mut results = Vec::new();
+
+    for harness in &matrix().harnesses {
+        let Some(acp) = harness.acp.as_ref() else {
+            continue;
+        };
+        if acp.status != "supported" || !acp.adapter.is_empty() {
+            continue;
+        }
+
+        let launches: Vec<&HarnessAcpLaunch> = if acp.installed_launches.is_empty() {
+            acp.launches
+                .iter()
+                .filter(|l| !is_package_runner(l))
+                .collect()
+        } else {
+            acp.installed_launches.iter().collect()
+        };
+        let Some(launch) = launches
+            .into_iter()
+            .find(|l| platform_matches(&l.platforms))
+        else {
+            continue;
+        };
+        if let Some(command) = find_executable(std::slice::from_ref(&launch.command), &env, true) {
+            results.push(InstalledAcpLaunch {
+                key: harness.key.clone(),
+                name: harness.name.clone(),
+                command,
+                args: launch.args.clone(),
+            });
+        }
+    }
+
+    results
+}
+
+fn is_package_runner(launch: &HarnessAcpLaunch) -> bool {
+    matches!(launch.command.as_str(), "npx" | "bunx" | "uvx")
+        || (launch.command == "pnpm" && launch.args.first().is_some_and(|a| a == "dlx"))
+}
 
 fn find_harness_definition(input: &str) -> Option<HarnessDefinition> {
     let key = input.trim().to_lowercase();
@@ -744,7 +814,13 @@ fn resolve_paths(
         .collect()
 }
 
-fn find_executable(executables: &[String], env: &HashMap<String, String>) -> Option<String> {
+/// Searches `PATH` for the first matching executable. With `absolute_only`,
+/// relative `PATH` entries are ignored.
+fn find_executable(
+    executables: &[String],
+    env: &HashMap<String, String>,
+    absolute_only: bool,
+) -> Option<String> {
     if executables.is_empty() {
         return None;
     }
@@ -753,7 +829,7 @@ fn find_executable(executables: &[String], env: &HashMap<String, String>) -> Opt
     let delimiter = if cfg!(windows) { ';' } else { ':' };
     let path_parts: Vec<&str> = path_value
         .split(delimiter)
-        .filter(|s| !s.is_empty())
+        .filter(|s| !s.is_empty() && (!absolute_only || Path::new(s).is_absolute()))
         .collect();
 
     let exts: Vec<String> = if cfg!(windows) {

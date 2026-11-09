@@ -38,6 +38,7 @@ See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command 
   - `listHarnessSupport()`
   - `getHarnessAcp(input)`
   - `listHarnessAcp()`
+  - `detectInstalledAcpLaunches()`
   - `checkHarness()`
   - `detectHarnesses()`
   - `detectInstalledHarnesses()`

@@ -147,13 +147,14 @@ function resolvePaths(harness, env) {
     });
 }
 
-function findExecutable(executables, env) {
+// With absoluteOnly, relative PATH entries are ignored.
+function findExecutable(executables, env, absoluteOnly = false) {
   if (!executables.length) {
     return null;
   }
 
   const pathValue = env.PATH || "";
-  const pathParts = pathValue.split(path.delimiter).filter(Boolean);
+  const pathParts = pathValue.split(path.delimiter).filter((dir) => dir && (!absoluteOnly || path.isAbsolute(dir)));
   const exts = process.platform === "win32"
     ? (env.PATHEXT || ".EXE;.CMD;.BAT;.COM").split(";")
     : [""];
@@ -282,4 +283,36 @@ export function detectHarnesses(options = {}) {
 
 export function detectInstalledHarnesses(options = {}) {
   return detectHarnesses(options).filter((result) => result.installed);
+}
+
+function isPackageRunner({ command, args }) {
+  return ["npx", "bunx", "uvx"].includes(command) || (command === "pnpm" && args[0] === "dlx");
+}
+
+/**
+ * Lists ACP agents that can be started from binaries already installed: the
+ * ACP status is supported, the entry does not delegate to an adapter, and the
+ * command of its launch for this platform resolves to an absolute executable.
+ * Uses installedLaunches when present, otherwise launches that do not use a
+ * package runner. Nothing is executed.
+ */
+export function detectInstalledAcpLaunches(options = {}) {
+  const env = withDefaults(options.env, options.cwd);
+  const results = [];
+
+  for (const harness of matrix.harnesses) {
+    const acp = harness.acp;
+    if (acp?.status !== "supported" || acp.adapter !== undefined) {
+      continue;
+    }
+
+    const launches = acp.installedLaunches ?? acp.launches.filter((launch) => !isPackageRunner(launch));
+    const launch = launches.find((entry) => platformMatches(entry.platforms));
+    const command = launch && findExecutable([launch.command], env, true);
+    if (command) {
+      results.push({ key: harness.key, name: harness.name, command, args: [...launch.args] });
+    }
+  }
+
+  return results;
 }

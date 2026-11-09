@@ -77,6 +77,11 @@ Every package must expose the same ten public operations already locked by
    - Go: `ListHarnessACP`
    - Rust: `list_harness_acp`
    - Python: `list_harness_acp`
+11. list ACP agents that can be launched from installed binaries
+   - TypeScript: `detectInstalledAcpLaunches`
+   - Go: `DetectInstalledACPLaunches`
+   - Rust: `detect_installed_acp_launches`
+   - Python: `detect_installed_acp_launches`
 
 Public naming may be idiomatic per language, but the operation set and behavior
  must stay equivalent. Prefer a clean aligned cross-language API over adding

@@ -74,6 +74,16 @@ type normalizedDetectResult struct {
 	Results        []normalizedCheckResult `json:"results"`
 }
 
+type normalizedInstalledACPLaunch struct {
+	Key     string   `json:"key"`
+	Command *string  `json:"command"`
+	Args    []string `json:"args"`
+}
+
+type normalizedInstalledACPLaunches struct {
+	Launches []normalizedInstalledACPLaunch `json:"launches"`
+}
+
 type normalizedSupportPath struct {
 	ID          string   `json:"id"`
 	Kind        string   `json:"kind"`
@@ -269,6 +279,13 @@ func runCase(rawCase fixtureCase, roots sandboxRoots) (snapshotCase, error) {
 		return result, nil
 	case "listHarnessAcp":
 		result.Result = harnessdetect.ListHarnessACP()
+		return result, nil
+	case "detectInstalledAcpLaunches":
+		actual, err := harnessdetect.DetectInstalledACPLaunches(options)
+		if err != nil {
+			return snapshotCase{}, fmt.Errorf("detectInstalledAcpLaunches: %w", err)
+		}
+		result.Result = normalizeInstalledACPLaunches(actual, roots)
 		return result, nil
 	case "getHarnessSupport":
 		actual, err := harnessdetect.GetHarnessSupport(c.Input)
@@ -544,6 +561,18 @@ func normalizeDetectResult(results []harnessdetect.HarnessCheckResult, roots san
 		InstalledKeys:  installedKeys,
 		Results:        normalizedResults,
 	}
+}
+
+func normalizeInstalledACPLaunches(launches []harnessdetect.InstalledACPLaunch, roots sandboxRoots) *normalizedInstalledACPLaunches {
+	out := make([]normalizedInstalledACPLaunch, 0, len(launches))
+	for _, launch := range launches {
+		out = append(out, normalizedInstalledACPLaunch{
+			Key:     launch.Key,
+			Command: normalizePathValue(&launch.Command, roots),
+			Args:    launch.Args,
+		})
+	}
+	return &normalizedInstalledACPLaunches{Launches: out}
 }
 
 func normalizeSupportPath(path harnessdetect.HarnessSupportPath) normalizedSupportPath {
