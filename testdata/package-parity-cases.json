@@ -213,10 +213,7 @@
         "key": "claude-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-root-env",
-          "settings"
-        ],
+        "matchedPathIds": ["config-root-env", "settings"],
         "pathAssertions": [
           {
             "id": "settings",
@@ -230,10 +227,7 @@
       "id": "check-executable-only-install-codex",
       "operation": "checkHarness",
       "input": "codex",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -327,10 +321,7 @@
         }
       ],
       "id": "check-executable-neovate-code-neovate",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "neovate-code",
         "installed": true,
@@ -403,10 +394,7 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -430,10 +418,7 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini-swe-agent",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -506,10 +491,7 @@
         }
       ],
       "id": "check-executable-deepagents-code-deepagents-code",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -533,10 +515,7 @@
         }
       ],
       "id": "check-executable-deepagents-code-dcode",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -609,10 +588,7 @@
         }
       ],
       "id": "check-executable-shai-shai",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "shai",
         "installed": true,
@@ -685,10 +661,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -712,10 +685,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-cbc",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -739,10 +709,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy-code",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -802,10 +769,7 @@
         "key": "neovate-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-config",
-          "project-dir"
-        ],
+        "matchedPathIds": ["project-config", "project-dir"],
         "pathAssertions": [
           {
             "id": "project-config",
@@ -836,10 +800,7 @@
         "key": "deepagents-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config",
-          "config-dir"
-        ],
+        "matchedPathIds": ["config", "config-dir"],
         "pathAssertions": [
           {
             "id": "config",
@@ -870,10 +831,7 @@
         "key": "shai",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "auth-config",
-          "config-dir"
-        ],
+        "matchedPathIds": ["auth-config", "config-dir"],
         "pathAssertions": [
           {
             "id": "auth-config",
@@ -887,9 +845,7 @@
       "id": "check-mini-config-linux-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -907,10 +863,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-linux",
-          "config-linux"
-        ],
+        "matchedPathIds": ["config-dir-linux", "config-linux"],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -924,9 +877,7 @@
       "id": "check-mini-config-linux-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -945,10 +896,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-linux",
-          "config-linux"
-        ],
+        "matchedPathIds": ["config-dir-linux", "config-linux"],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -962,9 +910,7 @@
       "id": "check-mini-config-darwin-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -982,10 +928,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-darwin",
-          "config-darwin"
-        ],
+        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -999,9 +942,7 @@
       "id": "check-mini-config-darwin-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1020,10 +961,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-darwin",
-          "config-darwin"
-        ],
+        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -1037,9 +975,7 @@
       "id": "check-mini-config-win32-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1057,10 +993,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-win32",
-          "config-win32"
-        ],
+        "matchedPathIds": ["config-dir-win32", "config-win32"],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -1074,9 +1007,7 @@
       "id": "check-mini-config-win32-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1095,10 +1026,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-win32",
-          "config-win32"
-        ],
+        "matchedPathIds": ["config-dir-win32", "config-win32"],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -1181,19 +1109,13 @@
         "executablePath": "${BIN}/perch",
         "matchedPathIds": []
       },
-      "platforms": [
-        "darwin",
-        "linux"
-      ]
+      "platforms": ["darwin", "linux"]
     },
     {
       "id": "check-path-only-devin-user-mcp",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1209,9 +1131,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp"
-        ],
+        "matchedPathIds": ["user-mcp"],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -1225,10 +1145,7 @@
       "id": "check-path-only-devin-user-mcp-xdg",
       "operation": "checkHarness",
       "input": "devin-cli",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1245,9 +1162,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp"
-        ],
+        "matchedPathIds": ["user-mcp"],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -1261,9 +1176,7 @@
       "id": "check-path-only-devin-user-mcp-windows",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1280,9 +1193,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp-windows"
-        ],
+        "matchedPathIds": ["user-mcp-windows"],
         "pathAssertions": [
           {
             "id": "user-mcp-windows",
@@ -1311,9 +1222,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp"
-        ],
+        "matchedPathIds": ["project-mcp"],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -1342,9 +1251,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp-local"
-        ],
+        "matchedPathIds": ["project-mcp-local"],
         "pathAssertions": [
           {
             "id": "project-mcp-local",
@@ -1373,9 +1280,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-mcp"
-        ],
+        "matchedPathIds": ["global-mcp"],
         "pathAssertions": [
           {
             "id": "global-mcp",
@@ -1404,9 +1309,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-manual"
-        ],
+        "matchedPathIds": ["global-manual"],
         "pathAssertions": [
           {
             "id": "global-manual",
@@ -1435,9 +1338,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp"
-        ],
+        "matchedPathIds": ["project-mcp"],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -1466,9 +1367,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-manual"
-        ],
+        "matchedPathIds": ["project-manual"],
         "pathAssertions": [
           {
             "id": "project-manual",
@@ -1497,9 +1396,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-rules"
-        ],
+        "matchedPathIds": ["project-rules"],
         "pathAssertions": [
           {
             "id": "project-rules",
@@ -1528,9 +1425,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-memory"
-        ],
+        "matchedPathIds": ["project-memory"],
         "pathAssertions": [
           {
             "id": "project-memory",
@@ -1614,10 +1509,7 @@
         "executablePath": "${BIN}/prime-agent",
         "matchedPathIds": []
       },
-      "platforms": [
-        "darwin",
-        "linux"
-      ]
+      "platforms": ["darwin", "linux"]
     },
     {
       "id": "check-path-only-prime-agent-global-settings",
@@ -1625,27 +1517,24 @@
       "input": "prime-agent",
       "cwd": "${CWD}",
       "env": {
-        "HOME": "${HOME}",
+        "HOME": "${TMP}/home-prime-global",
         "PATH": ""
       },
       "setup": [
         {
           "type": "file",
-          "path": "${HOME}/.prime/agent/settings.json"
+          "path": "${TMP}/home-prime-global/.prime/agent/settings.json"
         }
       ],
       "expect": {
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "root",
-          "global-settings"
-        ],
+        "matchedPathIds": ["global-settings", "root"],
         "pathAssertions": [
           {
             "id": "global-settings",
-            "path": "${HOME}/.prime/agent/settings.json",
+            "path": "${TMP}/home-prime-global/.prime/agent/settings.json",
             "exists": true
           }
         ]
@@ -1671,10 +1560,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "root",
-          "global-settings"
-        ],
+        "matchedPathIds": ["global-settings", "root"],
         "pathAssertions": [
           {
             "id": "global-settings",
@@ -1703,9 +1589,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-settings"
-        ],
+        "matchedPathIds": ["project-settings"],
         "pathAssertions": [
           {
             "id": "project-settings",
@@ -1736,9 +1620,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "sessions"
-        ],
+        "matchedPathIds": ["sessions"],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -1768,9 +1650,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "sessions"
-        ],
+        "matchedPathIds": ["sessions"],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -1794,10 +1674,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1821,10 +1698,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1848,10 +1722,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
