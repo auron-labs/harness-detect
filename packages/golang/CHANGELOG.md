@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/auron-labs/harness-detect/compare/packages/golang/v0.3.0...packages/golang/v0.4.0) (2026-11-09)
+
+
+### Features
+
+* list runnable ACP launches for installed harnesses ([4a25c8f](https://github.com/auron-labs/harness-detect/commit/4a25c8f9917693bb6dee8ae80eae9966d7afd06c))
+* list runnable ACP launches for installed harnesses ([d88b63e](https://github.com/auron-labs/harness-detect/commit/d88b63ea3bdd53b67e42350f75756b978eec9e16)), closes [#129](https://github.com/auron-labs/harness-detect/issues/129)
+
 ## [0.3.0](https://github.com/auron-labs/harness-detect/compare/packages/golang/v0.2.1...packages/golang/v0.3.0) (2026-11-09)
 
 
