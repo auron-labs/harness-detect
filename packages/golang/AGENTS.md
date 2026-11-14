@@ -37,6 +37,9 @@ validation.
   - `ListHarnessSupport()`
   - `GetHarnessACP(input)`
   - `ListHarnessACP()`
+  - `GetHarnessMCP(input)`
+  - `ListHarnessMCP()`
+  - `TranslateMCPJSON(input, mcpJSON, options)`
   - `DetectInstalledACPLaunches()`
   - `CheckHarness()`
   - `DetectHarnesses()`
@@ -84,3 +87,11 @@ installation detection are independent.
 
 See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
 for examples, platform selection, evidence rules, and source-only adapters.
+
+## MCP metadata and translation
+
+Every harness has required `mcp` metadata (see the root `AGENTS.md`). The
+`.mcp.json` translator is generic: it only interprets the registry's
+`mcp.serverFormat`, so keep it free of harness-specific branches. Its skip
+reasons, error messages, and output must stay identical across packages; the
+`translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.

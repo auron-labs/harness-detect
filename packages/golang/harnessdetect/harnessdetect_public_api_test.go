@@ -8,24 +8,27 @@ import (
 )
 
 var (
-	_ func(string) (harnessdetect.HarnessACPRecord, error)                               = harnessdetect.GetHarnessACP
-	_ func() []harnessdetect.HarnessACPRecord                                            = harnessdetect.ListHarnessACP
-	_ func() harnessdetect.HarnessMatrix                                                 = harnessdetect.GetRawHarnessData
-	_ func() harnessdetect.HarnessMatrix                                                 = harnessdetect.GetHarnessMatrix
-	_ func() []harnessdetect.HarnessDefinition                                           = harnessdetect.ListHarnesses
-	_ func(string) (harnessdetect.HarnessSupportRecord, error)                           = harnessdetect.GetHarnessSupport
-	_ func() []harnessdetect.HarnessSupportRecord                                        = harnessdetect.ListHarnessSupport
-	_ func(string, harnessdetect.CheckOptions) (harnessdetect.HarnessCheckResult, error) = harnessdetect.CheckHarness
-	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)       = harnessdetect.DetectHarnesses
-	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)       = harnessdetect.DetectInstalledHarnesses
-	_ func(harnessdetect.CheckOptions) ([]harnessdetect.InstalledACPLaunch, error)       = harnessdetect.DetectInstalledACPLaunches
+	_ func(string) (harnessdetect.HarnessACPRecord, error)                                          = harnessdetect.GetHarnessACP
+	_ func() []harnessdetect.HarnessACPRecord                                                       = harnessdetect.ListHarnessACP
+	_ func() harnessdetect.HarnessMatrix                                                            = harnessdetect.GetRawHarnessData
+	_ func() harnessdetect.HarnessMatrix                                                            = harnessdetect.GetHarnessMatrix
+	_ func() []harnessdetect.HarnessDefinition                                                      = harnessdetect.ListHarnesses
+	_ func(string) (harnessdetect.HarnessSupportRecord, error)                                      = harnessdetect.GetHarnessSupport
+	_ func() []harnessdetect.HarnessSupportRecord                                                   = harnessdetect.ListHarnessSupport
+	_ func(string, harnessdetect.CheckOptions) (harnessdetect.HarnessCheckResult, error)            = harnessdetect.CheckHarness
+	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)                  = harnessdetect.DetectHarnesses
+	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)                  = harnessdetect.DetectInstalledHarnesses
+	_ func(harnessdetect.CheckOptions) ([]harnessdetect.InstalledACPLaunch, error)                  = harnessdetect.DetectInstalledACPLaunches
+	_ func(string) (harnessdetect.HarnessMCPRecord, error)                                          = harnessdetect.GetHarnessMCP
+	_ func() []harnessdetect.HarnessMCPRecord                                                       = harnessdetect.ListHarnessMCP
+	_ func(string, []byte, harnessdetect.MCPTranslateOptions) (harnessdetect.MCPTranslation, error) = harnessdetect.TranslateMCPJSON
 
 	_ = harnessdetect.HarnessEnvVar{Name: "NAME", Description: "desc"}
 	_ = harnessdetect.HarnessPathSpec{ID: "id", Category: "config", Kind: "file", Template: "${HOME}/file", Platforms: []string{"darwin"}}
 	_ = harnessdetect.HarnessSupportPath{ID: "id", Kind: "file", Template: "${HOME}/file", Platforms: []string{"darwin"}, Description: "desc"}
 	_ = harnessdetect.HarnessSupportScope{Status: "supported", Paths: []harnessdetect.HarnessSupportPath{{ID: "id", Kind: "file", Template: "${HOME}/file"}}, Sources: []string{"https://example.com"}, Confidence: "official", Notes: "note"}
 	_ = harnessdetect.HarnessSupportArea{Global: harnessdetect.HarnessSupportScope{Status: "supported"}, Local: harnessdetect.HarnessSupportScope{Status: "unsupported"}}
-	_ = harnessdetect.HarnessSupport{Config: harnessdetect.HarnessSupportArea{}, Skills: harnessdetect.HarnessSupportArea{}, Commands: harnessdetect.HarnessSupportArea{}, Agents: harnessdetect.HarnessSupportArea{}, DotAgents: harnessdetect.HarnessSupportArea{}}
+	_ = harnessdetect.HarnessSupport{Config: harnessdetect.HarnessSupportArea{}, Skills: harnessdetect.HarnessSupportArea{}, Commands: harnessdetect.HarnessSupportArea{}, Agents: harnessdetect.HarnessSupportArea{}, AgentsSkills: harnessdetect.HarnessSupportArea{}}
 	_ = harnessdetect.HarnessRootDef{Name: "ROOT", Env: "ROOT_ENV", Use: "${ROOT_ENV}", Fallback: "${HOME}/root"}
 	_ = harnessdetect.HarnessDefinition{
 		Key:         "codex",
@@ -135,11 +138,11 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 		"Local":  "local",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessSupport{}), map[string]string{
-		"Config":    "config",
-		"Skills":    "skills",
-		"Commands":  "commands",
-		"Agents":    "agents",
-		"DotAgents": "dotAgents",
+		"Config":       "config",
+		"Skills":       "skills",
+		"Commands":     "commands",
+		"Agents":       "agents",
+		"AgentsSkills": "agentsSkills",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessACPLaunch{}), map[string]string{
 		"Command": "command", "Args": "args", "Platforms": "platforms,omitempty",
@@ -154,15 +157,33 @@ func TestPublicAPIExportedStructJSONTags(t *testing.T) {
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessDefinition{}), map[string]string{
 		"Key":           "key",
 		"Name":          "name",
+		"Version":       "version",
 		"Aliases":       "aliases",
 		"Executables":   "executables",
 		"Paths":         "paths",
 		"Roots":         "roots,omitempty",
 		"Support":       "support",
 		"ACP":           "acp,omitempty",
+		"MCP":           "mcp",
 		"Env":           "env",
 		"Sources":       "sources",
 		"Installations": "installations",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessMCPScope{}), map[string]string{
+		"Status": "status", "Paths": "paths", "Format": "format,omitempty", "KeyPath": "keyPath,omitempty",
+		"Sources": "sources", "Confidence": "confidence", "Notes": "notes,omitempty",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessMCP{}), map[string]string{
+		"Status": "status", "MCPJSON": "mcpJson", "Global": "global", "Local": "local",
+		"ServerFormat": "serverFormat,omitempty", "Sources": "sources", "Confidence": "confidence", "Notes": "notes,omitempty",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessMCPServerFormat{}), map[string]string{
+		"Container": "container", "NameField": "nameField,omitempty", "TypeField": "typeField,omitempty",
+		"Stdio": "stdio", "HTTP": "http,omitempty", "SSE": "sse,omitempty", "Defaults": "defaults,omitempty",
+	})
+	assertJSONTags(t, reflect.TypeOf(harnessdetect.MCPTranslation{}), map[string]string{
+		"Key": "key", "Name": "name", "Scope": "scope", "Format": "format", "KeyPath": "keyPath",
+		"Servers": "servers", "Config": "config", "Skipped": "skipped",
 	})
 	assertJSONTags(t, reflect.TypeOf(harnessdetect.HarnessMatrix{}), map[string]string{
 		"Version":   "version",

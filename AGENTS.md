@@ -65,6 +65,27 @@ ACP-ready, and ACP support does not imply installed.
 See [the ACP lookup and research workflow](docs/harness-guide.md#finding-and-updating-acp-records)
 for an executable lookup example, source-only adapters, and evidence rules.
 
+## Finding MCP records
+
+MCP client metadata lives in each harness's required top-level `mcp` field in
+`packages/data/harnesses.json`: `status` (MCP support), `mcpJson` (reads the
+project-root `.mcp.json` by default), `global`/`local` config files with
+`format` and `keyPath`, and a `serverFormat` describing one native server entry.
+
+| Package | One key or alias | All MCP records | `.mcp.json` → native config |
+| --- | --- | --- | --- |
+| TypeScript | `getHarnessMcp(input)` | `listHarnessMcp()` | `translateMcpJson(input, mcpJson, { scope })` |
+| Go | `GetHarnessMCP(input)` | `ListHarnessMCP()` | `TranslateMCPJSON(input, mcpJSON, options)` |
+| Rust / Python | `get_harness_mcp(input)` | `list_harness_mcp()` | `translate_mcp_json(...)` |
+
+Translation is generic: it interprets `serverFormat`, so new harnesses need no
+code. See [MCP metadata](docs/configuration.md#mcp-metadata-mcp) and
+[the MCP workflow](docs/harness-guide.md#finding-and-updating-mcp-records).
+
+Each harness also records the upstream `version` its data was verified against,
+and `support.agentsSkills` reports discovery of the shared `.agents/skills`
+directory.
+
 ## Monorepo layout
 
 - `packages/data/harnesses.json` — canonical shared registry.
@@ -82,5 +103,6 @@ Boundaries: shared data lives only under `packages/data/`. Each package's own `A
 - **Registry sync is command-driven.** Edit only `packages/data/harnesses.json`, then run `mise run registry:sync`. Do not hand-edit `packages/typescript/data/harnesses.json` or `packages/golang/harnessdetect/data/harnesses.json`.
 - **CI uses read-only registry enforcement.** `mise run registry:check` verifies generated package copies stay byte-for-byte aligned with `packages/data/harnesses.json`.
 - **Docker smoke is unverified.** `bun run smoke:fixtures` (Docker-based) has not been confirmed to run successfully locally. `bun run smoke:fixtures:local` is verified and is what CI uses.
+- **Every public function needs a parity case.** `scripts/check-package-parity.mjs` fails when a function in `testdata/public-api-parity.json` has no case in `testdata/package-parity-cases.json`, and raw-registry cases must reproduce `packages/data/harnesses.json` exactly in every package.
 - **Registry is public API.** Raw-registry APIs, harness-list APIs, and detection results that embed full harness definitions now include required `support` metadata wherever they expose registry harness entries. Prefer the runtime raw-registry APIs over package-local JSON access when documenting package usage.
 - **Pre-publication compatibility policy.** The repo has not been published yet, so prefer a clean aligned API/schema over compatibility-only layers. Keep registry `version: 1` unless internal tooling truly requires a bump.

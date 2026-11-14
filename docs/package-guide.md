@@ -82,6 +82,21 @@ Every package must expose the same ten public operations already locked by
    - Go: `DetectInstalledACPLaunches`
    - Rust: `detect_installed_acp_launches`
    - Python: `detect_installed_acp_launches`
+12. get MCP metadata for one harness by key or alias
+   - TypeScript: `getHarnessMcp`
+   - Go: `GetHarnessMCP`
+   - Rust: `get_harness_mcp`
+   - Python: `get_harness_mcp`
+13. list MCP metadata for every harness
+   - TypeScript: `listHarnessMcp`
+   - Go: `ListHarnessMCP`
+   - Rust: `list_harness_mcp`
+   - Python: `list_harness_mcp`
+14. translate a project `.mcp.json` document into a harness's native MCP config
+   - TypeScript: `translateMcpJson`
+   - Go: `TranslateMCPJSON`
+   - Rust: `translate_mcp_json`
+   - Python: `translate_mcp_json`
 
 Public naming may be idiomatic per language, but the operation set and behavior
  must stay equivalent. Prefer a clean aligned cross-language API over adding
@@ -100,6 +115,7 @@ The package must preserve the shared registry schema and the JSON/result fields
 2. Each harness definition must preserve these fields:
     - `key`
     - `name`
+    - `version`
     - `aliases`
     - `executables`
     - `installations`
@@ -108,6 +124,8 @@ The package must preserve the shared registry schema and the JSON/result fields
     - `env`
     - `sources`
     - `support`
+    - `acp`
+    - `mcp`
  3. Raw-registry, harness-list, and detection-result `harness` surfaces must
     expose `support` anywhere they expose a full harness definition.
  4. `getHarnessSupport`/`GetHarnessSupport` and

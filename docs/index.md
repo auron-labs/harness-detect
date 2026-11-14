@@ -70,7 +70,7 @@ The registry currently covers **67 harnesses**.
 3. [configuration.md](./configuration.md) — how path resolution and env
    overrides work
 4. [support-matrix.md](./support-matrix.md) — how to read global vs local
-   support metadata
+   support metadata, `.agents/skills` discovery, and MCP config locations
 
 **Contributors / registry editors:**
 

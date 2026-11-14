@@ -13,7 +13,7 @@ const SUPPORT_AREAS = [
   { key: 'skills', label: 'skills' },
   { key: 'commands', label: 'commands' },
   { key: 'agents', label: 'agents' },
-  { key: 'dotAgents', label: '`.agents` support' }
+  { key: 'agentsSkills', label: '`.agents/skills`' }
 ];
 const SUPPORT_SCOPES = ['global', 'local'];
 const STATUS_ORDER = ['supported', 'unsupported', 'unknown'];
@@ -219,7 +219,7 @@ function generateSupportMatrix(registry) {
 
   const rowLines = harnesses.map((harness) => {
     const cells = [
-      `\`${harness.key}\` — ${escapeCell(harness.name)}`,
+      `\`${harness.key}\` — ${escapeCell(harness.name)} (${escapeCell(harness.version)})`,
       ...SUPPORT_AREAS.flatMap((area) => SUPPORT_SCOPES.map((scope) => formatLeaf(harness.support[area.key][scope]))),
       formatSummaryCell(harness)
     ];
@@ -227,7 +227,58 @@ function generateSupportMatrix(registry) {
     return `| ${cells.join(' | ')} |`;
   });
 
-  return `${[...headerLines, ...rowLines].join('\n')}\n`;
+  return `${[...headerLines, ...rowLines, '', ...mcpTableLines(harnesses)].join('\n')}\n`;
+}
+
+function formatMcpScope(leaf) {
+  if (leaf.status !== 'supported' || leaf.paths.length === 0) {
+    return leaf.status === 'supported' ? 'supported (no config file)' : leaf.status;
+  }
+  const keyPath = leaf.keyPath.map((segment) => `\`${segment}\``).join(' → ');
+  const paths = leaf.paths.map((entry) => {
+    const platforms = entry.platforms?.length ? ` (${entry.platforms.join(', ')})` : '';
+    return `\`${entry.template}\`${platforms}`;
+  });
+  return escapeCell([...paths, `${leaf.format}: ${keyPath}`].join('<br>'));
+}
+
+function formatServerFormat(mcp) {
+  const format = mcp.serverFormat;
+  if (!format) {
+    return '—';
+  }
+  const transports = ['stdio', 'http', 'sse'].filter((transport) => format[transport]);
+  return escapeCell(`${format.container}; ${transports.join(', ')}`);
+}
+
+function mcpTableLines(harnesses) {
+  const counts = { supported: 0, unsupported: 0, unknown: 0 };
+  const mcpJsonCounts = { supported: 0, unsupported: 0, unknown: 0 };
+  for (const harness of harnesses) {
+    counts[harness.mcp.status] += 1;
+    mcpJsonCounts[harness.mcp.mcpJson] += 1;
+  }
+
+  return [
+    '## MCP',
+    '',
+    `MCP client status: ${formatStatusSummary(counts)}. Project-root \`.mcp.json\`: ${formatStatusSummary(mcpJsonCounts)}. The translation column lists the server container and the transports \`translateMcpJson\` can write.`,
+    '',
+    '| Harness | MCP | `.mcp.json` | global config | local config | translation |',
+    '| --- | --- | --- | --- | --- | --- |',
+    ...harnesses.map((harness) => {
+      const { mcp } = harness;
+      const cells = [
+        `\`${harness.key}\``,
+        mcp.status,
+        mcp.mcpJson,
+        formatMcpScope(mcp.global),
+        formatMcpScope(mcp.local),
+        formatServerFormat(mcp)
+      ];
+      return `| ${cells.join(' | ')} |`;
+    })
+  ];
 }
 
 function main() {
