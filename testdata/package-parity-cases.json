@@ -137,11 +137,6 @@
             "exists": false
           },
           {
-            "id": "sqlite",
-            "path": null,
-            "exists": false
-          },
-          {
             "id": "global-root",
             "path": "${HOME}/.aws/amazonq",
             "exists": false
@@ -213,7 +208,10 @@
         "key": "claude-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-root-env", "settings"],
+        "matchedPathIds": [
+          "config-root-env",
+          "settings"
+        ],
         "pathAssertions": [
           {
             "id": "settings",
@@ -227,7 +225,10 @@
       "id": "check-executable-only-install-codex",
       "operation": "checkHarness",
       "input": "codex",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -321,7 +322,10 @@
         }
       ],
       "id": "check-executable-neovate-code-neovate",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "neovate-code",
         "installed": true,
@@ -394,7 +398,10 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -418,7 +425,10 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini-swe-agent",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -491,7 +501,10 @@
         }
       ],
       "id": "check-executable-deepagents-code-deepagents-code",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -515,7 +528,10 @@
         }
       ],
       "id": "check-executable-deepagents-code-dcode",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -588,7 +604,10 @@
         }
       ],
       "id": "check-executable-shai-shai",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "shai",
         "installed": true,
@@ -661,7 +680,10 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -685,7 +707,10 @@
         }
       ],
       "id": "check-executable-codebuddy-code-cbc",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -709,7 +734,10 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy-code",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -769,7 +797,10 @@
         "key": "neovate-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-config", "project-dir"],
+        "matchedPathIds": [
+          "project-config",
+          "project-dir"
+        ],
         "pathAssertions": [
           {
             "id": "project-config",
@@ -800,7 +831,10 @@
         "key": "deepagents-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config", "config-dir"],
+        "matchedPathIds": [
+          "config",
+          "config-dir"
+        ],
         "pathAssertions": [
           {
             "id": "config",
@@ -831,7 +865,10 @@
         "key": "shai",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["auth-config", "config-dir"],
+        "matchedPathIds": [
+          "auth-config",
+          "config-dir"
+        ],
         "pathAssertions": [
           {
             "id": "auth-config",
@@ -845,7 +882,9 @@
       "id": "check-mini-config-linux-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["linux"],
+      "platforms": [
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -863,7 +902,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-linux", "config-linux"],
+        "matchedPathIds": [
+          "config-dir-linux",
+          "config-linux"
+        ],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -877,7 +919,9 @@
       "id": "check-mini-config-linux-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["linux"],
+      "platforms": [
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -896,7 +940,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-linux", "config-linux"],
+        "matchedPathIds": [
+          "config-dir-linux",
+          "config-linux"
+        ],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -910,7 +957,9 @@
       "id": "check-mini-config-darwin-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["darwin"],
+      "platforms": [
+        "darwin"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -928,7 +977,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
+        "matchedPathIds": [
+          "config-dir-darwin",
+          "config-darwin"
+        ],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -942,7 +994,9 @@
       "id": "check-mini-config-darwin-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["darwin"],
+      "platforms": [
+        "darwin"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -961,7 +1015,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
+        "matchedPathIds": [
+          "config-dir-darwin",
+          "config-darwin"
+        ],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -975,7 +1032,9 @@
       "id": "check-mini-config-win32-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["win32"],
+      "platforms": [
+        "win32"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -993,7 +1052,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-win32", "config-win32"],
+        "matchedPathIds": [
+          "config-dir-win32",
+          "config-win32"
+        ],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -1007,7 +1069,9 @@
       "id": "check-mini-config-win32-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": ["win32"],
+      "platforms": [
+        "win32"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1026,7 +1090,10 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["config-dir-win32", "config-win32"],
+        "matchedPathIds": [
+          "config-dir-win32",
+          "config-win32"
+        ],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -1109,13 +1176,19 @@
         "executablePath": "${BIN}/perch",
         "matchedPathIds": []
       },
-      "platforms": ["darwin", "linux"]
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
     },
     {
       "id": "check-path-only-devin-user-mcp",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1131,7 +1204,9 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["user-mcp"],
+        "matchedPathIds": [
+          "user-mcp"
+        ],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -1145,7 +1220,10 @@
       "id": "check-path-only-devin-user-mcp-xdg",
       "operation": "checkHarness",
       "input": "devin-cli",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1162,7 +1240,9 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["user-mcp"],
+        "matchedPathIds": [
+          "user-mcp"
+        ],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -1176,7 +1256,9 @@
       "id": "check-path-only-devin-user-mcp-windows",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": ["win32"],
+      "platforms": [
+        "win32"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1193,7 +1275,9 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["user-mcp-windows"],
+        "matchedPathIds": [
+          "user-mcp-windows"
+        ],
         "pathAssertions": [
           {
             "id": "user-mcp-windows",
@@ -1222,7 +1306,9 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-mcp"],
+        "matchedPathIds": [
+          "project-mcp"
+        ],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -1251,7 +1337,9 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-mcp-local"],
+        "matchedPathIds": [
+          "project-mcp-local"
+        ],
         "pathAssertions": [
           {
             "id": "project-mcp-local",
@@ -1280,7 +1368,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["global-mcp"],
+        "matchedPathIds": [
+          "global-mcp"
+        ],
         "pathAssertions": [
           {
             "id": "global-mcp",
@@ -1309,7 +1399,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["global-manual"],
+        "matchedPathIds": [
+          "global-manual"
+        ],
         "pathAssertions": [
           {
             "id": "global-manual",
@@ -1338,7 +1430,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-mcp"],
+        "matchedPathIds": [
+          "project-mcp"
+        ],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -1367,7 +1461,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-manual"],
+        "matchedPathIds": [
+          "project-manual"
+        ],
         "pathAssertions": [
           {
             "id": "project-manual",
@@ -1396,7 +1492,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-rules"],
+        "matchedPathIds": [
+          "project-rules"
+        ],
         "pathAssertions": [
           {
             "id": "project-rules",
@@ -1425,7 +1523,9 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-memory"],
+        "matchedPathIds": [
+          "project-memory"
+        ],
         "pathAssertions": [
           {
             "id": "project-memory",
@@ -1509,7 +1609,10 @@
         "executablePath": "${BIN}/prime-agent",
         "matchedPathIds": []
       },
-      "platforms": ["darwin", "linux"]
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
     },
     {
       "id": "check-path-only-prime-agent-global-settings",
@@ -1530,7 +1633,10 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["global-settings", "root"],
+        "matchedPathIds": [
+          "global-settings",
+          "root"
+        ],
         "pathAssertions": [
           {
             "id": "global-settings",
@@ -1560,7 +1666,10 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["global-settings", "root"],
+        "matchedPathIds": [
+          "global-settings",
+          "root"
+        ],
         "pathAssertions": [
           {
             "id": "global-settings",
@@ -1589,7 +1698,9 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["project-settings"],
+        "matchedPathIds": [
+          "project-settings"
+        ],
         "pathAssertions": [
           {
             "id": "project-settings",
@@ -1620,7 +1731,9 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["sessions"],
+        "matchedPathIds": [
+          "sessions"
+        ],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -1650,7 +1763,9 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": ["sessions"],
+        "matchedPathIds": [
+          "sessions"
+        ],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -1674,7 +1789,10 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1698,7 +1816,10 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1722,7 +1843,10 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": ["darwin", "linux"],
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -1971,6 +2095,510 @@
       ],
       "expect": {
         "launches": []
+      }
+    },
+    {
+      "id": "raw-registry-round-trip",
+      "operation": "getRawHarnessData"
+    },
+    {
+      "id": "harness-matrix-round-trip",
+      "operation": "getHarnessMatrix"
+    },
+    {
+      "id": "list-harnesses-round-trip",
+      "operation": "listHarnesses"
+    },
+    {
+      "id": "detect-installed-codex-and-claude",
+      "operation": "detectInstalledHarnesses",
+      "cwd": "${TMP}/detect-installed/cwd",
+      "env": {
+        "HOME": "${TMP}/detect-installed/home",
+        "PATH": "${TMP}/detect-installed/bin"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${TMP}/detect-installed/bin/codex",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/detect-installed/home/.claude/settings.json",
+          "content": "{}\n"
+        }
+      ],
+      "expect": {
+        "installedKeys": [
+          "claude-code",
+          "codex"
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "mcp-record-alias",
+      "operation": "getHarnessMcp",
+      "input": " Claude ",
+      "expect": {
+        "key": "claude-code"
+      }
+    },
+    {
+      "id": "mcp-record-unknown",
+      "operation": "getHarnessMcp",
+      "input": "not-a-harness",
+      "expect": {
+        "error": "Unknown harness: not-a-harness"
+      }
+    },
+    {
+      "id": "mcp-list",
+      "operation": "listHarnessMcp"
+    },
+    {
+      "id": "translate-claude-default-local",
+      "operation": "translateMcpJson",
+      "input": "claude-code",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "docs": {
+              "type": "http",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Authorization": "Bearer ${DOCS_TOKEN}"
+              }
+            },
+            "fs": {
+              "type": "stdio",
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "."
+              ],
+              "env": {
+                "ROOT": "."
+              }
+            },
+            "legacy": {
+              "type": "sse",
+              "url": "https://example.com/sse"
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "translate-codex-global-toml",
+      "operation": "translateMcpJson",
+      "input": "codex",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "format": "toml",
+        "keyPath": [
+          "mcp_servers"
+        ],
+        "config": {
+          "mcp_servers": {
+            "docs": {
+              "url": "https://example.com/mcp",
+              "http_headers": {
+                "Authorization": "Bearer ${DOCS_TOKEN}"
+              }
+            },
+            "fs": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "."
+              ],
+              "env": {
+                "ROOT": "."
+              }
+            }
+          }
+        },
+        "skipped": [
+          {
+            "name": "legacy",
+            "reason": "unsupported transport: sse"
+          }
+        ]
+      }
+    },
+    {
+      "id": "translate-opencode-argv-command",
+      "operation": "translateMcpJson",
+      "input": "opencode",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "servers": {
+          "docs": {
+            "type": "remote",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "fs": {
+            "type": "local",
+            "command": [
+              "npx",
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "environment": {
+              "ROOT": "."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "translate-gptme-array-container",
+      "operation": "translateMcpJson",
+      "input": "gptme",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "servers": [
+          {
+            "name": "docs",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          {
+            "name": "fs",
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "translate-unknown-scope",
+      "operation": "translateMcpJson",
+      "input": "codex",
+      "scope": "project",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Unknown MCP scope: project"
+      }
+    },
+    {
+      "id": "translate-without-mcp-config",
+      "operation": "translateMcpJson",
+      "input": "aider",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness aider has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-invalid-document",
+      "operation": "translateMcpJson",
+      "input": "claude-code",
+      "mcpJson": {
+        "servers": {}
+      },
+      "expect": {
+        "error": ".mcp.json must be an object with an mcpServers object"
+      }
+    },
+    {
+      "id": "translate-unknown-harness",
+      "operation": "translateMcpJson",
+      "input": "not-a-harness",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Unknown harness: not-a-harness"
+      }
+    },
+    {
+      "id": "translate-probe-every-harness",
+      "operation": "translateMcpJson",
+      "input": "*",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio-full": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+              "-y",
+              "pkg"
+            ],
+            "env": {
+              "TOKEN": "${TOKEN}"
+            }
+          },
+          "stdio-bare": {
+            "command": "server"
+          },
+          "stdio-null-fields": {
+            "command": "server",
+            "args": null,
+            "env": null
+          },
+          "stdio-extra-fields": {
+            "command": "server",
+            "cwd": "/srv",
+            "timeout": 5
+          },
+          "http-full": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${TOKEN}"
+            }
+          },
+          "http-inferred": {
+            "url": "https://example.com/inferred"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          },
+          "websocket": {
+            "type": "ws",
+            "url": "wss://example.com"
+          },
+          "no-transport": {
+            "description": "neither command nor url"
+          },
+          "numeric-type": {
+            "type": 5,
+            "command": "server"
+          },
+          "null-type": {
+            "type": null,
+            "command": "server"
+          },
+          "bad-args": {
+            "command": "server",
+            "args": [
+              1
+            ]
+          },
+          "bad-env": {
+            "command": "server",
+            "env": {
+              "A": 1
+            }
+          },
+          "bad-headers": {
+            "url": "https://example.com/mcp",
+            "headers": [
+              "x"
+            ]
+          },
+          "empty-command": {
+            "command": ""
+          },
+          "missing-url": {
+            "type": "http"
+          },
+          "not-an-object": "server",
+          "__proto__": {
+            "command": "proto-server"
+          }
+        }
       }
     }
   ]

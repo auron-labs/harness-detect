@@ -8,7 +8,7 @@ test("shared parity fixtures produce the expected detection results", async (t) 
   const fixturePath = fileURLToPath(new URL("../../../testdata/package-parity-cases.json", import.meta.url));
   const snapshotPath = fileURLToPath(new URL("../scripts/parity-snapshot.js", import.meta.url));
   const fixture = JSON.parse(fs.readFileSync(fixturePath, "utf8"));
-  const output = spawnSync("node", [snapshotPath, fixturePath], { encoding: "utf8" });
+  const output = spawnSync("node", [snapshotPath, fixturePath], { encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
   assert.equal(output.status, 0, output.stderr || String(output.error));
   const snapshot = JSON.parse(output.stdout);
 

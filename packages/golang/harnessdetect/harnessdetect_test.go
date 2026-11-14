@@ -18,34 +18,15 @@ import (
 var supportedInstallMethods = []string{"npm", "homebrew", "pip", "pipx", "uv", "cargo", "go", "script", "manual", "marketplace", "binary", "unknown"}
 
 var expectedUnknownInstallationHarnesses = []string{
-	"aider",
-	"amazon-q-cli",
-	"amp",
-	"antigravity-cli",
-	"autohand",
 	"boltai",
 	"cline",
-	"commandcode",
 	"continue",
 	"crush",
 	"cursor",
-	"devin-for-terminal",
 	"github-copilot-cli",
-	"goose",
-	"grok-build-cli",
-	"groq-code-cli",
-	"junie-cli",
 	"kilo-code",
-	"kimi-code-cli",
-	"letta-code",
-	"mistral-vibe",
 	"nanocoder",
-	"open-interpreter",
-	"openblock",
-	"openclaw",
-	"opencode",
 	"pieces",
-	"plandex",
 	"roo-code",
 	"rovo-dev-cli",
 	"toad",
@@ -56,7 +37,7 @@ var expectedUnknownInstallationHarnesses = []string{
 var (
 	allowedPlatforms        = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
 	expectedUsedPlatforms   = []string{"darwin", "linux", "win32"}
-	supportAreas            = []string{"config", "skills", "commands", "agents", "dotAgents"}
+	supportAreas            = []string{"config", "skills", "commands", "agents", "agentsSkills"}
 	supportScopes           = []string{"global", "local"}
 	supportStatuses         = []string{"supported", "unsupported", "unknown"}
 	supportConfidenceLevels = []string{"official", "source", "observed", "inferred", "unknown"}
@@ -1075,7 +1056,7 @@ func assertHarnessSupportNotMutated(t *testing.T, label string, support HarnessS
 		{name: "skills", area: support.Skills},
 		{name: "commands", area: support.Commands},
 		{name: "agents", area: support.Agents},
-		{name: "dotAgents", area: support.DotAgents},
+		{name: "agentsSkills", area: support.AgentsSkills},
 	} {
 		assertHarnessSupportScopeNotMutated(t, label, area.name, "global", area.area.Global)
 		assertHarnessSupportScopeNotMutated(t, label, area.name, "local", area.area.Local)

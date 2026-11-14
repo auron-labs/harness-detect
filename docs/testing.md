@@ -113,6 +113,31 @@ These checks validate local package artifacts and an external Go consumer. They 
 26. `uv build` (Python)
 27. `uv run --with pip-audit pip-audit` (Python)
 
+## Cross-package parity smoke test
+
+`node scripts/check-package-parity.mjs` (`mise run parity:check`) runs every case in
+`testdata/package-parity-cases.json` through the TypeScript, Go, Rust, and Python
+snapshot runners in fresh temporary trees and compares the normalized output. It
+fails when:
+
+- any package's output differs from TypeScript's for any case;
+- a function listed in `testdata/public-api-parity.json` has no parity case, so a
+  new public function cannot skip cross-package comparison;
+- `getRawHarnessData`, `getHarnessMatrix`, or `listHarnesses` does not reproduce
+  `packages/data/harnesses.json` exactly, which catches a package that drops or
+  renames a registry field when decoding it;
+- a case's `expect` block disagrees with the TypeScript output (checked by
+  `packages/typescript/test/parity-fixtures.test.js`), so agreement is also
+  checked against intended behavior.
+
+`translate-probe-every-harness` runs a probe `.mcp.json` with valid and malformed
+servers through every harness and both scopes, exercising every registry
+`serverFormat`. When adding an operation, support it in all four runners:
+`packages/typescript/scripts/parity-snapshot.js`,
+`packages/golang/internal/paritysnapshot/main.go`,
+`packages/rust/examples/parity_snapshot.rs`, and
+`packages/python/scripts/parity_snapshot.py`.
+
 Locally, `mise run verify` also runs `mise run docs:check` near the start of the sequence, so generated-doc freshness — including the support matrix — is a required verification gate before handoff.
 
 ## TypeScript tests

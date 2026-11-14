@@ -50,6 +50,9 @@ A harness counts as installed when either of these is true:
 - `GetHarnessACP` returns ACP metadata for one harness key or alias.
 - `DetectInstalledACPLaunches(options)` lists ACP agents launchable from installed binaries, as absolute `Command` paths with `Args`.
 - `ListHarnessACP` returns ACP metadata for every harness; absent metadata is `unknown`.
+- `GetHarnessMCP` returns MCP metadata for one harness key or alias: MCP support, project-root `.mcp.json` support, and global/local config files, format, and server key path.
+- `ListHarnessMCP` returns MCP metadata for every harness.
+- `TranslateMCPJSON(input, mcpJSON, MCPTranslateOptions{Scope: "local"})` translates `.mcp.json` bytes into the harness's native server entries for one scope (empty scope means `local`), returning `Format`, `KeyPath`, `Servers`, `Config`, and `Skipped`. Nothing is read or written.
 - `GetHarnessSupport` returns the support metadata for one harness key or alias.
 - `ListHarnessSupport()` returns support metadata for every harness.
 - `CheckHarness(input, options)` checks one harness key or alias and returns resolved paths, matches, and reasons.

@@ -5,10 +5,11 @@ use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use harness_detect::{
-    check_harness, detect_harnesses, detect_installed_acp_launches, get_harness_acp,
-    get_harness_support, list_harness_acp, list_harness_support, CheckOptions, HarnessCheckResult,
-    HarnessSupport, HarnessSupportArea, HarnessSupportPath, HarnessSupportRecord,
-    HarnessSupportScope,
+    check_harness, detect_harnesses, detect_installed_acp_launches, detect_installed_harnesses,
+    get_harness_acp, get_harness_matrix, get_harness_mcp, get_harness_support,
+    get_raw_harness_data, list_harness_acp, list_harness_mcp, list_harness_support, list_harnesses,
+    translate_mcp_json, CheckOptions, HarnessCheckResult, HarnessSupport, HarnessSupportArea,
+    HarnessSupportPath, HarnessSupportRecord, HarnessSupportScope, McpTranslateOptions,
 };
 use serde_json::{json, Value};
 
@@ -164,6 +165,23 @@ fn run_case(raw_case: &Value, roots: &SandboxRoots) -> Result<Value, String> {
                 normalize_support_record(&record)
             }
             "listHarnessSupport" => normalize_support_list(&list_harness_support()),
+            "detectInstalledHarnesses" => {
+                let results =
+                    detect_installed_harnesses(options).map_err(|error| error.to_string())?;
+                normalize_detect_results(&results, roots)
+            }
+            "getRawHarnessData" => to_value(get_raw_harness_data())?,
+            "getHarnessMatrix" => to_value(get_harness_matrix())?,
+            "listHarnesses" => to_value(list_harnesses())?,
+            "getHarnessMcp" => {
+                let input = required_string(&expanded_case, "input")?;
+                match get_harness_mcp(&input) {
+                    Ok(record) => to_value(record)?,
+                    Err(error) => json!({ "error": error.to_string() }),
+                }
+            }
+            "listHarnessMcp" => to_value(list_harness_mcp())?,
+            "translateMcpJson" => snapshot_translation(raw_case)?,
             other => return Err(format!("Unsupported parity operation: {other}")),
         };
 
@@ -175,6 +193,42 @@ fn run_case(raw_case: &Value, roots: &SandboxRoots) -> Result<Value, String> {
     })();
     cleanup_setup(&setup);
     result
+}
+
+fn to_value<T: serde::Serialize>(value: T) -> Result<Value, String> {
+    serde_json::to_value(value).map_err(|error| error.to_string())
+}
+
+fn translate_result(input: &str, scope: Option<&str>, document: &Value) -> Result<Value, String> {
+    let options = McpTranslateOptions {
+        scope: scope.map(ToOwned::to_owned),
+    };
+    match translate_mcp_json(input, document, &options) {
+        Ok(translation) => to_value(translation),
+        Err(error) => Ok(json!({ "error": error.to_string() })),
+    }
+}
+
+/// Translates one harness, or every harness and scope when the input is "*",
+/// so each registry serverFormat is exercised. The document is unexpanded.
+fn snapshot_translation(raw_case: &Value) -> Result<Value, String> {
+    let input = required_string(raw_case, "input")?;
+    let document = raw_case.get("mcpJson").cloned().unwrap_or(Value::Null);
+    if input != "*" {
+        let scope = raw_case.get("scope").and_then(Value::as_str);
+        return translate_result(&input, scope, &document);
+    }
+    let mut all = serde_json::Map::new();
+    for harness in list_harnesses() {
+        all.insert(
+            harness.key.clone(),
+            json!({
+                "global": translate_result(&harness.key, Some("global"), &document)?,
+                "local": translate_result(&harness.key, Some("local"), &document)?,
+            }),
+        );
+    }
+    Ok(Value::Object(all))
 }
 
 fn required_string(value: &Value, key: &str) -> Result<String, String> {
@@ -440,7 +494,7 @@ fn normalize_support(support: &HarnessSupport) -> Value {
         "skills": normalize_support_area(&support.skills),
         "commands": normalize_support_area(&support.commands),
         "agents": normalize_support_area(&support.agents),
-        "dotAgents": normalize_support_area(&support.dot_agents),
+        "agentsSkills": normalize_support_area(&support.agents_skills),
     })
 }
 

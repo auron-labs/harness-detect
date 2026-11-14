@@ -26,7 +26,9 @@
           "env",
           "sources",
           "support",
-          "installations"
+          "installations",
+          "version",
+          "mcp"
         ],
         "additionalProperties": false,
         "anyOf": [
@@ -54,6 +56,11 @@
           "name": {
             "type": "string",
             "minLength": 1
+          },
+          "version": {
+            "description": "Upstream product version the entry's data was last verified against (for example \"0.169.0\"), or \"unknown\" when upstream publishes no version. Descriptive only; never compared at runtime.",
+            "type": "string",
+            "pattern": "^\\S+$"
           },
           "aliases": {
             "type": "array",
@@ -86,6 +93,10 @@
             "description": "Describes platform-scoped local stdio launches or a direct adapter registry key; never detection evidence. Omitted metadata is unknown.",
             "$ref": "#/$defs/HarnessAcp"
           },
+          "mcp": {
+            "description": "Required descriptive MCP (Model Context Protocol) client metadata: whether the harness can use MCP servers, whether it reads the project-root .mcp.json, where it stores MCP servers per scope, and how .mcp.json servers translate into its native config. Never detection evidence.",
+            "$ref": "#/$defs/HarnessMcp"
+          },
           "support": {
             "description": "Required descriptive support metadata. All support categories and both scopes must be populated explicitly for every harness; use status/confidence 'unknown' rather than omitting unsupported or unknown data.",
             "$ref": "#/$defs/HarnessSupport"
@@ -101,6 +112,189 @@
     }
   },
   "$defs": {
+    "HarnessMcp": {
+      "type": "object",
+      "required": ["status", "mcpJson", "global", "local", "sources", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "description": "Whether the harness acts as an MCP client that can be configured with MCP servers.",
+          "enum": ["supported", "unsupported", "unknown"]
+        },
+        "mcpJson": {
+          "description": "Whether the harness natively reads the project-root .mcp.json file ({\"mcpServers\": {...}}).",
+          "enum": ["supported", "unsupported", "unknown"]
+        },
+        "global": { "$ref": "#/$defs/HarnessMcpScope" },
+        "local": { "$ref": "#/$defs/HarnessMcpScope" },
+        "serverFormat": { "$ref": "#/$defs/HarnessMcpServerFormat" },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HttpsUrl" }
+        },
+        "confidence": {
+          "enum": ["official", "source", "observed", "inferred", "unknown"]
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "enum": ["supported", "unsupported"] } }
+          },
+          "then": {
+            "properties": {
+              "sources": { "type": "array", "minItems": 1 },
+              "confidence": { "not": { "const": "unknown" } }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "status": { "const": "supported" } } },
+          "else": {
+            "properties": {
+              "mcpJson": { "not": { "const": "supported" } },
+              "global": {
+                "type": "object",
+                "properties": { "status": { "not": { "const": "supported" } } }
+              },
+              "local": {
+                "type": "object",
+                "properties": { "status": { "not": { "const": "supported" } } }
+              }
+            },
+            "not": { "required": ["serverFormat"] }
+          }
+        }
+      ]
+    },
+    "HarnessMcpScope": {
+      "type": "object",
+      "required": ["status", "paths", "sources", "confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["supported", "unsupported", "unknown"] },
+        "paths": {
+          "description": "Config files (or directories of config files) that hold MCP servers for this scope.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/HarnessSupportPath" }
+        },
+        "format": {
+          "description": "File format of the MCP config files.",
+          "enum": ["json", "jsonc", "toml", "yaml"]
+        },
+        "keyPath": {
+          "description": "Key segments under which MCP servers are stored, outermost first. A literal key containing a dot is one segment (for example [\"amp.mcpServers\"]).",
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/HttpsUrl" }
+        },
+        "confidence": {
+          "enum": ["official", "source", "observed", "inferred", "unknown"]
+        },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "enum": ["supported", "unsupported"] } }
+          },
+          "then": {
+            "properties": {
+              "sources": { "type": "array", "minItems": 1 },
+              "confidence": { "not": { "const": "unknown" } }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["status", "paths"],
+            "properties": {
+              "status": { "const": "supported" },
+              "paths": { "type": "array", "minItems": 1 }
+            }
+          },
+          "then": { "required": ["format", "keyPath"] },
+          "else": {
+            "not": { "anyOf": [{ "required": ["format"] }, { "required": ["keyPath"] }] }
+          }
+        }
+      ]
+    },
+    "HarnessMcpServerFormat": {
+      "description": "Describes the native shape of one MCP server entry so .mcp.json servers can be translated without harness-specific code.",
+      "type": "object",
+      "required": ["container", "stdio"],
+      "additionalProperties": false,
+      "properties": {
+        "container": {
+          "description": "map: an object keyed by server name; array: a list of entries that carry the name in nameField.",
+          "enum": ["map", "array"]
+        },
+        "nameField": {
+          "description": "Field that stores the server name inside each entry. Required for array containers; optional for maps.",
+          "$ref": "#/$defs/McpFieldName"
+        },
+        "typeField": {
+          "description": "Field that names the transport. Transports with a type value write it here.",
+          "$ref": "#/$defs/McpFieldName"
+        },
+        "stdio": {
+          "type": "object",
+          "required": ["command"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "type": "string", "minLength": 1 },
+            "command": { "$ref": "#/$defs/McpFieldName" },
+            "args": {
+              "description": "Field for the argument list. When omitted, the command field holds an argv array [command, ...args].",
+              "$ref": "#/$defs/McpFieldName"
+            },
+            "env": {
+              "description": "Field for environment variables. When omitted, servers that set env cannot be translated.",
+              "$ref": "#/$defs/McpFieldName"
+            }
+          }
+        },
+        "http": { "$ref": "#/$defs/HarnessMcpRemoteFormat" },
+        "sse": { "$ref": "#/$defs/HarnessMcpRemoteFormat" },
+        "defaults": {
+          "description": "Static fields added to every translated entry before mapped fields.",
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" }
+            ]
+          }
+        }
+      },
+      "if": { "properties": { "container": { "const": "array" } } },
+      "then": { "required": ["nameField"] }
+    },
+    "HarnessMcpRemoteFormat": {
+      "description": "Native shape for a remote transport. Omit the transport when the harness cannot use it.",
+      "type": "object",
+      "required": ["url"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "minLength": 1 },
+        "url": { "$ref": "#/$defs/McpFieldName" },
+        "headers": {
+          "description": "Field for HTTP headers. When omitted, servers that set headers cannot be translated.",
+          "$ref": "#/$defs/McpFieldName"
+        }
+      }
+    },
+    "McpFieldName": {
+      "type": "string",
+      "minLength": 1
+    },
     "HarnessAcp": {
       "type": "object",
       "required": ["status", "sources", "confidence"],
@@ -266,14 +460,17 @@
     },
     "HarnessSupport": {
       "type": "object",
-      "required": ["config", "skills", "commands", "agents", "dotAgents"],
+      "required": ["config", "skills", "commands", "agents", "agentsSkills"],
       "additionalProperties": false,
       "properties": {
         "config": { "$ref": "#/$defs/HarnessSupportArea" },
         "skills": { "$ref": "#/$defs/HarnessSupportArea" },
         "commands": { "$ref": "#/$defs/HarnessSupportArea" },
         "agents": { "$ref": "#/$defs/HarnessSupportArea" },
-        "dotAgents": { "$ref": "#/$defs/HarnessSupportArea" }
+        "agentsSkills": {
+          "description": "Whether the harness discovers Agent Skills from the shared, vendor-neutral .agents/skills directory (global: ${HOME}/.agents/skills, local: ${CWD}/.agents/skills). Vendor directories such as .claude/skills belong in skills.",
+          "$ref": "#/$defs/HarnessSupportArea"
+        }
       }
     },
     "HarnessSupportArea": {

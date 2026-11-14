@@ -56,6 +56,9 @@ There is no root `Cargo.toml`; always `cd` into `packages/rust` first.
   - `list_harness_support()`
   - `get_harness_acp(input)`
   - `list_harness_acp()`
+  - `get_harness_mcp(input)`
+  - `list_harness_mcp()`
+  - `translate_mcp_json(input, &mcp_json, &options)`
   - `detect_installed_acp_launches()`
   - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
   - `detect_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
@@ -124,3 +127,11 @@ installation detection are independent.
 
 See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
 for examples, platform selection, evidence rules, and source-only adapters.
+
+## MCP metadata and translation
+
+Every harness has required `mcp` metadata (see the root `AGENTS.md`). The
+`.mcp.json` translator is generic: it only interprets the registry's
+`mcp.serverFormat`, so keep it free of harness-specific branches. Its skip
+reasons, error messages, and output must stay identical across packages; the
+`translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.

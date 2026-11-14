@@ -11,7 +11,10 @@ import {
   detectInstalledAcpLaunches,
   detectInstalledHarnesses,
   getHarnessMatrix,
+  getHarnessMcp,
   getHarnessSupport,
+  listHarnessMcp,
+  translateMcpJson,
   getRawHarnessData,
   listHarnesses,
   listHarnessSupport,
@@ -29,6 +32,9 @@ const LOCKED_RUNTIME_EXPORTS = [
   "getRawHarnessData",
   "listHarnessSupport",
   "listHarnesses",
+  "getHarnessMcp",
+  "listHarnessMcp",
+  "translateMcpJson",
 ];
 
 const SHARED_REGISTRY_URL = new URL(
@@ -770,4 +776,37 @@ test("detectInstalledAcpLaunches ignores relative PATH entries", { skip: process
     process.chdir(originalCwd);
     fs.rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("MCP metadata and .mcp.json translation", () => {
+  const claude = getHarnessMcp(" Claude ");
+  assert.equal(claude.key, "claude-code");
+  assert.equal(claude.mcp.mcpJson, "supported");
+  claude.mcp.status = "MUTATED";
+  assert.equal(getHarnessMcp("claude-code").mcp.status, "supported");
+  assert.equal(listHarnessMcp().length, listHarnesses().length);
+
+  const translation = translateMcpJson(
+    "codex",
+    JSON.stringify({
+      mcpServers: {
+        fs: { command: "npx", args: ["-y", "fs"] },
+        legacy: { type: "sse", url: "https://example.com/sse" }
+      }
+    }),
+    { scope: "global" }
+  );
+  assert.equal(translation.format, "toml");
+  assert.deepEqual(translation.config, { mcp_servers: { fs: { command: "npx", args: ["-y", "fs"] } } });
+  assert.deepEqual(translation.skipped, [{ name: "legacy", reason: "unsupported transport: sse" }]);
+  assert.throws(() => translateMcpJson("aider", { mcpServers: {} }), /has no file-based MCP config for scope local/);
+  assert.throws(() => translateMcpJson("codex", { servers: {} }), /must be an object with an mcpServers object/);
+});
+
+test("harness entries expose version and .agents/skills support", () => {
+  for (const harness of listHarnesses()) {
+    assert.match(harness.version, /^\S+$/, harness.key);
+    assert.ok(harness.support.agentsSkills.global.status, harness.key);
+  }
+  assert.equal(getHarnessSupport("codex").support.agentsSkills.local.status, "supported");
 });

@@ -43,6 +43,9 @@ print(len(list_harness_support()))
 - `get_harness_acp` returns ACP metadata for one harness key or alias.
 - `detect_installed_acp_launches` lists ACP agents launchable from installed binaries, as absolute `command` paths with `args`.
 - `list_harness_acp` returns ACP metadata for every harness; absent metadata is `unknown`.
+- `get_harness_mcp` returns MCP metadata for one harness key or alias: MCP support, project-root `.mcp.json` support, and global/local config files, format, and server key path.
+- `list_harness_mcp` returns MCP metadata for every harness.
+- `translate_mcp_json(input, mcp_json, scope="local")` translates a `.mcp.json` mapping or JSON text into the harness's native server entries for one scope, returning `format`, `key_path`, `servers`, `config`, and `skipped`. Nothing is read or written.
 - `get_harness_support(input)` returns support metadata for one harness key or alias.
 - `list_harness_support()` returns support metadata for every harness.
 - `check_harness(input, options=None)` checks one harness key or alias.
