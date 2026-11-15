@@ -4,6 +4,7 @@
     {
       "key": "native",
       "name": "Native",
+      "version": "unknown",
       "aliases": [
         "native-alias"
       ],
@@ -78,7 +79,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -122,11 +123,30 @@
             ]
           }
         ]
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
       "key": "bridge",
       "name": "Bridge",
+      "version": "unknown",
       "aliases": [
         "bridge-alias"
       ],
@@ -201,7 +221,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -228,11 +248,30 @@
             "args": []
           }
         ]
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
       "key": "host",
       "name": "Host",
+      "version": "unknown",
       "aliases": [
         "host-alias"
       ],
@@ -307,7 +346,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -329,11 +368,30 @@
         ],
         "confidence": "official",
         "adapter": "bridge"
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
       "key": "unsupported",
       "name": "Unsupported",
+      "version": "unknown",
       "aliases": [
         "unsupported-alias"
       ],
@@ -408,7 +466,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -429,11 +487,30 @@
           "https://example.com/acp"
         ],
         "confidence": "source"
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
       "key": "unknown",
       "name": "Unknown",
+      "version": "unknown",
       "aliases": [
         "unknown-alias"
       ],
@@ -508,7 +585,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -527,11 +604,30 @@
         "status": "unknown",
         "sources": [],
         "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
       "key": "missing",
       "name": "Missing",
+      "version": "unknown",
       "aliases": [
         "missing-alias"
       ],
@@ -606,7 +702,7 @@
             "paths": []
           }
         },
-        "dotAgents": {
+        "agentsSkills": {
           "global": {
             "status": "unknown",
             "sources": [],
@@ -620,6 +716,24 @@
             "paths": []
           }
         }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
       }
     }
   ]

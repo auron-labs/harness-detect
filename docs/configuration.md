@@ -52,6 +52,7 @@ A machine-checked JSON Schema (draft 2020-12) is published at `packages/data/har
 | --- | --- | --- | --- |
 | `key` | string | yes | Stable, lowercase identifier. Part of the public API — never rename. |
 | `name` | string | yes | Human-readable harness name. |
+| `version` | string | yes | Upstream product version the entry's data was last verified against (for example `0.169.0`), or `unknown` when upstream publishes none. Descriptive only; refresh it whenever the entry is re-verified. |
 | `aliases` | string[] | yes | Alternative lookup names (e.g. `"claude"` for `claude-code`). May be empty. |
 | `executables` | string[] | yes | Executable names to search for on `PATH`. May be empty (path-only detection). |
 | `paths` | object[] | yes | Path templates to check. May be empty (executable-only detection). |
@@ -60,6 +61,7 @@ A machine-checked JSON Schema (draft 2020-12) is published at `packages/data/har
 | `sources` | string[] | yes | Evidence URLs for the path/executable rules. |
 | `acp` | object | no | Local stdio ACP launch or adapter metadata; optional in stored definitions; current entries populate it explicitly. |
 | `support` | object | yes | Required additive support metadata contract. Every category and both scopes must be explicit. |
+| `mcp` | object | yes | MCP client metadata: MCP support, project-root `.mcp.json` support, MCP config locations per scope, and the native server shape. Never detection evidence. |
 | `installations` | object[] | yes | Descriptive install metadata only; not detection evidence. |
 
 ### ACP metadata (`acp`)
@@ -143,6 +145,57 @@ is discoverable as metadata and never counts as installed from ACP alone.
 See [the lookup workflow](harness-guide.md#finding-and-updating-acp-records) for
 real examples and adapter discovery.
 
+### MCP metadata (`mcp`)
+
+`mcp` is required on every harness. It describes the harness as an MCP client
+and never affects installed status.
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status` | enum | yes | `supported`, `unsupported`, or `unknown`: can the harness use MCP servers at all. |
+| `mcpJson` | enum | yes | Does the harness read the project-root `${CWD}/.mcp.json` (`{"mcpServers": {...}}`) **by default**. Opt-in or plugin-only reading is `unsupported` with a note. |
+| `global` | object | yes | User-level MCP config scope (see below). |
+| `local` | object | yes | Project-level MCP config scope: the harness's native project file, anchored at `${CWD}`. |
+| `serverFormat` | object | no | Native shape of one server entry; required when a scope has a `format`. Used by `translateMcpJson`. |
+| `sources` | string[] | yes | Evidence URLs; at least one unless `status` is `unknown`. |
+| `confidence` | enum | yes | Same enum as support leaves; not `unknown` unless `status` is `unknown`. |
+| `notes` | string | no | Short factual qualifier (opt-ins, UI-only management, unsupported transports). |
+
+Scope objects (`global`, `local`) mirror support leaves plus two fields:
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `status`, `paths`, `sources`, `confidence`, `notes` | | | Same meaning and rules as support leaves. `paths` lists the config files (or directories of config files) holding MCP servers. Global templates must not start with `${CWD}`; local templates must. |
+| `format` | enum | when supported with paths | `json`, `jsonc`, `toml`, or `yaml`. Forbidden otherwise. |
+| `keyPath` | string[] | when supported with paths | Key segments the servers live under, outermost first: `["mcpServers"]`, `["mcp_servers"]`, `["mcp", "servers"]`. A literal key containing a dot is one segment (`["amp.mcpServers"]`). |
+
+All paths in one scope share `format` and `keyPath`; a harness whose MCP servers
+are managed only through a UI or database is `supported` with empty `paths`.
+
+`serverFormat` maps `.mcp.json` fields to native field names:
+
+| Field | Description |
+| --- | --- |
+| `container` | `map` (object keyed by server name) or `array` (list of entries; requires `nameField`). |
+| `nameField` | Field that stores the server name inside each entry; optional for maps. |
+| `typeField` | Field that names the transport. Required when any transport sets `type`. |
+| `stdio` | `{type?, command, args?, env?}`. Omitting `args` means the command field holds an argv array `[command, ...args]` (OpenCode style). |
+| `http`, `sse` | `{type?, url, headers?}`. Omit a transport the harness cannot use. |
+| `defaults` | Static scalar fields written into every entry before mapped fields (for example `{"enabled": true}`). |
+
+Omitting `env` or `headers` means servers that set them are skipped rather than
+translated without them. Example (Gemini CLI, which selects transports by field
+name instead of a type field):
+
+```json
+"serverFormat": {
+  "container": "map",
+  "stdio": { "command": "command", "args": "args", "env": "env" },
+  "http": { "url": "httpUrl", "headers": "headers" },
+  "sse": { "url": "url", "headers": "headers" }
+}
+```
+
 ### Support metadata fields (`support`)
 
 `support` is additive public registry metadata. It does **not** affect installed status. It documents whether a harness supports specific features at two scopes. Because the project is still pre-publication, this field was added by aligning the clean public shape directly instead of adding compatibility layers.
@@ -150,7 +203,7 @@ real examples and adapter discovery.
 - `global`: user-level or machine-level support outside a specific workspace.
 - `local`: project/workspace-local support rooted at `${CWD}`. In user-facing docs, describe this scope as **local/project**.
 
-That `local` meaning is shared across `config`, `skills`, `commands`, `agents`, and `dotAgents`: if a harness stores those surfaces inside a repo or workspace, model them under `support.<category>.local` and anchor the paths to `${CWD}` when the upstream layout is project-relative.
+That `local` meaning is shared across `config`, `skills`, `commands`, `agents`, and `agentsSkills`: if a harness stores those surfaces inside a repo or workspace, model them under `support.<category>.local` and anchor the paths to `${CWD}` when the upstream layout is project-relative.
 
 Every harness must include `support`, and it must include all categories and both scopes explicitly. Do not omit a leaf because the data is missing — encode the uncertainty with `status: "unknown"`, `confidence: "unknown"`, and empty `paths` / `sources` arrays.
 
@@ -160,7 +213,7 @@ Every harness must include `support`, and it must include all categories and bot
 | `skills` | object | yes | Support status for skills/prompts directories or files. |
 | `commands` | object | yes | Support status for slash commands, command packs, or equivalent command files. |
 | `agents` | object | yes | Support status for agent definitions or agent manifests. |
-| `dotAgents` | object | yes | Support status for `.agents`-style support surfaces when distinct from `agents`. |
+| `agentsSkills` | object | yes | Whether the harness discovers Agent Skills from the shared `.agents/skills` directory by default (`${HOME}/.agents/skills` globally, `${CWD}/.agents/skills` locally). Opt-in discovery is `unsupported` with a note; vendor directories such as `.claude/skills` belong under `skills`. |
 
 Each category object must contain both scopes:
 
@@ -360,7 +413,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `claude-code` | `CLAUDE_CONFIG_DIR` | `CLAUDE_ROOT` | `${HOME}/.claude` |
 | `claude-code` | — | `CLAUDE_JSON_STATE` | `${HOME}/.claude.json` |
 | `cline` | `CLINE_DIR` | `CLINE_ROOT` | `${HOME}/.cline` |
-| `cline` | — | `CLINE_DATA_ROOT` | `${CLINE_ROOT}/data` |
+| `cline` | `CLINE_DATA_DIR` | `CLINE_DATA_ROOT` | `${CLINE_ROOT}/data` |
 | `codebuff` | — | `CODEBUFF_CONFIG_ROOT` | `${HOME}/.config/manicode` |
 | `codex` | `CODEX_HOME` | `CODEX_ROOT` | `${HOME}/.codex` |
 | `crush` | `CRUSH_GLOBAL_CONFIG` | `CRUSH_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/crush` |
@@ -377,7 +430,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_CONFIG_ROOT` | `${GOOSE_PATH_ROOT}/config` (use) or `${XDG_CONFIG_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_DATA_ROOT` | `${GOOSE_PATH_ROOT}/data` (use) or `${XDG_DATA_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_STATE_ROOT` | `${GOOSE_PATH_ROOT}/state` (use) or `${XDG_STATE_HOME}/goose` |
-| `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_CONFIG_HOME}/goose/history.txt` |
+| `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_STATE_HOME}/goose/history.txt` |
+| `grok-build-cli` | `GROK_HOME` | `GROK_ROOT` | `${HOME}/.grok` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |
@@ -488,7 +542,7 @@ const codexSupport = getHarnessSupport("codex");
 console.log(codexSupport.support.skills.global.paths);
 console.log(codexSupport.support.skills.local.paths);
 console.log(codexSupport.support.agents.local.status);
-console.log(codexSupport.support.dotAgents.local.status);
+console.log(codexSupport.support.agentsSkills.local.status);
 ```
 
 Use `global` to answer user-level support questions. Use `local` to answer workspace/project questions rooted at `${CWD}`.

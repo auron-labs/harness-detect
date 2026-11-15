@@ -17,6 +17,8 @@ Detect installed LLM harnesses such as Codex, Claude Code, Gemini CLI, Cursor, a
 
 Supported distribution targets are npm (`@auron-labs/harness-detect`), Go modules (`github.com/auron-labs/harness-detect/packages/golang/harnessdetect`, released by `packages/golang/vX.Y.Z` tags), crates.io (`harness-detect`), and PyPI (`harness-detect`). Before the first public release for an ecosystem, these install commands are the intended consumer coordinates and may not resolve yet.
 
+Beyond detection, each registry entry records the upstream `version` its data was verified against and describes the harness's support surfaces: config, skills, commands, agents, the shared `.agents/skills` directory, ACP launches, and MCP. For MCP it reports whether the harness is an MCP client, whether it reads the project-root `.mcp.json`, where it stores MCP servers globally and per project (file, format, and key path), and `translateMcpJson` converts a `.mcp.json` into the harness's native server entries. See the [support matrix](./docs/support-matrix.md) and [API reference](./docs/api.md).
+
 There is no CLI binary in this repository. These packages are libraries for embedding detection in your own tools.
 
 ## Quick Start

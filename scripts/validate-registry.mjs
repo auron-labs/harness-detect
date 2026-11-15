@@ -94,9 +94,60 @@ export const validateRegistry = (registry) => {
         checkIds(leaf.paths, `${harness.key}.support.${area}.${scope}.paths`);
       }
     }
+    errors.push(...agentsSkillsErrors(harness), ...mcpErrors(harness, checkIds));
   }
   return errors;
 };
+
+const agentsSkillsTemplates = {
+  global: "${HOME}/.agents/skills",
+  local: "${CWD}/.agents/skills",
+};
+
+// agentsSkills is strictly the shared .agents/skills directory, so a
+// supported leaf must list that directory.
+function agentsSkillsErrors(harness) {
+  const errors = [];
+  for (const [scope, template] of Object.entries(agentsSkillsTemplates)) {
+    const leaf = harness.support.agentsSkills[scope];
+    if (leaf.status === "supported" && !leaf.paths.some((entry) => entry.template === template)) {
+      errors.push(`${harness.key}.support.agentsSkills.${scope} is supported but does not list ${template}`);
+    }
+  }
+  return errors;
+}
+
+function mcpErrors(harness, checkIds) {
+  const { mcp, key } = harness;
+  const errors = [];
+  for (const scope of ["global", "local"]) {
+    checkIds(mcp[scope].paths, `${key}.mcp.${scope}.paths`);
+  }
+  const isLocalTemplate = (template) => template === "${CWD}" || template.startsWith("${CWD}/");
+
+  for (const scope of ["global", "local"]) {
+    const leaf = mcp[scope];
+    for (const entry of leaf.paths) {
+      if (isLocalTemplate(entry.template) !== (scope === "local")) {
+        errors.push(`${key}.mcp.${scope}.paths ${entry.id} must ${scope === "local" ? "" : "not "}be anchored at \${CWD}`);
+      }
+    }
+    if (leaf.format !== undefined && mcp.serverFormat === undefined) {
+      errors.push(`${key}.mcp.serverFormat is required when mcp.${scope} has a config file format`);
+    }
+  }
+
+  const format = mcp.serverFormat;
+  if (format !== undefined) {
+    for (const transport of ["stdio", "http", "sse"]) {
+      if (format[transport]?.type !== undefined && format.typeField === undefined) {
+        errors.push(`${key}.mcp.serverFormat.${transport}.type requires serverFormat.typeField`);
+      }
+    }
+  }
+
+  return errors;
+}
 
 if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
   try {

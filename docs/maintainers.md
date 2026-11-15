@@ -164,6 +164,7 @@ Schema:
     {
       "key": "codex",
       "name": "OpenAI Codex CLI",
+      "version": "0.169.0",
       "aliases": ["openai/codex"],
       "executables": ["codex"],
       "installations": [
@@ -196,8 +197,8 @@ Schema:
 
 1. Edit `packages/data/harnesses.json` only.
 2. `key` must be stable and lowercase. **Never rename an existing key** — it is part of the public API of every package.
-3. Required fields per entry: `key`, `name`, `aliases`, `executables`, `installations`, `paths`, `env`, `sources`, and `support`. All entries must have every field (use empty arrays if needed).
-4. `support` must include `config`, `skills`, `commands`, `agents`, and `dotAgents`, each with `global` and `local` leaves.
+3. Required fields per entry: `key`, `name`, `version`, `aliases`, `executables`, `installations`, `paths`, `env`, `sources`, `support`, and `mcp`. All entries must have every field (use empty arrays if needed). `version` is the upstream release the entry was verified against (or `unknown`); see [MCP metadata](./configuration.md#mcp-metadata-mcp) for `mcp`.
+4. `support` must include `config`, `skills`, `commands`, `agents`, and `agentsSkills`, each with `global` and `local` leaves.
 5. Add at least one evidence URL in `sources` for every path/executable rule you add or change. Prefer documented config/state/install paths over guesses.
 6. If a path cannot be verified, omit it. If the install method is real but underspecified, use `{"method":"unknown"}` plus a short `notes` entry instead of guessing a package manager or marketplace ID.
 7. Use derived env roots (`roots[]`) when a harness documents a root override. Avoid hardcoding `${HOME}/...` when the harness has a documented override.
@@ -214,7 +215,7 @@ Schema:
 
 Required shape when present:
 
-- Categories: `config`, `skills`, `commands`, `agents`, `dotAgents`
+- Categories: `config`, `skills`, `commands`, `agents`, `agentsSkills` (`agentsSkills` means the shared `.agents/skills` directory only)
 - Scopes per category: `global`, `local`
 - Required leaf fields: `status`, `paths`, `sources`, `confidence`
 - Optional leaf field: `notes`

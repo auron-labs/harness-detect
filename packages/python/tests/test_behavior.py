@@ -493,7 +493,7 @@ _ALLOWED_PLATFORMS = {
     "sunos",
     "win32",
 }
-_SUPPORT_AREAS = ("config", "skills", "commands", "agents", "dotAgents")
+_SUPPORT_AREAS = ("config", "skills", "commands", "agents", "agentsSkills")
 _SUPPORT_SCOPES = ("global", "local")
 _SUPPORT_STATUSES = {"supported", "unsupported", "unknown"}
 _SUPPORT_CONFIDENCE = {"official", "source", "observed", "inferred", "unknown"}

@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -89,11 +90,13 @@ type HarnessSupportArea struct {
 
 // HarnessSupport describes support metadata for a harness.
 type HarnessSupport struct {
-	Config    HarnessSupportArea `json:"config"`
-	Skills    HarnessSupportArea `json:"skills"`
-	Commands  HarnessSupportArea `json:"commands"`
-	Agents    HarnessSupportArea `json:"agents"`
-	DotAgents HarnessSupportArea `json:"dotAgents"`
+	Config   HarnessSupportArea `json:"config"`
+	Skills   HarnessSupportArea `json:"skills"`
+	Commands HarnessSupportArea `json:"commands"`
+	Agents   HarnessSupportArea `json:"agents"`
+	// AgentsSkills reports discovery of Agent Skills from the shared
+	// .agents/skills directory.
+	AgentsSkills HarnessSupportArea `json:"agentsSkills"`
 }
 
 // HarnessACPLaunch describes a local stdio command and discrete argv values.
@@ -155,14 +158,18 @@ type HarnessInstallation struct {
 
 // HarnessDefinition describes a single LLM harness.
 type HarnessDefinition struct {
-	Key           string                `json:"key"`
-	Name          string                `json:"name"`
+	Key  string `json:"key"`
+	Name string `json:"name"`
+	// Version is the upstream version the entry was last verified against,
+	// or "unknown".
+	Version       string                `json:"version"`
 	Aliases       []string              `json:"aliases"`
 	Executables   []string              `json:"executables"`
 	Paths         []HarnessPathSpec     `json:"paths"`
 	Roots         []HarnessRootDef      `json:"roots,omitempty"`
 	Support       HarnessSupport        `json:"support"`
 	ACP           *HarnessACP           `json:"acp,omitempty"`
+	MCP           HarnessMCP            `json:"mcp"`
 	Env           []HarnessEnvVar       `json:"env"`
 	Sources       []string              `json:"sources"`
 	Installations []HarnessInstallation `json:"installations"`
@@ -284,7 +291,7 @@ func cloneACPLaunches(launches []HarnessACPLaunch) []HarnessACPLaunch {
 	for i, launch := range launches {
 		out[i] = launch
 		out[i].Args = append([]string{}, launch.Args...)
-		out[i].Platforms = append([]string(nil), launch.Platforms...)
+		out[i].Platforms = slices.Clone(launch.Platforms)
 	}
 	return out
 }
@@ -319,7 +326,7 @@ func cloneSupportPaths(paths []HarnessSupportPath) []HarnessSupportPath {
 			ID:          path.ID,
 			Kind:        path.Kind,
 			Template:    path.Template,
-			Platforms:   append([]string(nil), path.Platforms...),
+			Platforms:   slices.Clone(path.Platforms),
 			Description: path.Description,
 		}
 	}
@@ -330,7 +337,7 @@ func cloneSupportScope(scope HarnessSupportScope) HarnessSupportScope {
 	return HarnessSupportScope{
 		Status:     scope.Status,
 		Paths:      cloneSupportPaths(scope.Paths),
-		Sources:    append([]string(nil), scope.Sources...),
+		Sources:    slices.Clone(scope.Sources),
 		Confidence: scope.Confidence,
 		Notes:      scope.Notes,
 	}
@@ -345,11 +352,11 @@ func cloneSupportArea(area HarnessSupportArea) HarnessSupportArea {
 
 func cloneSupport(support HarnessSupport) HarnessSupport {
 	return HarnessSupport{
-		Config:    cloneSupportArea(support.Config),
-		Skills:    cloneSupportArea(support.Skills),
-		Commands:  cloneSupportArea(support.Commands),
-		Agents:    cloneSupportArea(support.Agents),
-		DotAgents: cloneSupportArea(support.DotAgents),
+		Config:       cloneSupportArea(support.Config),
+		Skills:       cloneSupportArea(support.Skills),
+		Commands:     cloneSupportArea(support.Commands),
+		Agents:       cloneSupportArea(support.Agents),
+		AgentsSkills: cloneSupportArea(support.AgentsSkills),
 	}
 }
 
@@ -369,7 +376,7 @@ func clonePathSpecs(paths []HarnessPathSpec) []HarnessPathSpec {
 			Category:  path.Category,
 			Kind:      path.Kind,
 			Template:  path.Template,
-			Platforms: append([]string(nil), path.Platforms...),
+			Platforms: slices.Clone(path.Platforms),
 		}
 	}
 	return out
@@ -385,7 +392,7 @@ func cloneInstallations(installations []HarnessInstallation) []HarnessInstallati
 			URL:         installation.URL,
 			Marketplace: installation.Marketplace,
 			ID:          installation.ID,
-			Platforms:   append([]string(nil), installation.Platforms...),
+			Platforms:   slices.Clone(installation.Platforms),
 			Notes:       installation.Notes,
 		}
 	}
@@ -396,14 +403,16 @@ func cloneHarnessDefinition(h HarnessDefinition) HarnessDefinition {
 	return HarnessDefinition{
 		Key:           h.Key,
 		Name:          h.Name,
-		Aliases:       append([]string(nil), h.Aliases...),
-		Executables:   append([]string(nil), h.Executables...),
+		Version:       h.Version,
+		Aliases:       slices.Clone(h.Aliases),
+		Executables:   slices.Clone(h.Executables),
 		Paths:         clonePathSpecs(h.Paths),
-		Roots:         append([]HarnessRootDef(nil), h.Roots...),
+		Roots:         slices.Clone(h.Roots),
 		Support:       cloneSupport(h.Support),
 		ACP:           cloneACP(h.ACP),
-		Env:           append([]HarnessEnvVar(nil), h.Env...),
-		Sources:       append([]string(nil), h.Sources...),
+		MCP:           cloneMCP(h.MCP),
+		Env:           slices.Clone(h.Env),
+		Sources:       slices.Clone(h.Sources),
 		Installations: cloneInstallations(h.Installations),
 	}
 }
@@ -417,7 +426,7 @@ func cloneResolvedPaths(paths []ResolvedHarnessPath) []ResolvedHarnessPath {
 				Category:  path.Category,
 				Kind:      path.Kind,
 				Template:  path.Template,
-				Platforms: append([]string(nil), path.Platforms...),
+				Platforms: slices.Clone(path.Platforms),
 			},
 			Path:   path.Path,
 			Exists: path.Exists,
@@ -480,7 +489,7 @@ func CheckHarness(input string, options CheckOptions) (HarnessCheckResult, error
 		Harness:        harness,
 		Paths:          cloneResolvedPaths(paths),
 		MatchedPaths:   cloneResolvedPaths(matchedPaths),
-		Reasons:        append([]string(nil), reasons...),
+		Reasons:        slices.Clone(reasons),
 	}, nil
 }
 
@@ -779,7 +788,7 @@ func resolvePaths(harness HarnessDefinition, env map[string]string) []ResolvedHa
 				Category:  entry.Category,
 				Kind:      entry.Kind,
 				Template:  entry.Template,
-				Platforms: append([]string(nil), entry.Platforms...),
+				Platforms: slices.Clone(entry.Platforms),
 			},
 			Path:   stringPointerOrNil(resolved),
 			Exists: exists,

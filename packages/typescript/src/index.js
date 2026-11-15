@@ -243,6 +243,185 @@ export function listHarnessAcp() {
   return matrix.harnesses.map(cloneHarnessAcpRecord);
 }
 
+function cloneHarnessMcpRecord(harness) {
+  return {
+    key: harness.key,
+    mcp: clone(harness.mcp),
+    name: harness.name
+  };
+}
+
+export function getHarnessMcp(input) {
+  const harness = getHarnessDefinition(input);
+  if (!harness) {
+    throw new Error(`Unknown harness: ${input}`);
+  }
+  return cloneHarnessMcpRecord(harness);
+}
+
+export function listHarnessMcp() {
+  return matrix.harnesses.map(cloneHarnessMcpRecord);
+}
+
+const MCP_TRANSPORTS = ["stdio", "http", "sse"];
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isStringMap(value) {
+  return isPlainObject(value) && Object.values(value).every((entry) => typeof entry === "string");
+}
+
+function resolveMcpTransport(server) {
+  if (server.type === undefined) {
+    if ("command" in server) {
+      return "stdio";
+    }
+    return "url" in server ? "http" : { reason: "missing command or url" };
+  }
+  if (typeof server.type !== "string") {
+    return { reason: "invalid server entry" };
+  }
+  if (!MCP_TRANSPORTS.includes(server.type)) {
+    return { reason: `unsupported transport: ${server.type}` };
+  }
+  return server.type;
+}
+
+function translateMcpStdio(entry, server, target) {
+  if (typeof server.command !== "string" || server.command === "") {
+    return "missing command";
+  }
+  const args = server.args ?? [];
+  if (!Array.isArray(args) || !args.every((arg) => typeof arg === "string")) {
+    return "invalid args";
+  }
+  const env = server.env ?? {};
+  if (!isStringMap(env)) {
+    return "invalid env";
+  }
+  if (target.args === undefined) {
+    entry[target.command] = [server.command, ...args];
+  } else {
+    entry[target.command] = server.command;
+    entry[target.args] = [...args];
+  }
+  if (Object.keys(env).length > 0) {
+    if (target.env === undefined) {
+      return "env not supported";
+    }
+    entry[target.env] = { ...env };
+  }
+  return entry;
+}
+
+function translateMcpRemote(entry, server, target) {
+  if (typeof server.url !== "string" || server.url === "") {
+    return "missing url";
+  }
+  const headers = server.headers ?? {};
+  if (!isStringMap(headers)) {
+    return "invalid headers";
+  }
+  entry[target.url] = server.url;
+  if (Object.keys(headers).length > 0) {
+    if (target.headers === undefined) {
+      return "headers not supported";
+    }
+    entry[target.headers] = { ...headers };
+  }
+  return entry;
+}
+
+// Returns a native entry, or a string reason when the server cannot be
+// translated. The check order matches every package.
+function translateMcpServer(name, server, format) {
+  if (!isPlainObject(server)) {
+    return "invalid server entry";
+  }
+
+  const transport = resolveMcpTransport(server);
+  if (typeof transport !== "string") {
+    return transport.reason;
+  }
+
+  const target = format[transport];
+  if (!target) {
+    return `unsupported transport: ${transport}`;
+  }
+
+  const entry = { ...format.defaults };
+  if (format.nameField !== undefined) {
+    entry[format.nameField] = name;
+  }
+  if (target.type !== undefined) {
+    entry[format.typeField] = target.type;
+  }
+
+  return transport === "stdio"
+    ? translateMcpStdio(entry, server, target)
+    : translateMcpRemote(entry, server, target);
+}
+
+/**
+ * Translates a project .mcp.json document ({"mcpServers": {...}}) into the
+ * native MCP config of a harness for one scope. Pure: nothing is read or
+ * written. Servers the native format cannot represent are listed in skipped.
+ */
+export function translateMcpJson(input, mcpJson, options = {}) {
+  const harness = getHarnessDefinition(input);
+  if (!harness) {
+    throw new Error(`Unknown harness: ${input}`);
+  }
+
+  const scope = options.scope ?? "local";
+  if (scope !== "global" && scope !== "local") {
+    throw new Error(`Unknown MCP scope: ${scope}`);
+  }
+
+  const { mcp } = harness;
+  const leaf = mcp[scope];
+  const format = mcp.serverFormat;
+  if (mcp.status !== "supported" || leaf.status !== "supported" || leaf.format === undefined || format === undefined) {
+    throw new Error(`Harness ${harness.key} has no file-based MCP config for scope ${scope}`);
+  }
+
+  const document = typeof mcpJson === "string" ? JSON.parse(mcpJson) : mcpJson;
+  if (!isPlainObject(document) || !isPlainObject(document.mcpServers)) {
+    throw new Error(".mcp.json must be an object with an mcpServers object");
+  }
+
+  const mapped = [];
+  const entries = [];
+  const skipped = [];
+  for (const name of Object.keys(document.mcpServers).sort()) {
+    const result = translateMcpServer(name, document.mcpServers[name], format);
+    if (typeof result === "string") {
+      skipped.push({ name, reason: result });
+    } else if (format.container === "array") {
+      entries.push(result);
+    } else {
+      mapped.push([name, result]);
+    }
+  }
+
+  // fromEntries defines own properties, so a server named "__proto__" stays data.
+  const servers = format.container === "array" ? entries : Object.fromEntries(mapped);
+  const config = leaf.keyPath.reduceRight((value, segment) => ({ [segment]: value }), servers);
+
+  return {
+    config: clone(config),
+    format: leaf.format,
+    key: harness.key,
+    keyPath: [...leaf.keyPath],
+    name: harness.name,
+    scope,
+    servers,
+    skipped
+  };
+}
+
 export function checkHarness(input, options = {}) {
   const harness = getHarnessDefinition(input);
 

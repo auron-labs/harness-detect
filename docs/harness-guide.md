@@ -55,7 +55,7 @@ Every added or changed detection rule needs source evidence.
 
 For `support` metadata, gather evidence per surface and per scope:
 
-- Check first-party docs for documented global config, local project files, skills/prompts, commands, agents, and `.agents` support.
+- Check first-party docs for documented global config, local project files, skills/prompts, commands, agents, shared `.agents/skills` discovery, MCP configuration, and the current upstream version.
 - Use registry `support.*.*` leaves as the scouting source of truth: after verifying official docs or upstream source, update that leaf's `status`, `paths`, `sources`, `confidence`, and optional `notes` directly in `packages/data/harnesses.json`.
 - Land support scouting incrementally when needed: prioritize the highest-use harnesses first, improve evidence quality in place, and leave the remaining unknowns explicit instead of blocking on full-matrix completion.
 - If docs are incomplete, use upstream repository/source evidence before using `observed` or `inferred` confidence.
@@ -72,6 +72,7 @@ Required fields on every harness entry:
 
 - `key`
 - `name`
+- `version` (upstream version the data was verified against, or `unknown`)
 - `aliases`
 - `executables`
 - `paths`
@@ -79,6 +80,7 @@ Required fields on every harness entry:
 - `sources`
 - `installations`
 - `support`
+- `mcp` (explicit even when every field is `unknown`)
 
 Optional but supported when needed:
 
@@ -94,14 +96,17 @@ Checklist:
 - Use `category` values that match the schema: `install`, `config`, `state`, `cache`, `project`.
 - Use `kind` values that match the schema: `file` or `dir`.
 - Add `platforms` only when the rule is truly platform-specific and you have evidence.
-- `support` must include `config`, `skills`, `commands`, `agents`, and `dotAgents`; each of those must include both `global` and `local`.
+- `support` must include `config`, `skills`, `commands`, `agents`, and `agentsSkills`; each of those must include both `global` and `local`.
 - Treat `local` support as project/workspace-scoped support rooted at `${CWD}`. In user-facing wording, call this local/project support.
 - Every `support.*.*` leaf must include `status`, `paths`, `sources`, and `confidence`; `notes` is optional.
 - Support `status` must be one of `supported`, `unsupported`, `unknown`.
 - Support `confidence` must be one of `official`, `source`, `observed`, `inferred`, `unknown`.
 - Support path entries reuse the existing path vocabulary where possible: `id`, `kind`, `template`, optional `platforms`, optional `description`.
 - Unknown support data must be explicit: prefer `status: "unknown"`, `confidence: "unknown"`, and empty `paths` / `sources` arrays instead of partial or omitted leaves.
-- Keep top-level `version` at `1`.
+- Keep top-level registry `version` at `1`. The per-harness `version` string is different: set it to the upstream release you verified against (no leading `v`) and update it whenever you re-verify the entry.
+- `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local); opt-in discovery is `unsupported` with a note.
+- `mcp.mcpJson` covers only the project-root `.mcp.json`; vendor files such as `.cursor/mcp.json` belong in `mcp.local.paths`. Supported scopes with paths need `format` and `keyPath`, and the entry needs a `serverFormat` taken from the docs' own stdio and remote examples. See [MCP metadata](./configuration.md#mcp-metadata-mcp).
+- Do not add shared paths (`.mcp.json`, `AGENTS.md`, `.agents/...`, `.claude/skills`) as detection `paths`; they are read by many products and cause false positives.
 - Keep contributor-facing support documentation aligned across `docs/api.md`, `docs/configuration.md`, and `docs/support-matrix.md`.
 - After editing `support`, regenerate `docs/support-matrix.md` and run `mise run docs:check` so stale generated docs fail locally before CI.
 - When upgrading a leaf from `unknown`, prefer the evidence order official docs first, then upstream source, then observed installs; leave the leaf `unknown` if none of those produce defensible evidence.
@@ -276,3 +281,41 @@ Use the same canonical edit, `mise run harness:refresh`, and
 metadata: they do not launch agents, install dependencies, authenticate, or
 verify an ACP handshake. See the [schema reference](configuration.md#acp-metadata-acp)
 and [API reference](api.md#getharnessacpinput-and-listharnessacp).
+
+## Finding and updating MCP records
+
+MCP records describe a harness as an MCP client. They live at `harness.mcp` in
+the canonical registry and never affect detection. Use `getHarnessMcp` /
+`listHarnessMcp` in TypeScript, `GetHarnessMCP` / `ListHarnessMCP` in Go, or
+`get_harness_mcp` / `list_harness_mcp` in Rust and Python. To write servers from
+a project `.mcp.json` into a harness's own config, call `translateMcpJson`
+(`TranslateMCPJSON`, `translate_mcp_json`) and merge the returned `config` into
+one of the scope's `paths` with your own JSON/TOML/YAML writer:
+
+```sh
+node --input-type=module <<'JS'
+import { getHarnessMcp, translateMcpJson } from './packages/typescript/src/index.js';
+const { mcp } = getHarnessMcp('gemini-cli');
+console.log(mcp.mcpJson, mcp.local.paths.map((entry) => entry.template), mcp.local.keyPath);
+const doc = { mcpServers: { docs: { type: 'http', url: 'https://example.com/mcp' } } };
+console.log(JSON.stringify(translateMcpJson('gemini-cli', doc).config));
+// {"mcpServers":{"docs":{"httpUrl":"https://example.com/mcp"}}}
+JS
+```
+
+When researching or updating a record:
+
+- `status` is about MCP client support at all; `mcpJson` is only about the
+  project-root `.mcp.json` read by default.
+- Model the harness's native files in `global` / `local` with `format` and
+  `keyPath`. Keep paths that need a different format or key path out of the
+  scope and mention them in `notes`.
+- Derive `serverFormat` from the docs' own stdio and remote examples: field
+  names, transport `type` values, argv-array commands, and `map` versus `array`
+  containers. Omit transports, `env`, or `headers` the harness cannot express;
+  translation then skips such servers instead of silently dropping fields.
+- ACP adapter records normally keep MCP `unknown`, because their MCP servers come
+  from the ACP client per session.
+- Any new `serverFormat` behavior must be added to every package and exercised
+  by `testdata/package-parity-cases.json`; the `translate-probe-every-harness`
+  case already runs a probe document through every harness and scope.

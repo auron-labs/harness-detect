@@ -169,7 +169,7 @@ fn test_support_api_returns_cloned_data() {
         .support
         .clone();
     listed.skills.local.confidence = "mutated".to_string();
-    listed.dot_agents.global.status = "mutated".to_string();
+    listed.agents_skills.global.status = "mutated".to_string();
 
     let second = get_harness_support("codex").expect("second support lookup");
     let listed_again = find_harness_support_record(&list_harness_support(), "codex")
@@ -1049,7 +1049,7 @@ fn validate_support_object(key: &str, support: &serde_json::Value, allowed_platf
     use serde_json::Value;
 
     let support = support.as_object().expect("support must be an object");
-    for area in ["config", "skills", "commands", "agents", "dotAgents"] {
+    for area in ["config", "skills", "commands", "agents", "agentsSkills"] {
         let area_value = support.get(area).unwrap_or_else(|| {
             panic!("support.{area} is required when support is present for key {key}")
         });

@@ -33,6 +33,14 @@ type fixtureCase struct {
 	CWD       string            `json:"cwd,omitempty"`
 	Env       map[string]string `json:"env,omitempty"`
 	Setup     []fixtureSetup    `json:"setup,omitempty"`
+	// Scope and MCPJSON parameterize translateMcpJson cases; MCPJSON is
+	// passed through unexpanded.
+	Scope   string          `json:"scope,omitempty"`
+	MCPJSON json.RawMessage `json:"mcpJson,omitempty"`
+}
+
+type errorResult struct {
+	Error string `json:"error"`
 }
 
 type fixtureSetup struct {
@@ -106,11 +114,11 @@ type normalizedSupportArea struct {
 }
 
 type normalizedSupport struct {
-	Config    normalizedSupportArea `json:"config"`
-	Skills    normalizedSupportArea `json:"skills"`
-	Commands  normalizedSupportArea `json:"commands"`
-	Agents    normalizedSupportArea `json:"agents"`
-	DotAgents normalizedSupportArea `json:"dotAgents"`
+	Config       normalizedSupportArea `json:"config"`
+	Skills       normalizedSupportArea `json:"skills"`
+	Commands     normalizedSupportArea `json:"commands"`
+	Agents       normalizedSupportArea `json:"agents"`
+	AgentsSkills normalizedSupportArea `json:"agentsSkills"`
 }
 
 type normalizedSupportRecord struct {
@@ -297,9 +305,63 @@ func runCase(rawCase fixtureCase, roots sandboxRoots) (snapshotCase, error) {
 	case "listHarnessSupport":
 		result.Result = normalizeSupportList(harnessdetect.ListHarnessSupport())
 		return result, nil
+	case "detectInstalledHarnesses":
+		actual, err := harnessdetect.DetectInstalledHarnesses(options)
+		if err != nil {
+			return snapshotCase{}, fmt.Errorf("detectInstalledHarnesses: %w", err)
+		}
+		result.Result = normalizeDetectResult(actual, roots)
+		return result, nil
+	case "getRawHarnessData":
+		result.Result = harnessdetect.GetRawHarnessData()
+		return result, nil
+	case "getHarnessMatrix":
+		result.Result = harnessdetect.GetHarnessMatrix() //nolint:staticcheck // parity covers the deprecated alias too
+		return result, nil
+	case "listHarnesses":
+		result.Result = harnessdetect.ListHarnesses()
+		return result, nil
+	case "getHarnessMcp":
+		actual, err := harnessdetect.GetHarnessMCP(c.Input)
+		if err != nil {
+			result.Result = errorResult{Error: err.Error()}
+		} else {
+			result.Result = actual
+		}
+		return result, nil
+	case "listHarnessMcp":
+		result.Result = harnessdetect.ListHarnessMCP()
+		return result, nil
+	case "translateMcpJson":
+		result.Result = snapshotTranslation(c)
+		return result, nil
 	default:
 		return snapshotCase{}, fmt.Errorf("unsupported operation %q", c.Operation)
 	}
+}
+
+func translateResult(input, scope string, document []byte) interface{} {
+	actual, err := harnessdetect.TranslateMCPJSON(input, document, harnessdetect.MCPTranslateOptions{Scope: scope})
+	if err != nil {
+		return errorResult{Error: err.Error()}
+	}
+	return actual
+}
+
+// snapshotTranslation translates one harness, or every harness and scope when
+// the input is "*", so each registry serverFormat is exercised.
+func snapshotTranslation(c fixtureCase) interface{} {
+	if c.Input != "*" {
+		return translateResult(c.Input, c.Scope, c.MCPJSON)
+	}
+	all := map[string]interface{}{}
+	for _, harness := range harnessdetect.ListHarnesses() {
+		all[harness.Key] = map[string]interface{}{
+			"global": translateResult(harness.Key, "global", c.MCPJSON),
+			"local":  translateResult(harness.Key, "local", c.MCPJSON),
+		}
+	}
+	return all
 }
 
 func expandCase(c fixtureCase, roots sandboxRoots) fixtureCase {
@@ -309,6 +371,8 @@ func expandCase(c fixtureCase, roots sandboxRoots) fixtureCase {
 		Input:     expandString(c.Input, roots),
 		CWD:       expandString(c.CWD, roots),
 		Platforms: append([]string(nil), c.Platforms...),
+		Scope:     c.Scope,
+		MCPJSON:   c.MCPJSON,
 	}
 
 	if len(c.Env) > 0 {
@@ -631,11 +695,11 @@ func normalizeSupportArea(area harnessdetect.HarnessSupportArea) normalizedSuppo
 
 func normalizeSupport(support harnessdetect.HarnessSupport) normalizedSupport {
 	return normalizedSupport{
-		Config:    normalizeSupportArea(support.Config),
-		Skills:    normalizeSupportArea(support.Skills),
-		Commands:  normalizeSupportArea(support.Commands),
-		Agents:    normalizeSupportArea(support.Agents),
-		DotAgents: normalizeSupportArea(support.DotAgents),
+		Config:       normalizeSupportArea(support.Config),
+		Skills:       normalizeSupportArea(support.Skills),
+		Commands:     normalizeSupportArea(support.Commands),
+		Agents:       normalizeSupportArea(support.Agents),
+		AgentsSkills: normalizeSupportArea(support.AgentsSkills),
 	}
 }
 

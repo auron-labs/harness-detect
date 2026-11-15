@@ -1,4 +1,4 @@
-import { detectInstalledAcpLaunches, type InstalledAcpLaunch, getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
+import { getHarnessMcp, listHarnessMcp, translateMcpJson, type HarnessMcp, type McpTranslation, detectInstalledAcpLaunches, type InstalledAcpLaunch, getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
 
 type Assert<T extends true> = T;
 type IsExact<T, U> =
@@ -107,3 +107,17 @@ void emptyLaunches;
 const installedAcpLaunches: InstalledAcpLaunch[] = detectInstalledAcpLaunches({ env: { PATH: "/usr/bin" } });
 const installedAcpCommand: string | undefined = installedAcpLaunches[0]?.command;
 void installedAcpCommand;
+
+const harnessVersion: string = harnesses[0]!.version;
+const mcpRecord = getHarnessMcp("claude-code");
+const mcpMetadata: HarnessMcp = mcpRecord.mcp;
+const mcpJsonStatus: "supported" | "unsupported" | "unknown" = mcpMetadata.mcpJson;
+const mcpGlobalKeyPath: string[] | undefined = mcpMetadata.global.keyPath;
+const allMcp: string[] = listHarnessMcp().map((record) => record.key);
+const translation: McpTranslation = translateMcpJson("codex", { mcpServers: { fs: { command: "npx", args: ["-y", "fs"] } } }, { scope: "global" });
+const translationFromText: McpTranslation = translateMcpJson("cursor", "{\"mcpServers\":{}}");
+const translationSkipped: string[] = translation.skipped.map((entry) => entry.reason);
+const agentsSkillsStatus: "supported" | "unsupported" | "unknown" = harnesses[0]!.support.agentsSkills.local.status;
+// @ts-expect-error scope must be global or local
+translateMcpJson("codex", { mcpServers: {} }, { scope: "project" });
+void [harnessVersion, mcpJsonStatus, mcpGlobalKeyPath, allMcp, translationFromText, translationSkipped, agentsSkillsStatus];
