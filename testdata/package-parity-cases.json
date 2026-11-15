@@ -1954,6 +1954,75 @@
       }
     },
     {
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "acp-launches-generic-interpreter-with-relative-script",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "acp-launches-installed-binary-beside-node-script",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/gemini",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "gemini-cli",
+            "command": "${BIN}/gemini",
+            "args": [
+              "--acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
       "id": "acp-launches-adapters-installed",
       "operation": "detectInstalledAcpLaunches",
       "platforms": [

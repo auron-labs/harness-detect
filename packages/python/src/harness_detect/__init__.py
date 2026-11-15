@@ -293,7 +293,9 @@ class HarnessAcp:
     launches: tuple[HarnessAcpLaunch, ...] = ()
     # Launches that start the agent from a binary already on PATH; never a
     # package runner.
-    installed_launches: tuple[HarnessAcpLaunch, ...] = ()
+    # None means absent (fall back to launches); an empty tuple means the agent
+    # is never reported as installed.
+    installed_launches: tuple[HarnessAcpLaunch, ...] | None = None
     adapter: str = ""
     notes: str = ""
 
@@ -306,9 +308,12 @@ class HarnessAcp:
             launches=tuple(
                 HarnessAcpLaunch.from_dict(item) for item in d.get("launches", [])
             ),
-            installed_launches=tuple(
-                HarnessAcpLaunch.from_dict(item)
-                for item in d.get("installedLaunches", [])
+            installed_launches=(
+                tuple(
+                    HarnessAcpLaunch.from_dict(item) for item in d["installedLaunches"]
+                )
+                if "installedLaunches" in d
+                else None
             ),
             adapter=d.get("adapter", ""),
             notes=d.get("notes", ""),
@@ -830,7 +835,7 @@ def detect_installed_acp_launches(
     An entry is returned when its ACP status is ``supported``, it does not
     delegate to an ``adapter``, and the command of its launch for the current
     platform resolves to an absolute executable path. Uses ``installed_launches``
-    when present, otherwise ``launches`` that do not use a package runner.
+    when present (an empty list means never installed), otherwise ``launches`` that do not use a package runner.
     Nothing is executed.
     """
     opts = options or CheckOptions()
@@ -840,8 +845,12 @@ def detect_installed_acp_launches(
         acp = harness.acp
         if acp is None or acp.status != "supported" or acp.adapter:
             continue
-        launches = acp.installed_launches or tuple(
-            launch for launch in acp.launches if not _is_package_runner(launch)
+        launches = (
+            acp.installed_launches
+            if acp.installed_launches is not None
+            else tuple(
+                launch for launch in acp.launches if not _is_package_runner(launch)
+            )
         )
         launch = next((x for x in launches if _platform_matches(x.platforms)), None)
         if launch is None:

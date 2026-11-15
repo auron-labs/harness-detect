@@ -1240,3 +1240,30 @@ fn acp_omission_and_default_getters() {
         raw.harnesses.len()
     );
 }
+
+#[cfg(unix)]
+#[test]
+fn installed_acp_launches_never_report_aider_acp_from_node() {
+    use std::os::unix::fs::PermissionsExt;
+    let tmp = temp_dir();
+    let bin = tmp.join("bin");
+    fs::create_dir_all(&bin).unwrap();
+    let node = bin.join("node");
+    fs::write(&node, "#!/bin/sh\nexit 0\n").unwrap();
+    fs::set_permissions(&node, fs::Permissions::from_mode(0o755)).unwrap();
+    fs::create_dir_all(tmp.join("dist")).unwrap();
+    fs::write(tmp.join("dist/index.js"), "").unwrap();
+    let mut env = HashMap::new();
+    env.insert("HOME".to_string(), tmp.to_string_lossy().into_owned());
+    env.insert("PATH".to_string(), bin.to_string_lossy().into_owned());
+    let found = harness_detect::detect_installed_acp_launches(CheckOptions {
+        cwd: Some(tmp.to_string_lossy().into_owned()),
+        env: Some(env),
+    });
+    assert!(found.is_empty(), "unexpected launches: {found:?}");
+    let record = harness_detect::get_harness_acp("aider-acp").unwrap();
+    assert_eq!(record.acp.status, "supported");
+    assert_eq!(record.acp.launches.len(), 1);
+    assert_eq!(record.acp.installed_launches, Some(vec![]));
+    cleanup(&tmp);
+}

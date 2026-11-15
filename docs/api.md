@@ -234,7 +234,8 @@ fetching packages. For each registry entry, in registry order:
 2. Entries with an `adapter` are skipped. The adapter's own entry is returned
    when it is installed, so there are no duplicates and no base CLI is offered
    without its adapter.
-3. `installedLaunches` is used when present; otherwise `launches` without
+3. `installedLaunches` is used when present (an empty list means the entry is
+   never reported as installed); otherwise `launches` without
    package-runner recipes (`npx`, `bunx`, `uvx`, `pnpm dlx`).
 4. The recipe for the current platform is selected.
 5. `command` is resolved on `PATH` using the same lookup as harness detection,
