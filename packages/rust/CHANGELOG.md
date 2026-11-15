@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.0](https://github.com/auron-labs/harness-detect/compare/rust-v0.4.0...rust-v0.5.0) (2026-11-15)
+
+
+### Features
+
+* add MCP metadata, .mcp.json translation, verified versions, and .agents/skills support ([8e67b8d](https://github.com/auron-labs/harness-detect/commit/8e67b8dc617d3d8a85b21195af1f42feb73b1da8))
+* MCP metadata and .mcp.json translation, verified versions, .agents/skills support ([8b25a1e](https://github.com/auron-labs/harness-detect/commit/8b25a1e3987d2aedc61f561aff83870b73b9eb27))
+
+
+### Bug Fixes
+
+* **acp:** never report aider-acp as installed from node alone ([#136](https://github.com/auron-labs/harness-detect/issues/136)) ([67ac28f](https://github.com/auron-labs/harness-detect/commit/67ac28f7ec9cc40a335571f43645c710eeead0d9))
+
 ## [0.4.0](https://github.com/auron-labs/harness-detect/compare/rust-v0.3.0...rust-v0.4.0) (2026-11-09)
 
 
