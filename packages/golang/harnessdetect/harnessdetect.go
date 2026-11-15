@@ -31,6 +31,38 @@ func processEnvMap() map[string]string {
 	return out
 }
 
+// envCaseInsensitive reports whether environment variable names are
+// case-insensitive on this platform. It is a variable so tests can exercise
+// the Windows behaviour on any OS.
+var envCaseInsensitive = runtime.GOOS == "windows"
+
+// lookupEnv returns env[key]. When names are case-insensitive and there is no
+// exact match, it falls back to the lexicographically smallest key that
+// equals key under Unicode case folding.
+func lookupEnv(env map[string]string, key string) (string, bool) {
+	if v, ok := env[key]; ok {
+		return v, true
+	}
+	if !envCaseInsensitive {
+		return "", false
+	}
+	best, found := "", false
+	for k := range env {
+		if strings.EqualFold(k, key) && (!found || k < best) {
+			best, found = k, true
+		}
+	}
+	if !found {
+		return "", false
+	}
+	return env[best], true
+}
+
+func envValue(env map[string]string, key string) string {
+	v, _ := lookupEnv(env, key)
+	return v
+}
+
 //go:embed data/harnesses.json
 var matrixJSON []byte
 
@@ -601,7 +633,7 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		out[k] = v
 	}
 
-	home := env["HOME"]
+	home := envValue(env, "HOME")
 	if home == "" {
 		home, _ = os.UserHomeDir()
 	}
@@ -609,19 +641,19 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		home = "/"
 	}
 
-	xdgConfigHome := env["XDG_CONFIG_HOME"]
+	xdgConfigHome := envValue(env, "XDG_CONFIG_HOME")
 	if xdgConfigHome == "" {
 		xdgConfigHome = filepath.Join(home, ".config")
 	}
-	xdgDataHome := env["XDG_DATA_HOME"]
+	xdgDataHome := envValue(env, "XDG_DATA_HOME")
 	if xdgDataHome == "" {
 		xdgDataHome = filepath.Join(home, ".local", "share")
 	}
-	xdgStateHome := env["XDG_STATE_HOME"]
+	xdgStateHome := envValue(env, "XDG_STATE_HOME")
 	if xdgStateHome == "" {
 		xdgStateHome = filepath.Join(home, ".local", "state")
 	}
-	xdgCacheHome := env["XDG_CACHE_HOME"]
+	xdgCacheHome := envValue(env, "XDG_CACHE_HOME")
 	if xdgCacheHome == "" {
 		xdgCacheHome = filepath.Join(home, ".cache")
 	}
@@ -633,13 +665,18 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		cwd = "."
 	}
 
-	tmpdir := env["TMPDIR"]
+	tmpdir := envValue(env, "TMPDIR")
 	if tmpdir == "" {
 		tmpdir = os.TempDir()
 	}
 
+	for _, key := range []string{"PATH", "PATHEXT"} {
+		if v, ok := lookupEnv(env, key); ok {
+			out[key] = v
+		}
+	}
 	out["HOME"] = home
-	out["USERPROFILE"] = first(env["USERPROFILE"], home)
+	out["USERPROFILE"] = first(envValue(env, "USERPROFILE"), home)
 	out["XDG_CONFIG_HOME"] = xdgConfigHome
 	out["XDG_DATA_HOME"] = xdgDataHome
 	out["XDG_STATE_HOME"] = xdgStateHome
@@ -663,11 +700,11 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 		var value string
 		envVal := ""
 		if root.Env != "" {
-			envVal = baseEnv[root.Env]
+			envVal = envValue(baseEnv, root.Env)
 		}
 		fallbackEnvVal := ""
 		if root.FallbackEnv != "" {
-			fallbackEnvVal = baseEnv[root.FallbackEnv]
+			fallbackEnvVal = envValue(baseEnv, root.FallbackEnv)
 		}
 
 		if root.Env != "" && envVal != "" {
@@ -819,11 +856,11 @@ func findExecutable(executables []string, env map[string]string, absoluteOnly bo
 		return nil
 	}
 
-	pathValue := env["PATH"]
+	pathValue := envValue(env, "PATH")
 	pathParts := strings.Split(pathValue, string(filepath.ListSeparator))
 	var exts []string
 	if runtime.GOOS == "windows" {
-		pathext := env["PATHEXT"]
+		pathext := envValue(env, "PATHEXT")
 		if pathext == "" {
 			pathext = ".EXE;.CMD;.BAT;.COM"
 		}

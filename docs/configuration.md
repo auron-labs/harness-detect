@@ -479,7 +479,7 @@ Paths with a `platforms` array are only checked on matching platforms. On non-ma
 
 On non-Windows platforms, a file found on `PATH` must have the executable bit set (`0o111`) to count as an executable match. A regular file without the executable bit does not trigger detection.
 
-On Windows, any file matching the executable name (with extensions from `PATHEXT`) counts as a match.
+On Windows, any file matching the executable name (with extensions from `PATHEXT`) counts as a match. `PATH` and `PATHEXT` (and `HOME`, `USERPROFILE`, `TMPDIR`) are looked up case-insensitively, so a `Path` key works.
 
 ## Concrete examples
 

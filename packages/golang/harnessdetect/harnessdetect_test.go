@@ -1681,3 +1681,91 @@ func assertNoInstallationMutationMarker(t *testing.T, label string, installation
 		}
 	}
 }
+
+func setEnvCaseInsensitive(t *testing.T, v bool) {
+	t.Helper()
+	old := envCaseInsensitive
+	envCaseInsensitive = v
+	t.Cleanup(func() { envCaseInsensitive = old })
+}
+
+func TestLookupEnv(t *testing.T) {
+	setEnvCaseInsensitive(t, true)
+	if v, ok := lookupEnv(map[string]string{"PATH": "a", "Path": "b"}, "PATH"); !ok || v != "a" {
+		t.Fatalf("exact match = %q, %v", v, ok)
+	}
+	if v, ok := lookupEnv(map[string]string{"Path": "b"}, "PATH"); !ok || v != "b" {
+		t.Fatalf("folded match = %q, %v", v, ok)
+	}
+	for range 20 {
+		if v, _ := lookupEnv(map[string]string{"path": "x", "Path": "y", "pAth": "z"}, "PATH"); v != "y" {
+			t.Fatalf("non-deterministic pick = %q", v)
+		}
+	}
+	if _, ok := lookupEnv(map[string]string{"Other": "b"}, "PATH"); ok {
+		t.Fatal("unexpected match")
+	}
+	setEnvCaseInsensitive(t, false)
+	if _, ok := lookupEnv(map[string]string{"Path": "b"}, "PATH"); ok {
+		t.Fatal("case-sensitive lookup must not fold")
+	}
+}
+
+func TestCheckHarnessFindsExecutableWithMixedCasePathKey(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX executable fixtures")
+	}
+	tmp := tempDir(t)
+	binDir := filepath.Join(tmp, "bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(binDir, "claude"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(binDir, "gemini"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	env := map[string]string{"Home": tmp, "Path": binDir}
+
+	setEnvCaseInsensitive(t, true)
+	r, err := CheckHarness("claude", CheckOptions{Env: env, CWD: tmp})
+	if err != nil || r.ExecutablePath == nil || *r.ExecutablePath != filepath.Join(binDir, "claude") {
+		t.Fatalf("claude not found: %#v, %v", r.ExecutablePath, err)
+	}
+	if got := withDefaults(env, tmp); got["HOME"] != tmp || got["PATH"] != binDir {
+		t.Fatalf("withDefaults HOME = %q, PATH = %q", got["HOME"], got["PATH"])
+	}
+	found, err := DetectInstalledACPLaunches(CheckOptions{Env: env, CWD: tmp})
+	if err != nil || len(found) != 1 || found[0].Key != "gemini-cli" {
+		t.Fatalf("ACP launches = %#v, %v", found, err)
+	}
+
+	setEnvCaseInsensitive(t, false)
+	r, err = CheckHarness("claude", CheckOptions{Env: env, CWD: tmp})
+	if err != nil || r.ExecutablePath != nil {
+		t.Fatalf("Path must not be honoured when case-sensitive: %v, %v", r.ExecutablePath, err)
+	}
+}
+
+func TestFindExecutable_WindowsMixedCaseKeys(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("windows-only test")
+	}
+	tmp := tempDir(t)
+	binDir := filepath.Join(tmp, "bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	exePath := filepath.Join(binDir, "codex.cmd")
+	if err := os.WriteFile(exePath, nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	result, err := CheckHarness("codex", CheckOptions{
+		Env: map[string]string{"Home": tmp, "Path": binDir, "Pathext": ".CMD"},
+		CWD: tmp,
+	})
+	if err != nil || result.ExecutablePath == nil || *result.ExecutablePath != exePath {
+		t.Fatalf("executable path = %v, %v; want %q", result.ExecutablePath, err, exePath)
+	}
+}
