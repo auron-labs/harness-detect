@@ -20706,6 +20706,7 @@
             ]
           }
         ],
+        "installedLaunches": [],
         "sources": [
           "https://github.com/jorgejhms/aider-acp",
           "https://raw.githubusercontent.com/jorgejhms/aider-acp/main/README.md",

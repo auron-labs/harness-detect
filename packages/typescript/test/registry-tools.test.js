@@ -356,7 +356,7 @@ test("ACP installedLaunches require launches and reject package runners", () => 
     assert.match(validateRegistry(withInstalled([launch])).join("\n"), /installedLaunches must not use a package runner/u, launch.command);
   }
   assert.deepEqual(validateRegistry(withInstalled([{ command: "pnpm", args: ["run", "acp"] }])), []);
-  assert.ok(validateRegistry(withInstalled([])).length, "empty list");
+  assert.deepEqual(validateRegistry(withInstalled([])), [], "empty list opts out of installed detection");
   const adapter = acpFixture();
   adapter.harnesses[2].acp.installedLaunches = [{ command: "example-agent", args: [] }];
   assert.ok(validateRegistry(adapter).length, "adapter records cannot declare installedLaunches");

@@ -152,7 +152,7 @@ def run_case(raw_case: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
 
 # Optional list fields the registry omits when empty; every other empty list
 # (aliases, sources, paths...) is required and kept.
-_OMIT_EMPTY_LISTS = {"platforms", "roots", "launches", "installed_launches", "key_path"}
+_OMIT_EMPTY_LISTS = {"platforms", "roots", "launches", "key_path"}
 # Required string fields that may legitimately be empty.
 _KEEP_EMPTY_STRINGS = {"fallback"}
 
@@ -361,7 +361,7 @@ def normalize_acp_record(record: HarnessAcpRecord) -> dict[str, Any]:
         ("launches", acp.launches),
         ("installedLaunches", acp.installed_launches),
     ):
-        if launches:
+        if launches is not None and (launches or field == "installedLaunches"):
             metadata[field] = []
             for launch in launches:
                 item = {"command": launch.command, "args": list(launch.args)}

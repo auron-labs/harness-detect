@@ -244,7 +244,9 @@ Interpret and maintain the records as follows:
   confirms that a binary already on `PATH` serves ACP. It uses the same shape and
   platform rules as `launches`, must not use a package runner, and requires
   `launches`. Without it, only `launches` that avoid package runners are
-  returned by the installed-launch API.
+  returned by the installed-launch API. Use `installedLaunches: []` for a launch
+  that pairs a generic interpreter with a relative path (`aider-acp`), so it is
+  never reported as installed.
 - Follow an adapter by its exact registry key once. Adapter chains are invalid.
   Examples are `codex` → `codex-acp` and `claude-code` → `claude-agent-acp`.
   The target owns launch commands and installation requirements; the host's
@@ -260,7 +262,8 @@ Interpret and maintain the records as follows:
 - Source-only adapters may lack an unambiguous detection signal. `aider-acp`
   records `node dist/index.js` with a required built-checkout working directory;
   callers can instead configure the absolute script path. Its empty
-  `executables` and `paths` deliberately prevent false installation claims.
+  `executables` and `paths`, plus `installedLaunches: []`, deliberately prevent
+  false installation claims.
   Do not use `node`, `npx`, or a generic `dist/index.js` as detection evidence.
 - Research the exact registered product using upstream documentation, source,
   and ACP distribution manifests. Client-only integration, an RFC, a similarly

@@ -731,3 +731,25 @@ def test_installed_acp_launches_ignore_relative_path_entries(tmp_path, monkeypat
     assert [(x.key, x.command, x.args) for x in both] == [
         ("gemini-cli", str(tmp_path / "absolute-bin" / "gemini"), ("--acp",))
     ]
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses POSIX executable fixtures")
+def test_installed_acp_launches_never_report_aider_acp_from_node(tmp_path):
+    binary = tmp_path / "bin" / "node"
+    binary.parent.mkdir()
+    binary.write_text("#!/bin/sh\nexit 0\n")
+    binary.chmod(0o755)
+    (tmp_path / "dist").mkdir()
+    (tmp_path / "dist" / "index.js").write_text("")
+    found = detect_installed_acp_launches(
+        CheckOptions(
+            cwd=str(tmp_path), env={"HOME": str(tmp_path), "PATH": str(binary.parent)}
+        )
+    )
+    assert found == []
+    record = harness_detect.get_harness_acp("aider-acp")
+    assert record.acp.status == "supported"
+    assert [(x.command, x.args) for x in record.acp.launches] == [
+        ("node", ("dist/index.js",))
+    ]
+    assert record.acp.installed_launches == ()

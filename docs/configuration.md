@@ -81,7 +81,7 @@ in stored definitions. Raw/list/detection JSON surfaces preserve omission; Pytho
 | --- | --- | --- | --- |
 | `status` | string | yes | `supported`, `unsupported`, or `unknown`. |
 | `launches` | object[] | conditional | Nonempty list of local stdio recipes: nonblank `command`, required `args` string array, optional `platforms`. |
-| `installedLaunches` | object[] | no | Same shape and platform rules as `launches`, for starting the agent from a binary already on `PATH`. Requires `launches`; never a package runner (`npx`, `bunx`, `uvx`, `pnpm dlx`). |
+| `installedLaunches` | object[] | no | Same shape and platform rules as `launches`, for starting the agent from a binary already on `PATH`. Requires `launches`; never a package runner (`npx`, `bunx`, `uvx`, `pnpm dlx`). An empty list means the entry is never reported as installed. |
 | `adapter` | string | conditional | Exact registry key of a different entry with supported ACP and direct `launches`. |
 | `sources` | string[] | yes | HTTPS evidence URLs; nonempty for `supported` and `unsupported`. |
 | `confidence` | string | yes | Same values as support confidence; cannot be `unknown` for a known status. |
@@ -110,7 +110,8 @@ package-runner recipe, while `installedLaunches` starts the binary a user alread
 has. Populate it only where upstream documentation or the package manifest
 confirms that binary serves ACP. Entries without that evidence are not returned
 by `detectInstalledAcpLaunches` unless their `launches` already avoid package
-runners.
+runners. An empty `installedLaunches` list opts a launch record out of
+installed-launch detection entirely.
 
 ```json
 {
@@ -141,7 +142,8 @@ A documented ACP launch record may omit detection signals when no portable,
 unambiguous signal exists, but must include setup `notes`. For example,
 `aider-acp` runs `node dist/index.js` from its built checkout; the caller must
 choose that working directory or supply the absolute script path. This entry
-is discoverable as metadata and never counts as installed from ACP alone.
+is discoverable as metadata and never counts as installed from ACP alone: it
+sets `installedLaunches: []` so the `node` fallback is not reported.
 See [the lookup workflow](harness-guide.md#finding-and-updating-acp-records) for
 real examples and adapter discovery.
 

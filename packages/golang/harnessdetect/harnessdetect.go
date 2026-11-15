@@ -111,12 +111,27 @@ type HarnessACP struct {
 	Status   string             `json:"status"`
 	Launches []HarnessACPLaunch `json:"launches,omitempty"`
 	// InstalledLaunches start the agent from a binary already on PATH and never
-	// use a package runner.
+	// use a package runner. An empty, non-nil list means the agent is never
+	// reported as installed; nil means absent.
 	InstalledLaunches []HarnessACPLaunch `json:"installedLaunches,omitempty"`
 	Adapter           string             `json:"adapter,omitempty"`
 	Sources           []string           `json:"sources"`
 	Confidence        string             `json:"confidence"`
 	Notes             string             `json:"notes,omitempty"`
+}
+
+// MarshalJSON keeps an empty, non-nil InstalledLaunches as `[]` (never
+// installed) while still omitting a nil one (absent).
+func (a HarnessACP) MarshalJSON() ([]byte, error) {
+	type plain HarnessACP
+	out := struct {
+		plain
+		InstalledLaunches *[]HarnessACPLaunch `json:"installedLaunches,omitempty"`
+	}{plain: plain(a)}
+	if a.InstalledLaunches != nil {
+		out.InstalledLaunches = &a.InstalledLaunches
+	}
+	return json.Marshal(out)
 }
 
 // InstalledACPLaunch is a runnable ACP launch for an installed harness.

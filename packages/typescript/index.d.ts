@@ -50,7 +50,7 @@ export type HarnessAcp = {
   | {
       status: "supported";
       launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]];
-      installedLaunches?: [HarnessAcpLaunch, ...HarnessAcpLaunch[]];
+      installedLaunches?: HarnessAcpLaunch[];
       adapter?: never;
     }
   | { status: "supported"; adapter: string; launches?: never; installedLaunches?: never }

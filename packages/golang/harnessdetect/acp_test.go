@@ -149,3 +149,34 @@ func TestDetectInstalledACPLaunchesIgnoresRelativePathEntries(t *testing.T) {
 		t.Fatalf("got %#v, %v; want %#v", both, err, want)
 	}
 }
+
+func TestDetectInstalledACPLaunchesNeverReportsAiderACPFromNode(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX executable fixtures")
+	}
+	root := t.TempDir()
+	bin := filepath.Join(root, "bin")
+	if err := os.MkdirAll(bin, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(bin, "node"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(root, "dist"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "dist", "index.js"), nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	found, err := DetectInstalledACPLaunches(CheckOptions{CWD: root, Env: map[string]string{"HOME": root, "PATH": bin}})
+	if err != nil || len(found) != 0 {
+		t.Fatalf("got %#v, %v; want none", found, err)
+	}
+	record, err := GetHarnessACP("aider-acp")
+	if err != nil || record.ACP.Status != "supported" || len(record.ACP.Launches) != 1 {
+		t.Fatalf("aider-acp not discoverable: %#v", record)
+	}
+	if record.ACP.InstalledLaunches == nil || len(record.ACP.InstalledLaunches) != 0 {
+		t.Fatalf("installedLaunches = %#v; want empty non-nil", record.ACP.InstalledLaunches)
+	}
+}

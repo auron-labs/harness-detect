@@ -9,6 +9,7 @@ import {
   checkHarness,
   detectHarnesses,
   detectInstalledAcpLaunches,
+  getHarnessAcp,
   detectInstalledHarnesses,
   getHarnessMatrix,
   getHarnessMcp,
@@ -774,6 +775,27 @@ test("detectInstalledAcpLaunches ignores relative PATH entries", { skip: process
     ]);
   } finally {
     process.chdir(originalCwd);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("detectInstalledAcpLaunches never reports aider-acp from node alone", { skip: process.platform === "win32" }, () => {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-aider-")));
+  try {
+    fs.mkdirSync(path.join(root, "bin"));
+    fs.writeFileSync(path.join(root, "bin", "node"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+    fs.mkdirSync(path.join(root, "dist"));
+    fs.writeFileSync(path.join(root, "dist", "index.js"), "");
+    const found = detectInstalledAcpLaunches({
+      cwd: root,
+      env: { HOME: root, PATH: path.join(root, "bin") }
+    });
+    assert.deepEqual(found, []);
+    const record = getHarnessAcp("aider-acp");
+    assert.equal(record.acp.status, "supported");
+    assert.deepEqual(record.acp.launches, [{ command: "node", args: ["dist/index.js"] }]);
+    assert.deepEqual(record.acp.installedLaunches, []);
+  } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
 });

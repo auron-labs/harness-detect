@@ -115,12 +115,14 @@ pub struct HarnessAcp {
     pub launches: Vec<HarnessAcpLaunch>,
     /// Launches that start the agent from a binary already on `PATH`; never a
     /// package runner.
+    /// `None` means absent (fall back to `launches`); `Some(vec![])` means the
+    /// agent is never reported as installed.
     #[serde(
         default,
         rename = "installedLaunches",
-        skip_serializing_if = "Vec::is_empty"
+        skip_serializing_if = "Option::is_none"
     )]
-    pub installed_launches: Vec<HarnessAcpLaunch>,
+    pub installed_launches: Option<Vec<HarnessAcpLaunch>>,
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub adapter: String,
     pub sources: Vec<String>,
@@ -134,7 +136,7 @@ impl Default for HarnessAcp {
         Self {
             status: "unknown".into(),
             launches: vec![],
-            installed_launches: vec![],
+            installed_launches: None,
             adapter: String::new(),
             sources: vec![],
             confidence: "unknown".into(),
@@ -772,7 +774,7 @@ pub fn detect_installed_harnesses(
 /// An entry is returned when its ACP status is `supported`, it does not
 /// delegate to an `adapter`, and the command of its launch for the current
 /// platform resolves to an absolute executable path. Uses `installed_launches`
-/// when present, otherwise `launches` that do not use a package runner. Nothing
+/// when present (an empty list means never installed), otherwise `launches` that do not use a package runner. Nothing
 /// is executed.
 pub fn detect_installed_acp_launches(options: CheckOptions) -> Vec<InstalledAcpLaunch> {
     let env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
@@ -786,13 +788,13 @@ pub fn detect_installed_acp_launches(options: CheckOptions) -> Vec<InstalledAcpL
             continue;
         }
 
-        let launches: Vec<&HarnessAcpLaunch> = if acp.installed_launches.is_empty() {
-            acp.launches
+        let launches: Vec<&HarnessAcpLaunch> = match &acp.installed_launches {
+            Some(installed) => installed.iter().collect(),
+            None => acp
+                .launches
                 .iter()
                 .filter(|l| !is_package_runner(l))
-                .collect()
-        } else {
-            acp.installed_launches.iter().collect()
+                .collect(),
         };
         let Some(launch) = launches
             .into_iter()
