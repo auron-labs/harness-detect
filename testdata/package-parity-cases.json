@@ -500,11 +500,6 @@
             "exists": false
           },
           {
-            "id": "sqlite",
-            "path": null,
-            "exists": false
-          },
-          {
             "id": "global-root",
             "path": "${HOME}/.aws/amazonq",
             "exists": false
@@ -652,7 +647,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 59,
+        "count": 69,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1936,6 +1931,1106 @@
         "installed": false,
         "executablePath": null,
         "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-alias-prime-agent",
+      "operation": "checkHarness",
+      "input": "PrimeIntellect-ai/prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [],
+      "expect": {
+        "key": "prime-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-executable-only-prime-agent",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/prime-agent",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": "${BIN}/prime-agent",
+        "matchedPathIds": []
+      },
+      "platforms": [
+        "darwin",
+        "linux"
+      ]
+    },
+    {
+      "id": "check-path-only-prime-agent-global-settings",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/home-prime-global",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/home-prime-global/.prime/agent/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-settings",
+          "root"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-settings",
+            "path": "${TMP}/home-prime-global/.prime/agent/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-root-tilde-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_CODING_AGENT_DIR": "~/custom-prime"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/custom-prime/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-settings",
+          "root"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-settings",
+            "path": "${HOME}/custom-prime/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-project-settings",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.prime/agent/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-settings"
+        ],
+        "pathAssertions": [
+          {
+            "id": "project-settings",
+            "path": "${CWD}/.prime/agent/settings.json",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-primary-session-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_SESSION_DIR": "${TMP}/sessions-primary",
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR": "${TMP}/sessions-legacy"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/sessions-primary"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sessions"
+        ],
+        "pathAssertions": [
+          {
+            "id": "sessions",
+            "path": "${TMP}/sessions-primary",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-path-only-prime-agent-legacy-session-override",
+      "operation": "checkHarness",
+      "input": "prime-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR": "${TMP}/sessions-legacy"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/sessions-legacy"
+        }
+      ],
+      "expect": {
+        "key": "prime-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sessions"
+        ],
+        "pathAssertions": [
+          {
+            "id": "sessions",
+            "path": "${TMP}/sessions-legacy",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-alias",
+      "operation": "getHarnessAcp",
+      "input": " OPENAI/CODEX ",
+      "expect": {
+        "key": "codex"
+      }
+    },
+    {
+      "id": "acp-list",
+      "operation": "listHarnessAcp"
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "adapter-install-does-not-install-host",
+      "input": "codex",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "codex",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "adapter-alias-detection",
+      "input": "@agentclientprotocol/codex-acp",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "codex-acp",
+        "installed": true,
+        "executablePath": "${BIN}/codex-acp",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "source-only-adapter-does-not-detect-generic-runtime",
+      "input": "aider-acp",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "key": "aider-acp",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-adapter-alias",
+      "operation": "getHarnessAcp",
+      "input": " @agentclientprotocol/claude-agent-acp ",
+      "expect": {
+        "key": "claude-agent-acp"
+      }
+    },
+    {
+      "id": "acp-platform-launches",
+      "operation": "getHarnessAcp",
+      "input": "antigravity-acp",
+      "expect": {
+        "key": "antigravity-acp"
+      }
+    },
+    {
+      "id": "acp-launches-installed-binary-without-runner",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/gemini",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "gemini-cli",
+            "command": "${BIN}/gemini",
+            "args": [
+              "--acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-package-runner-alone",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/npx",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/bunx",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/uvx",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "acp-launches-generic-interpreter-with-relative-script",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "id": "acp-launches-installed-binary-beside-node-script",
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/node",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dist/index.js",
+          "content": ""
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/gemini",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "gemini-cli",
+            "command": "${BIN}/gemini",
+            "args": [
+              "--acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-adapters-installed",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/codex-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/claude-agent-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "codex-acp",
+            "command": "${BIN}/codex-acp",
+            "args": []
+          },
+          {
+            "key": "claude-agent-acp",
+            "command": "${BIN}/claude-agent-acp",
+            "args": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-base-clis-skip-adapter-records",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/claude",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/codex",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "acp-launches-detected-binary-differs-from-launch-command",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cursor",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "acp-launches-launch-command-present",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cursor-agent",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "cursor",
+            "command": "${BIN}/cursor-agent",
+            "args": [
+              "acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-other-platform-recipe",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/agy_acp_server.exe",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "raw-registry-round-trip",
+      "operation": "getRawHarnessData"
+    },
+    {
+      "id": "harness-matrix-round-trip",
+      "operation": "getHarnessMatrix"
+    },
+    {
+      "id": "list-harnesses-round-trip",
+      "operation": "listHarnesses"
+    },
+    {
+      "id": "detect-installed-codex-and-claude",
+      "operation": "detectInstalledHarnesses",
+      "cwd": "${TMP}/detect-installed/cwd",
+      "env": {
+        "HOME": "${TMP}/detect-installed/home",
+        "PATH": "${TMP}/detect-installed/bin"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${TMP}/detect-installed/bin/codex",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/detect-installed/home/.claude/settings.json",
+          "content": "{}\n"
+        }
+      ],
+      "expect": {
+        "installedKeys": [
+          "claude-code",
+          "codex"
+        ],
+        "count": 2
+      }
+    },
+    {
+      "id": "mcp-record-alias",
+      "operation": "getHarnessMcp",
+      "input": " Claude ",
+      "expect": {
+        "key": "claude-code"
+      }
+    },
+    {
+      "id": "mcp-record-unknown",
+      "operation": "getHarnessMcp",
+      "input": "not-a-harness",
+      "expect": {
+        "error": "Unknown harness: not-a-harness"
+      }
+    },
+    {
+      "id": "mcp-list",
+      "operation": "listHarnessMcp"
+    },
+    {
+      "id": "translate-claude-default-local",
+      "operation": "translateMcpJson",
+      "input": "claude-code",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "docs": {
+              "type": "http",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Authorization": "Bearer ${DOCS_TOKEN}"
+              }
+            },
+            "fs": {
+              "type": "stdio",
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "."
+              ],
+              "env": {
+                "ROOT": "."
+              }
+            },
+            "legacy": {
+              "type": "sse",
+              "url": "https://example.com/sse"
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "translate-codex-global-toml",
+      "operation": "translateMcpJson",
+      "input": "codex",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "format": "toml",
+        "keyPath": [
+          "mcp_servers"
+        ],
+        "config": {
+          "mcp_servers": {
+            "docs": {
+              "url": "https://example.com/mcp",
+              "http_headers": {
+                "Authorization": "Bearer ${DOCS_TOKEN}"
+              }
+            },
+            "fs": {
+              "command": "npx",
+              "args": [
+                "-y",
+                "@modelcontextprotocol/server-filesystem",
+                "."
+              ],
+              "env": {
+                "ROOT": "."
+              }
+            }
+          }
+        },
+        "skipped": [
+          {
+            "name": "legacy",
+            "reason": "unsupported transport: sse"
+          }
+        ]
+      }
+    },
+    {
+      "id": "translate-opencode-argv-command",
+      "operation": "translateMcpJson",
+      "input": "opencode",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "servers": {
+          "docs": {
+            "type": "remote",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "fs": {
+            "type": "local",
+            "command": [
+              "npx",
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "environment": {
+              "ROOT": "."
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "translate-gptme-array-container",
+      "operation": "translateMcpJson",
+      "input": "gptme",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "servers": [
+          {
+            "name": "docs",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          {
+            "name": "fs",
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "translate-unknown-scope",
+      "operation": "translateMcpJson",
+      "input": "codex",
+      "scope": "project",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Unknown MCP scope: project"
+      }
+    },
+    {
+      "id": "translate-without-mcp-config",
+      "operation": "translateMcpJson",
+      "input": "aider",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness aider has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-invalid-document",
+      "operation": "translateMcpJson",
+      "input": "claude-code",
+      "mcpJson": {
+        "servers": {}
+      },
+      "expect": {
+        "error": ".mcp.json must be an object with an mcpServers object"
+      }
+    },
+    {
+      "id": "translate-unknown-harness",
+      "operation": "translateMcpJson",
+      "input": "not-a-harness",
+      "mcpJson": {
+        "mcpServers": {
+          "fs": {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@modelcontextprotocol/server-filesystem",
+              "."
+            ],
+            "env": {
+              "ROOT": "."
+            }
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${DOCS_TOKEN}"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "error": "Unknown harness: not-a-harness"
+      }
+    },
+    {
+      "id": "translate-probe-every-harness",
+      "operation": "translateMcpJson",
+      "input": "*",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio-full": {
+            "type": "stdio",
+            "command": "npx",
+            "args": [
+              "-y",
+              "pkg"
+            ],
+            "env": {
+              "TOKEN": "${TOKEN}"
+            }
+          },
+          "stdio-bare": {
+            "command": "server"
+          },
+          "stdio-null-fields": {
+            "command": "server",
+            "args": null,
+            "env": null
+          },
+          "stdio-extra-fields": {
+            "command": "server",
+            "cwd": "/srv",
+            "timeout": 5
+          },
+          "http-full": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${TOKEN}"
+            }
+          },
+          "http-inferred": {
+            "url": "https://example.com/inferred"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          },
+          "websocket": {
+            "type": "ws",
+            "url": "wss://example.com"
+          },
+          "no-transport": {
+            "description": "neither command nor url"
+          },
+          "numeric-type": {
+            "type": 5,
+            "command": "server"
+          },
+          "null-type": {
+            "type": null,
+            "command": "server"
+          },
+          "bad-args": {
+            "command": "server",
+            "args": [
+              1
+            ]
+          },
+          "bad-env": {
+            "command": "server",
+            "env": {
+              "A": 1
+            }
+          },
+          "bad-headers": {
+            "url": "https://example.com/mcp",
+            "headers": [
+              "x"
+            ]
+          },
+          "empty-command": {
+            "command": ""
+          },
+          "missing-url": {
+            "type": "http"
+          },
+          "not-an-object": "server",
+          "__proto__": {
+            "command": "proto-server"
+          }
+        }
       }
     }
   ]

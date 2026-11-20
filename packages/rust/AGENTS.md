@@ -54,6 +54,12 @@ There is no root `Cargo.toml`; always `cd` into `packages/rust` first.
   - `list_harnesses()`
   - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>`
   - `list_harness_support()`
+  - `get_harness_acp(input)`
+  - `list_harness_acp()`
+  - `get_harness_mcp(input)`
+  - `list_harness_mcp()`
+  - `translate_mcp_json(input, &mcp_json, &options)`
+  - `detect_installed_acp_launches()`
   - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
   - `detect_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
   - `detect_installed_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
@@ -109,3 +115,23 @@ notes:
   simplification since the registry contains no Windows-only path entries.
 - Detection is intentionally evidence-based: a harness can count as installed
   from either an executable match or existing config/state paths.
+
+## Finding ACP metadata
+
+Use `get_harness_acp(input)` for a key or alias and `list_harness_acp()` to list all
+ACP records, including adapters and unknowns. Read the record's `acp` metadata
+and check `status` before using a launch. Follow `adapter` once to the owning
+registry record, then select from `launches` for the caller's platform. Read both
+records' notes and the owner's installation requirements; ACP support and
+installation detection are independent.
+
+See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
+for examples, platform selection, evidence rules, and source-only adapters.
+
+## MCP metadata and translation
+
+Every harness has required `mcp` metadata (see the root `AGENTS.md`). The
+`.mcp.json` translator is generic: it only interprets the registry's
+`mcp.serverFormat`, so keep it free of harness-specific branches. Its skip
+reasons, error messages, and output must stay identical across packages; the
+`translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.

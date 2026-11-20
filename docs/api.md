@@ -60,7 +60,7 @@ import { getHarnessMatrix } from "@auron-labs/harness-detect";
 
 const matrix = getHarnessMatrix();
 console.log(matrix.version);           // 1
-console.log(matrix.harnesses.length);  // 59
+console.log(matrix.harnesses.length);  // 69
 ```
 
 <!-- /automd -->
@@ -79,6 +79,183 @@ import { listHarnesses } from "@auron-labs/harness-detect";
 const harnesses = listHarnesses();
 console.log(harnesses.map((h) => h.key));
 console.log(harnesses[0].support);
+```
+
+### `getHarnessAcp(input)` and `listHarnessAcp()`
+
+```ts
+function getHarnessAcp(input: string): HarnessAcpRecord
+function listHarnessAcp(): HarnessAcpRecord[]
+```
+
+Return `{key, name, acp}` records using the same key/alias normalization,
+unknown-harness error, and independent snapshots as the support APIs. Stored ACP
+is optional during this rollout; these getters return explicit `unknown` when
+it is absent. Raw/list/detection surfaces retain stored omission. Python uses
+immutable records and represents absent stored ACP as `None`.
+
+Go names these operations `GetHarnessACP` and `ListHarnessACP`; Rust and Python
+use `get_harness_acp` and `list_harness_acp`. Support getters continue returning
+only support metadata. ACP has no effect on installed status.
+
+```ts
+import { getHarnessAcp } from "@auron-labs/harness-detect";
+
+const record = getHarnessAcp("codex");
+const acp = record.acp;
+const owner = acp.adapter ? getHarnessAcp(acp.adapter) : record;
+const launch = owner.acp.launches?.find(
+  item => !item.platforms || item.platforms.includes(process.platform)
+);
+console.log(launch); // undefined if no supported launch matches this OS
+console.log(record.acp.notes, owner.acp.notes);
+```
+
+Supported ACP describes either a nonempty `launches` list for local stdio or
+one `adapter` registry key leading to the launch owner. Multiple recipes have
+explicit, non-overlapping platforms. Read the owning harness definition's
+`installations` and `env` plus both records' notes for setup requirements.
+The library returns metadata; it does not execute commands or check readiness. See [ACP fields and evidence rules](./configuration.md#acp-metadata-acp).
+
+### `getHarnessMcp(input)` and `listHarnessMcp()`
+
+```ts
+function getHarnessMcp(input: string): HarnessMcpRecord
+function listHarnessMcp(): HarnessMcpRecord[]
+```
+
+Return `{key, name, mcp}` records with the same key/alias normalization,
+unknown-harness error, and independent copies as the support and ACP getters.
+Every harness has explicit `mcp` metadata:
+
+- `mcp.status`: whether the harness can use MCP servers at all.
+- `mcp.mcpJson`: whether it reads the project-root `.mcp.json`
+  (`{"mcpServers": {...}}`) by default.
+- `mcp.global` / `mcp.local`: the user-level and project-level files that store
+  MCP servers (`paths`), their `format` (`json`, `jsonc`, `toml`, `yaml`), and the
+  `keyPath` the servers live under, e.g. `["mcpServers"]`, `["mcp_servers"]`,
+  `["mcp", "servers"]`, or the literal key `["amp.mcpServers"]`. `local` describes
+  the harness's native project file; `.mcp.json` support is reported only by
+  `mcpJson`.
+- `mcp.serverFormat`: the native shape of one server entry, used by
+  `translateMcpJson`.
+
+MCP metadata is descriptive and never affects installed status. See
+[MCP fields](./configuration.md#mcp-metadata-mcp).
+
+```ts
+import { getHarnessMcp } from "@auron-labs/harness-detect";
+
+const { mcp } = getHarnessMcp("codex");
+console.log(mcp.status, mcp.mcpJson); // "supported" "unsupported"
+console.log(mcp.global.paths[0].template, mcp.global.format, mcp.global.keyPath);
+// "${CODEX_ROOT}/config.toml" "toml" ["mcp_servers"]
+```
+
+### `translateMcpJson(input, mcpJson, options?)`
+
+```ts
+function translateMcpJson(
+  input: string,
+  mcpJson: McpJsonDocument | string,
+  options?: { scope?: "global" | "local" } // default "local"
+): McpTranslation
+
+interface McpTranslation {
+  key: string;
+  name: string;
+  scope: "global" | "local";
+  format: "json" | "jsonc" | "toml" | "yaml";
+  keyPath: [string, ...string[]];
+  servers: Record<string, Record<string, unknown>> | Array<Record<string, unknown>>;
+  config: Record<string, unknown>; // servers nested under keyPath
+  skipped: { name: string; reason: string }[];
+}
+```
+
+Translates the servers of a `.mcp.json` document into the harness's native
+server entries for one scope. The function is pure: it reads no files, writes
+nothing, and returns a plain object. Serialize `config` with your own
+JSON/TOML/YAML writer and merge it into one of the scope's `paths`.
+
+Each `.mcp.json` server is classified by `type` (`stdio`, `http`, `sse`), or by
+`command` (stdio) / `url` (http) when `type` is absent. Only `command`, `args`,
+`env`, `url`, and `headers` are translated; other fields are ignored. Values such
+as `${TOKEN}` are copied verbatim. Servers are processed in sorted name order,
+and a server is listed in `skipped` instead of being partially translated when:
+
+| `reason` | Cause |
+| --- | --- |
+| `invalid server entry` | The entry is not an object, or `type` is not a string. |
+| `unsupported transport: <type>` | `type` is not stdio/http/sse, or the harness cannot use that transport. |
+| `missing command or url` | No `type`, `command`, or `url`. |
+| `missing command` / `missing url` | The field is absent or empty. |
+| `invalid args` / `invalid env` / `invalid headers` | Not a string array / object of strings. |
+| `env not supported` / `headers not supported` | The server sets them but the native format has no field for them. |
+
+It throws `Unknown harness: <input>`, `Unknown MCP scope: <scope>`,
+`Harness <key> has no file-based MCP config for scope <scope>` (MCP unsupported
+or unknown, or the scope has no config file), or
+`.mcp.json must be an object with an mcpServers object`.
+
+```ts
+import { translateMcpJson } from "@auron-labs/harness-detect";
+
+const result = translateMcpJson("codex", {
+  mcpServers: {
+    fs: { command: "npx", args: ["-y", "@modelcontextprotocol/server-filesystem", "."] },
+    docs: { type: "http", url: "https://example.com/mcp", headers: { Authorization: "Bearer ${TOKEN}" } },
+    legacy: { type: "sse", url: "https://example.com/sse" }
+  }
+}, { scope: "global" });
+
+result.format;  // "toml"
+result.config;  // { mcp_servers: { docs: { url, http_headers }, fs: { command, args } } }
+result.skipped; // [{ name: "legacy", reason: "unsupported transport: sse" }]
+```
+
+### `detectInstalledAcpLaunches(options?)`
+
+```ts
+function detectInstalledAcpLaunches(options?: CheckHarnessOptions): InstalledAcpLaunch[]
+
+interface InstalledAcpLaunch {
+  key: string;
+  name: string;
+  command: string; // absolute path
+  args: string[];
+}
+```
+
+Lists ACP agents that can be started from binaries already installed, without
+fetching packages. For each registry entry, in registry order:
+
+1. `acp.status` must be `supported`.
+2. Entries with an `adapter` are skipped. The adapter's own entry is returned
+   when it is installed, so there are no duplicates and no base CLI is offered
+   without its adapter.
+3. `installedLaunches` is used when present (an empty list means the entry is
+   never reported as installed); otherwise `launches` without
+   package-runner recipes (`npx`, `bunx`, `uvx`, `pnpm dlx`).
+4. The recipe for the current platform is selected.
+5. `command` is resolved on `PATH` using the same lookup as harness detection,
+   honouring `options.env`. The entry is omitted unless the result is an
+   absolute path to an executable file; relative `PATH` entries are ignored.
+
+The detected `executablePath` is not used: a harness can be detected at `cursor`
+while its ACP launch is `cursor-agent`. The call does not execute, install, or
+probe anything.
+
+Go names this `DetectInstalledACPLaunches(options) ([]InstalledACPLaunch, error)`;
+Rust and Python use `detect_installed_acp_launches`, returning
+`Vec<InstalledAcpLaunch>` and `list[InstalledAcpLaunch]`.
+
+```ts
+import { detectInstalledAcpLaunches } from "@auron-labs/harness-detect";
+
+for (const { key, command, args } of detectInstalledAcpLaunches()) {
+  console.log(key, command, args); // e.g. gemini-cli /usr/local/bin/gemini ["--acp"]
+}
 ```
 
 ### `getHarnessSupport(input)`
@@ -115,14 +292,14 @@ console.log(support.support.config.global.status);
 console.log(support.support.config.local.status);
 
 console.log(support.support.commands.local.paths);
-console.log(support.support.dotAgents.local.paths);
+console.log(support.support.agentsSkills.local.paths);
 ```
 
 - `config` = config files/directories
 - `skills` = skills/prompts surfaces
 - `commands` = slash commands or command packs
 - `agents` = agent definition/manifests
-- `dotAgents` = `.agents`-style support when distinct from `agents`
+- `agentsSkills` = discovery of Agent Skills from the shared `.agents/skills` directory (`${HOME}/.agents/skills` globally, `${CWD}/.agents/skills` locally); vendor directories such as `.claude/skills` belong under `skills`
 
 When you need all harnesses' support summaries without the rest of the raw
 registry, prefer `listHarnessSupport()`.
@@ -226,6 +403,7 @@ interface HarnessRootDef {
   name: string;
   env?: string;
   use?: string;
+  fallbackEnv?: string;
   fallback: string;
 }
 
@@ -257,6 +435,7 @@ interface HarnessInstallation {
 interface HarnessDefinition {
   key: string;
   name: string;
+  version: string; // upstream version the entry was verified against, or "unknown"
   aliases: string[];
   executables: string[];
   installations: HarnessInstallation[];
@@ -265,6 +444,8 @@ interface HarnessDefinition {
   env: HarnessEnvVar[];
   sources: string[];
   support: HarnessSupport;
+  acp?: HarnessAcp;
+  mcp: HarnessMcp;
 }
 
 interface HarnessMatrix {
@@ -306,13 +487,72 @@ interface HarnessSupport {
   skills: HarnessSupportScopePair;
   commands: HarnessSupportScopePair;
   agents: HarnessSupportScopePair;
-  dotAgents: HarnessSupportScopePair;
+  agentsSkills: HarnessSupportScopePair;
+}
+
+interface HarnessAcpLaunch {
+  command: string;
+  args: string[];
+  platforms?: HarnessPlatform[];
+}
+
+type HarnessAcp = {
+  sources: string[];
+  confidence: HarnessSupportConfidence;
+  notes?: string;
+} & (
+  | { status: "supported"; launches: [HarnessAcpLaunch, ...HarnessAcpLaunch[]]; adapter?: never }
+  | { status: "supported"; adapter: string; launches?: never }
+  | { status: "unsupported" | "unknown"; launches?: never; adapter?: never }
+);
+
+interface HarnessAcpRecord {
+  key: string;
+  name: string;
+  acp: HarnessAcp;
 }
 
 interface HarnessSupportRecord {
   key: string;
   name: string;
   support: HarnessSupport;
+}
+
+interface HarnessMcpScope {
+  status: HarnessSupportStatus;
+  paths: HarnessSupportPath[];
+  format?: "json" | "jsonc" | "toml" | "yaml"; // when supported with paths
+  keyPath?: [string, ...string[]];            // when supported with paths
+  sources: string[];
+  confidence: HarnessSupportConfidence;
+  notes?: string;
+}
+
+interface HarnessMcpServerFormat {
+  container: "map" | "array";
+  nameField?: string;
+  typeField?: string;
+  stdio: { type?: string; command: string; args?: string; env?: string };
+  http?: { type?: string; url: string; headers?: string };
+  sse?: { type?: string; url: string; headers?: string };
+  defaults?: Record<string, string | number | boolean>;
+}
+
+interface HarnessMcp {
+  status: HarnessSupportStatus;
+  mcpJson: HarnessSupportStatus;
+  global: HarnessMcpScope;
+  local: HarnessMcpScope;
+  serverFormat?: HarnessMcpServerFormat;
+  sources: string[];
+  confidence: HarnessSupportConfidence;
+  notes?: string;
+}
+
+interface HarnessMcpRecord {
+  key: string;
+  name: string;
+  mcp: HarnessMcp;
 }
 
 interface ResolvedHarnessPath extends HarnessPathSpec {
@@ -380,7 +620,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 59
+console.log(harnesses.harnesses.length);  // 69
 ```
 
 <!-- /automd -->
@@ -421,6 +661,57 @@ Returns a copy of the harness definitions slice.
 ```go
 func ListHarnesses() []HarnessDefinition
 ```
+
+### `GetHarnessACP(input)` and `ListHarnessACP()`
+
+```go
+func GetHarnessACP(input string) (HarnessACPRecord, error)
+func ListHarnessACP() []HarnessACPRecord
+```
+
+Return ACP records with the same lookup and copy behavior as support records.
+See the [shared ACP API contract](#getharnessacpinput-and-listharnessacp).
+
+### `GetHarnessMCP(input)`, `ListHarnessMCP()`, and `TranslateMCPJSON(input, mcpJSON, options)`
+
+```go
+func GetHarnessMCP(input string) (HarnessMCPRecord, error)
+func ListHarnessMCP() []HarnessMCPRecord
+func TranslateMCPJSON(input string, mcpJSON []byte, options MCPTranslateOptions) (MCPTranslation, error)
+
+type MCPTranslateOptions struct {
+	Scope string // "global" or "local"; empty means "local"
+}
+
+type MCPTranslation struct {
+	Key, Name, Scope, Format string
+	KeyPath []string
+	Servers any            // map[string]any, or []any for array containers
+	Config  map[string]any // Servers nested under KeyPath
+	Skipped []MCPSkippedServer
+}
+```
+
+Same metadata, translation rules, skip reasons, and error messages as the
+[TypeScript MCP API](#getharnessmcpinput-and-listharnessmcp). `HarnessMCP.MCPJSON`
+holds the JSON `mcpJson` field. A malformed `mcpJSON` byte slice returns the
+wrapped `encoding/json` error.
+
+### `DetectInstalledACPLaunches(options)`
+
+```go
+type InstalledACPLaunch struct {
+	Key     string
+	Name    string
+	Command string // absolute path
+	Args    []string
+}
+
+func DetectInstalledACPLaunches(options CheckOptions) ([]InstalledACPLaunch, error)
+```
+
+Lists ACP agents that can be started from installed binaries. See the
+[shared contract](#detectinstalledacplaunchesoptions).
 
 ### `GetHarnessSupport(input)`
 
@@ -501,6 +792,7 @@ type HarnessDefinition struct {
     Paths       []HarnessPathSpec
     Roots       []HarnessRootDef
     Support     HarnessSupport
+    ACP         *HarnessACP
     Env         []HarnessEnvVar
     Sources     []string
 }
@@ -534,7 +826,10 @@ type ResolvedHarnessPath struct {
 `GetRawHarnessData()`, `GetHarnessMatrix()`, `ListHarnesses()`, and
 `HarnessCheckResult.Harness` all expose the same registry metadata, including
 `Installations` and required `Support`. `GetHarnessSupport()` and
-`ListHarnessSupport()` expose just the support subset. That metadata is
+`ListHarnessSupport()` expose just the support subset. Optional `ACP` is a
+`*HarnessACP` containing `Status`, `Launches`, `Adapter`, `Sources`, `Confidence`,
+and `Notes`. `Launches` is a slice of `HarnessACPLaunch` values holding `Command`, `Args`, and `Platforms`;
+`HarnessACPRecord` holds `Key`, `Name`, and `ACP`. That metadata is
 descriptive only and does not make a harness count as installed.
 
 ## Rust API
@@ -545,6 +840,12 @@ Entry point: `packages/rust/src/lib.rs`
 - `get_raw_harness_data() -> HarnessMatrix`
 - `get_harness_matrix() -> HarnessMatrix`
 - `list_harnesses() -> Vec<HarnessDefinition>`
+- `get_harness_acp(input) -> Result<HarnessAcpRecord, HarnessError>`
+- `list_harness_acp() -> Vec<HarnessAcpRecord>`
+- `detect_installed_acp_launches(options) -> Vec<InstalledAcpLaunch>`
+- `get_harness_mcp(input) -> Result<HarnessMcpRecord, HarnessError>`
+- `list_harness_mcp() -> Vec<HarnessMcpRecord>`
+- `translate_mcp_json(input, &mcp_json, &McpTranslateOptions) -> Result<McpTranslation, HarnessError>`
 - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>`
 - `list_harness_support() -> Vec<HarnessSupportRecord>`
 - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>`
@@ -552,7 +853,13 @@ Entry point: `packages/rust/src/lib.rs`
 - `detect_installed_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>`
 
 Rust uses the same raw registry shape, including `installations[]` and required
-`support`, and the same detection semantics.
+`support`, and the same detection semantics. Optional ACP is
+`Option<HarnessAcp>` on `HarnessDefinition`; `HarnessAcpLaunch` describes the
+command and argv, and `HarnessAcpRecord` is the getter/list result. See the
+[shared ACP API contract](#getharnessacpinput-and-listharnessacp).
+`HarnessDefinition.mcp` is a required `HarnessMcp`; `translate_mcp_json` takes a
+`serde_json::Value` and returns `servers`/`config` as `serde_json::Value`. See the
+[shared MCP API contract](#getharnessmcpinput-and-listharnessmcp).
 
 ## Python API
 
@@ -562,6 +869,12 @@ Entry point: `packages/python/src/harness_detect/__init__.py`
 - `get_raw_harness_data() -> HarnessMatrix`
 - `get_harness_matrix() -> HarnessMatrix`
 - `list_harnesses() -> list[HarnessDefinition]`
+- `get_harness_acp(input) -> HarnessAcpRecord`
+- `list_harness_acp() -> list[HarnessAcpRecord]`
+- `detect_installed_acp_launches(options=None) -> list[InstalledAcpLaunch]`
+- `get_harness_mcp(input) -> HarnessMcpRecord`
+- `list_harness_mcp() -> list[HarnessMcpRecord]`
+- `translate_mcp_json(input, mcp_json, *, scope="local") -> McpTranslation`
 - `get_harness_support(input) -> HarnessSupportRecord`
 - `list_harness_support() -> list[HarnessSupportRecord]`
 - `check_harness(input, options=None) -> HarnessCheckResult`
@@ -569,7 +882,14 @@ Entry point: `packages/python/src/harness_detect/__init__.py`
 - `detect_installed_harnesses(options=None) -> list[HarnessCheckResult]`
 
 Python uses the same raw registry shape, including `installations[]` and
-required `support`, and the same detection semantics.
+required `support`, and the same detection semantics. `HarnessDefinition.acp`
+is `HarnessAcp | None`; the frozen `HarnessAcp`, `HarnessAcpLaunch`, and
+`HarnessAcpRecord` dataclasses use tuples for arrays. See the
+[shared ACP API contract](#getharnessacpinput-and-listharnessacp).
+`HarnessDefinition.mcp` is a frozen `HarnessMcp` (`mcp_json`, `global_`, `local`,
+`server_format`); `translate_mcp_json` accepts a mapping or JSON text, raises
+`HarnessError`, and returns an `McpTranslation` with plain `dict`/`list` values.
+See the [shared MCP API contract](#getharnessmcpinput-and-listharnessmcp).
 
 ### Go usage example
 

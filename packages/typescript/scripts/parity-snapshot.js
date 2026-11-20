@@ -2,7 +2,22 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { checkHarness, detectHarnesses, getHarnessSupport, listHarnessSupport } from "../src/index.js";
+import {
+  checkHarness,
+  detectHarnesses,
+  detectInstalledAcpLaunches,
+  detectInstalledHarnesses,
+  getHarnessAcp,
+  getHarnessMatrix,
+  getHarnessMcp,
+  getHarnessSupport,
+  getRawHarnessData,
+  listHarnessAcp,
+  listHarnessMcp,
+  listHarnessSupport,
+  listHarnesses,
+  translateMcpJson
+} from "../src/index.js";
 
 function readInput(sourceArg) {
   if (sourceArg && sourceArg !== "-") {
@@ -77,7 +92,10 @@ function expandCase(testCase, roots) {
     ...(testCase.platforms === undefined ? {} : { platforms: expandValue(testCase.platforms, roots) }),
     ...(testCase.cwd === undefined ? {} : { cwd: expandValue(testCase.cwd, roots) }),
     ...(testCase.env === undefined ? {} : { env: expandValue(testCase.env, roots) }),
-    ...(testCase.setup === undefined ? {} : { setup: expandValue(testCase.setup, roots) })
+    ...(testCase.setup === undefined ? {} : { setup: expandValue(testCase.setup, roots) }),
+    // .mcp.json documents are passed through unexpanded.
+    ...(testCase.scope === undefined ? {} : { scope: testCase.scope }),
+    ...(testCase.mcpJson === undefined ? {} : { mcpJson: testCase.mcpJson })
   };
 }
 
@@ -246,7 +264,7 @@ function normalizeSupport(support) {
     skills: normalizeSupportArea(support.skills),
     commands: normalizeSupportArea(support.commands),
     agents: normalizeSupportArea(support.agents),
-    dotAgents: normalizeSupportArea(support.dotAgents)
+    agentsSkills: normalizeSupportArea(support.agentsSkills)
   };
 }
 
@@ -300,6 +318,42 @@ function normalizeDetectResults(results, roots) {
   };
 }
 
+function errorResult(fn) {
+  try {
+    return fn();
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+function snapshotTranslation(testCase) {
+  const translate = (harness, scope) => errorResult(() => {
+    const result = translateMcpJson(harness, testCase.mcpJson, scope === undefined ? {} : { scope });
+    return {
+      key: result.key,
+      name: result.name,
+      scope: result.scope,
+      format: result.format,
+      keyPath: result.keyPath,
+      servers: result.servers,
+      config: result.config,
+      skipped: result.skipped
+    };
+  });
+
+  if (testCase.input !== "*") {
+    return translate(testCase.input, testCase.scope);
+  }
+
+  // Every harness and scope, so each registry serverFormat is exercised.
+  return Object.fromEntries(
+    listHarnesses()
+      .map((harness) => harness.key)
+      .sort()
+      .map((key) => [key, { global: translate(key, "global"), local: translate(key, "local") }])
+  );
+}
+
 function runCase(rawCase, roots) {
   const testCase = expandCase(rawCase, roots);
 
@@ -333,6 +387,60 @@ function runCase(rawCase, roots) {
         operation: testCase.operation,
         result: normalizeDetectResults(detectHarnesses(options), roots)
       };
+    }
+
+    if (testCase.operation === "getHarnessAcp" || testCase.operation === "listHarnessAcp") {
+      return {
+        id: testCase.id,
+        operation: testCase.operation,
+        result: testCase.operation === "getHarnessAcp" ? getHarnessAcp(testCase.input) : listHarnessAcp()
+      };
+    }
+
+    if (testCase.operation === "detectInstalledAcpLaunches") {
+      return {
+        id: testCase.id,
+        operation: testCase.operation,
+        result: {
+          launches: detectInstalledAcpLaunches(options).map((launch) => ({
+            key: launch.key,
+            command: normalizePathString(launch.command, roots),
+            args: launch.args
+          }))
+        }
+      };
+    }
+
+    if (testCase.operation === "detectInstalledHarnesses") {
+      return {
+        id: testCase.id,
+        operation: testCase.operation,
+        result: normalizeDetectResults(detectInstalledHarnesses(options), roots)
+      };
+    }
+
+    if (testCase.operation === "getRawHarnessData" || testCase.operation === "getHarnessMatrix") {
+      return {
+        id: testCase.id,
+        operation: testCase.operation,
+        result: testCase.operation === "getRawHarnessData" ? getRawHarnessData() : getHarnessMatrix()
+      };
+    }
+
+    if (testCase.operation === "listHarnesses") {
+      return { id: testCase.id, operation: testCase.operation, result: listHarnesses() };
+    }
+
+    if (testCase.operation === "getHarnessMcp") {
+      return { id: testCase.id, operation: testCase.operation, result: errorResult(() => getHarnessMcp(testCase.input)) };
+    }
+
+    if (testCase.operation === "listHarnessMcp") {
+      return { id: testCase.id, operation: testCase.operation, result: listHarnessMcp() };
+    }
+
+    if (testCase.operation === "translateMcpJson") {
+      return { id: testCase.id, operation: testCase.operation, result: snapshotTranslation(testCase) };
     }
 
     if (testCase.operation === "getHarnessSupport") {

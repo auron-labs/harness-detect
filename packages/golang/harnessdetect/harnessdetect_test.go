@@ -18,34 +18,15 @@ import (
 var supportedInstallMethods = []string{"npm", "homebrew", "pip", "pipx", "uv", "cargo", "go", "script", "manual", "marketplace", "binary", "unknown"}
 
 var expectedUnknownInstallationHarnesses = []string{
-	"aider",
-	"amazon-q-cli",
-	"amp",
-	"antigravity-cli",
-	"autohand",
 	"boltai",
 	"cline",
-	"commandcode",
 	"continue",
 	"crush",
 	"cursor",
-	"devin-for-terminal",
 	"github-copilot-cli",
-	"goose",
-	"grok-build-cli",
-	"groq-code-cli",
-	"junie-cli",
 	"kilo-code",
-	"kimi-code-cli",
-	"letta-code",
-	"mistral-vibe",
 	"nanocoder",
-	"open-interpreter",
-	"openblock",
-	"openclaw",
-	"opencode",
 	"pieces",
-	"plandex",
 	"roo-code",
 	"rovo-dev-cli",
 	"toad",
@@ -53,12 +34,14 @@ var expectedUnknownInstallationHarnesses = []string{
 	"windsurf",
 }
 
-var allowedPlatforms = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
-var expectedUsedPlatforms = []string{"darwin", "linux", "win32"}
-var supportAreas = []string{"config", "skills", "commands", "agents", "dotAgents"}
-var supportScopes = []string{"global", "local"}
-var supportStatuses = []string{"supported", "unsupported", "unknown"}
-var supportConfidenceLevels = []string{"official", "source", "observed", "inferred", "unknown"}
+var (
+	allowedPlatforms        = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
+	expectedUsedPlatforms   = []string{"darwin", "linux", "win32"}
+	supportAreas            = []string{"config", "skills", "commands", "agents", "agentsSkills"}
+	supportScopes           = []string{"global", "local"}
+	supportStatuses         = []string{"supported", "unsupported", "unknown"}
+	supportConfidenceLevels = []string{"official", "source", "observed", "inferred", "unknown"}
+)
 
 func tempDir(t *testing.T) string {
 	t.Helper()
@@ -96,8 +79,8 @@ func TestGetHarnessMatrix(t *testing.T) {
 
 func TestGoInstallationMetadataCompleteness(t *testing.T) {
 	matrix := GetRawHarnessData()
-	if len(matrix.Harnesses) != 57 {
-		t.Fatalf("harness count = %d, want 57", len(matrix.Harnesses))
+	if len(matrix.Harnesses) != 67 {
+		t.Fatalf("harness count = %d, want 67", len(matrix.Harnesses))
 	}
 
 	allowedMethods := make(map[string]struct{}, len(supportedInstallMethods))
@@ -678,6 +661,45 @@ func TestCheckHarness_ResolvesDerivedRoots(t *testing.T) {
 	}
 }
 
+func TestCheckHarness_ExpandsTildeRootOverrides(t *testing.T) {
+	result, err := CheckHarness("prime-agent", CheckOptions{
+		CWD: "/repo",
+		Env: map[string]string{
+			"HOME":                         "/Users/test",
+			"PATH":                         "",
+			"PRIME_AGENT_CODING_AGENT_DIR": "~/prime-agent",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	settings := findPath(result, "global-settings")
+	if settings == nil || settings.Path == nil || *settings.Path != "/Users/test/prime-agent/settings.json" {
+		t.Fatalf("global settings path = %v, want /Users/test/prime-agent/settings.json", settings)
+	}
+}
+
+func TestCheckHarness_PrimeAgentSessionOverridePrecedence(t *testing.T) {
+	result, err := CheckHarness("prime-agent", CheckOptions{
+		CWD: "/repo",
+		Env: map[string]string{
+			"HOME":                                 "/Users/test",
+			"PATH":                                 "",
+			"PRIME_AGENT_CODING_AGENT_SESSION_DIR": "/tmp/legacy-sessions",
+			"PRIME_AGENT_SESSION_DIR":              "/tmp/current-sessions",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	sessions := findPath(result, "sessions")
+	if sessions == nil || sessions.Path == nil || *sessions.Path != "/tmp/current-sessions" {
+		t.Fatalf("sessions path = %v, want /tmp/current-sessions", sessions)
+	}
+}
+
 func TestCheckHarness_AliasesMatch(t *testing.T) {
 	byKey, err := CheckHarness("claude-code", CheckOptions{
 		Env: map[string]string{"HOME": "/Users/test", "PATH": ""},
@@ -1034,7 +1056,7 @@ func assertHarnessSupportNotMutated(t *testing.T, label string, support HarnessS
 		{name: "skills", area: support.Skills},
 		{name: "commands", area: support.Commands},
 		{name: "agents", area: support.Agents},
-		{name: "dotAgents", area: support.DotAgents},
+		{name: "agentsSkills", area: support.AgentsSkills},
 	} {
 		assertHarnessSupportScopeNotMutated(t, label, area.name, "global", area.area.Global)
 		assertHarnessSupportScopeNotMutated(t, label, area.name, "local", area.area.Local)
@@ -1657,5 +1679,93 @@ func assertNoInstallationMutationMarker(t *testing.T, label string, installation
 				t.Fatalf("%s installation platforms alias a mutated backing array at position %d/%d", label, i, j)
 			}
 		}
+	}
+}
+
+func setEnvCaseInsensitive(t *testing.T, v bool) {
+	t.Helper()
+	old := envCaseInsensitive
+	envCaseInsensitive = v
+	t.Cleanup(func() { envCaseInsensitive = old })
+}
+
+func TestLookupEnv(t *testing.T) {
+	setEnvCaseInsensitive(t, true)
+	if v, ok := lookupEnv(map[string]string{"PATH": "a", "Path": "b"}, "PATH"); !ok || v != "a" {
+		t.Fatalf("exact match = %q, %v", v, ok)
+	}
+	if v, ok := lookupEnv(map[string]string{"Path": "b"}, "PATH"); !ok || v != "b" {
+		t.Fatalf("folded match = %q, %v", v, ok)
+	}
+	for range 20 {
+		if v, _ := lookupEnv(map[string]string{"path": "x", "Path": "y", "pAth": "z"}, "PATH"); v != "y" {
+			t.Fatalf("non-deterministic pick = %q", v)
+		}
+	}
+	if _, ok := lookupEnv(map[string]string{"Other": "b"}, "PATH"); ok {
+		t.Fatal("unexpected match")
+	}
+	setEnvCaseInsensitive(t, false)
+	if _, ok := lookupEnv(map[string]string{"Path": "b"}, "PATH"); ok {
+		t.Fatal("case-sensitive lookup must not fold")
+	}
+}
+
+func TestCheckHarnessFindsExecutableWithMixedCasePathKey(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("uses POSIX executable fixtures")
+	}
+	tmp := tempDir(t)
+	binDir := filepath.Join(tmp, "bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(binDir, "claude"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(binDir, "gemini"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	env := map[string]string{"Home": tmp, "Path": binDir}
+
+	setEnvCaseInsensitive(t, true)
+	r, err := CheckHarness("claude", CheckOptions{Env: env, CWD: tmp})
+	if err != nil || r.ExecutablePath == nil || *r.ExecutablePath != filepath.Join(binDir, "claude") {
+		t.Fatalf("claude not found: %#v, %v", r.ExecutablePath, err)
+	}
+	if got := withDefaults(env, tmp); got["HOME"] != tmp || got["PATH"] != binDir {
+		t.Fatalf("withDefaults HOME = %q, PATH = %q", got["HOME"], got["PATH"])
+	}
+	found, err := DetectInstalledACPLaunches(CheckOptions{Env: env, CWD: tmp})
+	if err != nil || len(found) != 1 || found[0].Key != "gemini-cli" {
+		t.Fatalf("ACP launches = %#v, %v", found, err)
+	}
+
+	setEnvCaseInsensitive(t, false)
+	r, err = CheckHarness("claude", CheckOptions{Env: env, CWD: tmp})
+	if err != nil || r.ExecutablePath != nil {
+		t.Fatalf("Path must not be honoured when case-sensitive: %v, %v", r.ExecutablePath, err)
+	}
+}
+
+func TestFindExecutable_WindowsMixedCaseKeys(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		t.Skip("windows-only test")
+	}
+	tmp := tempDir(t)
+	binDir := filepath.Join(tmp, "bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	exePath := filepath.Join(binDir, "codex.cmd")
+	if err := os.WriteFile(exePath, nil, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	result, err := CheckHarness("codex", CheckOptions{
+		Env: map[string]string{"Home": tmp, "Path": binDir, "Pathext": ".CMD"},
+		CWD: tmp,
+	})
+	if err != nil || result.ExecutablePath == nil || *result.ExecutablePath != exePath {
+		t.Fatalf("executable path = %v, %v; want %q", result.ExecutablePath, err, exePath)
 	}
 }

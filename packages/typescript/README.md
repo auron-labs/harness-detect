@@ -36,6 +36,12 @@ A harness counts as installed when either of these is true:
 - `getRawHarnessData()` returns the full registry object and is the preferred raw-registry API.
 - `getHarnessMatrix()` is a backwards-compatible alias for `getRawHarnessData()`.
 - `listHarnesses()` returns the registry's `harnesses` array.
+- `getHarnessAcp` returns ACP metadata for one harness key or alias.
+- `listHarnessAcp` returns ACP metadata for every harness; absent metadata is `unknown`.
+- `getHarnessMcp(input)` returns MCP metadata for one harness key or alias: whether it supports MCP, whether it reads the project-root `.mcp.json`, and its global/local config files, file format, and server key path.
+- `listHarnessMcp()` returns MCP metadata for every harness.
+- `translateMcpJson(input, mcpJson, { scope? })` translates a `.mcp.json` document (object or JSON text) into the harness's native server entries for `scope` (`"local"` by default). It returns `format`, `keyPath`, `servers`, `config` (servers nested under `keyPath`), and `skipped` servers the native format cannot represent. Nothing is read or written.
+- `detectInstalledAcpLaunches(options?)` lists ACP agents launchable from installed binaries, as absolute `command` paths with `args`.
 - `getHarnessSupport` returns support metadata for one harness key or alias.
 - `listHarnessSupport()` returns support metadata for every harness.
 - `checkHarness(input, options?)` checks one harness key or alias and returns resolved paths, matches, and reasons.
@@ -77,3 +83,9 @@ When editing registry data, update `packages/data/harnesses.json`, run `mise run
 - Security reporting: [../../SECURITY.md](../../SECURITY.md)
 - Support expectations: [../../SUPPORT.md](../../SUPPORT.md)
 - Contribution and registry evidence requirements: [../../CONTRIBUTING.md](../../CONTRIBUTING.md)
+
+ACP metadata describes local stdio launches and optional adapter registry keys,
+independently of file-location support. Read `acp.status`, follow `acp.adapter`
+when present, and select a platform-matching recipe from `acp.launches`. Read the
+owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
+for the optional stored shape and adapter lookup rules.

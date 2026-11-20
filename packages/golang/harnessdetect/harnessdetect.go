@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"slices"
 	"strings"
 	"sync"
 )
@@ -28,6 +29,38 @@ func processEnvMap() map[string]string {
 		out[key] = value
 	}
 	return out
+}
+
+// envCaseInsensitive reports whether environment variable names are
+// case-insensitive on this platform. It is a variable so tests can exercise
+// the Windows behaviour on any OS.
+var envCaseInsensitive = runtime.GOOS == "windows"
+
+// lookupEnv returns env[key]. When names are case-insensitive and there is no
+// exact match, it falls back to the lexicographically smallest key that
+// equals key under Unicode case folding.
+func lookupEnv(env map[string]string, key string) (string, bool) {
+	if v, ok := env[key]; ok {
+		return v, true
+	}
+	if !envCaseInsensitive {
+		return "", false
+	}
+	best, found := "", false
+	for k := range env {
+		if strings.EqualFold(k, key) && (!found || k < best) {
+			best, found = k, true
+		}
+	}
+	if !found {
+		return "", false
+	}
+	return env[best], true
+}
+
+func envValue(env map[string]string, key string) string {
+	v, _ := lookupEnv(env, key)
+	return v
 }
 
 //go:embed data/harnesses.json
@@ -89,19 +122,73 @@ type HarnessSupportArea struct {
 
 // HarnessSupport describes support metadata for a harness.
 type HarnessSupport struct {
-	Config    HarnessSupportArea `json:"config"`
-	Skills    HarnessSupportArea `json:"skills"`
-	Commands  HarnessSupportArea `json:"commands"`
-	Agents    HarnessSupportArea `json:"agents"`
-	DotAgents HarnessSupportArea `json:"dotAgents"`
+	Config   HarnessSupportArea `json:"config"`
+	Skills   HarnessSupportArea `json:"skills"`
+	Commands HarnessSupportArea `json:"commands"`
+	Agents   HarnessSupportArea `json:"agents"`
+	// AgentsSkills reports discovery of Agent Skills from the shared
+	// .agents/skills directory.
+	AgentsSkills HarnessSupportArea `json:"agentsSkills"`
+}
+
+// HarnessACPLaunch describes a local stdio command and discrete argv values.
+type HarnessACPLaunch struct {
+	Command   string   `json:"command"`
+	Args      []string `json:"args"`
+	Platforms []string `json:"platforms,omitempty"`
+}
+
+// HarnessACP describes ACP metadata, independently of file-location support.
+type HarnessACP struct {
+	Status   string             `json:"status"`
+	Launches []HarnessACPLaunch `json:"launches,omitempty"`
+	// InstalledLaunches start the agent from a binary already on PATH and never
+	// use a package runner. An empty, non-nil list means the agent is never
+	// reported as installed; nil means absent.
+	InstalledLaunches []HarnessACPLaunch `json:"installedLaunches,omitempty"`
+	Adapter           string             `json:"adapter,omitempty"`
+	Sources           []string           `json:"sources"`
+	Confidence        string             `json:"confidence"`
+	Notes             string             `json:"notes,omitempty"`
+}
+
+// MarshalJSON keeps an empty, non-nil InstalledLaunches as `[]` (never
+// installed) while still omitting a nil one (absent).
+func (a HarnessACP) MarshalJSON() ([]byte, error) {
+	type plain HarnessACP
+	out := struct {
+		plain
+		InstalledLaunches *[]HarnessACPLaunch `json:"installedLaunches,omitempty"`
+	}{plain: plain(a)}
+	if a.InstalledLaunches != nil {
+		out.InstalledLaunches = &a.InstalledLaunches
+	}
+	return json.Marshal(out)
+}
+
+// InstalledACPLaunch is a runnable ACP launch for an installed harness.
+// Command is the absolute path of the resolved executable.
+type InstalledACPLaunch struct {
+	Key     string   `json:"key"`
+	Name    string   `json:"name"`
+	Command string   `json:"command"`
+	Args    []string `json:"args"`
+}
+
+// HarnessACPRecord exposes one harness ACP entry.
+type HarnessACPRecord struct {
+	Key  string     `json:"key"`
+	Name string     `json:"name"`
+	ACP  HarnessACP `json:"acp"`
 }
 
 // HarnessRootDef declares a derived template variable for a harness.
 type HarnessRootDef struct {
-	Name     string `json:"name"`
-	Env      string `json:"env,omitempty"`
-	Use      string `json:"use,omitempty"`
-	Fallback string `json:"fallback"`
+	Name        string `json:"name"`
+	Env         string `json:"env,omitempty"`
+	Use         string `json:"use,omitempty"`
+	Fallback    string `json:"fallback"`
+	FallbackEnv string `json:"fallbackEnv,omitempty"`
 }
 
 // HarnessInstallation describes one documented installation method.
@@ -118,13 +205,18 @@ type HarnessInstallation struct {
 
 // HarnessDefinition describes a single LLM harness.
 type HarnessDefinition struct {
-	Key           string                `json:"key"`
-	Name          string                `json:"name"`
+	Key  string `json:"key"`
+	Name string `json:"name"`
+	// Version is the upstream version the entry was last verified against,
+	// or "unknown".
+	Version       string                `json:"version"`
 	Aliases       []string              `json:"aliases"`
 	Executables   []string              `json:"executables"`
 	Paths         []HarnessPathSpec     `json:"paths"`
 	Roots         []HarnessRootDef      `json:"roots,omitempty"`
 	Support       HarnessSupport        `json:"support"`
+	ACP           *HarnessACP           `json:"acp,omitempty"`
+	MCP           HarnessMCP            `json:"mcp"`
 	Env           []HarnessEnvVar       `json:"env"`
 	Sources       []string              `json:"sources"`
 	Installations []HarnessInstallation `json:"installations"`
@@ -208,6 +300,57 @@ func ListHarnessSupport() []HarnessSupportRecord {
 	return out
 }
 
+// GetHarnessACP returns ACP metadata for one harness by key or alias.
+func GetHarnessACP(input string) (HarnessACPRecord, error) {
+	h, ok := getHarnessDefinition(input)
+	if !ok {
+		return HarnessACPRecord{}, errors.New("Unknown harness: " + input)
+	}
+	return cloneHarnessACPRecord(h), nil
+}
+
+// ListHarnessACP returns ACP metadata for all harnesses.
+func ListHarnessACP() []HarnessACPRecord {
+	loadMatrix()
+	out := make([]HarnessACPRecord, len(matrix.Harnesses))
+	for i, h := range matrix.Harnesses {
+		out[i] = cloneHarnessACPRecord(h)
+	}
+	return out
+}
+
+func cloneACP(acp *HarnessACP) *HarnessACP {
+	if acp == nil {
+		return nil
+	}
+	out := *acp
+	out.Sources = append([]string{}, acp.Sources...)
+	out.Launches = cloneACPLaunches(acp.Launches)
+	out.InstalledLaunches = cloneACPLaunches(acp.InstalledLaunches)
+	return &out
+}
+
+func cloneACPLaunches(launches []HarnessACPLaunch) []HarnessACPLaunch {
+	if launches == nil {
+		return nil
+	}
+	out := make([]HarnessACPLaunch, len(launches))
+	for i, launch := range launches {
+		out[i] = launch
+		out[i].Args = append([]string{}, launch.Args...)
+		out[i].Platforms = slices.Clone(launch.Platforms)
+	}
+	return out
+}
+
+func cloneHarnessACPRecord(h HarnessDefinition) HarnessACPRecord {
+	acp := cloneACP(h.ACP)
+	if acp == nil {
+		acp = &HarnessACP{Status: "unknown", Sources: []string{}, Confidence: "unknown"}
+	}
+	return HarnessACPRecord{Key: h.Key, Name: h.Name, ACP: *acp}
+}
+
 func cloneMatrix(m HarnessMatrix) HarnessMatrix {
 	return HarnessMatrix{
 		Version:   m.Version,
@@ -230,7 +373,7 @@ func cloneSupportPaths(paths []HarnessSupportPath) []HarnessSupportPath {
 			ID:          path.ID,
 			Kind:        path.Kind,
 			Template:    path.Template,
-			Platforms:   append([]string(nil), path.Platforms...),
+			Platforms:   slices.Clone(path.Platforms),
 			Description: path.Description,
 		}
 	}
@@ -241,7 +384,7 @@ func cloneSupportScope(scope HarnessSupportScope) HarnessSupportScope {
 	return HarnessSupportScope{
 		Status:     scope.Status,
 		Paths:      cloneSupportPaths(scope.Paths),
-		Sources:    append([]string(nil), scope.Sources...),
+		Sources:    slices.Clone(scope.Sources),
 		Confidence: scope.Confidence,
 		Notes:      scope.Notes,
 	}
@@ -256,11 +399,11 @@ func cloneSupportArea(area HarnessSupportArea) HarnessSupportArea {
 
 func cloneSupport(support HarnessSupport) HarnessSupport {
 	return HarnessSupport{
-		Config:    cloneSupportArea(support.Config),
-		Skills:    cloneSupportArea(support.Skills),
-		Commands:  cloneSupportArea(support.Commands),
-		Agents:    cloneSupportArea(support.Agents),
-		DotAgents: cloneSupportArea(support.DotAgents),
+		Config:       cloneSupportArea(support.Config),
+		Skills:       cloneSupportArea(support.Skills),
+		Commands:     cloneSupportArea(support.Commands),
+		Agents:       cloneSupportArea(support.Agents),
+		AgentsSkills: cloneSupportArea(support.AgentsSkills),
 	}
 }
 
@@ -280,7 +423,7 @@ func clonePathSpecs(paths []HarnessPathSpec) []HarnessPathSpec {
 			Category:  path.Category,
 			Kind:      path.Kind,
 			Template:  path.Template,
-			Platforms: append([]string(nil), path.Platforms...),
+			Platforms: slices.Clone(path.Platforms),
 		}
 	}
 	return out
@@ -296,7 +439,7 @@ func cloneInstallations(installations []HarnessInstallation) []HarnessInstallati
 			URL:         installation.URL,
 			Marketplace: installation.Marketplace,
 			ID:          installation.ID,
-			Platforms:   append([]string(nil), installation.Platforms...),
+			Platforms:   slices.Clone(installation.Platforms),
 			Notes:       installation.Notes,
 		}
 	}
@@ -307,13 +450,16 @@ func cloneHarnessDefinition(h HarnessDefinition) HarnessDefinition {
 	return HarnessDefinition{
 		Key:           h.Key,
 		Name:          h.Name,
-		Aliases:       append([]string(nil), h.Aliases...),
-		Executables:   append([]string(nil), h.Executables...),
+		Version:       h.Version,
+		Aliases:       slices.Clone(h.Aliases),
+		Executables:   slices.Clone(h.Executables),
 		Paths:         clonePathSpecs(h.Paths),
-		Roots:         append([]HarnessRootDef(nil), h.Roots...),
+		Roots:         slices.Clone(h.Roots),
 		Support:       cloneSupport(h.Support),
-		Env:           append([]HarnessEnvVar(nil), h.Env...),
-		Sources:       append([]string(nil), h.Sources...),
+		ACP:           cloneACP(h.ACP),
+		MCP:           cloneMCP(h.MCP),
+		Env:           slices.Clone(h.Env),
+		Sources:       slices.Clone(h.Sources),
 		Installations: cloneInstallations(h.Installations),
 	}
 }
@@ -327,7 +473,7 @@ func cloneResolvedPaths(paths []ResolvedHarnessPath) []ResolvedHarnessPath {
 				Category:  path.Category,
 				Kind:      path.Kind,
 				Template:  path.Template,
-				Platforms: append([]string(nil), path.Platforms...),
+				Platforms: slices.Clone(path.Platforms),
 			},
 			Path:   path.Path,
 			Exists: path.Exists,
@@ -366,7 +512,7 @@ func CheckHarness(input string, options CheckOptions) (HarnessCheckResult, error
 
 	baseEnv := withDefaults(options.Env, options.CWD)
 	env := resolveHarnessRoots(harness, baseEnv)
-	executablePath := findExecutable(harness.Executables, env)
+	executablePath := findExecutable(harness.Executables, env, false)
 	paths := resolvePaths(harness, env)
 	matchedPaths := make([]ResolvedHarnessPath, 0, len(paths))
 	reasons := make([]string, 0)
@@ -390,7 +536,7 @@ func CheckHarness(input string, options CheckOptions) (HarnessCheckResult, error
 		Harness:        harness,
 		Paths:          cloneResolvedPaths(paths),
 		MatchedPaths:   cloneResolvedPaths(matchedPaths),
-		Reasons:        append([]string(nil), reasons...),
+		Reasons:        slices.Clone(reasons),
 	}, nil
 }
 
@@ -426,6 +572,53 @@ func DetectInstalledHarnesses(options CheckOptions) ([]HarnessCheckResult, error
 	return installed, nil
 }
 
+// DetectInstalledACPLaunches lists the ACP agents that can be started from
+// binaries already installed. An entry is returned when its ACP status is
+// supported, it does not delegate to an adapter, and the command of its launch
+// for the current platform resolves to an absolute executable path. It uses
+// installedLaunches when present, otherwise launches that do not use a package
+// runner. It never executes anything.
+func DetectInstalledACPLaunches(options CheckOptions) ([]InstalledACPLaunch, error) {
+	loadMatrix()
+	env := withDefaults(options.Env, options.CWD)
+	out := []InstalledACPLaunch{}
+	for _, harness := range matrix.Harnesses {
+		acp := harness.ACP
+		if acp == nil || acp.Status != "supported" || acp.Adapter != "" {
+			continue
+		}
+		launches := acp.InstalledLaunches
+		if launches == nil {
+			launches = acp.Launches
+		}
+		for _, launch := range launches {
+			if !platformMatches(launch.Platforms) || isPackageRunner(launch) {
+				continue
+			}
+			if command := findExecutable([]string{launch.Command}, env, true); command != nil {
+				out = append(out, InstalledACPLaunch{
+					Key:     harness.Key,
+					Name:    harness.Name,
+					Command: *command,
+					Args:    append([]string{}, launch.Args...),
+				})
+			}
+			break
+		}
+	}
+	return out, nil
+}
+
+func isPackageRunner(launch HarnessACPLaunch) bool {
+	switch launch.Command {
+	case "npx", "bunx", "uvx":
+		return true
+	case "pnpm":
+		return len(launch.Args) > 0 && launch.Args[0] == "dlx"
+	}
+	return false
+}
+
 // withDefaults computes the universal base-variable map (HOME, XDG_*, TMPDIR, CWD)
 // plus any caller-supplied env vars. CWD comes only from the explicit option or
 // the process working directory, matching the TypeScript package. Harness-specific
@@ -440,7 +633,7 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		out[k] = v
 	}
 
-	home := env["HOME"]
+	home := envValue(env, "HOME")
 	if home == "" {
 		home, _ = os.UserHomeDir()
 	}
@@ -448,19 +641,19 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		home = "/"
 	}
 
-	xdgConfigHome := env["XDG_CONFIG_HOME"]
+	xdgConfigHome := envValue(env, "XDG_CONFIG_HOME")
 	if xdgConfigHome == "" {
 		xdgConfigHome = filepath.Join(home, ".config")
 	}
-	xdgDataHome := env["XDG_DATA_HOME"]
+	xdgDataHome := envValue(env, "XDG_DATA_HOME")
 	if xdgDataHome == "" {
 		xdgDataHome = filepath.Join(home, ".local", "share")
 	}
-	xdgStateHome := env["XDG_STATE_HOME"]
+	xdgStateHome := envValue(env, "XDG_STATE_HOME")
 	if xdgStateHome == "" {
 		xdgStateHome = filepath.Join(home, ".local", "state")
 	}
-	xdgCacheHome := env["XDG_CACHE_HOME"]
+	xdgCacheHome := envValue(env, "XDG_CACHE_HOME")
 	if xdgCacheHome == "" {
 		xdgCacheHome = filepath.Join(home, ".cache")
 	}
@@ -472,13 +665,18 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 		cwd = "."
 	}
 
-	tmpdir := env["TMPDIR"]
+	tmpdir := envValue(env, "TMPDIR")
 	if tmpdir == "" {
 		tmpdir = os.TempDir()
 	}
 
+	for _, key := range []string{"PATH", "PATHEXT"} {
+		if v, ok := lookupEnv(env, key); ok {
+			out[key] = v
+		}
+	}
 	out["HOME"] = home
-	out["USERPROFILE"] = first(env["USERPROFILE"], home)
+	out["USERPROFILE"] = first(envValue(env, "USERPROFILE"), home)
 	out["XDG_CONFIG_HOME"] = xdgConfigHome
 	out["XDG_DATA_HOME"] = xdgDataHome
 	out["XDG_STATE_HOME"] = xdgStateHome
@@ -502,7 +700,11 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 		var value string
 		envVal := ""
 		if root.Env != "" {
-			envVal = baseEnv[root.Env]
+			envVal = envValue(baseEnv, root.Env)
+		}
+		fallbackEnvVal := ""
+		if root.FallbackEnv != "" {
+			fallbackEnvVal = envValue(baseEnv, root.FallbackEnv)
 		}
 
 		if root.Env != "" && envVal != "" {
@@ -519,17 +721,30 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 			} else {
 				value = envVal
 			}
+		} else if root.FallbackEnv != "" && fallbackEnvVal != "" {
+			// Use the documented legacy override before the static fallback.
+			value = fallbackEnvVal
 		} else {
-			// Env var is not set. Resolve the fallback template.
+			// Env vars are not set. Resolve the fallback template.
 			value = resolveTemplate(root.Fallback, out)
 		}
 
 		if value != "" {
-			out[root.Name] = filepath.Clean(value)
+			out[root.Name] = filepath.Clean(expandLeadingTilde(value, baseEnv["HOME"]))
 		}
 	}
 
 	return out
+}
+
+func expandLeadingTilde(value, home string) string {
+	if value == "~" {
+		return home
+	}
+	if strings.HasPrefix(value, "~/") || strings.HasPrefix(value, `~\`) {
+		return filepath.Join(home, value[2:])
+	}
+	return value
 }
 
 func first(a, b string) string {
@@ -625,7 +840,7 @@ func resolvePaths(harness HarnessDefinition, env map[string]string) []ResolvedHa
 				Category:  entry.Category,
 				Kind:      entry.Kind,
 				Template:  entry.Template,
-				Platforms: append([]string(nil), entry.Platforms...),
+				Platforms: slices.Clone(entry.Platforms),
 			},
 			Path:   stringPointerOrNil(resolved),
 			Exists: exists,
@@ -634,16 +849,18 @@ func resolvePaths(harness HarnessDefinition, env map[string]string) []ResolvedHa
 	return out
 }
 
-func findExecutable(executables []string, env map[string]string) *string {
+// findExecutable searches PATH for the first matching executable. With
+// absoluteOnly, relative PATH entries are ignored.
+func findExecutable(executables []string, env map[string]string, absoluteOnly bool) *string {
 	if len(executables) == 0 {
 		return nil
 	}
 
-	pathValue := env["PATH"]
+	pathValue := envValue(env, "PATH")
 	pathParts := strings.Split(pathValue, string(filepath.ListSeparator))
 	var exts []string
 	if runtime.GOOS == "windows" {
-		pathext := env["PATHEXT"]
+		pathext := envValue(env, "PATHEXT")
 		if pathext == "" {
 			pathext = ".EXE;.CMD;.BAT;.COM"
 		}
@@ -654,7 +871,7 @@ func findExecutable(executables []string, env map[string]string) *string {
 
 	for _, executable := range executables {
 		for _, dir := range pathParts {
-			if dir == "" {
+			if dir == "" || (absoluteOnly && !filepath.IsAbs(dir)) {
 				continue
 			}
 			for _, ext := range exts {

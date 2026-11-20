@@ -54,6 +54,42 @@
       "go": "ListHarnesses",
       "rust": "list_harnesses",
       "python": "list_harnesses"
+    },
+    {
+      "typescript": "getHarnessAcp",
+      "go": "GetHarnessACP",
+      "rust": "get_harness_acp",
+      "python": "get_harness_acp"
+    },
+    {
+      "typescript": "listHarnessAcp",
+      "go": "ListHarnessACP",
+      "rust": "list_harness_acp",
+      "python": "list_harness_acp"
+    },
+    {
+      "typescript": "detectInstalledAcpLaunches",
+      "go": "DetectInstalledACPLaunches",
+      "rust": "detect_installed_acp_launches",
+      "python": "detect_installed_acp_launches"
+    },
+    {
+      "typescript": "getHarnessMcp",
+      "go": "GetHarnessMCP",
+      "rust": "get_harness_mcp",
+      "python": "get_harness_mcp"
+    },
+    {
+      "typescript": "listHarnessMcp",
+      "go": "ListHarnessMCP",
+      "rust": "list_harness_mcp",
+      "python": "list_harness_mcp"
+    },
+    {
+      "typescript": "translateMcpJson",
+      "go": "TranslateMCPJSON",
+      "rust": "translate_mcp_json",
+      "python": "translate_mcp_json"
     }
   ],
   "coreFields": {
@@ -79,6 +115,11 @@
         "json": "name",
         "typescript": "name",
         "go": "Name"
+      },
+      {
+        "json": "version",
+        "typescript": "version",
+        "go": "Version"
       },
       {
         "json": "aliases",
@@ -119,6 +160,17 @@
         "json": "sources",
         "typescript": "sources",
         "go": "Sources"
+      },
+      {
+        "json": "acp",
+        "typescript": "acp",
+        "go": "ACP",
+        "nullable": true
+      },
+      {
+        "json": "mcp",
+        "typescript": "mcp",
+        "go": "MCP"
       }
     ],
     "HarnessInstallation": [
@@ -261,9 +313,9 @@
         "go": "Agents"
       },
       {
-        "json": "dotAgents",
-        "typescript": "dotAgents",
-        "go": "DotAgents"
+        "json": "agentsSkills",
+        "typescript": "agentsSkills",
+        "go": "AgentsSkills"
       }
     ],
     "ResolvedHarnessPath": [
@@ -338,6 +390,215 @@
         "typescript": "support",
         "go": "Support",
         "nullable": true
+      }
+    ],
+    "HarnessAcpLaunch": [
+      {
+        "json": "command",
+        "typescript": "command",
+        "go": "Command"
+      },
+      {
+        "json": "args",
+        "typescript": "args",
+        "go": "Args"
+      },
+      {
+        "json": "platforms",
+        "typescript": "platforms",
+        "go": "Platforms",
+        "nullable": true
+      }
+    ],
+    "HarnessAcp": [
+      {
+        "json": "status",
+        "typescript": "status",
+        "go": "Status"
+      },
+      {
+        "json": "launches",
+        "typescript": "launches",
+        "go": "Launches",
+        "nullable": true
+      },
+      {
+        "json": "adapter",
+        "typescript": "adapter",
+        "go": "Adapter",
+        "nullable": true
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      },
+      {
+        "json": "confidence",
+        "typescript": "confidence",
+        "go": "Confidence"
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes",
+        "nullable": true
+      }
+    ],
+    "HarnessAcpRecord": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "acp",
+        "typescript": "acp",
+        "go": "ACP"
+      }
+    ],
+    "HarnessMcpScope": [
+      {
+        "json": "status",
+        "typescript": "status",
+        "go": "Status"
+      },
+      {
+        "json": "paths",
+        "typescript": "paths",
+        "go": "Paths"
+      },
+      {
+        "json": "format",
+        "typescript": "format",
+        "go": "Format"
+      },
+      {
+        "json": "keyPath",
+        "typescript": "keyPath",
+        "go": "KeyPath"
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      },
+      {
+        "json": "confidence",
+        "typescript": "confidence",
+        "go": "Confidence"
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes"
+      }
+    ],
+    "HarnessMcp": [
+      {
+        "json": "status",
+        "typescript": "status",
+        "go": "Status"
+      },
+      {
+        "json": "mcpJson",
+        "typescript": "mcpJson",
+        "go": "MCPJSON"
+      },
+      {
+        "json": "global",
+        "typescript": "global",
+        "go": "Global"
+      },
+      {
+        "json": "local",
+        "typescript": "local",
+        "go": "Local"
+      },
+      {
+        "json": "serverFormat",
+        "typescript": "serverFormat",
+        "go": "ServerFormat",
+        "nullable": true
+      },
+      {
+        "json": "sources",
+        "typescript": "sources",
+        "go": "Sources"
+      },
+      {
+        "json": "confidence",
+        "typescript": "confidence",
+        "go": "Confidence"
+      },
+      {
+        "json": "notes",
+        "typescript": "notes",
+        "go": "Notes"
+      }
+    ],
+    "HarnessMcpRecord": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "mcp",
+        "typescript": "mcp",
+        "go": "MCP"
+      }
+    ],
+    "McpTranslation": [
+      {
+        "json": "key",
+        "typescript": "key",
+        "go": "Key"
+      },
+      {
+        "json": "name",
+        "typescript": "name",
+        "go": "Name"
+      },
+      {
+        "json": "scope",
+        "typescript": "scope",
+        "go": "Scope"
+      },
+      {
+        "json": "format",
+        "typescript": "format",
+        "go": "Format"
+      },
+      {
+        "json": "keyPath",
+        "typescript": "keyPath",
+        "go": "KeyPath"
+      },
+      {
+        "json": "servers",
+        "typescript": "servers",
+        "go": "Servers"
+      },
+      {
+        "json": "config",
+        "typescript": "config",
+        "go": "Config"
+      },
+      {
+        "json": "skipped",
+        "typescript": "skipped",
+        "go": "Skipped"
       }
     ]
   }

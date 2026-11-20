@@ -36,6 +36,12 @@ See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command 
   - `listHarnesses()`
   - `getHarnessSupport()`
   - `listHarnessSupport()`
+  - `getHarnessAcp(input)`
+  - `listHarnessAcp()`
+  - `getHarnessMcp(input)`
+  - `listHarnessMcp()`
+  - `translateMcpJson(input, mcpJson, options?)`
+  - `detectInstalledAcpLaunches()`
   - `checkHarness()`
   - `detectHarnesses()`
   - `detectInstalledHarnesses()`
@@ -67,3 +73,23 @@ See [../../docs/maintainers.md](../../docs/maintainers.md) for the registry edit
 - The preferred raw-registry API is `getRawHarnessData()`. The `./data` export remains public for backwards compatibility, so schema changes are still effectively API changes.
 - Detection is intentionally evidence-based: a harness can count as installed from either an executable match or existing config/state paths.
 - The Docker smoke test runs on Linux, so macOS-only harnesses can be skipped there if they have no supported detection surface on that platform.
+
+## Finding ACP metadata
+
+Use `getHarnessAcp(input)` for a key or alias and `listHarnessAcp()` to list all
+ACP records, including adapters and unknowns. Read the record's `acp` metadata
+and check `status` before using a launch. Follow `adapter` once to the owning
+registry record, then select from `launches` for the caller's platform. Read both
+records' notes and the owner's installation requirements; ACP support and
+installation detection are independent.
+
+See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
+for examples, platform selection, evidence rules, and source-only adapters.
+
+## MCP metadata and translation
+
+Every harness has required `mcp` metadata (see the root `AGENTS.md`). The
+`.mcp.json` translator is generic: it only interprets the registry's
+`mcp.serverFormat`, so keep it free of harness-specific branches. Its skip
+reasons, error messages, and output must stay identical across packages; the
+`translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.

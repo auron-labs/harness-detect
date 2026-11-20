@@ -169,7 +169,7 @@ fn test_support_api_returns_cloned_data() {
         .support
         .clone();
     listed.skills.local.confidence = "mutated".to_string();
-    listed.dot_agents.global.status = "mutated".to_string();
+    listed.agents_skills.global.status = "mutated".to_string();
 
     let second = get_harness_support("codex").expect("second support lookup");
     let listed_again = find_harness_support_record(&list_harness_support(), "codex")
@@ -262,6 +262,55 @@ fn test_check_harness_resolves_derived_roots() {
 
     assert_eq!(config.path.as_deref(), Some("/tmp/hermes-home/config.yaml"));
     assert_eq!(sessions.path.as_deref(), Some("/tmp/hermes-home/sessions"));
+}
+
+#[test]
+fn test_check_harness_expands_tilde_root_overrides() {
+    let mut env = env_home("/Users/test");
+    env.insert(
+        "PRIME_AGENT_CODING_AGENT_DIR".to_string(),
+        "~/prime-agent".to_string(),
+    );
+
+    let result = check_harness(
+        "prime-agent",
+        CheckOptions {
+            env: Some(env),
+            cwd: Some("/repo".to_string()),
+        },
+    )
+    .expect("unexpected error");
+
+    let settings = find_path(&result, "global-settings").expect("missing global-settings path");
+    assert_eq!(
+        settings.path.as_deref(),
+        Some("/Users/test/prime-agent/settings.json")
+    );
+}
+
+#[test]
+fn test_check_harness_prime_agent_session_override_precedence() {
+    let mut env = env_home("/Users/test");
+    env.insert(
+        "PRIME_AGENT_CODING_AGENT_SESSION_DIR".to_string(),
+        "/tmp/legacy-sessions".to_string(),
+    );
+    env.insert(
+        "PRIME_AGENT_SESSION_DIR".to_string(),
+        "/tmp/current-sessions".to_string(),
+    );
+
+    let result = check_harness(
+        "prime-agent",
+        CheckOptions {
+            env: Some(env),
+            cwd: Some("/repo".to_string()),
+        },
+    )
+    .expect("unexpected error");
+
+    let sessions = find_path(&result, "sessions").expect("missing sessions path");
+    assert_eq!(sessions.path.as_deref(), Some("/tmp/current-sessions"));
 }
 
 // ---------------------------------------------------------------------------
@@ -1000,7 +1049,7 @@ fn validate_support_object(key: &str, support: &serde_json::Value, allowed_platf
     use serde_json::Value;
 
     let support = support.as_object().expect("support must be an object");
-    for area in ["config", "skills", "commands", "agents", "dotAgents"] {
+    for area in ["config", "skills", "commands", "agents", "agentsSkills"] {
         let area_value = support.get(area).unwrap_or_else(|| {
             panic!("support.{area} is required when support is present for key {key}")
         });
@@ -1160,4 +1209,61 @@ fn validate_template(s: &str) -> bool {
         }
     }
     true
+}
+
+#[test]
+fn acp_omission_and_default_getters() {
+    let raw = harness_detect::get_raw_harness_data();
+    for h in &raw.harnesses {
+        assert_eq!(
+            harness_detect::get_harness_acp(&h.key).unwrap().acp,
+            h.acp.clone().unwrap_or_default()
+        );
+        if h.acp.is_none() {
+            assert!(serde_json::to_value(h).unwrap().get("acp").is_none());
+        }
+    }
+    let record = harness_detect::get_harness_acp(" OPENAI/CODEX ").unwrap();
+    assert_eq!(record.key, "codex");
+    assert_eq!(
+        record.acp,
+        raw.harnesses
+            .iter()
+            .find(|h| h.key == "codex")
+            .unwrap()
+            .acp
+            .clone()
+            .unwrap_or_default()
+    );
+    assert_eq!(
+        harness_detect::list_harness_acp().len(),
+        raw.harnesses.len()
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn installed_acp_launches_never_report_aider_acp_from_node() {
+    use std::os::unix::fs::PermissionsExt;
+    let tmp = temp_dir();
+    let bin = tmp.join("bin");
+    fs::create_dir_all(&bin).unwrap();
+    let node = bin.join("node");
+    fs::write(&node, "#!/bin/sh\nexit 0\n").unwrap();
+    fs::set_permissions(&node, fs::Permissions::from_mode(0o755)).unwrap();
+    fs::create_dir_all(tmp.join("dist")).unwrap();
+    fs::write(tmp.join("dist/index.js"), "").unwrap();
+    let mut env = HashMap::new();
+    env.insert("HOME".to_string(), tmp.to_string_lossy().into_owned());
+    env.insert("PATH".to_string(), bin.to_string_lossy().into_owned());
+    let found = harness_detect::detect_installed_acp_launches(CheckOptions {
+        cwd: Some(tmp.to_string_lossy().into_owned()),
+        env: Some(env),
+    });
+    assert!(found.is_empty(), "unexpected launches: {found:?}");
+    let record = harness_detect::get_harness_acp("aider-acp").unwrap();
+    assert_eq!(record.acp.status, "supported");
+    assert_eq!(record.acp.launches.len(), 1);
+    assert_eq!(record.acp.installed_launches, Some(vec![]));
+    cleanup(&tmp);
 }

@@ -25,6 +25,7 @@ from harness_detect import (
     ResolvedHarnessPath,
     check_harness,
     detect_harnesses,
+    detect_installed_acp_launches,
     detect_installed_harnesses,
     get_harness_matrix,
     get_harness_support,
@@ -204,6 +205,29 @@ def test_check_harness_resolves_derived_roots():
     assert sessions is not None
     assert config.path == os.path.normpath("/tmp/hermes-home/config.yaml")
     assert sessions.path == os.path.normpath("/tmp/hermes-home/sessions")
+
+
+def test_check_harness_expands_tilde_root_overrides():
+    env = _env_home("/Users/test")
+    env["PRIME_AGENT_CODING_AGENT_DIR"] = "~/prime-agent"
+
+    result = check_harness("prime-agent", CheckOptions(env=env, cwd="/repo"))
+
+    settings = _find_path(result, "global-settings")
+    assert settings is not None
+    assert settings.path == os.path.normpath("/Users/test/prime-agent/settings.json")
+
+
+def test_check_harness_prime_agent_session_override_precedence():
+    env = _env_home("/Users/test")
+    env["PRIME_AGENT_CODING_AGENT_SESSION_DIR"] = "/tmp/legacy-sessions"
+    env["PRIME_AGENT_SESSION_DIR"] = "/tmp/current-sessions"
+
+    result = check_harness("prime-agent", CheckOptions(env=env, cwd="/repo"))
+
+    sessions = _find_path(result, "sessions")
+    assert sessions is not None
+    assert sessions.path == os.path.normpath("/tmp/current-sessions")
 
 
 # ---------------------------------------------------------------------------
@@ -469,7 +493,7 @@ _ALLOWED_PLATFORMS = {
     "sunos",
     "win32",
 }
-_SUPPORT_AREAS = ("config", "skills", "commands", "agents", "dotAgents")
+_SUPPORT_AREAS = ("config", "skills", "commands", "agents", "agentsSkills")
 _SUPPORT_SCOPES = ("global", "local")
 _SUPPORT_STATUSES = {"supported", "unsupported", "unknown"}
 _SUPPORT_CONFIDENCE = {"official", "source", "observed", "inferred", "unknown"}
@@ -685,3 +709,47 @@ def test_resolve_template_unresolved_returns_none():
     assert harness_detect._resolve_template(
         "${HOME}/.codex/config.toml", env
     ) == os.path.normpath("/Users/test/.codex/config.toml")
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses POSIX executable fixtures")
+def test_installed_acp_launches_ignore_relative_path_entries(tmp_path, monkeypatch):
+    for name in ("relative-bin", "absolute-bin"):
+        binary = tmp_path / name / "gemini"
+        binary.parent.mkdir()
+        binary.write_text("#!/bin/sh\nexit 0\n")
+        binary.chmod(0o755)
+    monkeypatch.chdir(tmp_path)
+    home = str(tmp_path)
+
+    only = detect_installed_acp_launches(
+        CheckOptions(env={"HOME": home, "PATH": "relative-bin"})
+    )
+    assert only == []
+
+    path = os.pathsep.join(["relative-bin", str(tmp_path / "absolute-bin")])
+    both = detect_installed_acp_launches(CheckOptions(env={"HOME": home, "PATH": path}))
+    assert [(x.key, x.command, x.args) for x in both] == [
+        ("gemini-cli", str(tmp_path / "absolute-bin" / "gemini"), ("--acp",))
+    ]
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="uses POSIX executable fixtures")
+def test_installed_acp_launches_never_report_aider_acp_from_node(tmp_path):
+    binary = tmp_path / "bin" / "node"
+    binary.parent.mkdir()
+    binary.write_text("#!/bin/sh\nexit 0\n")
+    binary.chmod(0o755)
+    (tmp_path / "dist").mkdir()
+    (tmp_path / "dist" / "index.js").write_text("")
+    found = detect_installed_acp_launches(
+        CheckOptions(
+            cwd=str(tmp_path), env={"HOME": str(tmp_path), "PATH": str(binary.parent)}
+        )
+    )
+    assert found == []
+    record = harness_detect.get_harness_acp("aider-acp")
+    assert record.acp.status == "supported"
+    assert [(x.command, x.args) for x in record.acp.launches] == [
+        ("node", ("dist/index.js",))
+    ]
+    assert record.acp.installed_launches == ()

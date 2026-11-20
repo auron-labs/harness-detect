@@ -93,8 +93,205 @@ pub struct HarnessSupport {
     pub skills: HarnessSupportArea,
     pub commands: HarnessSupportArea,
     pub agents: HarnessSupportArea,
-    #[serde(rename = "dotAgents")]
-    pub dot_agents: HarnessSupportArea,
+    /// Discovery of Agent Skills from the shared `.agents/skills` directory.
+    #[serde(rename = "agentsSkills")]
+    pub agents_skills: HarnessSupportArea,
+}
+
+/// A local stdio command with discrete argv values.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcpLaunch {
+    pub command: String,
+    pub args: Vec<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub platforms: Vec<String>,
+}
+
+/// ACP metadata, independently of file-location support.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcp {
+    pub status: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub launches: Vec<HarnessAcpLaunch>,
+    /// Launches that start the agent from a binary already on `PATH`; never a
+    /// package runner.
+    /// `None` means absent (fall back to `launches`); `Some(vec![])` means the
+    /// agent is never reported as installed.
+    #[serde(
+        default,
+        rename = "installedLaunches",
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub installed_launches: Option<Vec<HarnessAcpLaunch>>,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub adapter: String,
+    pub sources: Vec<String>,
+    pub confidence: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub notes: String,
+}
+
+impl Default for HarnessAcp {
+    fn default() -> Self {
+        Self {
+            status: "unknown".into(),
+            launches: vec![],
+            installed_launches: None,
+            adapter: String::new(),
+            sources: vec![],
+            confidence: "unknown".into(),
+            notes: String::new(),
+        }
+    }
+}
+
+/// One harness ACP entry.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessAcpRecord {
+    pub key: String,
+    pub name: String,
+    pub acp: HarnessAcp,
+}
+
+/// A runnable ACP launch for an installed harness.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct InstalledAcpLaunch {
+    pub key: String,
+    pub name: String,
+    /// Absolute path of the resolved executable.
+    pub command: String,
+    pub args: Vec<String>,
+}
+
+/// Where a harness stores MCP servers for one scope.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcpScope {
+    pub status: String,
+    /// Config files (or directories of config files) holding MCP servers.
+    pub paths: Vec<HarnessSupportPath>,
+    /// `json`, `jsonc`, `toml`, or `yaml`; set when `status` is supported and
+    /// `paths` is non-empty.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub format: String,
+    /// Key segments under which servers are stored, outermost first.
+    #[serde(rename = "keyPath", default, skip_serializing_if = "Vec::is_empty")]
+    pub key_path: Vec<String>,
+    pub sources: Vec<String>,
+    pub confidence: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub notes: String,
+}
+
+/// Native field names of a stdio MCP server entry.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcpStdioFormat {
+    #[serde(rename = "type", default, skip_serializing_if = "String::is_empty")]
+    pub type_: String,
+    pub command: String,
+    /// Empty when the command field holds an argv array `[command, ...args]`.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub args: String,
+    /// Empty when the harness cannot set server environment variables.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub env: String,
+}
+
+/// Native field names of a remote MCP server entry.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcpRemoteFormat {
+    #[serde(rename = "type", default, skip_serializing_if = "String::is_empty")]
+    pub type_: String,
+    pub url: String,
+    /// Empty when the harness cannot set HTTP headers.
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub headers: String,
+}
+
+/// Describes one native MCP server entry so `.mcp.json` servers can be
+/// translated without harness-specific code.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcpServerFormat {
+    /// `map` (object keyed by name) or `array`.
+    pub container: String,
+    #[serde(
+        rename = "nameField",
+        default,
+        skip_serializing_if = "String::is_empty"
+    )]
+    pub name_field: String,
+    #[serde(
+        rename = "typeField",
+        default,
+        skip_serializing_if = "String::is_empty"
+    )]
+    pub type_field: String,
+    pub stdio: HarnessMcpStdioFormat,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub http: Option<HarnessMcpRemoteFormat>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub sse: Option<HarnessMcpRemoteFormat>,
+    #[serde(default, skip_serializing_if = "serde_json::Map::is_empty")]
+    pub defaults: serde_json::Map<String, serde_json::Value>,
+}
+
+/// MCP client metadata for a harness.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcp {
+    /// Whether the harness can use MCP servers.
+    pub status: String,
+    /// Whether the harness natively reads the project-root `.mcp.json`.
+    #[serde(rename = "mcpJson")]
+    pub mcp_json: String,
+    pub global: HarnessMcpScope,
+    pub local: HarnessMcpScope,
+    #[serde(
+        rename = "serverFormat",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub server_format: Option<HarnessMcpServerFormat>,
+    pub sources: Vec<String>,
+    pub confidence: String,
+    #[serde(default, skip_serializing_if = "String::is_empty")]
+    pub notes: String,
+}
+
+/// One harness MCP entry.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct HarnessMcpRecord {
+    pub key: String,
+    pub name: String,
+    pub mcp: HarnessMcp,
+}
+
+/// Options for [`translate_mcp_json`].
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct McpTranslateOptions {
+    /// `"global"` or `"local"`; `None` means `"local"`.
+    pub scope: Option<String>,
+}
+
+/// A `.mcp.json` server the native format cannot represent.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct McpSkippedServer {
+    pub name: String,
+    pub reason: String,
+}
+
+/// A `.mcp.json` document translated into a harness's native MCP config.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct McpTranslation {
+    pub key: String,
+    pub name: String,
+    pub scope: String,
+    pub format: String,
+    #[serde(rename = "keyPath")]
+    pub key_path: Vec<String>,
+    /// An object keyed by server name, or an array for array containers.
+    pub servers: serde_json::Value,
+    /// `servers` nested under `key_path`, ready to merge into the config file.
+    pub config: serde_json::Value,
+    pub skipped: Vec<McpSkippedServer>,
 }
 
 /// A derived template variable declared by a harness.
@@ -108,6 +305,12 @@ pub struct HarnessRootDef {
     pub env: String,
     #[serde(rename = "use", default, skip_serializing_if = "String::is_empty")]
     pub use_: String,
+    #[serde(
+        rename = "fallbackEnv",
+        default,
+        skip_serializing_if = "String::is_empty"
+    )]
+    pub fallback_env: String,
     pub fallback: String,
 }
 
@@ -136,6 +339,8 @@ pub struct HarnessInstallation {
 pub struct HarnessDefinition {
     pub key: String,
     pub name: String,
+    /// Upstream version the entry was last verified against, or `"unknown"`.
+    pub version: String,
     pub aliases: Vec<String>,
     pub executables: Vec<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -144,6 +349,9 @@ pub struct HarnessDefinition {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub roots: Vec<HarnessRootDef>,
     pub support: HarnessSupport,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub acp: Option<HarnessAcp>,
+    pub mcp: HarnessMcp,
     pub env: Vec<HarnessEnvVar>,
     pub sources: Vec<String>,
 }
@@ -250,6 +458,253 @@ pub fn list_harness_support() -> Vec<HarnessSupportRecord> {
         .collect()
 }
 
+/// Returns MCP metadata for one harness by key or alias.
+pub fn get_harness_mcp(input: &str) -> Result<HarnessMcpRecord, HarnessError> {
+    let harness = find_harness_definition(input)
+        .ok_or_else(|| HarnessError(format!("Unknown harness: {}", input)))?;
+    Ok(HarnessMcpRecord {
+        key: harness.key.clone(),
+        name: harness.name.clone(),
+        mcp: harness.mcp.clone(),
+    })
+}
+
+/// Returns MCP metadata for all harnesses.
+pub fn list_harness_mcp() -> Vec<HarnessMcpRecord> {
+    matrix()
+        .harnesses
+        .iter()
+        .map(|harness| HarnessMcpRecord {
+            key: harness.key.clone(),
+            name: harness.name.clone(),
+            mcp: harness.mcp.clone(),
+        })
+        .collect()
+}
+
+/// Translates a project `.mcp.json` document (`{"mcpServers": {...}}`) into
+/// the native MCP config of a harness for one scope. Pure: nothing is read or
+/// written. Servers the native format cannot represent are listed in
+/// `skipped`.
+pub fn translate_mcp_json(
+    input: &str,
+    mcp_json: &serde_json::Value,
+    options: &McpTranslateOptions,
+) -> Result<McpTranslation, HarnessError> {
+    use serde_json::{Map, Value};
+
+    let harness = find_harness_definition(input)
+        .ok_or_else(|| HarnessError(format!("Unknown harness: {}", input)))?;
+    let scope = options.scope.as_deref().unwrap_or("local");
+    let leaf = match scope {
+        "global" => &harness.mcp.global,
+        "local" => &harness.mcp.local,
+        _ => return Err(HarnessError(format!("Unknown MCP scope: {}", scope))),
+    };
+    let format = match &harness.mcp.server_format {
+        Some(format)
+            if harness.mcp.status == "supported"
+                && leaf.status == "supported"
+                && !leaf.format.is_empty() =>
+        {
+            format
+        }
+        _ => {
+            return Err(HarnessError(format!(
+                "Harness {} has no file-based MCP config for scope {}",
+                harness.key, scope
+            )))
+        }
+    };
+
+    let servers = mcp_json
+        .as_object()
+        .and_then(|document| document.get("mcpServers"))
+        .and_then(Value::as_object)
+        .ok_or_else(|| {
+            HarnessError(".mcp.json must be an object with an mcpServers object".into())
+        })?;
+
+    let mut names: Vec<&String> = servers.keys().collect();
+    names.sort();
+
+    let mut mapped = Map::new();
+    let mut entries = Vec::new();
+    let mut skipped = Vec::new();
+    for name in names {
+        match translate_mcp_server(name, &servers[name.as_str()], format) {
+            Err(reason) => skipped.push(McpSkippedServer {
+                name: name.clone(),
+                reason,
+            }),
+            Ok(entry) if format.container == "array" => entries.push(Value::Object(entry)),
+            Ok(entry) => {
+                mapped.insert(name.clone(), Value::Object(entry));
+            }
+        }
+    }
+
+    let native = if format.container == "array" {
+        Value::Array(entries)
+    } else {
+        Value::Object(mapped)
+    };
+    let config = leaf
+        .key_path
+        .iter()
+        .rev()
+        .fold(native.clone(), |value, segment| {
+            let mut wrapper = Map::new();
+            wrapper.insert(segment.clone(), value);
+            Value::Object(wrapper)
+        });
+
+    Ok(McpTranslation {
+        key: harness.key.clone(),
+        name: harness.name.clone(),
+        scope: scope.to_string(),
+        format: leaf.format.clone(),
+        key_path: leaf.key_path.clone(),
+        servers: native,
+        config,
+        skipped,
+    })
+}
+
+/// Translates one server. The check order matches every package.
+fn translate_mcp_server(
+    name: &str,
+    raw: &serde_json::Value,
+    format: &HarnessMcpServerFormat,
+) -> Result<serde_json::Map<String, serde_json::Value>, String> {
+    use serde_json::Value;
+
+    let server = raw.as_object().ok_or("invalid server entry")?;
+    let transport = match server.get("type") {
+        Some(Value::String(kind)) if ["stdio", "http", "sse"].contains(&kind.as_str()) => {
+            kind.as_str()
+        }
+        Some(Value::String(kind)) => return Err(format!("unsupported transport: {}", kind)),
+        Some(_) => return Err("invalid server entry".into()),
+        None if server.contains_key("command") => "stdio",
+        None if server.contains_key("url") => "http",
+        None => return Err("missing command or url".into()),
+    };
+
+    let remote = match transport {
+        "http" => format.http.as_ref(),
+        "sse" => format.sse.as_ref(),
+        _ => None,
+    };
+    if transport != "stdio" && remote.is_none() {
+        return Err(format!("unsupported transport: {}", transport));
+    }
+
+    let mut entry = format.defaults.clone();
+    if !format.name_field.is_empty() {
+        entry.insert(format.name_field.clone(), Value::String(name.to_string()));
+    }
+
+    let Some(remote) = remote else {
+        let target = &format.stdio;
+        if !target.type_.is_empty() {
+            entry.insert(
+                format.type_field.clone(),
+                Value::String(target.type_.clone()),
+            );
+        }
+        let command = match server.get("command") {
+            Some(Value::String(command)) if !command.is_empty() => command.clone(),
+            _ => return Err("missing command".into()),
+        };
+        let args = optional_strings(server.get("args")).ok_or("invalid args")?;
+        let env = optional_string_map(server.get("env")).ok_or("invalid env")?;
+        if target.args.is_empty() {
+            let mut argv = vec![Value::String(command)];
+            argv.extend(args);
+            entry.insert(target.command.clone(), Value::Array(argv));
+        } else {
+            entry.insert(target.command.clone(), Value::String(command));
+            entry.insert(target.args.clone(), Value::Array(args));
+        }
+        if !env.is_empty() {
+            if target.env.is_empty() {
+                return Err("env not supported".into());
+            }
+            entry.insert(target.env.clone(), Value::Object(env));
+        }
+        return Ok(entry);
+    };
+
+    if !remote.type_.is_empty() {
+        entry.insert(
+            format.type_field.clone(),
+            Value::String(remote.type_.clone()),
+        );
+    }
+    let url = match server.get("url") {
+        Some(Value::String(url)) if !url.is_empty() => url.clone(),
+        _ => return Err("missing url".into()),
+    };
+    let headers = optional_string_map(server.get("headers")).ok_or("invalid headers")?;
+    entry.insert(remote.url.clone(), Value::String(url));
+    if !headers.is_empty() {
+        if remote.headers.is_empty() {
+            return Err("headers not supported".into());
+        }
+        entry.insert(remote.headers.clone(), Value::Object(headers));
+    }
+    Ok(entry)
+}
+
+/// Accepts a missing/null value or an array of strings.
+fn optional_strings(value: Option<&serde_json::Value>) -> Option<Vec<serde_json::Value>> {
+    match value {
+        None | Some(serde_json::Value::Null) => Some(Vec::new()),
+        Some(serde_json::Value::Array(items)) if items.iter().all(|item| item.is_string()) => {
+            Some(items.clone())
+        }
+        _ => None,
+    }
+}
+
+/// Accepts a missing/null value or an object of strings.
+fn optional_string_map(
+    value: Option<&serde_json::Value>,
+) -> Option<serde_json::Map<String, serde_json::Value>> {
+    match value {
+        None | Some(serde_json::Value::Null) => Some(serde_json::Map::new()),
+        Some(serde_json::Value::Object(object)) if object.values().all(|item| item.is_string()) => {
+            Some(object.clone())
+        }
+        _ => None,
+    }
+}
+
+/// Returns ACP metadata for one harness by key or alias; missing metadata is unknown.
+pub fn get_harness_acp(input: &str) -> Result<HarnessAcpRecord, HarnessError> {
+    let harness = find_harness_definition(input)
+        .ok_or_else(|| HarnessError(format!("Unknown harness: {}", input)))?;
+    Ok(clone_harness_acp_record(&harness))
+}
+
+/// Returns ACP metadata for all harnesses.
+pub fn list_harness_acp() -> Vec<HarnessAcpRecord> {
+    matrix()
+        .harnesses
+        .iter()
+        .map(clone_harness_acp_record)
+        .collect()
+}
+
+fn clone_harness_acp_record(harness: &HarnessDefinition) -> HarnessAcpRecord {
+    HarnessAcpRecord {
+        key: harness.key.clone(),
+        name: harness.name.clone(),
+        acp: harness.acp.clone().unwrap_or_default(),
+    }
+}
+
 /// Checks a single harness by key or alias (case-insensitive, trimmed).
 ///
 /// Returns [`HarnessError`] with the message `"Unknown harness: <input>"` if
@@ -263,7 +718,7 @@ pub fn check_harness(
 
     let base_env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
     let env = resolve_harness_roots(&harness, &base_env);
-    let executable_path = find_executable(&harness.executables, &env);
+    let executable_path = find_executable(&harness.executables, &env, false);
     let paths = resolve_paths(&harness, &env);
     let matched_paths: Vec<ResolvedHarnessPath> =
         paths.iter().filter(|p| p.exists).cloned().collect();
@@ -313,6 +768,57 @@ pub fn detect_installed_harnesses(
 // ---------------------------------------------------------------------------
 // Internal: lookup
 // ---------------------------------------------------------------------------
+
+/// Lists the ACP agents that can be started from binaries already installed.
+///
+/// An entry is returned when its ACP status is `supported`, it does not
+/// delegate to an `adapter`, and the command of its launch for the current
+/// platform resolves to an absolute executable path. Uses `installed_launches`
+/// when present (an empty list means never installed), otherwise `launches` that do not use a package runner. Nothing
+/// is executed.
+pub fn detect_installed_acp_launches(options: CheckOptions) -> Vec<InstalledAcpLaunch> {
+    let env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
+    let mut results = Vec::new();
+
+    for harness in &matrix().harnesses {
+        let Some(acp) = harness.acp.as_ref() else {
+            continue;
+        };
+        if acp.status != "supported" || !acp.adapter.is_empty() {
+            continue;
+        }
+
+        let launches: Vec<&HarnessAcpLaunch> = match &acp.installed_launches {
+            Some(installed) => installed.iter().collect(),
+            None => acp
+                .launches
+                .iter()
+                .filter(|l| !is_package_runner(l))
+                .collect(),
+        };
+        let Some(launch) = launches
+            .into_iter()
+            .find(|l| platform_matches(&l.platforms))
+        else {
+            continue;
+        };
+        if let Some(command) = find_executable(std::slice::from_ref(&launch.command), &env, true) {
+            results.push(InstalledAcpLaunch {
+                key: harness.key.clone(),
+                name: harness.name.clone(),
+                command,
+                args: launch.args.clone(),
+            });
+        }
+    }
+
+    results
+}
+
+fn is_package_runner(launch: &HarnessAcpLaunch) -> bool {
+    matches!(launch.command.as_str(), "npx" | "bunx" | "uvx")
+        || (launch.command == "pnpm" && launch.args.first().is_some_and(|a| a == "dlx"))
+}
 
 fn find_harness_definition(input: &str) -> Option<HarnessDefinition> {
     let key = input.trim().to_lowercase();
@@ -438,6 +944,11 @@ fn resolve_harness_roots(
             base_env.get(&root.env).map(|s| s.as_str())
         };
         let env_val_nonempty = env_val.filter(|s| !s.is_empty());
+        let fallback_env_val = if root.fallback_env.is_empty() {
+            None
+        } else {
+            base_env.get(&root.fallback_env).filter(|s| !s.is_empty())
+        };
 
         let value: Option<String> = if !root.env.is_empty() {
             if let Some(val) = env_val_nonempty {
@@ -449,6 +960,9 @@ fn resolve_harness_roots(
                 } else {
                     Some(val.to_string())
                 }
+            } else if let Some(val) = fallback_env_val {
+                // Use the documented legacy override before the static fallback.
+                Some(val.to_string())
             } else {
                 resolve_template(&root.fallback, &out)
             }
@@ -458,12 +972,33 @@ fn resolve_harness_roots(
 
         if let Some(v) = value {
             if !v.is_empty() {
-                out.insert(root.name.clone(), normalize_path(&v));
+                out.insert(
+                    root.name.clone(),
+                    normalize_path(&expand_leading_tilde(
+                        &v,
+                        base_env.get("HOME").map(String::as_str).unwrap_or(""),
+                    )),
+                );
             }
         }
     }
 
     out
+}
+
+fn expand_leading_tilde(value: &str, home: &str) -> String {
+    if value == "~" {
+        return home.to_string();
+    }
+    if let Some(rest) = value.strip_prefix("~/") {
+        return format!("{}/{}", home.trim_end_matches('/'), rest);
+    }
+    if cfg!(windows) {
+        if let Some(rest) = value.strip_prefix(r"~\") {
+            return format!(r"{}\{}", home.trim_end_matches(['/', '\\']), rest);
+        }
+    }
+    value.to_string()
 }
 
 // ---------------------------------------------------------------------------
@@ -639,7 +1174,13 @@ fn resolve_paths(
         .collect()
 }
 
-fn find_executable(executables: &[String], env: &HashMap<String, String>) -> Option<String> {
+/// Searches `PATH` for the first matching executable. With `absolute_only`,
+/// relative `PATH` entries are ignored.
+fn find_executable(
+    executables: &[String],
+    env: &HashMap<String, String>,
+    absolute_only: bool,
+) -> Option<String> {
     if executables.is_empty() {
         return None;
     }
@@ -648,7 +1189,7 @@ fn find_executable(executables: &[String], env: &HashMap<String, String>) -> Opt
     let delimiter = if cfg!(windows) { ';' } else { ':' };
     let path_parts: Vec<&str> = path_value
         .split(delimiter)
-        .filter(|s| !s.is_empty())
+        .filter(|s| !s.is_empty() && (!absolute_only || Path::new(s).is_absolute()))
         .collect();
 
     let exts: Vec<String> = if cfg!(windows) {
@@ -704,5 +1245,79 @@ mod tests {
             resolve_template("${HOME}/.codex/config.toml", &env),
             Some("/Users/test/.codex/config.toml".to_string())
         );
+    }
+
+    #[test]
+    fn acp_synthetic_public_flows() {
+        // Unit tests have a separate binary from integration tests using the real registry.
+        let fixture_json = fs::read_to_string(
+            Path::new(env!("CARGO_MANIFEST_DIR")).join("../../testdata/acp-registry.json"),
+        )
+        .expect("read ACP fixture");
+        let fixture: HarnessMatrix = serde_json::from_str(&fixture_json).unwrap();
+        MATRIX
+            .set(fixture.clone())
+            .expect("unit-test matrix must be unused");
+        assert_eq!(get_raw_harness_data(), fixture);
+        assert_eq!(get_harness_acp(" NATIVE-ALIAS ").unwrap().key, "native");
+        assert_eq!(
+            get_harness_acp("absent").unwrap_err().0,
+            "Unknown harness: absent"
+        );
+        let host = get_harness_acp("host").unwrap();
+        let bridge = get_harness_acp(&host.acp.adapter).unwrap();
+        assert_eq!(bridge.acp.launches[0].command, "example-bridge");
+        assert_eq!(
+            serde_json::to_value(&bridge).unwrap()["acp"]["launches"][0]["args"],
+            serde_json::json!([])
+        );
+        for key in ["unknown", "missing"] {
+            assert_eq!(get_harness_acp(key).unwrap().acp, HarnessAcp::default());
+        }
+        assert_eq!(
+            get_harness_acp("unsupported").unwrap().acp.status,
+            "unsupported"
+        );
+        let mut records = list_harness_acp();
+        assert_eq!(records.len(), fixture.harnesses.len());
+        records[0]
+            .acp
+            .sources
+            .push("https://example.com/mutated".into());
+        let launch = &mut records[0].acp.launches[0];
+        launch.args.push("mutated".into());
+        launch.platforms.push("win32".into());
+        records[0].acp.launches[1].args.push("mutated".into());
+        for mut harness in list_harnesses() {
+            let options = CheckOptions {
+                env: Some(HashMap::from([("PATH".into(), "".into())])),
+                cwd: None,
+            };
+            let mut result = check_harness(&harness.key, options).unwrap();
+            assert!(!result.installed, "ACP is not detection evidence");
+            assert_eq!(result.harness, harness);
+            if harness.key == "missing" {
+                assert!(serde_json::to_value(&result).unwrap()["harness"]
+                    .get("acp")
+                    .is_none());
+            }
+            if let Some(acp) = harness.acp.as_mut() {
+                acp.sources.push("mutated".into());
+            }
+            if let Some(acp) = result.harness.acp.as_mut() {
+                acp.sources.push("mutated".into());
+            }
+        }
+        let mut raw = get_raw_harness_data();
+        raw.harnesses[0].acp.as_mut().unwrap().launches[0].command = "mutated".into();
+        assert_eq!(get_raw_harness_data(), fixture);
+        assert_eq!(
+            get_harness_acp("native").unwrap().acp,
+            fixture.harnesses[0].acp.clone().unwrap()
+        );
+        assert!(serde_json::to_value(get_harness_support("native").unwrap())
+            .unwrap()
+            .get("acp")
+            .is_none());
     }
 }

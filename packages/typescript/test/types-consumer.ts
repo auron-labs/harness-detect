@@ -1,4 +1,4 @@
-import { checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
+import { getHarnessMcp, listHarnessMcp, translateMcpJson, type HarnessMcp, type McpTranslation, detectInstalledAcpLaunches, type InstalledAcpLaunch, getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
 
 type Assert<T extends true> = T;
 type IsExact<T, U> =
@@ -62,7 +62,7 @@ const firstInstalledDetectedKey: string | undefined = detectedInstalled[0]?.key;
 
 type _CheckResultExecutablePathIsNullable = Assert<IsExact<typeof checkResult.executablePath, string | null>>;
 type _ResolvedPathPathIsNullable = Assert<IsExact<typeof firstResolvedPath.path, string | null>>;
-type _HarnessRootsStayOptional = Assert<IsExact<typeof checkResult.harness.roots, { name: string; env?: string; use?: string; fallback: string }[] | undefined>>;
+type _HarnessRootsStayOptional = Assert<IsExact<typeof checkResult.harness.roots, { name: string; env?: string; use?: string; fallbackEnv?: string; fallback: string }[] | undefined>>;
 
 void version;
 void rawVersion;
@@ -87,3 +87,37 @@ void firstResolvedPathPlatforms;
 void linuxPlatform;
 void firstDetectedKey;
 void firstInstalledDetectedKey;
+
+const acp = getHarnessAcp("codex").acp;
+const acpRecords = listHarnessAcp();
+const optionalAcp: HarnessAcp | undefined = rawMatrix.harnesses[0]?.acp;
+const directAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", launches: [{ command: "example", args: [] }] };
+const adapterAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", adapter: "example-bridge" };
+// @ts-expect-error supported ACP needs exactly one launch or adapter
+const invalidAcp: HarnessAcp = { status: "supported", sources: [], confidence: "unknown" };
+// @ts-expect-error unsupported ACP has no launch
+const invalidLaunch: HarnessAcp = { status: "unsupported", sources: [], confidence: "source", launches: [{ command: "example", args: [] }] };
+const optionalLaunch: HarnessAcpLaunch | undefined = acp.launches?.[0];
+void [acpRecords, optionalAcp, directAcp, adapterAcp, invalidAcp, invalidLaunch, optionalLaunch];
+
+// @ts-expect-error supported ACP requires a nonempty launch list
+const emptyLaunches: HarnessAcp = { status: "supported", sources: [], confidence: "source", launches: [] };
+void emptyLaunches;
+
+const installedAcpLaunches: InstalledAcpLaunch[] = detectInstalledAcpLaunches({ env: { PATH: "/usr/bin" } });
+const installedAcpCommand: string | undefined = installedAcpLaunches[0]?.command;
+void installedAcpCommand;
+
+const harnessVersion: string = harnesses[0]!.version;
+const mcpRecord = getHarnessMcp("claude-code");
+const mcpMetadata: HarnessMcp = mcpRecord.mcp;
+const mcpJsonStatus: "supported" | "unsupported" | "unknown" = mcpMetadata.mcpJson;
+const mcpGlobalKeyPath: string[] | undefined = mcpMetadata.global.keyPath;
+const allMcp: string[] = listHarnessMcp().map((record) => record.key);
+const translation: McpTranslation = translateMcpJson("codex", { mcpServers: { fs: { command: "npx", args: ["-y", "fs"] } } }, { scope: "global" });
+const translationFromText: McpTranslation = translateMcpJson("cursor", "{\"mcpServers\":{}}");
+const translationSkipped: string[] = translation.skipped.map((entry) => entry.reason);
+const agentsSkillsStatus: "supported" | "unsupported" | "unknown" = harnesses[0]!.support.agentsSkills.local.status;
+// @ts-expect-error scope must be global or local
+translateMcpJson("codex", { mcpServers: {} }, { scope: "project" });
+void [harnessVersion, mcpJsonStatus, mcpGlobalKeyPath, allMcp, translationFromText, translationSkipped, agentsSkillsStatus];

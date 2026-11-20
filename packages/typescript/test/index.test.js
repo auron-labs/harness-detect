@@ -8,9 +8,14 @@ import test from "node:test";
 import {
   checkHarness,
   detectHarnesses,
+  detectInstalledAcpLaunches,
+  getHarnessAcp,
   detectInstalledHarnesses,
   getHarnessMatrix,
+  getHarnessMcp,
   getHarnessSupport,
+  listHarnessMcp,
+  translateMcpJson,
   getRawHarnessData,
   listHarnesses,
   listHarnessSupport,
@@ -19,12 +24,18 @@ import {
 const LOCKED_RUNTIME_EXPORTS = [
   "checkHarness",
   "detectHarnesses",
+  "detectInstalledAcpLaunches",
   "detectInstalledHarnesses",
+  "getHarnessAcp",
+  "listHarnessAcp",
   "getHarnessMatrix",
   "getHarnessSupport",
   "getRawHarnessData",
   "listHarnessSupport",
   "listHarnesses",
+  "getHarnessMcp",
+  "listHarnessMcp",
+  "translateMcpJson",
 ];
 
 const SHARED_REGISTRY_URL = new URL(
@@ -214,6 +225,7 @@ const VERIFIED_NEW_HARNESS_KEYS = [
   "nanocoder",
   "openblock",
   "pi",
+  "prime-agent",
   "qoder-cli",
   "rovo-dev-cli",
   "toad",
@@ -261,6 +273,35 @@ test("checkHarness resolves harness-specific derived roots", () => {
 
   assert.equal(config?.path, "/tmp/hermes-home/config.yaml");
   assert.equal(sessions?.path, "/tmp/hermes-home/sessions");
+});
+
+test("checkHarness expands tilde root overrides", () => {
+  const result = checkHarness("prime-agent", {
+    cwd: "/repo",
+    env: {
+      HOME: "/Users/test",
+      PATH: "",
+      PRIME_AGENT_CODING_AGENT_DIR: "~/prime-agent",
+    },
+  });
+
+  const settings = result.paths.find((entry) => entry.id === "global-settings");
+  assert.equal(settings?.path, "/Users/test/prime-agent/settings.json");
+});
+
+test("checkHarness honors Prime Agent session override precedence", () => {
+  const result = checkHarness("prime-agent", {
+    cwd: "/repo",
+    env: {
+      HOME: "/Users/test",
+      PATH: "",
+      PRIME_AGENT_CODING_AGENT_SESSION_DIR: "/tmp/legacy-sessions",
+      PRIME_AGENT_SESSION_DIR: "/tmp/current-sessions",
+    },
+  });
+
+  const sessions = result.paths.find((entry) => entry.id === "sessions");
+  assert.equal(sessions?.path, "/tmp/current-sessions");
 });
 
 test("aliases map to the same harness", () => {
@@ -711,4 +752,83 @@ test("registry retains verified installation metadata", () => {
       )
     )
   );
+});
+
+test("detectInstalledAcpLaunches ignores relative PATH entries", { skip: process.platform === "win32" }, () => {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-launches-")));
+  const originalCwd = process.cwd();
+  try {
+    for (const dir of ["relative-bin", "absolute-bin"]) {
+      fs.mkdirSync(path.join(root, dir));
+      fs.writeFileSync(path.join(root, dir, "gemini"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+    }
+    process.chdir(root);
+
+    const only = detectInstalledAcpLaunches({ env: { HOME: root, PATH: "relative-bin" } });
+    assert.deepEqual(only, []);
+
+    const both = detectInstalledAcpLaunches({
+      env: { HOME: root, PATH: ["relative-bin", path.join(root, "absolute-bin")].join(path.delimiter) }
+    });
+    assert.deepEqual(both.map(({ key, command }) => [key, command]), [
+      ["gemini-cli", path.join(root, "absolute-bin", "gemini")]
+    ]);
+  } finally {
+    process.chdir(originalCwd);
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("detectInstalledAcpLaunches never reports aider-acp from node alone", { skip: process.platform === "win32" }, () => {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-aider-")));
+  try {
+    fs.mkdirSync(path.join(root, "bin"));
+    fs.writeFileSync(path.join(root, "bin", "node"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+    fs.mkdirSync(path.join(root, "dist"));
+    fs.writeFileSync(path.join(root, "dist", "index.js"), "");
+    const found = detectInstalledAcpLaunches({
+      cwd: root,
+      env: { HOME: root, PATH: path.join(root, "bin") }
+    });
+    assert.deepEqual(found, []);
+    const record = getHarnessAcp("aider-acp");
+    assert.equal(record.acp.status, "supported");
+    assert.deepEqual(record.acp.launches, [{ command: "node", args: ["dist/index.js"] }]);
+    assert.deepEqual(record.acp.installedLaunches, []);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("MCP metadata and .mcp.json translation", () => {
+  const claude = getHarnessMcp(" Claude ");
+  assert.equal(claude.key, "claude-code");
+  assert.equal(claude.mcp.mcpJson, "supported");
+  claude.mcp.status = "MUTATED";
+  assert.equal(getHarnessMcp("claude-code").mcp.status, "supported");
+  assert.equal(listHarnessMcp().length, listHarnesses().length);
+
+  const translation = translateMcpJson(
+    "codex",
+    JSON.stringify({
+      mcpServers: {
+        fs: { command: "npx", args: ["-y", "fs"] },
+        legacy: { type: "sse", url: "https://example.com/sse" }
+      }
+    }),
+    { scope: "global" }
+  );
+  assert.equal(translation.format, "toml");
+  assert.deepEqual(translation.config, { mcp_servers: { fs: { command: "npx", args: ["-y", "fs"] } } });
+  assert.deepEqual(translation.skipped, [{ name: "legacy", reason: "unsupported transport: sse" }]);
+  assert.throws(() => translateMcpJson("aider", { mcpServers: {} }), /has no file-based MCP config for scope local/);
+  assert.throws(() => translateMcpJson("codex", { servers: {} }), /must be an object with an mcpServers object/);
+});
+
+test("harness entries expose version and .agents/skills support", () => {
+  for (const harness of listHarnesses()) {
+    assert.match(harness.version, /^\S+$/, harness.key);
+    assert.ok(harness.support.agentsSkills.global.status, harness.key);
+  }
+  assert.equal(getHarnessSupport("codex").support.agentsSkills.local.status, "supported");
 });

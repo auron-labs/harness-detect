@@ -34,14 +34,24 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
     );
   }
   const draft = {
+    acp: { status: "unknown", sources: [], confidence: "unknown" },
     aliases,
     env: [],
     executables: [],
     installations: [],
     key,
+    mcp: {
+      confidence: "unknown",
+      global: { confidence: "unknown", paths: [], sources: [], status: "unknown" },
+      local: { confidence: "unknown", paths: [], sources: [], status: "unknown" },
+      mcpJson: "unknown",
+      sources: [],
+      status: "unknown",
+    },
     name,
     paths: [],
     sources: [],
+    version: "unknown",
     support: Object.fromEntries(
       registrySchema.$defs.HarnessSupport.required.map((area) => [
         area,

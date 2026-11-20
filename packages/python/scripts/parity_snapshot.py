@@ -6,12 +6,16 @@ import shutil
 import stat
 import sys
 import tempfile
+from collections.abc import Mapping
+from dataclasses import fields, is_dataclass
 from pathlib import Path
 from typing import Any
 
 from harness_detect import (
     CheckOptions,
+    HarnessAcpRecord,
     HarnessCheckResult,
+    HarnessError,
     HarnessSupport,
     HarnessSupportArea,
     HarnessSupportPath,
@@ -19,8 +23,18 @@ from harness_detect import (
     HarnessSupportScope,
     check_harness,
     detect_harnesses,
+    detect_installed_acp_launches,
+    detect_installed_harnesses,
+    get_harness_acp,
+    get_harness_matrix,
+    get_harness_mcp,
     get_harness_support,
+    get_raw_harness_data,
+    list_harness_acp,
+    list_harness_mcp,
     list_harness_support,
+    list_harnesses,
+    translate_mcp_json,
 )
 
 
@@ -90,16 +104,113 @@ def run_case(raw_case: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
             )
         elif operation == "detectHarnesses":
             result = normalize_detect_results(detect_harnesses(options), roots)
+        elif operation == "getHarnessAcp":
+            result = normalize_acp_record(get_harness_acp(case["input"]))
+        elif operation == "listHarnessAcp":
+            result = [normalize_acp_record(r) for r in list_harness_acp()]
+        elif operation == "detectInstalledAcpLaunches":
+            result = {
+                "launches": [
+                    {
+                        "key": launch.key,
+                        "command": normalize_path_value(launch.command, roots),
+                        "args": list(launch.args),
+                    }
+                    for launch in detect_installed_acp_launches(options)
+                ]
+            }
         elif operation == "getHarnessSupport":
             result = normalize_support_record(get_harness_support(case["input"]))
         elif operation == "listHarnessSupport":
             result = normalize_support_list(list_harness_support())
+        elif operation == "detectInstalledHarnesses":
+            result = normalize_detect_results(
+                detect_installed_harnesses(options), roots
+            )
+        elif operation == "getRawHarnessData":
+            result = to_registry_json(get_raw_harness_data())
+        elif operation == "getHarnessMatrix":
+            result = to_registry_json(get_harness_matrix())
+        elif operation == "listHarnesses":
+            result = to_registry_json(list_harnesses())
+        elif operation == "getHarnessMcp":
+            result = error_result(
+                lambda: to_registry_json(get_harness_mcp(case["input"]))
+            )
+        elif operation == "listHarnessMcp":
+            result = to_registry_json(list_harness_mcp())
+        elif operation == "translateMcpJson":
+            # The .mcp.json document is passed through unexpanded.
+            result = snapshot_translation(raw_case)
         else:
             raise ValueError(f"Unsupported parity operation: {operation}")
 
         return {"id": case["id"], "operation": operation, "result": result}
     finally:
         cleanup_setup(setup)
+
+
+# Optional list fields the registry omits when empty; every other empty list
+# (aliases, sources, paths...) is required and kept.
+_OMIT_EMPTY_LISTS = {"platforms", "roots", "launches", "key_path"}
+# Required string fields that may legitimately be empty.
+_KEEP_EMPTY_STRINGS = {"fallback"}
+
+
+def _json_name(name: str) -> str:
+    head, *rest = name.rstrip("_").split("_")
+    return head + "".join(part.capitalize() for part in rest)
+
+
+def to_registry_json(value: Any) -> Any:
+    """Serialize package dataclasses back to the registry's JSON shape."""
+    if is_dataclass(value):
+        out = {}
+        for item in fields(value):
+            field_value = getattr(value, item.name)
+            if field_value is None:
+                continue
+            if field_value == "" and item.name not in _KEEP_EMPTY_STRINGS:
+                continue
+            if item.name in _OMIT_EMPTY_LISTS and len(field_value) == 0:
+                continue
+            if item.name == "defaults" and len(field_value) == 0:
+                continue
+            out[_json_name(item.name)] = to_registry_json(field_value)
+        return out
+    if isinstance(value, Mapping):
+        return {key: to_registry_json(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [to_registry_json(item) for item in value]
+    return value
+
+
+def error_result(fn: Any) -> Any:
+    try:
+        return fn()
+    except (HarnessError, ValueError) as error:
+        return {"error": str(error)}
+
+
+def translate_result(harness: str, scope: str | None, document: Any) -> Any:
+    kwargs = {} if scope is None else {"scope": scope}
+    return error_result(
+        lambda: to_registry_json(translate_mcp_json(harness, document, **kwargs))
+    )
+
+
+def snapshot_translation(case: dict[str, Any]) -> Any:
+    """Translate one harness, or every harness and scope for input "*"."""
+    document = case.get("mcpJson")
+    if case["input"] != "*":
+        return translate_result(case["input"], case.get("scope"), document)
+    return {
+        harness.key: {
+            "global": translate_result(harness.key, "global", document),
+            "local": translate_result(harness.key, "local", document),
+        }
+        for harness in list_harnesses()
+    }
 
 
 def expand_value(value: Any, roots: dict[str, str]) -> Any:
@@ -239,6 +350,31 @@ def normalize_path_value(value: str | None, roots: dict[str, str]) -> str | None
     return normalized
 
 
+def normalize_acp_record(record: HarnessAcpRecord) -> dict[str, Any]:
+    acp = record.acp
+    metadata = {
+        "status": acp.status,
+        "sources": list(acp.sources),
+        "confidence": acp.confidence,
+    }
+    for field, launches in (
+        ("launches", acp.launches),
+        ("installedLaunches", acp.installed_launches),
+    ):
+        if launches is not None and (launches or field == "installedLaunches"):
+            metadata[field] = []
+            for launch in launches:
+                item = {"command": launch.command, "args": list(launch.args)}
+                if launch.platforms:
+                    item["platforms"] = list(launch.platforms)
+                metadata[field].append(item)
+    if acp.adapter:
+        metadata["adapter"] = acp.adapter
+    if acp.notes:
+        metadata["notes"] = acp.notes
+    return {"key": record.key, "name": record.name, "acp": metadata}
+
+
 def normalize_support_path(path: HarnessSupportPath) -> dict[str, Any]:
     return {
         "id": path.id,
@@ -275,7 +411,7 @@ def normalize_support(support: HarnessSupport) -> dict[str, Any]:
         "skills": normalize_support_area(support.skills),
         "commands": normalize_support_area(support.commands),
         "agents": normalize_support_area(support.agents),
-        "dotAgents": normalize_support_area(support.dot_agents),
+        "agentsSkills": normalize_support_area(support.agents_skills),
     }
 
 

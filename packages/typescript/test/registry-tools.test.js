@@ -18,7 +18,7 @@ import { checkHarness, listHarnesses } from "../src/index.js";
 const repoRoot = fileURLToPath(new URL("../../..", import.meta.url));
 const registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
 const minimal = () => ({
-  harnesses: [structuredClone(registry.harnesses[0])],
+  harnesses: [{ ...structuredClone(registry.harnesses[0]), acp: { status: "unknown", sources: [], confidence: "unknown" } }],
   version: 1,
 });
 const cli = (script, args = []) =>
@@ -319,4 +319,91 @@ test("stats checker rejects stale content without writing files or consulting Gi
   } finally {
     fs.rmSync(dir, { force: true, recursive: true });
   }
+});
+
+const acpFixture = () => JSON.parse(fs.readFileSync(new URL("../../../testdata/acp-registry.json", import.meta.url), "utf8"));
+
+test("ACP schema accepts staged omission, direct argv launches and adapters", () => {
+  assert.deepEqual(validateRegistry(acpFixture()), []);
+  const sourceOnly = acpFixture();
+  sourceOnly.harnesses[0].executables = [];
+  sourceOnly.harnesses[0].paths = [];
+  sourceOnly.harnesses[0].acp.notes = "Run from the built adapter checkout.";
+  assert.deepEqual(validateRegistry(sourceOnly), []);
+  delete sourceOnly.harnesses[0].acp.notes;
+  assert.ok(validateRegistry(sourceOnly).length, "source-only records need setup notes");
+  const draft = scaffoldHarness(registry, "example-acp", "Example ACP");
+  assert.deepEqual(draft.acp, { status: "unknown", sources: [], confidence: "unknown" });
+  const before = acpFixture();
+  const after = acpFixture();
+  after.harnesses[0].acp.launches[0].args.push("--new");
+  assert.match(summarizeHarnessChanges(before, after), /- acp:.*--new/u);
+});
+
+test("ACP installedLaunches require launches and reject package runners", () => {
+  const withInstalled = (installedLaunches) => {
+    const candidate = acpFixture();
+    candidate.harnesses[0].acp.installedLaunches = installedLaunches;
+    return candidate;
+  };
+  assert.deepEqual(validateRegistry(withInstalled([{ command: "example-agent", args: ["--acp"] }])), []);
+  for (const launch of [
+    { command: "npx", args: ["-y", "example"] },
+    { command: "bunx", args: ["example"] },
+    { command: "uvx", args: ["example"] },
+    { command: "pnpm", args: ["dlx", "example"] },
+  ]) {
+    assert.match(validateRegistry(withInstalled([launch])).join("\n"), /installedLaunches must not use a package runner/u, launch.command);
+  }
+  assert.deepEqual(validateRegistry(withInstalled([{ command: "pnpm", args: ["run", "acp"] }])), []);
+  assert.deepEqual(validateRegistry(withInstalled([])), [], "empty list opts out of installed detection");
+  const adapter = acpFixture();
+  adapter.harnesses[2].acp.installedLaunches = [{ command: "example-agent", args: [] }];
+  assert.ok(validateRegistry(adapter).length, "adapter records cannot declare installedLaunches");
+});
+
+test("ACP validation rejects invalid claims, launch shapes and adapter targets", () => {
+  const cases = [
+    ["empty launches", (h) => { h.acp.launches = []; }],
+    ["ambiguous default", (h) => { delete h.acp.launches[0].platforms; }],
+    ["overlapping platforms", (h) => { h.acp.launches[1].platforms = ["linux"]; }],
+    ["missing supported launch", (h) => { delete h.acp.launches; }],
+    ["both launch and adapter", (h) => { h.acp.adapter = "bridge"; }],
+    ["unsupported launch", (h) => { h.acp.status = "unsupported"; }],
+    ["unknown launch", (h) => { h.acp.status = "unknown"; }],
+    ["missing evidence", (h) => { h.acp.sources = []; }],
+    ["unknown confidence", (h) => { h.acp.confidence = "unknown"; }],
+    ["non-HTTPS evidence", (h) => { h.acp.sources = ["http://example.com"]; }],
+    ["blank command", (h) => { h.acp.launches[0].command = " "; }],
+    ["missing argv", (h) => { delete h.acp.launches[0].args; }],
+    ["shell string argv", (h) => { h.acp.launches[0].args = "--acp"; }],
+    ["nonstring argv", (h) => { h.acp.launches[0].args = [1]; }],
+    ["empty platforms", (h) => { h.acp.launches[0].platforms = []; }],
+    ["duplicate platforms", (h) => { h.acp.launches[0].platforms = ["linux", "linux"]; }],
+    ["invalid platform", (h) => { h.acp.launches[0].platforms = ["plan9"]; }],
+    ["unknown property", (h) => { h.acp.transport = "stdio"; }],
+  ];
+  for (const [label, mutate] of cases) {
+    const candidate = acpFixture();
+    mutate(candidate.harnesses[0]);
+    assert.ok(validateRegistry(candidate).length, label);
+  }
+  for (const adapter of ["absent", "bridge-alias", "host", "unknown", "unsupported", "missing"]) {
+    const candidate = acpFixture();
+    candidate.harnesses[2].acp.adapter = adapter;
+    assert.match(validateRegistry(candidate).join("\n"), /acp.adapter/u, adapter);
+  }
+  const chain = acpFixture();
+  chain.harnesses[1].acp = { ...chain.harnesses[2].acp, adapter: "native" };
+  assert.match(validateRegistry(chain).join("\n"), /host.acp.adapter/u);
+  chain.harnesses[1].acp.adapter = "host";
+  assert.match(validateRegistry(chain).join("\n"), /acp.adapter/u);
+  for (const status of ["unsupported", "unknown"]) {
+    const candidate = acpFixture();
+    candidate.harnesses[2].acp.status = status;
+    assert.ok(validateRegistry(candidate).length, `${status} adapter`);
+  }
+  const unsupported = acpFixture();
+  unsupported.harnesses[3].acp.sources = [];
+  assert.ok(validateRegistry(unsupported).length, "unsupported needs evidence");
 });

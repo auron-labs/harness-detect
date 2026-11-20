@@ -23,7 +23,7 @@ This guide defines the minimum contract for adding a new package implementation
 
 ## 2. Required public API
 
-Every package must expose the same eight public operations already locked by
+Every package must expose the same ten public operations already locked by
  `testdata/public-api-parity.json`:
 
 1. raw registry accessor
@@ -67,6 +67,37 @@ Every package must expose the same eight public operations already locked by
    - Rust: `detect_installed_harnesses`
    - Python: `detect_installed_harnesses`
 
+9. get ACP metadata for one harness by key or alias
+   - TypeScript: `getHarnessAcp`
+   - Go: `GetHarnessACP`
+   - Rust: `get_harness_acp`
+   - Python: `get_harness_acp`
+10. list ACP metadata for every harness
+   - TypeScript: `listHarnessAcp`
+   - Go: `ListHarnessACP`
+   - Rust: `list_harness_acp`
+   - Python: `list_harness_acp`
+11. list ACP agents that can be launched from installed binaries
+   - TypeScript: `detectInstalledAcpLaunches`
+   - Go: `DetectInstalledACPLaunches`
+   - Rust: `detect_installed_acp_launches`
+   - Python: `detect_installed_acp_launches`
+12. get MCP metadata for one harness by key or alias
+   - TypeScript: `getHarnessMcp`
+   - Go: `GetHarnessMCP`
+   - Rust: `get_harness_mcp`
+   - Python: `get_harness_mcp`
+13. list MCP metadata for every harness
+   - TypeScript: `listHarnessMcp`
+   - Go: `ListHarnessMCP`
+   - Rust: `list_harness_mcp`
+   - Python: `list_harness_mcp`
+14. translate a project `.mcp.json` document into a harness's native MCP config
+   - TypeScript: `translateMcpJson`
+   - Go: `TranslateMCPJSON`
+   - Rust: `translate_mcp_json`
+   - Python: `translate_mcp_json`
+
 Public naming may be idiomatic per language, but the operation set and behavior
  must stay equivalent. Prefer a clean aligned cross-language API over adding
 compatibility-only layers.
@@ -84,6 +115,7 @@ The package must preserve the shared registry schema and the JSON/result fields
 2. Each harness definition must preserve these fields:
     - `key`
     - `name`
+    - `version`
     - `aliases`
     - `executables`
     - `installations`
@@ -92,6 +124,8 @@ The package must preserve the shared registry schema and the JSON/result fields
     - `env`
     - `sources`
     - `support`
+    - `acp`
+    - `mcp`
  3. Raw-registry, harness-list, and detection-result `harness` surfaces must
     expose `support` anywhere they expose a full harness definition.
  4. `getHarnessSupport`/`GetHarnessSupport` and
@@ -99,6 +133,24 @@ The package must preserve the shared registry schema and the JSON/result fields
     only.
  5. `getHarnessMatrix`/`GetHarnessMatrix` must remain a compatibility alias for
     the raw-registry accessor, not a divergent data shape.
+
+### ACP metadata
+
+Harness definitions preserve optional top-level `acp` separately from `support`.
+Stored omission stays omitted in JSON-returning
+surfaces; Python represents it as `None` in its immutable typed definition.
+ACP getters return `{key, name, acp}` and normalize omission to
+`{status: "unknown", sources: [], confidence: "unknown"}`. They share support
+getters' alias lookup, unknown-harness errors, and snapshot/immutability contract.
+Support getters continue returning only `{key, name, support}`.
+
+A supported ACP entry has either a nonempty local stdio `launches` list or an
+`adapter` key. Adapter references resolve to another entry with supported
+direct launches; consumers make a second getter call and select the recipe for
+their platform. Multiple launches have explicit, disjoint platform restrictions.
+All packages preserve the list order, argv boundaries, and setup notes. See
+[configuration.md](./configuration.md#acp-metadata-acp) for validation rules.
+ACP never changes installation detection.
 
 ### Detection APIs
 

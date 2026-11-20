@@ -164,6 +164,7 @@ Schema:
     {
       "key": "codex",
       "name": "OpenAI Codex CLI",
+      "version": "0.169.0",
       "aliases": ["openai/codex"],
       "executables": ["codex"],
       "installations": [
@@ -196,8 +197,8 @@ Schema:
 
 1. Edit `packages/data/harnesses.json` only.
 2. `key` must be stable and lowercase. **Never rename an existing key** — it is part of the public API of every package.
-3. Required fields per entry: `key`, `name`, `aliases`, `executables`, `installations`, `paths`, `env`, `sources`, and `support`. All entries must have every field (use empty arrays if needed).
-4. `support` must include `config`, `skills`, `commands`, `agents`, and `dotAgents`, each with `global` and `local` leaves.
+3. Required fields per entry: `key`, `name`, `version`, `aliases`, `executables`, `installations`, `paths`, `env`, `sources`, `support`, and `mcp`. All entries must have every field (use empty arrays if needed). `version` is the upstream release the entry was verified against (or `unknown`); see [MCP metadata](./configuration.md#mcp-metadata-mcp) for `mcp`.
+4. `support` must include `config`, `skills`, `commands`, `agents`, and `agentsSkills`, each with `global` and `local` leaves.
 5. Add at least one evidence URL in `sources` for every path/executable rule you add or change. Prefer documented config/state/install paths over guesses.
 6. If a path cannot be verified, omit it. If the install method is real but underspecified, use `{"method":"unknown"}` plus a short `notes` entry instead of guessing a package manager or marketplace ID.
 7. Use derived env roots (`roots[]`) when a harness documents a root override. Avoid hardcoding `${HOME}/...` when the harness has a documented override.
@@ -214,7 +215,7 @@ Schema:
 
 Required shape when present:
 
-- Categories: `config`, `skills`, `commands`, `agents`, `dotAgents`
+- Categories: `config`, `skills`, `commands`, `agents`, `agentsSkills` (`agentsSkills` means the shared `.agents/skills` directory only)
 - Scopes per category: `global`, `local`
 - Required leaf fields: `status`, `paths`, `sources`, `confidence`
 - Optional leaf field: `notes`
@@ -300,7 +301,7 @@ Install TypeScript dev dependencies first (`cd packages/typescript && bun instal
 mise run harness:new -- example-harness "Example Harness" --alias example-alias
 ```
 
-The scaffold refuses existing keys/aliases after case and whitespace normalization and writes JSON only to stdout. It includes every required field and ten independent `unknown` support leaves. It deliberately leaves detection, sources, and installation arrays empty: supply verified facts before adding the entry to `packages/data/harnesses.json`; the draft is not a valid registry entry yet. Update an existing entry in place and keep its key stable.
+The scaffold refuses existing keys/aliases after case and whitespace normalization and writes JSON only to stdout. It includes every required field, ten independent `unknown` support leaves, and optional `unknown` ACP metadata. It deliberately leaves detection, sources, and installation arrays empty: supply verified facts before adding the entry to `packages/data/harnesses.json`; the draft is not a valid registry entry yet. Update an existing entry in place and keep its key stable.
 
 After editing the canonical registry, run from the repository root:
 
@@ -325,7 +326,7 @@ The validator CLI also accepts a registry JSON filename:
 node scripts/validate-registry.mjs /tmp/candidate-registry.json
 ```
 
-The schema owns field requirements, supported values, installation evidence, and evidence/confidence for non-`unknown` support claims. Semantic checks cover normalized key/alias collisions across entries and duplicate detection/support path IDs or root names within their owning scope. A self-alias is permitted. Validation cannot prove that a URL substantiates a rule; reviewers still check the upstream evidence and possible shared-file false positives.
+The schema owns field requirements, supported values, installation evidence, and evidence/confidence for non-`unknown` support claims. Stored ACP is optional, but current entries populate it explicitly; see [ACP metadata](./configuration.md#acp-metadata-acp) for the `launches`/adapter contract and [the agent lookup workflow](./harness-guide.md#finding-and-updating-acp-records) for discovery. Schema validation checks ACP claims and launch shapes; semantic validation requires adapter keys to target a different supported entry with direct launches and rejects overlapping or unscoped platform variants. Documented source-only ACP launch records may omit detection signals when setup notes explain the limitation. Semantic checks also cover normalized key/alias collisions across entries and duplicate detection/support path IDs or root names within their owning scope. A self-alias is permitted. Validation cannot prove that a URL substantiates a rule; reviewers still check the upstream evidence and possible shared-file false positives.
 
 The Markdown summary compares the working canonical registry against `HEAD` by default, including staged and unstaged edits. Use `--base` for committed branch changes; missing revisions fail explicitly. It lists additions, removals, and changed fields, with support broken down by area and scope. CI uses the PR base revision and publishes the result in the job summary.
 
