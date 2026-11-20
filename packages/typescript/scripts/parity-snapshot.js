@@ -228,7 +228,8 @@ function sortById(items) {
 }
 
 function sortStrings(values) {
-  return [...values].sort((left, right) => left.localeCompare(right));
+  // Compare UTF-8 bytes, as the Go, Rust, and Python parity helpers do.
+  return [...values].sort((left, right) => Buffer.compare(Buffer.from(left), Buffer.from(right)));
 }
 
 function normalizeSupportPath(pathSpec) {
