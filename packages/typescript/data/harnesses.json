@@ -31955,9 +31955,7 @@
       "aliases": [
         "@madarco/agentbox"
       ],
-      "executables": [
-        "agentbox"
-      ],
+      "executables": [],
       "paths": [
         {
           "id": "global-config",
@@ -32001,7 +31999,7 @@
             "linux"
           ],
           "url": "https://github.com/madarco/agentbox/blob/v0.33.1/README.md#L72-L84",
-          "notes": "The documented local runtime requires macOS or Linux, Node >=20.10, and Docker."
+          "notes": "The documented local runtime requires macOS or Linux, Node >=20.10, and Docker. The detector requires AgentBox-owned settings or state because mattolson/agent-sandbox also installs an agentbox command."
         }
       ],
       "sources": [
@@ -32010,7 +32008,8 @@
         "https://github.com/madarco/agentbox/blob/v0.33.1/README.md#L72-L84",
         "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L7-L20",
         "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L28-L50",
-        "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L143-L153"
+        "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L143-L153",
+        "https://github.com/mattolson/agent-sandbox/blob/v0.13.0/docs/cli.md#L1-L8"
       ],
       "support": {
         "config": {

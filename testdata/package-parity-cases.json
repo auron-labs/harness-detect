@@ -9134,7 +9134,7 @@
       }
     },
     {
-      "id": "check-agentbox-agentbox-on-path",
+      "id": "check-agentbox-ignores-shared-agentbox-executable",
       "operation": "checkHarness",
       "input": "@madarco/agentbox",
       "platforms": [
@@ -9153,8 +9153,8 @@
       ],
       "expect": {
         "key": "agentbox",
-        "installed": true,
-        "executablePath": "${BIN}/agentbox",
+        "installed": false,
+        "executablePath": null,
         "matchedPathIds": []
       }
     },
