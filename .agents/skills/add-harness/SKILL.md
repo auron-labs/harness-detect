@@ -16,6 +16,7 @@ Work from the `harness-detect` repository root. Paths in commands and inline cod
 - Read [AGENTS.md](../../../AGENTS.md), the [harness guide](../../../docs/harness-guide.md), and the registry editing and change-aware validation sections of [maintainers.md](../../../docs/maintainers.md).
 - Inspect [the schema](../../../packages/data/harnesses.schema.json) and a comparable entry in [the canonical registry](../../../packages/data/harnesses.json). Use a real entry for structure, but verify the new harness's facts independently.
 - Search existing keys, names, and aliases before adding an entry. Extend an existing entry if the requested product is already represented. Keep existing keys stable and avoid collisions after trimming and case normalization.
+- When starting from a backlog or issue, follow [the issue-to-PR triage workflow](../../../docs/harness-guide.md#triage-a-harness-request) to prioritize requests, rule out overlap with open PRs, and identify detection collisions before editing.
 - Read the relevant `packages/*/AGENTS.md` before editing package files. Consult [the parity contract](../../../docs/package-guide.md) if behavior or schema changes are necessary.
 
 ## Establish evidence

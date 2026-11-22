@@ -36,7 +36,7 @@ var expectedUnknownInstallationHarnesses = []string{
 
 var (
 	allowedPlatforms        = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
-	expectedUsedPlatforms   = []string{"darwin", "linux", "win32"}
+	expectedUsedPlatforms   = []string{"darwin", "freebsd", "linux", "win32"}
 	supportAreas            = []string{"config", "skills", "commands", "agents", "agentsSkills"}
 	supportScopes           = []string{"global", "local"}
 	supportStatuses         = []string{"supported", "unsupported", "unknown"}
@@ -79,9 +79,6 @@ func TestGetHarnessMatrix(t *testing.T) {
 
 func TestGoInstallationMetadataCompleteness(t *testing.T) {
 	matrix := GetRawHarnessData()
-	if len(matrix.Harnesses) != 67 {
-		t.Fatalf("harness count = %d, want 67", len(matrix.Harnesses))
-	}
 
 	allowedMethods := make(map[string]struct{}, len(supportedInstallMethods))
 	for _, method := range supportedInstallMethods {

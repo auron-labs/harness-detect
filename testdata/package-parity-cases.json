@@ -284,7 +284,7 @@
       },
       "setup": [],
       "expect": {
-        "count": 67,
+        "count": 69,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1776,6 +1776,248 @@
       }
     },
     {
+      "id": "check-jcode-home-override",
+      "operation": "checkHarness",
+      "input": "jcode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "JCODE_HOME": "${TMP}/custom-jcode"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.jcode/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/custom-jcode/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "jcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config"
+        ]
+      }
+    },
+    {
+      "id": "check-jcode-home-override-ignores-default",
+      "operation": "checkHarness",
+      "input": "jcode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "JCODE_HOME": "${TMP}/custom-jcode"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.jcode/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "jcode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-jcode-project-mcp",
+      "operation": "checkHarness",
+      "input": "jcode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.jcode/mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "jcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-mcp"
+        ]
+      }
+    },
+    {
+      "id": "check-jcode-ignores-shared-mcp-and-skills",
+      "operation": "checkHarness",
+      "input": "jcode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.claude/mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agents/skills"
+        }
+      ],
+      "expect": {
+        "key": "jcode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-jcode-windows-launcher",
+      "operation": "checkHarness",
+      "input": "jcode",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/localappdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/localappdata/jcode/bin/jcode.exe"
+        }
+      ],
+      "expect": {
+        "key": "jcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-nanobot-default-config",
+      "operation": "checkHarness",
+      "input": "HKUDS/nanobot",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.nanobot/config.json"
+        }
+      ],
+      "expect": {
+        "key": "nanobot",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config"
+        ]
+      }
+    },
+    {
+      "id": "check-nanobot-ignores-obot-cli-and-yaml",
+      "operation": "checkHarness",
+      "input": "nanobot",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/nanobot",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.nanobot/nanobot.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.nanobot/nanobot.yaml"
+        }
+      ],
+      "expect": {
+        "key": "nanobot",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-nanobot-global",
+      "operation": "translateMcpJson",
+      "input": "nanobot",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          },
+          "local": {
+            "command": "mcp-tool",
+            "args": [
+              "--stdio"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "format": "json",
+        "keyPath": [
+          "tools",
+          "mcpServers"
+        ],
+        "config": {
+          "tools": {
+            "mcpServers": {
+              "docs": {
+                "type": "streamableHttp",
+                "url": "https://example.com/mcp"
+              },
+              "local": {
+                "type": "stdio",
+                "command": "mcp-tool",
+                "args": [
+                  "--stdio"
+                ]
+              }
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
       "id": "acp-alias",
       "operation": "getHarnessAcp",
       "input": " OPENAI/CODEX ",
@@ -1915,6 +2157,37 @@
             "command": "${BIN}/gemini",
             "args": [
               "--acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-jcode",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/jcode",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "jcode",
+            "command": "${BIN}/jcode",
+            "args": [
+              "acp"
             ]
           }
         ]
