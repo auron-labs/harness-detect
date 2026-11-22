@@ -1534,7 +1534,7 @@
       "setup": [
         {
           "type": "file",
-          "path": "${CWD}/log/symphony.log"
+          "path": "${CWD}/log/symphony.log.idx"
         }
       ],
       "expect": {
