@@ -8152,6 +8152,312 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-tuios-packaged-executable",
+      "operation": "checkHarness",
+      "input": "tuios",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/tuios"
+        }
+      ],
+      "expect": {
+        "key": "tuios",
+        "installed": true,
+        "executablePath": "${BIN}/tuios",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-tuios-xdg-home",
+      "operation": "checkHarness",
+      "input": "tuios",
+      "platforms": [
+        "linux",
+        "freebsd",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/tuios-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tuios-xdg/tuios/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "tuios",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-xdg"
+        ]
+      }
+    },
+    {
+      "id": "check-tuios-macos-native-home",
+      "operation": "checkHarness",
+      "input": "tuios",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/tuios/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "tuios",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-macos"
+        ]
+      }
+    },
+    {
+      "id": "check-tuios-windows-localappdata",
+      "operation": "checkHarness",
+      "input": "tuios",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/tuios-local"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tuios-local/tuios/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "tuios",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-tuios-ignores-herdr-and-shared-config",
+      "operation": "checkHarness",
+      "input": "tuios",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}/tuios-neg",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/herdr/config.toml"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/tuios/plugins"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/tuios-neg/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "tuios",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-ouroboros-q00-user-config",
+      "operation": "checkHarness",
+      "input": "ouroboros-q00",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-q00",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-ouroboros-q00-event-stores",
+      "operation": "checkHarness",
+      "input": "ouroboros-q00",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/data/ouroboros.db"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ouroboros/ouroboros.db"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-q00",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-event-store",
+          "user-legacy-event-store"
+        ]
+      }
+    },
+    {
+      "id": "check-ouroboros-q00-windows-profile",
+      "operation": "checkHarness",
+      "input": "ouroboros-q00",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/oq-win"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oq-win/.ouroboros/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-q00",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-ouroboros-q00-ignores-razzant-and-shared-project-files",
+      "operation": "checkHarness",
+      "input": "ouroboros-q00",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}/oq-neg",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/ouroboros"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/Ouroboros/data/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oq-neg/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oq-neg/.ouroboros/mcp_servers.yaml"
+        }
+      ],
+      "expect": {
+        "key": "ouroboros-q00",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-tuios-wrapper-is-not-an-agent-launch",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "linux"
+      ],
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/tuios"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "translate-ouroboros-q00-has-no-bridge-target",
+      "operation": "translateMcpJson",
+      "input": "q00/ouroboros",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "example": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness ouroboros-q00 has no file-based MCP config for scope global"
+      }
     }
   ]
 }

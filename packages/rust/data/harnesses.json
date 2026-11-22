@@ -27999,7 +27999,7 @@
               "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/src/openjarvis/core/paths.py#L82-L104"
             ],
             "confidence": "source",
-            "notes": "Models OPENJARVIS_HOME and the default home layout. OpenJarvis uses XDG_DATA_HOME/openjarvis when that variable is explicitly set and OPENJARVIS_HOME is unset; the registry cannot distinguish explicit XDG_DATA_HOME from its synthesized default. Set OPENJARVIS_HOME to that root for detection."
+            "notes": "Use an absolute OPENJARVIS_HOME. The runtime expands a leading tilde and resolves relative overrides against its working directory; the Unix installer does not expand a tilde supplied through the variable. Any config.toml under an explicit override counts as installed without checking its contents. On Windows, the registry falls back to normalized HOME if USERPROFILE is unavailable; Python Path.home() can use HOMEDRIVE and HOMEPATH instead. To detect the runtime's explicit XDG_DATA_HOME/openjarvis fallback, set OPENJARVIS_HOME to that absolute path; the registry cannot distinguish an explicit XDG_DATA_HOME from its synthesized default."
           },
           "local": {
             "status": "unknown",
@@ -28328,6 +28328,481 @@
         ],
         "confidence": "source",
         "notes": "Provider-specific configuration; there is no single native file-based translation target for the desktop app."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "tuios",
+      "name": "TUIOS",
+      "version": "0.13.3",
+      "aliases": [],
+      "executables": [
+        "tuios"
+      ],
+      "paths": [
+        {
+          "id": "user-config-xdg",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/tuios/config.toml",
+          "platforms": [
+            "linux",
+            "freebsd",
+            "openbsd",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-macos",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/tuios/config.toml",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${TUIOS_WINDOWS_CONFIG_BASE}/tuios/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        }
+      ],
+      "roots": [
+        {
+          "name": "TUIOS_WINDOWS_CONFIG_BASE",
+          "env": "LOCALAPPDATA",
+          "fallback": "${USERPROFILE}/AppData/Local"
+        }
+      ],
+      "env": [
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "User config base on Linux, FreeBSD, OpenBSD, and macOS."
+        },
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Approximates the Windows Local AppData Known Folder for detection."
+        }
+      ],
+      "sources": [
+        "https://github.com/Gaurav-Gosain/tuios/releases/tag/v0.13.3",
+        "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/README.md#installation",
+        "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/internal/config/userconfig.go#L2557-L2579",
+        "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/go.mod#L15",
+        "https://github.com/adrg/xdg/blob/v0.5.3/paths_unix.go#L19-L27",
+        "https://github.com/adrg/xdg/blob/v0.5.3/paths_darwin.go#L15-L31",
+        "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L17-L23",
+        "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L110-L114"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "tuios",
+          "command": "brew install tuios",
+          "url": "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/README.md#installation",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "go",
+          "package": "github.com/Gaurav-Gosain/tuios/cmd/tuios",
+          "command": "go install github.com/Gaurav-Gosain/tuios/cmd/tuios@latest",
+          "url": "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/README.md#installation"
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/Gaurav-Gosain/tuios/releases/tag/v0.13.3",
+          "platforms": [
+            "linux",
+            "freebsd",
+            "openbsd",
+            "darwin",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config-xdg",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/tuios/config.toml",
+                "platforms": [
+                  "linux",
+                  "freebsd",
+                  "openbsd",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "user-config-macos",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/tuios/config.toml",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${TUIOS_WINDOWS_CONFIG_BASE}/tuios/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/adrg/xdg/blob/v0.5.3/paths_darwin.go#L15-L31",
+              "https://github.com/adrg/xdg/blob/v0.5.3/paths_unix.go#L19-L27",
+              "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L110-L114",
+              "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L17-L23",
+              "https://github.com/gaurav-gosain/tuios/blob/v0.13.3/internal/config/userconfig.go#L2557-L2579"
+            ],
+            "confidence": "source",
+            "notes": "Models the user config file, not the full XDG_CONFIG_DIRS search, included files, or config.d fragments. On macOS the registry checks the native default and the XDG candidate without enforcing lookup precedence. On Windows it approximates the Local AppData Known Folder with LOCALAPPDATA or the default profile path and does not resolve a custom XDG_CONFIG_HOME."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/docs/AGENT_STATE.md#the-mcp-server"
+        ],
+        "confidence": "official",
+        "notes": "tuios mcp exposes a server to other harnesses; this is not evidence of native MCP client support.",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/cmd/tuios/agent_proto_command.go#L38-L47"
+        ],
+        "confidence": "source",
+        "notes": "The agent-proto command wraps an external ACP agent; it is not a TUIOS ACP agent launch."
+      }
+    },
+    {
+      "key": "ouroboros-q00",
+      "name": "Ouroboros Agent OS (Q00)",
+      "version": "0.65.4",
+      "aliases": [
+        "q00/ouroboros"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${HOME}/.ouroboros/config.yaml",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-user-config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.ouroboros/config.yaml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-event-store",
+          "kind": "file",
+          "template": "${HOME}/.ouroboros/data/ouroboros.db",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-user-event-store",
+          "kind": "file",
+          "template": "${USERPROFILE}/.ouroboros/data/ouroboros.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "user-legacy-event-store",
+          "kind": "file",
+          "template": "${HOME}/.ouroboros/ouroboros.db",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-user-legacy-event-store",
+          "kind": "file",
+          "template": "${USERPROFILE}/.ouroboros/ouroboros.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "OUROBOROS_AGENTS_DIR",
+          "description": "Optional override for bundled Ouroboros agent prompt files."
+        },
+        {
+          "name": "OUROBOROS_MCP_CONFIG",
+          "description": "Optional trusted path to the YAML configuration for the Ouroboros MCP bridge."
+        }
+      ],
+      "sources": [
+        "https://github.com/Q00/ouroboros/releases/tag/v0.65.4",
+        "https://pypi.org/project/ouroboros-ai/0.65.4/",
+        "https://github.com/Q00/ouroboros/blob/v0.65.4/README.md#install",
+        "https://github.com/Q00/ouroboros/blob/v0.65.4/pyproject.toml#L92-L96",
+        "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/config/models.py#L1057-L1063",
+        "https://github.com/Q00/ouroboros/blob/v0.65.4/docs/config-reference.md#file-layout",
+        "https://github.com/Q00/ouroboros/blob/v0.65.4/docs/platform-support.md"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "ouroboros-ai",
+          "url": "https://pypi.org/project/ouroboros-ai/0.65.4/"
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/Q00/ouroboros/blob/v0.65.4/README.md#install",
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ],
+          "notes": "Native Windows is experimental; see the upstream platform support guide."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${HOME}/.ouroboros/config.yaml",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-user-config",
+                "kind": "file",
+                "template": "${USERPROFILE}/.ouroboros/config.yaml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/config/models.py#L1057-L1063",
+              "https://github.com/Q00/ouroboros/blob/v0.65.4/docs/config-reference.md#file-layout"
+            ],
+            "confidence": "source",
+            "notes": "Only Q00's home layout is detected; the unrelated razzant project also ships an ouroboros executable. Windows profile fallback may differ from Python Path.home() when USERPROFILE is missing."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-prompts-override",
+                "kind": "dir",
+                "template": "${OUROBOROS_AGENTS_DIR}"
+              }
+            ],
+            "sources": [
+              "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/agents/loader.py#L37-L47"
+            ],
+            "confidence": "source",
+            "notes": "When set, the override is checked for named .md prompts before packaged resources. The override directory is metadata, not installation evidence."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "unsupported",
+          "paths": [],
+          "sources": [
+            "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/mcp/bridge/config.py#L31-L54"
+          ],
+          "confidence": "source",
+          "notes": "Project-local bridge configuration is deliberately not auto-discovered."
+        },
+        "sources": [
+          "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/mcp/bridge/config.py#L31-L54",
+          "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/orchestrator/mcp_config.py#L1-L20",
+          "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/mcp/types.py#L94-L108"
+        ],
+        "confidence": "source",
+        "notes": "No translation target is offered: the bridge validates remote server URLs against its network restrictions, which the generic translator cannot check.",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/mcp/bridge/config.py#L31-L54",
+            "https://github.com/Q00/ouroboros/blob/v0.65.4/src/ouroboros/orchestrator/mcp_config.py#L1-L20"
+          ],
+          "confidence": "source",
+          "notes": "The bridge uses mcp_servers.yaml in the Ouroboros home, or an existing file explicitly selected by OUROBOROS_MCP_CONFIG."
+        }
       },
       "acp": {
         "status": "unknown",

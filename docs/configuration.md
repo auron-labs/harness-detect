@@ -457,6 +457,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `qwenpaw` | `QWENPAW_WORKING_DIR` | `QWENPAW_ROOT` | `${HOME}/.qwenpaw` |
 | `qwenpaw` | `ProgramFiles` | `QWENPAW_PROGRAM_FILES` | (empty — path resolves to null) |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
+| `tuios` | `LOCALAPPDATA` | `TUIOS_WINDOWS_CONFIG_BASE` | `${USERPROFILE}/AppData/Local` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_XDG` | `${XDG_CONFIG_HOME}/vtcode` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_MACOS` | `${HOME}/Library/Application Support/com.vinhnx.vtcode` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_WINDOWS` | `${APPDATA}/vinhnx/vtcode/config` |
@@ -541,7 +542,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 99
+console.log(harnesses.harnesses.length);  // 101
 ```
 
 <!-- /automd -->
