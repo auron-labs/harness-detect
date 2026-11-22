@@ -26105,7 +26105,8 @@
             "linux",
             "win32"
           ],
-          "url": "https://github.com/tinyhumansai/openhuman/releases/tag/v0.64.15"
+          "url": "https://github.com/tinyhumansai/openhuman/releases/tag/v0.64.15",
+          "notes": "On Windows, the Tauri NSIS current-user default is %LOCALAPPDATA%/OpenHuman/OpenHuman.exe. Upstream install.ps1 probes an extra Programs directory; that probe does not match the NSIS default."
         }
       ],
       "support": {
@@ -26325,6 +26326,552 @@
             "servers"
           ]
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "open-design",
+      "name": "OpenDesign",
+      "version": "0.27.2",
+      "aliases": [
+        "opendesign"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "user-agent-profiles",
+          "kind": "file",
+          "template": "${HOME}/.open-design/agents.local.json",
+          "category": "config"
+        },
+        {
+          "id": "source-runtime-db",
+          "kind": "file",
+          "template": "${OPEN_DESIGN_SOURCE_DATA}/app.sqlite",
+          "category": "state"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/Open Design.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-macos-app",
+          "kind": "dir",
+          "template": "/Applications/Open Design.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-windows-app",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/Programs/Open Design/Open Design.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPEN_DESIGN_SOURCE_DATA",
+          "env": "OD_DATA_DIR",
+          "fallback": "${CWD}/.od"
+        },
+        {
+          "name": "OPEN_DESIGN_APPDATA",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        }
+      ],
+      "env": [
+        {
+          "name": "OD_DATA_DIR",
+          "description": "Overrides the daemon data directory. Packaged launches scope it to their namespace."
+        },
+        {
+          "name": "OD_AGENT_PROFILES_CONFIG",
+          "description": "Overrides the local agent profiles file."
+        }
+      ],
+      "sources": [
+        "https://github.com/nexu-io/open-design/releases/tag/open-design-v0.27.2",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/README.md#-install-into-your-coding-agent-no-ui",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/tools/pack/src/mac/identity.ts#L24-L42",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/packages/release/src/index.ts#L49-L82",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/tools/pack/src/win/custom-installer.ts#L478-L487",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/tools/pack/src/win/identity.ts#L24-L36",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/runtimes/local-profiles.ts#L31-L58",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
+        "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/db.ts#L83-L99"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/nexu-io/open-design/releases/tag/open-design-v0.27.2",
+          "platforms": [
+            "darwin",
+            "win32"
+          ]
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/README.md#-run-from-source",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The official release has no prebuilt Linux artifact."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "source-preferences",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_SOURCE_DATA}/app-config.json"
+              },
+              {
+                "id": "macos-preferences",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable/data/app-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "macos-intel-preferences",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable-intel/data/app-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-preferences",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_APPDATA}/Open Design/namespaces/release-stable-win/data/app-config.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "source-external-mcp",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_SOURCE_DATA}/mcp-config.json"
+              },
+              {
+                "id": "macos-external-mcp",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable/data/mcp-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "macos-intel-external-mcp",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable-intel/data/mcp-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-external-mcp",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_APPDATA}/Open Design/namespaces/release-stable-win/data/mcp-config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/app-config.ts#L1-L11",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/paths.ts#L50-L95",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
+            ],
+            "confidence": "source",
+            "notes": "Models stable desktop defaults and source runs when CWD is the OpenDesign checkout root or OD_DATA_DIR is the absolute daemon data directory."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "source-user-skills",
+                "kind": "dir",
+                "template": "${OPEN_DESIGN_SOURCE_DATA}/skills"
+              },
+              {
+                "id": "macos-user-skills",
+                "kind": "dir",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable/data/skills",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "macos-intel-user-skills",
+                "kind": "dir",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable-intel/data/skills",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${OPEN_DESIGN_APPDATA}/Open Design/namespaces/release-stable-win/data/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/paths.ts#L50-L95",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/server.ts#L1472-L1494",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
+            ],
+            "confidence": "source",
+            "notes": "User-installed library, separate from the bundled skills. Source defaults require CWD at the OpenDesign checkout root."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agent-profiles",
+                "kind": "file",
+                "template": "${HOME}/.open-design/agents.local.json"
+              },
+              {
+                "id": "explicit-agent-profiles",
+                "kind": "file",
+                "template": "${OD_AGENT_PROFILES_CONFIG}"
+              }
+            ],
+            "sources": [
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/runtimes/local-profiles.ts#L31-L58"
+            ],
+            "confidence": "source",
+            "notes": "The explicit file is descriptive only; a generic filename at an override is not installation evidence. Sandbox-specific profile placement is not modeled."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
+            "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
+            "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/paths.ts#L50-L95",
+            "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
+          ],
+          "confidence": "source",
+          "notes": "The daemon stores a servers array in mcp-config.json; see global config support for default paths."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
+          "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L97-L104",
+          "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L175-L217"
+        ],
+        "confidence": "source",
+        "notes": "Automatic translation is not offered because OpenDesign rejects IDs outside its 1–64 character identifier rule, which the shared translator cannot enforce."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "omnigent",
+      "name": "Omnigent",
+      "version": "0.23.0",
+      "aliases": [
+        "omni"
+      ],
+      "executables": [
+        "omnigent"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${OMNIGENT_CONFIG_ROOT}/config.yaml",
+          "category": "config"
+        },
+        {
+          "id": "project-config",
+          "kind": "file",
+          "template": "${CWD}/.omnigent/config.yaml",
+          "category": "project"
+        },
+        {
+          "id": "local-session-db",
+          "kind": "file",
+          "template": "${OMNIGENT_DATA_ROOT}/chat.db",
+          "category": "state"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/Omnigent.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-macos-app",
+          "kind": "dir",
+          "template": "/Applications/Omnigent.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OMNIGENT_CONFIG_ROOT",
+          "env": "OMNIGENT_CONFIG_HOME",
+          "fallback": "${HOME}/.omnigent"
+        },
+        {
+          "name": "OMNIGENT_DATA_ROOT",
+          "env": "OMNIGENT_DATA_DIR",
+          "fallback": "${HOME}/.omnigent"
+        }
+      ],
+      "env": [
+        {
+          "name": "OMNIGENT_CONFIG_HOME",
+          "description": "Overrides the user config location without moving runtime state."
+        },
+        {
+          "name": "OMNIGENT_DATA_DIR",
+          "description": "Overrides the local runtime data directory without moving user config."
+        }
+      ],
+      "sources": [
+        "https://github.com/omnigent-ai/omnigent/releases/tag/v0.23.0",
+        "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/pyproject.toml#L421-L429",
+        "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/omnigent/config.py#L31-L59",
+        "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/docs/DATA_DIR_LAYOUT.md#top-level-files",
+        "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/README.md",
+        "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/web/electron/RELEASING.md#3-build-the-signed-notarized-macos-release"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "url": "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/README.md#1-install"
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://omnigent.ai/quickstart/install#install-the-desktop-app"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${OMNIGENT_CONFIG_ROOT}/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/omnigent/config.py#L31-L59"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.omnigent/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/omnigent/config.py#L31-L59"
+            ],
+            "confidence": "source",
+            "notes": "Checks the selected working directory directly, not its parents."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents",
+                "kind": "dir",
+                "template": "${HOME}/.omnigent/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/docs/DATA_DIR_LAYOUT.md#directories"
+            ],
+            "confidence": "source",
+            "notes": "This path is not redirected by either root override."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/docs/AGENT_YAML_SPEC.md#mcp-server",
+            "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/omnigent/spec/AGENTSPEC.md#directory-layout"
+          ],
+          "confidence": "source",
+          "notes": "MCP declarations belong to the selected agent bundle, not a fixed project-root file."
+        },
+        "sources": [
+          "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/docs/AGENT_YAML_SPEC.md#mcp-server",
+          "https://github.com/omnigent-ai/omnigent/blob/v0.23.0/omnigent/spec/parser.py#L3085-L3146"
+        ],
+        "confidence": "source",
+        "notes": "An agent may declare inline YAML tools or individual server files under tools/mcp/. No single portable translation target is modeled."
       },
       "acp": {
         "status": "unknown",

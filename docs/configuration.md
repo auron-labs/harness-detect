@@ -457,6 +457,10 @@ The following table lists harness-specific env vars that affect path resolution 
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_WINDOWS_ROOT` | `${LOCALAPPDATA}/mini-swe-agent/mini-swe-agent` |
 | `mistral-vibe` | `VIBE_HOME` | `VIBE_HOME` | `${HOME}/.vibe` |
 | `oh-my-pi` | `PI_CODING_AGENT_DIR` | `OMP_ROOT` | `${HOME}/.omp/agent` |
+| `omnigent` | `OMNIGENT_CONFIG_HOME` | `OMNIGENT_CONFIG_ROOT` | `${HOME}/.omnigent` |
+| `omnigent` | `OMNIGENT_DATA_DIR` | `OMNIGENT_DATA_ROOT` | `${HOME}/.omnigent` |
+| `open-design` | `OD_DATA_DIR` | `OPEN_DESIGN_SOURCE_DATA` | `${CWD}/.od` |
+| `open-design` | `APPDATA` | `OPEN_DESIGN_APPDATA` | `${USERPROFILE}/AppData/Roaming` |
 | `openclaw` | `OPENCLAW_HOME` | `OPENCLAW_ROOT` | `${HOME}/.openclaw` |
 | `openclaw` | `OPENCLAW_STATE_DIR` | `OPENCLAW_STATE_ROOT` | `${OPENCLAW_ROOT}` |
 | `opencode` | `OPENCODE_CONFIG_DIR` | `OPENCODE_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/opencode` |
@@ -563,7 +567,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 89
+console.log(harnesses.harnesses.length);  // 91
 ```
 
 <!-- /automd -->

@@ -6462,6 +6462,337 @@
           }
         }
       }
+    },
+    {
+      "id": "check-open-design-default-agent-profile",
+      "operation": "checkHarness",
+      "input": "opendesign",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.open-design/agents.local.json"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-agent-profiles"
+        ]
+      }
+    },
+    {
+      "id": "check-open-design-source-runtime-db",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.od/app.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-runtime-db"
+        ]
+      }
+    },
+    {
+      "id": "check-open-design-relocated-source-runtime-db",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OD_DATA_DIR": "${TMP}/open-design-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/open-design-data/app.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-runtime-db"
+        ]
+      }
+    },
+    {
+      "id": "check-open-design-macos-bundle",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/Open Design.app"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-macos-app"
+        ]
+      }
+    },
+    {
+      "id": "check-open-design-windows-default-installer",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/od-local"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/od-local/Programs/Open Design/Open Design.exe"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-windows-app"
+        ]
+      }
+    },
+    {
+      "id": "check-open-design-ignores-system-od-and-shared-files",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OD_AGENT_PROFILES_CONFIG": "${TMP}/foreign.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/foreign.json"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/od",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-open-design-rejects-unmodeled-id-rules",
+      "operation": "translateMcpJson",
+      "input": "opendesign",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "com.example.docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness open-design has no file-based MCP config for scope global"
+      }
+    },
+    {
+      "id": "check-omnigent-independent-config-and-data-overrides",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OMNIGENT_CONFIG_HOME": "${TMP}/om-config",
+        "OMNIGENT_DATA_DIR": "${TMP}/om-state"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/om-config/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/om-state/chat.db"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "local-session-db",
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-omnigent-default-config-with-data-override",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OMNIGENT_DATA_DIR": "${TMP}/other-state"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.omnigent/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-omnigent-project-config",
+      "operation": "checkHarness",
+      "input": "omni",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.omnigent/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-omnigent-macos-bundle",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/Omnigent.app"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-macos-app"
+        ]
+      }
+    },
+    {
+      "id": "check-omnigent-ignores-unrelated-omni-and-shared-files",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/omni",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }
