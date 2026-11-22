@@ -32376,7 +32376,7 @@
       "env": [
         {
           "name": "ASTRBOT_ROOT",
-          "description": "Override the direct runtime/deployment root. Use an absolute path. The astrbot run CLI sets this to its initialized working directory."
+          "description": "Override the direct runtime/deployment root. Use an absolute path: AstrBot treats a literal ~/custom as relative to cwd, but the detector expands it against HOME. The astrbot run CLI sets this to its initialized working directory."
         }
       ],
       "installations": [
@@ -32437,7 +32437,7 @@
               "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24"
             ],
             "confidence": "source",
-            "notes": "Default packaged desktop location. A custom root is listed under the deployment scope."
+            "notes": "Default packaged desktop location. On Windows, AstrBot expands its home using USERPROFILE or HOMEDRIVE and HOMEPATH; the detector's normalized HOME can differ. A custom root is listed under the deployment scope."
           },
           "local": {
             "status": "supported",
@@ -32592,6 +32592,368 @@
           "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/provider/func_tool_manager.py#L542-L585",
           "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/agent/mcp_client.py#L215-L248",
           "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/agent/mcp_client.py#L535-L576"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "gpt-researcher",
+      "name": "GPT Researcher",
+      "version": "3.8.0",
+      "aliases": [
+        "assafelovic/gpt-researcher"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "web-checkout",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/frontend/static/gptr-logo.png"
+        }
+      ],
+      "env": [
+        {
+          "name": "CONFIG_PATH",
+          "description": "Optional explicit JSON configuration path; it does not identify a GPT Researcher installation."
+        },
+        {
+          "name": "RETRIEVER",
+          "description": "Selects retrievers; include mcp to opt in to MCP research."
+        }
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/README.md#L100-L137",
+          "notes": "Clone the project and run the self-hosted web app with uvicorn from its checkout. Detection recognizes the checkout, not whether the app is running."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/README.md#L253-L270",
+          "notes": "The documented Docker Compose build uses the checkout. Image-only or remote deployments are not detected."
+        },
+        {
+          "method": "pip",
+          "package": "gpt-researcher",
+          "command": "pip install gpt-researcher",
+          "url": "https://pypi.org/project/gpt-researcher/0.17.0/",
+          "notes": "0.17.0 is the SDK version included in the v3.8.0 app release. An SDK-only install is not a standalone web app."
+        }
+      ],
+      "sources": [
+        "https://github.com/assafelovic/gpt-researcher/releases/tag/v3.8.0",
+        "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/pyproject.toml#L15-L22",
+        "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/frontend/index.html#L141-L151",
+        "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/frontend/static/gptr-logo.png",
+        "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/README.md#L100-L137",
+        "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/gpt_researcher/config/config.py#L149-L174"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-env",
+                "kind": "file",
+                "template": "${CWD}/.env"
+              }
+            ],
+            "sources": [
+              "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/main.py#L26-L31",
+              "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/gpt_researcher/config/config.py#L149-L174"
+            ],
+            "confidence": "source",
+            "notes": "Optional deployment environment file. JSON configuration is selected explicitly by CONFIG_PATH or a library argument; a standalone .env or JSON file does not identify the harness."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/docs/docs/gpt-researcher/retrievers/mcp-configs.mdx#L39-L100",
+            "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/gpt_researcher/agent.py#L173-L180"
+          ],
+          "confidence": "official",
+          "notes": "MCP is opt-in via RETRIEVER and configured through a server list supplied to the API or constructor. The project-root .mcp.json is not the web app's native configuration target."
+        },
+        "sources": [
+          "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/docs/docs/gpt-researcher/retrievers/mcp-configs.mdx#L39-L100",
+          "https://github.com/assafelovic/gpt-researcher/blob/v3.8.0/gpt_researcher/agent.py#L173-L180"
+        ],
+        "confidence": "official"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "khoj",
+      "name": "Khoj",
+      "version": "2.0.0b28",
+      "aliases": [
+        "khoj-ai/khoj"
+      ],
+      "executables": [
+        "khoj"
+      ],
+      "paths": [
+        {
+          "id": "beta-log",
+          "category": "state",
+          "kind": "file",
+          "template": "${CWD}/~/.khoj/khoj.log"
+        },
+        {
+          "id": "home-log",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.khoj/khoj.log",
+          "platforms": [
+            "darwin",
+            "linux",
+            "freebsd",
+            "openbsd"
+          ]
+        },
+        {
+          "id": "windows-home-log",
+          "category": "state",
+          "kind": "file",
+          "template": "${USERPROFILE}/.khoj/khoj.log",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "compose-deployment",
+          "category": "install",
+          "kind": "file",
+          "template": "${HOME}/.khoj/docker-compose.yml",
+          "platforms": [
+            "darwin",
+            "linux",
+            "freebsd",
+            "openbsd"
+          ]
+        }
+      ],
+      "env": [],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "khoj",
+          "command": "pip install khoj==2.0.0b28",
+          "url": "https://pypi.org/project/khoj/2.0.0b28/",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The beta is the verified release for the current admin and MCP features; the stable 1.42.10 CLI and default log also remain detectable."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/documentation/docs/get-started/setup.mdx#L26-L101",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The documented host-side Compose file is under ~/.khoj (inside WSL on Windows). Docker-only state, arbitrary --log-file paths, and hosted client installs are not detected."
+        }
+      ],
+      "sources": [
+        "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/pyproject.toml#L106-L107",
+        "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/utils/cli.py#L9-L17",
+        "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/main.py#L206-L207",
+        "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/main.py#L138-L145",
+        "https://github.com/khoj-ai/khoj/blob/1.42.10/src/khoj/utils/cli.py#L23-L28",
+        "https://github.com/khoj-ai/khoj/blob/1.42.10/src/khoj/main.py#L137-L145",
+        "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/documentation/docs/get-started/setup.mdx#L26-L101"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/documentation/docs/get-started/setup.mdx#L38-L51",
+              "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/app/settings.py#L121-L148"
+            ],
+            "confidence": "source",
+            "notes": "Current deployment settings use environment variables and database-backed admin settings; there is no default application YAML config in this release."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/database/admin.py#L189-L207"
+            ],
+            "confidence": "source",
+            "notes": "Configure agents in the admin UI; records are stored in the database."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/database/admin.py#L189-L207",
+            "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/routers/research.py#L499-L505"
+          ],
+          "confidence": "source",
+          "notes": "The beta's research workflow reads server records from the database; no native file target is available."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/database/admin.py#L189-L207",
+          "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/routers/research.py#L499-L505",
+          "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/processor/tools/mcp.py#L27-L37"
         ],
         "confidence": "source"
       },
