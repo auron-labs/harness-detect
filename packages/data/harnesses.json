@@ -27483,7 +27483,7 @@
       "env": [
         {
           "name": "AGENT_SWARM_DIR",
-          "description": "Overrides the one-shot installer directory, not the native /opt/agent-swarm service directory."
+          "description": "Use an absolute path to override the one-shot installer directory, not the native /opt/agent-swarm service directory."
         }
       ],
       "sources": [
@@ -27703,7 +27703,7 @@
               "https://github.com/speakeasy-api/kit/blob/v0.2.25/README.md#quick-start"
             ],
             "confidence": "source",
-            "notes": "Kit reads the literal HOME variable and skips the file when unset; the registry uses normalized HOME."
+            "notes": "Kit reads the literal HOME variable and skips the file when HOME is unset or empty; the registry uses normalized HOME."
           },
           "local": {
             "status": "unknown",
@@ -27866,6 +27866,473 @@
         ],
         "confidence": "official",
         "notes": "Use the verified Kit binary (macOS arm64 or Linux x86-64). Auto-discovery is disabled because the generic kit executable name does not identify Speakeasy Kit."
+      }
+    },
+    {
+      "key": "openjarvis",
+      "name": "OpenJarvis",
+      "version": "1.0.4",
+      "aliases": [
+        "open-jarvis"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${OPENJARVIS_ROOT}/config.toml",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-user-config",
+          "kind": "file",
+          "template": "${OPENJARVIS_WINDOWS_CONFIG_ROOT}/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-installer-cli",
+          "kind": "file",
+          "template": "${OPENJARVIS_ROOT}/.venv/bin/jarvis",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-installer-shim",
+          "kind": "file",
+          "template": "${OPENJARVIS_WINDOWS_INSTALL_ROOT}/bin/jarvis.cmd",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPENJARVIS_ROOT",
+          "env": "OPENJARVIS_HOME",
+          "fallback": "${HOME}/.openjarvis"
+        },
+        {
+          "name": "OPENJARVIS_WINDOWS_CONFIG_ROOT",
+          "env": "OPENJARVIS_HOME",
+          "fallback": "${USERPROFILE}/.openjarvis"
+        },
+        {
+          "name": "OPENJARVIS_WINDOWS_INSTALL_ROOT",
+          "env": "OPENJARVIS_HOME",
+          "fallback": "${LOCALAPPDATA}/OpenJarvis"
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENJARVIS_HOME",
+          "description": "Overrides the OpenJarvis runtime root and the native installer destination."
+        },
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Base for the Windows installer's shim when OPENJARVIS_HOME is unset."
+        },
+        {
+          "name": "XDG_DATA_HOME",
+          "description": "Upstream runtime fallback when explicitly set and OPENJARVIS_HOME is unset; not resolved by this registry."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/OpenJarvis/1.0.4/",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/src/openjarvis/core/paths.py#L82-L104",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/pyproject.toml#L203-L204",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/scripts/install/install.sh#L215-L229",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/scripts/install/install.sh#L603-L613",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/deploy/windows/install.ps1#L246-L255",
+        "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/deploy/windows/install.ps1#L393-L414"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "OpenJarvis",
+          "url": "https://pypi.org/project/OpenJarvis/1.0.4/"
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/README.md#installation",
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${OPENJARVIS_ROOT}/config.toml",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-user-config",
+                "kind": "file",
+                "template": "${OPENJARVIS_WINDOWS_CONFIG_ROOT}/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/src/openjarvis/core/paths.py#L82-L104"
+            ],
+            "confidence": "source",
+            "notes": "Models OPENJARVIS_HOME and the default home layout. OpenJarvis uses XDG_DATA_HOME/openjarvis when that variable is explicitly set and OPENJARVIS_HOME is unset; the registry cannot distinguish explicit XDG_DATA_HOME from its synthesized default. Set OPENJARVIS_HOME to that root for detection."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${OPENJARVIS_ROOT}/skills",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${OPENJARVIS_WINDOWS_CONFIG_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/src/openjarvis/core/config.py#L1699-L1707"
+            ],
+            "confidence": "source",
+            "notes": "The runtime supports skills_dir overrides. The registry reports default skill paths under the modeled runtime root; see the config scope for the XDG caveat."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/docs/user-guide/mcp-external-servers.md#configuration"
+        ],
+        "confidence": "official",
+        "notes": "The registry cannot translate the JSON-encoded TOML value or infer the path to a separately configured file.",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/open-jarvis/OpenJarvis/blob/v1.0.4/docs/user-guide/mcp-external-servers.md#configuration"
+          ],
+          "confidence": "source",
+          "notes": "The [tools.mcp].servers TOML field is a string containing JSON or a path to an optional JSON file."
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "agent-teams-ai",
+      "name": "Agent Teams AI",
+      "version": "2.18.7",
+      "aliases": [],
+      "executables": [
+        "agent-teams-ai",
+        "AgentTeamsAI"
+      ],
+      "paths": [
+        {
+          "id": "linux-deb-executable",
+          "kind": "file",
+          "template": "/opt/Agent-Teams-AI/agent-teams-ai",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-app",
+          "kind": "dir",
+          "template": "/Applications/Agent Teams AI.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${HOME}/.claude/agent-teams-config.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-user-config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.claude/agent-teams-config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-schedules",
+          "kind": "dir",
+          "template": "${HOME}/.claude/agent-teams-schedules",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-user-schedules",
+          "kind": "dir",
+          "template": "${USERPROFILE}/.claude/agent-teams-schedules",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/777genius/agent-teams-ai/releases/tag/v2.18.7",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/infrastructure/ConfigManager.ts#L30-L47",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/infrastructure/ConfigManager.ts#L547-L553",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/utils/pathDecoder.ts#L311-L355",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/utils/pathDecoder.ts#L462-L470",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/scripts/electron-builder/verifyLinuxInstallers.cjs#L9-L14",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/scripts/electron-builder/afterPack.cjs#L717-L725",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/package.json#L429-L445",
+        "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/package.json#L446-L453"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ],
+          "url": "https://github.com/777genius/agent-teams-ai/releases/tag/v2.18.7"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${HOME}/.claude/agent-teams-config.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-user-config",
+                "kind": "file",
+                "template": "${USERPROFILE}/.claude/agent-teams-config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/infrastructure/ConfigManager.ts#L30-L47",
+              "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/infrastructure/ConfigManager.ts#L547-L553",
+              "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/utils/pathDecoder.ts#L311-L355"
+            ],
+            "confidence": "source",
+            "notes": "Only the current config filename is detected. The packaged app obtains its home from Electron. The registry uses the detector's home (USERPROFILE on Windows); it does not read the app's Claude root setting or detect schedules relocated by it."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/extensions/runtime/McpConfigStateReader.ts#L19-L97"
+          ],
+          "confidence": "source",
+          "notes": "The app's Claude integration reads user servers from ~/.claude.json."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/extensions/runtime/McpConfigStateReader.ts#L19-L97"
+          ],
+          "confidence": "source",
+          "notes": "With project context, the app's Claude integration reads per-project Claude settings and project-root .mcp.json."
+        },
+        "sources": [
+          "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/src/main/services/extensions/runtime/McpConfigStateReader.ts#L19-L97",
+          "https://github.com/777genius/agent-teams-ai/blob/v2.18.7/README.md#L272"
+        ],
+        "confidence": "source",
+        "notes": "Provider-specific configuration; there is no single native file-based translation target for the desktop app."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
       }
     },
     {
