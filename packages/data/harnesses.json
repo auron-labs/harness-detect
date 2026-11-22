@@ -25828,13 +25828,18 @@
                 "id": "shared-skill-pool",
                 "kind": "dir",
                 "template": "${QWENPAW_ROOT}/skill_pool"
+              },
+              {
+                "id": "legacy-copaw-skill-pool",
+                "kind": "dir",
+                "template": "${HOME}/.copaw/skill_pool"
               }
             ],
             "sources": [
               "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
             ],
             "confidence": "source",
-            "notes": "Pool skills must be copied into an agent workspace before use."
+            "notes": "Pool skills must be copied into an agent workspace before use. Without a working-directory override, QwenPaw prefers the legacy location if ~/.copaw exists."
           },
           "local": {
             "status": "supported",
@@ -25874,6 +25879,11 @@
                 "id": "agent-workspaces",
                 "kind": "dir",
                 "template": "${QWENPAW_ROOT}/workspaces"
+              },
+              {
+                "id": "legacy-copaw-workspaces",
+                "kind": "dir",
+                "template": "${HOME}/.copaw/workspaces"
               }
             ],
             "sources": [
@@ -25881,7 +25891,7 @@
               "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
             ],
             "confidence": "source",
-            "notes": "Each agent profile is stored as agent.json in its own workspace."
+            "notes": "Each agent profile is stored as agent.json in its own workspace. Without a working-directory override, QwenPaw prefers the legacy location if ~/.copaw exists."
           },
           "local": {
             "status": "unknown",
