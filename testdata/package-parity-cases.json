@@ -405,6 +405,313 @@
       }
     },
     {
+      "id": "check-happy-cli-default-settings",
+      "operation": "checkHarness",
+      "input": "happy-coder",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.happy/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "happy-cli",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-happy-cli-tilde-home-override",
+      "operation": "checkHarness",
+      "input": "happy-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "HAPPY_HOME_DIR": "~/custom-happy"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/custom-happy/daemon.state.json"
+        }
+      ],
+      "expect": {
+        "key": "happy-cli",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "daemon-state"
+        ]
+      }
+    },
+    {
+      "id": "check-happy-cli-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "happy-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/happy-mcp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "happy-cli",
+        "installed": true,
+        "executablePath": "${BIN}/happy-mcp",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-happy-haskell-executable-is-not-happy-cli",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "happy-cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/happy",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.claude"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "happy-cli",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-emdash-workspace-server-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/emdash-workspace-server",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": "${BIN}/emdash-workspace-server",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-emdash-workspace-server-state",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.emdash/workspace-server/state/workspace-registry.db"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "server-workspace-registry"
+        ]
+      }
+    },
+    {
+      "id": "check-emdash-linux-xdg-profile",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/emdash-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/emdash-xdg/emdash/emdash4.db"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-emdash-macos-default-profile",
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/emdash/emdash4.db"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-darwin"
+        ]
+      }
+    },
+    {
+      "id": "check-emdash-windows-appdata-profile",
+      "operation": "checkHarness",
+      "platforms": [
+        "win32"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/emdash-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/emdash-appdata/emdash/emdash4.db"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-win32"
+        ]
+      }
+    },
+    {
+      "id": "check-emdash-desktop-profile-override",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "EMDASH_USER_DATA_DIR": "${TMP}/emdash-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/emdash-profile/emdash4.db"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-emdash-project-files-are-not-installation",
+      "operation": "checkHarness",
+      "input": "emdash",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.emdash.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.agents/skills/example/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "emdash",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "check-agent-browser-on-path",
       "operation": "checkHarness",
       "platforms": [
