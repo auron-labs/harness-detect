@@ -308,7 +308,14 @@ function translateMcpStdio(entry, server, target) {
   if (!isStringMap(env)) {
     return "invalid env";
   }
-  if (target.args === undefined) {
+  if (target.commandFormat === "shlex") {
+    entry[target.command] = [server.command, ...args]
+      .map((word) => `'${word.replaceAll("'", "'\"'\"'")}'`)
+      .join(" ");
+    if (target.args !== undefined) {
+      entry[target.args] = [];
+    }
+  } else if (target.args === undefined) {
     entry[target.command] = [server.command, ...args];
   } else {
     entry[target.command] = server.command;

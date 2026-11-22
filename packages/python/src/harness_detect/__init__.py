@@ -375,14 +375,16 @@ class HarnessMcpScope:
 class HarnessMcpStdioFormat:
     """Native field names of a stdio MCP server entry.
 
-    An empty ``args`` means the command field holds an argv array
-    ``[command, *args]``; an empty ``env`` means env cannot be set.
+    ``command_format="shlex"`` encodes the executable and its arguments
+    in the command field and writes an empty list to ``args`` if configured.
+    If neither is configured, the command field holds an argv array.
     """
 
     command: str
     type: str = ""
     args: str = ""
     env: str = ""
+    command_format: str = ""
 
     @classmethod
     def from_dict(cls, d: dict) -> HarnessMcpStdioFormat:
@@ -391,6 +393,7 @@ class HarnessMcpStdioFormat:
             type=d.get("type", ""),
             args=d.get("args", ""),
             env=d.get("env", ""),
+            command_format=d.get("commandFormat", ""),
         )
 
 
@@ -789,7 +792,13 @@ def _translate_mcp_server(
         env = _optional_string_map(server.get("env"))
         if env is None:
             return "invalid env"
-        if target.args:
+        if target.command_format == "shlex":
+            entry[target.command] = " ".join(
+                "'" + word.replace("'", "'\"'\"'") + "'" for word in [command, *args]
+            )
+            if target.args:
+                entry[target.args] = []
+        elif target.args:
             entry[target.command] = command
             entry[target.args] = list(args)
         else:

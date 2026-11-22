@@ -90,7 +90,9 @@ export interface HarnessMcpScope {
 export interface HarnessMcpStdioFormat {
   type?: string;
   command: string;
-  /** When omitted, the command field holds an argv array [command, ...args]. */
+  /** Encode the executable and arguments as one string for POSIX shlex. */
+  commandFormat?: "shlex";
+  /** If set, writes an argument list (empty when commandFormat is set). */
   args?: string;
   /** When omitted, servers that set env cannot be translated. */
   env?: string;

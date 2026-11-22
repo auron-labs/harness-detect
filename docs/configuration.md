@@ -181,7 +181,7 @@ are managed only through a UI or database is `supported` with empty `paths`.
 | `container` | `map` (object keyed by server name) or `array` (list of entries; requires `nameField`). |
 | `nameField` | Field that stores the server name inside each entry; optional for maps. |
 | `typeField` | Field that names the transport. Required when any transport sets `type`. |
-| `stdio` | `{type?, command, args?, env?}`. Omitting `args` means the command field holds an argv array `[command, ...args]` (OpenCode style). |
+| `stdio` | `{type?, command, commandFormat?, args?, env?}`. With `commandFormat: "shlex"`, the command field holds a quoted string containing the executable and all arguments; any mapped `args` field is an empty list. Without either field, the command holds an argv array `[command, ...args]`. |
 | `http`, `sse` | `{type?, url, headers?}`. Omit a transport the harness cannot use. |
 | `defaults` | Static scalar fields written into every entry before mapped fields (for example `{"enabled": true}`). |
 
@@ -432,6 +432,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `deerflow` | `DEER_FLOW_CONFIG_PATH` | `DEERFLOW_CONFIG_FILE` | `${DEERFLOW_PROJECT_ROOT}/config.yaml` |
 | `deerflow` | `DEER_FLOW_SKILLS_PATH` | `DEERFLOW_SKILLS_ROOT` | `${DEERFLOW_PROJECT_ROOT}/skills` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
+| `eigent` | `EIGENT_RUN_JOURNAL_PATH` | `EIGENT_JOURNAL_FILE` | `${HOME}/.eigent/run-journal.sqlite3` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
@@ -548,7 +549,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 81
+console.log(harnesses.harnesses.length);  // 83
 ```
 
 <!-- /automd -->

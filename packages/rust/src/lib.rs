@@ -188,7 +188,14 @@ pub struct HarnessMcpStdioFormat {
     #[serde(rename = "type", default, skip_serializing_if = "String::is_empty")]
     pub type_: String,
     pub command: String,
-    /// Empty when the command field holds an argv array `[command, ...args]`.
+    /// Encodes the executable and arguments as one string for POSIX shlex.
+    #[serde(
+        rename = "commandFormat",
+        default,
+        skip_serializing_if = "String::is_empty"
+    )]
+    pub command_format: String,
+    /// Names the argument list field (an empty list for shlex).
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub args: String,
     /// Empty when the harness cannot set server environment variables.
@@ -619,7 +626,17 @@ fn translate_mcp_server(
         };
         let args = optional_strings(server.get("args")).ok_or("invalid args")?;
         let env = optional_string_map(server.get("env")).ok_or("invalid env")?;
-        if target.args.is_empty() {
+        if target.command_format == "shlex" {
+            let quoted = std::iter::once(command.as_str())
+                .chain(args.iter().map(|arg| arg.as_str().unwrap()))
+                .map(|word| format!("'{}'", word.replace('\'', "'\"'\"'")))
+                .collect::<Vec<_>>()
+                .join(" ");
+            entry.insert(target.command.clone(), Value::String(quoted));
+            if !target.args.is_empty() {
+                entry.insert(target.args.clone(), Value::Array(Vec::new()));
+            }
+        } else if target.args.is_empty() {
             let mut argv = vec![Value::String(command)];
             argv.extend(args);
             entry.insert(target.command.clone(), Value::Array(argv));

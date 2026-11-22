@@ -95,7 +95,7 @@ The registry contains harness keys, aliases, executable names, path templates, e
 
 <!-- automd:repo-stats section="harness-count-sentence" -->
 
-The registry currently covers **81 harnesses**.
+The registry currently covers **83 harnesses**.
 
 <!-- /automd -->
 
