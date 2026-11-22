@@ -2083,6 +2083,11 @@
       "input": "codex"
     },
     {
+      "id": "support-record-nanoclaw",
+      "operation": "getHarnessSupport",
+      "input": "nanoclaw"
+    },
+    {
       "id": "support-list-all",
       "operation": "listHarnessSupport"
     },

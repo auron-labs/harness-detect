@@ -26769,10 +26769,25 @@
             "confidence": "unknown"
           },
           "local": {
-            "status": "unknown",
-            "paths": [],
-            "sources": [],
-            "confidence": "unknown"
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-skills",
+                "kind": "dir",
+                "template": "${CWD}/container/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/container-runner.ts#L1588-L1603",
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/templates.md#whats-in-a-template",
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/templates/create-agent.ts#L41-L44"
+            ],
+            "confidence": "source",
+            "notes": "CWD must be the NanoClaw checkout. Template skills are copied into a separate overlay under data/v2-sessions/<agent_group_id>/.claude-shared/skills, not a fixed shared .agents/skills directory."
           }
         },
         "commands": {
