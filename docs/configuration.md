@@ -468,6 +468,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `openfang` | `OPENFANG_HOME` | `OPENFANG_ROOT` | `${HOME}/.openfang` |
+| `openfang` | `OPENFANG_INSTALL_DIR` | `OPENFANG_INSTALL_ROOT` | `${HOME}/.openfang/bin` |
+| `openfang` | `OPENFANG_INSTALL_DIR` | `OPENFANG_WINDOWS_INSTALL_ROOT` | `${USERPROFILE}/.openfang/bin` |
 | `openharness` | `OPENHARNESS_CONFIG_DIR` | `OPENHARNESS_CONFIG_ROOT` | `${HOME}/.openharness` |
 | `openharness` | `OPENHARNESS_DATA_DIR` | `OPENHARNESS_DATA_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/data` |
 | `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
@@ -569,7 +572,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 93
+console.log(harnesses.harnesses.length);  // 95
 ```
 
 <!-- /automd -->

@@ -7197,6 +7197,368 @@
       "expect": {
         "launches": []
       }
+    },
+    {
+      "id": "check-stakpak-autopilot-config",
+      "operation": "checkHarness",
+      "input": "stakpak",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.stakpak/autopilot.toml"
+        }
+      ],
+      "expect": {
+        "key": "stakpak",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "autopilot-config"
+        ]
+      }
+    },
+    {
+      "id": "check-stakpak-ignores-shared-or-project-config",
+      "operation": "checkHarness",
+      "input": "stakpak",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.stakpak/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/mcp.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.stakpak/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "expect": {
+        "key": "stakpak",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-stakpak-global-mcp",
+      "operation": "translateMcpJson",
+      "input": "stakpak",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-mcp",
+            "env": {
+              "TEST_MODE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "X-Fixture": "yes"
+            }
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "toml",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "stdio": {
+              "command": "fixture-mcp",
+              "args": [],
+              "env": {
+                "TEST_MODE": "fixture"
+              }
+            },
+            "http": {
+              "url": "https://example.com/mcp",
+              "headers": {
+                "X-Fixture": "yes"
+              }
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "translate-stakpak-local-mcp",
+      "operation": "translateMcpJson",
+      "input": "stakpak",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-mcp",
+            "env": {
+              "TEST_MODE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "X-Fixture": "yes"
+            }
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "toml",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "stdio": {
+              "command": "fixture-mcp",
+              "args": [],
+              "env": {
+                "TEST_MODE": "fixture"
+              }
+            },
+            "http": {
+              "url": "https://example.com/mcp",
+              "headers": {
+                "X-Fixture": "yes"
+              }
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "acp-launches-stakpak",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/stakpak",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "stakpak",
+            "command": "${BIN}/stakpak",
+            "args": [
+              "acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-home-override",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENFANG_HOME": "${TMP}/of-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/of-profile/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "translate-openfang-rejects-unmodeled-transport",
+      "operation": "translateMcpJson",
+      "input": "openfang",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness openfang has no file-based MCP config for scope global"
+      }
+    },
+    {
+      "id": "check-openfang-distinct-cli-install-root",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENFANG_HOME": "${TMP}/of-data",
+        "OPENFANG_INSTALL_DIR": "${TMP}/of-cli"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/of-cli/openfang"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/of-data/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cli-install",
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-default-cli-install",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENFANG_HOME": "${TMP}/of-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openfang/bin/openfang"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cli-install"
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-windows-cli-install",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/of-win"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/of-win/.openfang/bin/openfang.exe"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cli-install-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-ignore-generic-and-unselected-roots",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENFANG_HOME": "${TMP}/of-user"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openfang/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/of-user/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/of-user/agents"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }
