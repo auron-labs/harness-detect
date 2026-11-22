@@ -27434,6 +27434,441 @@
       }
     },
     {
+      "key": "agent-swarm",
+      "name": "Agent Swarm",
+      "version": "2.14.3",
+      "aliases": [
+        "@desplega.ai/agent-swarm"
+      ],
+      "executables": [
+        "agent-swarm"
+      ],
+      "paths": [
+        {
+          "id": "native-systemd-unit",
+          "kind": "file",
+          "template": "/etc/systemd/system/agent-swarm.service",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "native-config",
+          "kind": "file",
+          "template": "/opt/agent-swarm/.env",
+          "platforms": [
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "installer-setup-marker",
+          "kind": "file",
+          "template": "${AGENT_SWARM_INSTALL_ROOT}/.agent-swarm/setup-url",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        }
+      ],
+      "roots": [
+        {
+          "name": "AGENT_SWARM_INSTALL_ROOT",
+          "env": "AGENT_SWARM_DIR",
+          "fallback": "${HOME}/agent-swarm"
+        }
+      ],
+      "env": [
+        {
+          "name": "AGENT_SWARM_DIR",
+          "description": "Overrides the one-shot installer directory, not the native /opt/agent-swarm service directory."
+        }
+      ],
+      "sources": [
+        "https://github.com/desplega-ai/agent-swarm/releases/tag/v2.14.3",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/package.json#L48-L52",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/deploy/install.ts#L26-L38",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/deploy/install.ts#L44-L64",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/install.sh#L23-L49",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/install.sh#L687-L698",
+        "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/install.sh#L873-L889"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@desplega.ai/agent-swarm",
+          "command": "npx @desplega.ai/agent-swarm",
+          "url": "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/docs-site/content/docs/(documentation)/reference/cli.mdx#L7-L18"
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "url": "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/README.md#quick-start",
+          "notes": "The one-shot installer deploys with Docker Compose."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "linux"
+          ],
+          "url": "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/deploy/install.ts#L5-L17",
+          "notes": "Native systemd deployment via the upstream deploy/install.ts script."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "native-config",
+                "kind": "file",
+                "template": "/opt/agent-swarm/.env",
+                "platforms": [
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/deploy/install.ts#L26-L38",
+              "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/deploy/install.ts#L44-L64"
+            ],
+            "confidence": "source",
+            "notes": "Native deployment uses an environment file. Compose projects use their own .env; generic Compose files are not detection signals."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/docs-site/content/docs/api-reference/mcp-servers.mdx#L1-L7",
+            "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/src/be/migrations/023_mcp_servers.sql"
+          ],
+          "confidence": "source",
+          "notes": "The swarm API manages server records in the swarm database."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/docs-site/content/docs/api-reference/mcp-servers.mdx#L1-L7",
+          "https://github.com/desplega-ai/agent-swarm/blob/v2.14.3/docs-site/content/docs/(documentation)/guides/user-mcp.mdx#L7-L19"
+        ],
+        "confidence": "source",
+        "notes": "Swarm-managed servers are passed to worker harnesses; Agent Swarm also exposes its own MCP endpoint. There is no single native file-based target for translating project MCP configuration."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "speakeasy-kit",
+      "name": "Speakeasy Kit",
+      "version": "0.2.25",
+      "aliases": [
+        "speakeasy-api/kit"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${HOME}/.kit/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/speakeasy-api/kit/releases/tag/v0.2.25",
+        "https://github.com/speakeasy-api/kit/blob/v0.2.25/Cargo.toml#L1-L6",
+        "https://github.com/speakeasy-api/kit/blob/v0.2.25/src/main.rs#L1487-L1493",
+        "https://github.com/speakeasy-api/kit/blob/v0.2.25/README.md#quick-start"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/speakeasy-api/kit/releases/tag/v0.2.25",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "CLI archives for macOS arm64 and Linux x86-64; macOS arm64 also has a desktop build."
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/speakeasy-api/kit/blob/v0.2.25/README.md#install",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${HOME}/.kit/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/src/main.rs#L1487-L1493",
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/README.md#quick-start"
+            ],
+            "confidence": "source",
+            "notes": "Kit reads the literal HOME variable and skips the file when unset; the registry uses normalized HOME."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/getting-started-and-configuration.md#agent-skills"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/getting-started-and-configuration.md#agent-skills"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/getting-started-and-configuration.md#agent-skills"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/getting-started-and-configuration.md#agent-skills"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "supported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/mcp.md#L3-L7"
+          ],
+          "confidence": "source",
+          "notes": "Global MCP JSON is opt-in through mcp_config in ~/.kit/config.toml."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/mcp.md#L3-L7",
+            "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/mcp.md#L113-L127"
+          ],
+          "confidence": "source",
+          "notes": "Reads .mcp.json from the canonical runtime root, which --root may change."
+        },
+        "sources": [
+          "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/mcp.md"
+        ],
+        "confidence": "official",
+        "notes": "Translation is unavailable because Kit rejects configurations with overlapping server-name prefixes. The registry cannot check constraints across entries."
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "kit",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "installedLaunches": [],
+        "sources": [
+          "https://github.com/speakeasy-api/kit/blob/v0.2.25/docs/user/getting-started-and-configuration.md#acp-and-a2a-server-commands",
+          "https://github.com/speakeasy-api/kit/releases/download/v0.2.25/agent.json"
+        ],
+        "confidence": "official",
+        "notes": "Use the verified Kit binary (macOS arm64 or Linux x86-64). Auto-discovery is disabled because the generic kit executable name does not identify Speakeasy Kit."
+      }
+    },
+    {
       "key": "openrig",
       "name": "OpenRig",
       "version": "0.7.21",

@@ -7661,6 +7661,219 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-agent-swarm-default-installer-marker",
+      "operation": "checkHarness",
+      "input": "agent-swarm",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/agent-swarm/.agent-swarm/setup-url"
+        }
+      ],
+      "expect": {
+        "key": "agent-swarm",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installer-setup-marker"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-swarm-installer-root-override",
+      "operation": "checkHarness",
+      "input": "agent-swarm",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AGENT_SWARM_DIR": "${TMP}/swarm"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/swarm/.agent-swarm/setup-url"
+        }
+      ],
+      "expect": {
+        "key": "agent-swarm",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installer-setup-marker"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-swarm-ignores-shared-compose-files",
+      "operation": "checkHarness",
+      "input": "agent-swarm",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AGENT_SWARM_DIR": "${TMP}/swarm"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/swarm/.env"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/swarm/docker-compose.yml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/agent-swarm/.agent-swarm/setup-url"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.agents/skills/agent-swarm/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "agent-swarm",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-speakeasy-kit-home-config",
+      "operation": "checkHarness",
+      "input": "speakeasy-kit",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.kit/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "speakeasy-kit",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-speakeasy-kit-ignores-shared-files-and-generic-command",
+      "operation": "checkHarness",
+      "input": "speakeasy-kit",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/kit",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.agents/skills/example/SKILL.md"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.kit/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "speakeasy-kit",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-does-not-auto-discover-generic-kit",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/kit",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.kit/config.toml"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "translate-speakeasy-kit-rejects-unmodeled-server-name-collisions",
+      "operation": "translateMcpJson",
+      "input": "speakeasy-kit",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "example": {
+            "command": "fixture-mcp"
+          },
+          "example_other": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness speakeasy-kit has no file-based MCP config for scope local"
+      }
     }
   ]
 }
