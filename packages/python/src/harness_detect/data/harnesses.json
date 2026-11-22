@@ -26468,10 +26468,40 @@
                 "platforms": [
                   "win32"
                 ]
+              },
+              {
+                "id": "source-external-mcp",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_SOURCE_DATA}/mcp-config.json"
+              },
+              {
+                "id": "macos-external-mcp",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable/data/mcp-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "macos-intel-external-mcp",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable-intel/data/mcp-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-external-mcp",
+                "kind": "file",
+                "template": "${OPEN_DESIGN_APPDATA}/Open Design/namespaces/release-stable-win/data/mcp-config.json",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
               "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/app-config.ts#L1-L11",
+              "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
               "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
               "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/paths.ts#L50-L95",
               "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
@@ -26598,37 +26628,7 @@
         "mcpJson": "unsupported",
         "global": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "source-external-mcp",
-              "kind": "file",
-              "template": "${OPEN_DESIGN_SOURCE_DATA}/mcp-config.json"
-            },
-            {
-              "id": "macos-external-mcp",
-              "kind": "file",
-              "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable/data/mcp-config.json",
-              "platforms": [
-                "darwin"
-              ]
-            },
-            {
-              "id": "macos-intel-external-mcp",
-              "kind": "file",
-              "template": "${HOME}/Library/Application Support/Open Design/namespaces/release-stable-intel/data/mcp-config.json",
-              "platforms": [
-                "darwin"
-              ]
-            },
-            {
-              "id": "windows-external-mcp",
-              "kind": "file",
-              "template": "${OPEN_DESIGN_APPDATA}/Open Design/namespaces/release-stable-win/data/mcp-config.json",
-              "platforms": [
-                "win32"
-              ]
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/daemon-paths.ts#L125-L138",
             "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
@@ -26636,11 +26636,7 @@
             "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
           ],
           "confidence": "source",
-          "notes": "Daemon-owned config, not the downstream agent's .mcp.json. Use the actual namespace data directory for non-default packaged setups.",
-          "format": "json",
-          "keyPath": [
-            "servers"
-          ]
+          "notes": "The daemon stores a servers array in mcp-config.json; see global config support for default paths."
         },
         "local": {
           "status": "unknown",
@@ -26648,37 +26644,13 @@
           "sources": [],
           "confidence": "unknown"
         },
-        "serverFormat": {
-          "container": "array",
-          "nameField": "id",
-          "typeField": "transport",
-          "stdio": {
-            "type": "stdio",
-            "command": "command",
-            "args": "args",
-            "env": "env"
-          },
-          "http": {
-            "type": "http",
-            "url": "url",
-            "headers": "headers"
-          },
-          "sse": {
-            "type": "sse",
-            "url": "url",
-            "headers": "headers"
-          },
-          "defaults": {
-            "enabled": true
-          }
-        },
         "sources": [
           "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L1-L49",
           "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L97-L104",
           "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/daemon/src/mcp-config.ts#L175-L217"
         ],
         "confidence": "source",
-        "notes": "The native editor requires IDs of 1–64 letters, digits, underscores or hyphens, starting with a letter or digit. OAuth settings are managed separately."
+        "notes": "Automatic translation is not offered because OpenDesign rejects IDs outside its 1–64 character identifier rule, which the shared translator cannot enforce."
       },
       "acp": {
         "status": "unknown",

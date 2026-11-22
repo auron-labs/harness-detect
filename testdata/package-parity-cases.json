@@ -6632,72 +6632,20 @@
       }
     },
     {
-      "id": "translate-open-design-global",
+      "id": "translate-open-design-rejects-unmodeled-id-rules",
       "operation": "translateMcpJson",
       "input": "opendesign",
       "scope": "global",
       "mcpJson": {
         "mcpServers": {
-          "docs": {
+          "com.example.docs": {
             "type": "http",
-            "url": "https://example.com/mcp",
-            "headers": {
-              "X-Example": "fixture"
-            }
-          },
-          "events": {
-            "type": "sse",
-            "url": "https://example.com/events"
-          },
-          "local": {
-            "command": "fixture-mcp",
-            "args": [
-              "--stdio"
-            ],
-            "env": {
-              "FIXTURE_MODE": "demo"
-            }
+            "url": "https://example.com/mcp"
           }
         }
       },
       "expect": {
-        "scope": "global",
-        "format": "json",
-        "keyPath": [
-          "servers"
-        ],
-        "config": {
-          "servers": [
-            {
-              "id": "docs",
-              "transport": "http",
-              "enabled": true,
-              "url": "https://example.com/mcp",
-              "headers": {
-                "X-Example": "fixture"
-              }
-            },
-            {
-              "id": "events",
-              "transport": "sse",
-              "enabled": true,
-              "url": "https://example.com/events"
-            },
-            {
-              "id": "local",
-              "transport": "stdio",
-              "enabled": true,
-              "command": "fixture-mcp",
-              "args": [
-                "--stdio"
-              ],
-              "env": {
-                "FIXTURE_MODE": "demo"
-              }
-            }
-          ]
-        },
-        "skipped": []
+        "error": "Harness open-design has no file-based MCP config for scope global"
       }
     },
     {
