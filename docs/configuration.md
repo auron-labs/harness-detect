@@ -292,6 +292,8 @@ These are computed by `withDefaults()` in all packages and are always available:
 
 **Stakpak and OpenFang on Windows:** Detection uses `USERPROFILE` for the default config paths. If it is unset or empty, the registry falls back to normalized `HOME`, which may not be the Windows profile these harnesses use. Changing `USERPROFILE` also does not move the Windows Known Folder used by Stakpak Autopilot and OpenFang.
 
+**Agent Swarm:** Use an absolute `AGENT_SWARM_DIR` for a relocated one-shot install. Relative paths depend on the installer's working directory, and the installer does not expand a literal leading tilde. Detection uses normalized `HOME` for the default directory, even if the installer had no usable `HOME`.
+
 ### Harness-specific derived roots
 
 Each harness can declare its own derived roots. For example, Codex declares:
@@ -441,6 +443,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
 | `openhuman` | `OPENHUMAN_HOME` | `OPENHUMAN_AGENT_DEFINITIONS_ROOT` | `${HOME}/.openhuman` |
 | `openhuman` | `ProgramFiles` | `OPENHUMAN_PROGRAM_FILES` | (empty — path resolves to null) |
+| `openjarvis` | `OPENJARVIS_HOME` | `OPENJARVIS_ROOT` | `${HOME}/.openjarvis` |
+| `openjarvis` | `OPENJARVIS_HOME` | `OPENJARVIS_WINDOWS_CONFIG_ROOT` | `${USERPROFILE}/.openjarvis` |
+| `openjarvis` | `OPENJARVIS_HOME` | `OPENJARVIS_WINDOWS_INSTALL_ROOT` | `${LOCALAPPDATA}/OpenJarvis` |
 | `openrig` | `OPENRIG_HOME` | `OPENRIG_ROOT` | `${HOME}/.openrig` |
 | `openrig` | `OPENRIG_SKILLS_ROOT` | `OPENRIG_SKILLS` | `${OPENRIG_ROOT}/skills` |
 | `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
@@ -536,7 +541,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 97
+console.log(harnesses.harnesses.length);  // 99
 ```
 
 <!-- /automd -->

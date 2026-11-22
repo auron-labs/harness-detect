@@ -7874,6 +7874,284 @@
       "expect": {
         "error": "Harness speakeasy-kit has no file-based MCP config for scope local"
       }
+    },
+    {
+      "id": "check-openjarvis-default-config",
+      "operation": "checkHarness",
+      "input": "openjarvis",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openjarvis/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openjarvis",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openjarvis-explicit-home-wins",
+      "operation": "checkHarness",
+      "input": "openjarvis",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENJARVIS_HOME": "${TMP}/oj-explicit",
+        "XDG_DATA_HOME": "${TMP}/oj-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oj-explicit/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/oj-xdg/openjarvis/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openjarvis/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openjarvis",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openjarvis-windows-installer-shim",
+      "operation": "checkHarness",
+      "input": "openjarvis",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/oj-local"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oj-local/OpenJarvis/bin/jarvis.cmd"
+        }
+      ],
+      "expect": {
+        "key": "openjarvis",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-installer-shim"
+        ]
+      }
+    },
+    {
+      "id": "check-openjarvis-windows-profile-config",
+      "operation": "checkHarness",
+      "input": "openjarvis",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/oj-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oj-profile/.openjarvis/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openjarvis",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openjarvis-ignores-generic-signals",
+      "operation": "checkHarness",
+      "input": "openjarvis",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}/oj-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/jarvis"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oj-negative/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oj-negative/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.openjarvis/skills"
+        }
+      ],
+      "expect": {
+        "key": "openjarvis",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-agent-teams-ai-default-config",
+      "operation": "checkHarness",
+      "input": "agent-teams-ai",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/agent-teams-config.json"
+        }
+      ],
+      "expect": {
+        "key": "agent-teams-ai",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-teams-ai-schedules",
+      "operation": "checkHarness",
+      "input": "agent-teams-ai",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.claude/agent-teams-schedules"
+        }
+      ],
+      "expect": {
+        "key": "agent-teams-ai",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-schedules"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-teams-ai-windows-profile-config",
+      "operation": "checkHarness",
+      "input": "agent-teams-ai",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/ata-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ata-profile/.claude/agent-teams-config.json"
+        }
+      ],
+      "expect": {
+        "key": "agent-teams-ai",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-teams-ai-ignores-shared-claude-state",
+      "operation": "checkHarness",
+      "input": "agent-teams-ai",
+      "cwd": "${CWD}/ata-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.claude/teams"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/claude-devtools-config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/ata-negative/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "agent-teams-ai",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }
