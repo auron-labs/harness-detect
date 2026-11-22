@@ -25688,6 +25688,651 @@
       }
     },
     {
+      "key": "qwenpaw",
+      "name": "QwenPaw",
+      "version": "2.3.0.post1",
+      "aliases": [],
+      "executables": [
+        "qwenpaw"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${QWENPAW_ROOT}/config.json",
+          "category": "config"
+        },
+        {
+          "id": "macos-app",
+          "kind": "dir",
+          "template": "/Applications/QwenPaw Desktop.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/QwenPaw Desktop.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-windows-app",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/QwenPaw Desktop/qwenpaw-desktop.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-windows-app",
+          "kind": "file",
+          "template": "${QWENPAW_PROGRAM_FILES}/QwenPaw Desktop/qwenpaw-desktop.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "QWENPAW_ROOT",
+          "env": "QWENPAW_WORKING_DIR",
+          "fallback": "${HOME}/.qwenpaw"
+        },
+        {
+          "name": "QWENPAW_PROGRAM_FILES",
+          "env": "ProgramFiles",
+          "fallbackEnv": "PROGRAMFILES",
+          "fallback": ""
+        }
+      ],
+      "env": [
+        {
+          "name": "QWENPAW_WORKING_DIR",
+          "description": "Overrides the application config, workspaces, and skill pool."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/qwenpaw/2.3.0.post1/",
+        "https://github.com/agentscope-ai/QwenPaw/releases/tag/v2.3.0.post1",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/pyproject.toml#L117-L118",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/constant.py#L82-L94",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/config/utils.py#L450-L452",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/scripts/verify/launch_tauri_macos.sh#L6-L15",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/console/src-tauri/nsis/tauri-installer.nsi#L506-L522",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/scripts/verify/launch_tauri_windows.ps1#L43-L58",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/README.md#quick-start"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "qwenpaw",
+          "command": "pip install qwenpaw",
+          "url": "https://pypi.org/project/qwenpaw/2.3.0.post1/",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/agentscope-ai/QwenPaw/releases/tag/v2.3.0.post1",
+          "platforms": [
+            "darwin",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${QWENPAW_ROOT}/config.json"
+              },
+              {
+                "id": "legacy-copaw-config",
+                "kind": "file",
+                "template": "${HOME}/.copaw/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/constant.py#L82-L94",
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/config/utils.py#L450-L452"
+            ],
+            "confidence": "source",
+            "notes": "Upstream prefers an existing ~/.copaw before ~/.qwenpaw when no env override is set; the legacy file alone is not proof of a current QwenPaw installation."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "shared-skill-pool",
+                "kind": "dir",
+                "template": "${QWENPAW_ROOT}/skill_pool"
+              },
+              {
+                "id": "legacy-copaw-skill-pool",
+                "kind": "dir",
+                "template": "${HOME}/.copaw/skill_pool"
+              }
+            ],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
+            ],
+            "confidence": "source",
+            "notes": "Pool skills must be copied into an agent workspace before use. Without a working-directory override, QwenPaw prefers the legacy location if ~/.copaw exists."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-skills",
+                "kind": "dir",
+                "template": "${CWD}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
+            ],
+            "confidence": "source",
+            "notes": "CWD must be the selected QwenPaw agent workspace."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-workspaces",
+                "kind": "dir",
+                "template": "${QWENPAW_ROOT}/workspaces"
+              },
+              {
+                "id": "legacy-copaw-workspaces",
+                "kind": "dir",
+                "template": "${HOME}/.copaw/workspaces"
+              }
+            ],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/config/config.py#L3755-L3790",
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
+            ],
+            "confidence": "source",
+            "notes": "Each agent profile is stored as agent.json in its own workspace. Without a working-directory override, QwenPaw prefers the legacy location if ~/.copaw exists."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
+            ],
+            "confidence": "source",
+            "notes": "QwenPaw uses its own global skill pool."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/skills.en.md"
+            ],
+            "confidence": "source",
+            "notes": "QwenPaw loads skills from its active agent workspace's skills directory."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/app/driver_config_service.py#L32-L56",
+            "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/drivers/storage.py#L252-L261"
+          ],
+          "confidence": "source",
+          "notes": "The selected agent workspace owns its MCP DriverCards under drivers/mcp/."
+        },
+        "sources": [
+          "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/app/driver_config_service.py#L32-L56",
+          "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/drivers/storage.py#L252-L261",
+          "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/drivers/adapters/mcp_legacy_config.py"
+        ],
+        "confidence": "source",
+        "notes": "The Console persists a YAML DriverCard per server rather than a single MCP file; legacy agent.json entries are migrated. This layout has no translation target."
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "qwenpaw",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/website/public/docs/acp-integration.en.md#qwenpaw-as-an-acp-server",
+          "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/cli/acp_cmd.py"
+        ],
+        "confidence": "official",
+        "notes": "QwenPaw must be initialized; configure a model for agent turns."
+      }
+    },
+    {
+      "key": "openhuman",
+      "name": "OpenHuman",
+      "version": "0.64.15",
+      "aliases": [],
+      "executables": [
+        "openhuman-core",
+        "OpenHuman"
+      ],
+      "paths": [
+        {
+          "id": "local-user-config",
+          "kind": "file",
+          "template": "${HOME}/.openhuman/users/local/config.toml",
+          "category": "config"
+        },
+        {
+          "id": "staging-local-user-config",
+          "kind": "file",
+          "template": "${HOME}/.openhuman-staging/users/local/config.toml",
+          "category": "config"
+        },
+        {
+          "id": "active-user",
+          "kind": "file",
+          "template": "${HOME}/.openhuman/active_user.toml",
+          "category": "state"
+        },
+        {
+          "id": "active-workspace",
+          "kind": "file",
+          "template": "${HOME}/.openhuman/active_workspace.toml",
+          "category": "state"
+        },
+        {
+          "id": "staging-active-user",
+          "kind": "file",
+          "template": "${HOME}/.openhuman-staging/active_user.toml",
+          "category": "state"
+        },
+        {
+          "id": "staging-active-workspace",
+          "kind": "file",
+          "template": "${HOME}/.openhuman-staging/active_workspace.toml",
+          "category": "state"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/OpenHuman.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-macos-app",
+          "kind": "dir",
+          "template": "/Applications/OpenHuman.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-windows-app",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/OpenHuman/OpenHuman.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-windows-app",
+          "kind": "file",
+          "template": "${OPENHUMAN_PROGRAM_FILES}/OpenHuman/OpenHuman.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPENHUMAN_AGENT_DEFINITIONS_ROOT",
+          "env": "OPENHUMAN_HOME",
+          "fallback": "${HOME}/.openhuman"
+        },
+        {
+          "name": "OPENHUMAN_PROGRAM_FILES",
+          "env": "ProgramFiles",
+          "fallbackEnv": "PROGRAMFILES",
+          "fallback": ""
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENHUMAN_WORKSPACE",
+          "description": "Selects the runtime workspace; some layouts read config.toml beside the workspace."
+        },
+        {
+          "name": "OPENHUMAN_HOME",
+          "description": "Overrides the user agent definitions root only."
+        },
+        {
+          "name": "OPENHUMAN_APP_ENV",
+          "description": "Staging uses ~/.openhuman-staging instead of ~/.openhuman."
+        }
+      ],
+      "sources": [
+        "https://github.com/tinyhumansai/openhuman/releases/tag/v0.64.15",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/INSTALL.md#recommended-install-native-packages",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-cli/Cargo.toml#L32-L34",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.sh#L513-L557",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load/dirs.rs",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load_user_state.rs",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/app_env.rs",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-app/postinst#L4-L16",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.ps1#L269-L273",
+        "https://github.com/tauri-apps/tauri/blob/tauri-cli-v2.11.4/crates/tauri-bundler/src/bundle/windows/nsis/installer.nsi#L498-L515"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "openhuman",
+          "command": "brew install --cask openhuman",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/INSTALL.md#recommended-install-native-packages"
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "url": "https://github.com/tinyhumansai/openhuman/releases/tag/v0.64.15"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "local-user-config",
+                "kind": "file",
+                "template": "${HOME}/.openhuman/users/local/config.toml"
+              },
+              {
+                "id": "staging-local-user-config",
+                "kind": "file",
+                "template": "${HOME}/.openhuman-staging/users/local/config.toml"
+              },
+              {
+                "id": "workspace-override-config",
+                "kind": "file",
+                "template": "${OPENHUMAN_WORKSPACE}/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load/dirs.rs"
+            ],
+            "confidence": "source",
+            "notes": "Models the signed-out, staging, and directly overridden configs. Signed-in profiles are resolved by the app through active_user.toml; variable account paths and legacy sibling fallbacks are not enumerated."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${HOME}/.openhuman/skills"
+              },
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/scan.rs"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-skills",
+                "kind": "dir",
+                "template": "${CWD}/.openhuman/skills"
+              },
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              },
+              {
+                "id": "legacy-workspace-skills",
+                "kind": "dir",
+                "template": "${CWD}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/scan.rs",
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/api.rs#L126-L137"
+            ],
+            "confidence": "source",
+            "notes": "CWD must be the active workspace; the .openhuman and .agents roots require workspace trust."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents",
+                "kind": "dir",
+                "template": "${OPENHUMAN_AGENT_DEFINITIONS_ROOT}/agents"
+              },
+              {
+                "id": "staging-user-agents",
+                "kind": "dir",
+                "template": "${HOME}/.openhuman-staging/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/agent/harness/definition_loader.rs"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-agents",
+                "kind": "dir",
+                "template": "${CWD}/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/agent/harness/definition_loader.rs"
+            ],
+            "confidence": "source",
+            "notes": "CWD must be the active workspace."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/scan.rs"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/scan.rs",
+              "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/skills/ops_discover/api.rs#L126-L137"
+            ],
+            "confidence": "source",
+            "notes": "The workspace .agents/skills root is scanned only after explicit workspace trust."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "serverFormat": {
+          "container": "array",
+          "nameField": "name",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "url": "endpoint"
+          }
+        },
+        "sources": [
+          "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/gitbooks/developing/architecture/mcp-registry.md",
+          "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/tools/mcp.rs",
+          "https://github.com/tinyhumansai/tinymcp/blob/ab2de39180d9dadd897b382fef80d1ad9f7d25eb/crates/tinymcp-bus/src/config/types.rs#L60-L116"
+        ],
+        "confidence": "source",
+        "notes": "HTTP header authentication uses a structured auth field not expressible in the registry's header map.",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "local-user-config",
+              "kind": "file",
+              "template": "${HOME}/.openhuman/users/local/config.toml"
+            },
+            {
+              "id": "staging-local-user-config",
+              "kind": "file",
+              "template": "${HOME}/.openhuman-staging/users/local/config.toml"
+            },
+            {
+              "id": "workspace-override-config",
+              "kind": "file",
+              "template": "${OPENHUMAN_WORKSPACE}/config.toml"
+            }
+          ],
+          "sources": [
+            "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/gitbooks/developing/architecture/mcp-registry.md",
+            "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/tools/mcp.rs"
+          ],
+          "confidence": "source",
+          "notes": "Static servers are declared in the active profile. The UI's mcp.json editor instead writes to the app database.",
+          "format": "toml",
+          "keyPath": [
+            "mcp_client",
+            "servers"
+          ]
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",

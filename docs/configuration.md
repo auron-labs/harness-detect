@@ -468,12 +468,16 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openharness` | `OPENHARNESS_DATA_DIR` | `OPENHARNESS_DATA_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/data` |
 | `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
 | `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
+| `openhuman` | `OPENHUMAN_HOME` | `OPENHUMAN_AGENT_DEFINITIONS_ROOT` | `${HOME}/.openhuman` |
+| `openhuman` | `ProgramFiles` | `OPENHUMAN_PROGRAM_FILES` | (empty — path resolves to null) |
 | `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
 | `paradev` | `SUPERSET_HOME` | `PARADEV_CLI_INSTALL_ROOT` | `${HOME}/superset` |
 | `pipali` | `APPDATA` | `PIPALI_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
 | `pipali` | `PIPALI_SKILLS_DIR` | `PIPALI_SKILLS_ROOT` | `${HOME}/.pipali/skills` |
 | `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
+| `qwenpaw` | `QWENPAW_WORKING_DIR` | `QWENPAW_ROOT` | `${HOME}/.qwenpaw` |
+| `qwenpaw` | `ProgramFiles` | `QWENPAW_PROGRAM_FILES` | (empty — path resolves to null) |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_XDG` | `${XDG_CONFIG_HOME}/vtcode` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_MACOS` | `${HOME}/Library/Application Support/com.vinhnx.vtcode` |
@@ -559,7 +563,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 87
+console.log(harnesses.harnesses.length);  // 89
 ```
 
 <!-- /automd -->

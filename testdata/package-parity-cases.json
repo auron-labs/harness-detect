@@ -5952,6 +5952,428 @@
       }
     },
     {
+      "id": "check-qwenpaw-default-config",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/paw-default-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paw-default-home/.qwenpaw/config.json"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-qwenpaw-working-dir-override",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "QWENPAW_WORKING_DIR": "${TMP}/paw-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paw-profile/config.json"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-qwenpaw-shared-and-legacy-markers",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "cwd": "${CWD}/paw-negative",
+      "env": {
+        "HOME": "${TMP}/paw-negative-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paw-negative-home/.copaw/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/paw-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/paw-negative/agent.json"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-launches-qwenpaw",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/qwenpaw",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "qwenpaw",
+            "command": "${BIN}/qwenpaw",
+            "args": [
+              "acp"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-openhuman-signed-out-profile",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/oh-local-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-local-home/.openhuman/users/local/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "local-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openhuman-staging-active-user",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/oh-staging-home",
+        "PATH": "",
+        "OPENHUMAN_APP_ENV": "staging"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-staging-home/.openhuman-staging/active_user.toml"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "staging-active-user"
+        ]
+      }
+    },
+    {
+      "id": "check-openhuman-ignores-generic-override-config",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENHUMAN_WORKSPACE": "${TMP}/oh-platform"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-platform/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openhuman-ignores-shared-skills",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "cwd": "${CWD}/oh-negative",
+      "env": {
+        "HOME": "${TMP}/oh-negative-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-negative-home/.agents/skills/example/SKILL.md"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oh-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/oh-negative/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openhuman-macos-user-app",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/oh-macos-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/oh-macos-home/Applications/OpenHuman.app"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-macos-app"
+        ]
+      }
+    },
+    {
+      "id": "translate-openhuman-global",
+      "operation": "translateMcpJson",
+      "input": "openhuman",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          },
+          "stdio": {
+            "command": "fixture-mcp",
+            "args": [
+              "--stdio"
+            ]
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "toml",
+        "keyPath": [
+          "mcp_client",
+          "servers"
+        ],
+        "config": {
+          "mcp_client": {
+            "servers": [
+              {
+                "name": "docs",
+                "endpoint": "https://example.com/mcp"
+              },
+              {
+                "name": "stdio",
+                "command": "fixture-mcp",
+                "args": [
+                  "--stdio"
+                ]
+              }
+            ]
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "check-qwenpaw-macos-user-app",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/paw-mac-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/paw-mac-home/Applications/QwenPaw Desktop.app"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-macos-app"
+        ]
+      }
+    },
+    {
+      "id": "check-qwenpaw-windows-user-app-without-cli",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/paw-local-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paw-local-appdata/QwenPaw Desktop/qwenpaw-desktop.exe"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-windows-app"
+        ]
+      }
+    },
+    {
+      "id": "check-openhuman-debian-desktop-binary",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/OpenHuman",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": "${BIN}/OpenHuman",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openhuman-windows-user-app-without-cli",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/oh-local-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-local-appdata/OpenHuman/OpenHuman.exe"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-windows-app"
+        ]
+      }
+    },
+    {
+      "id": "check-openhuman-windows-system-app-without-cli",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ProgramFiles": "${TMP}/oh-program-files"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-program-files/OpenHuman/OpenHuman.exe"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "system-windows-app"
+        ]
+      }
+    },
+    {
       "id": "translate-probe-every-harness",
       "operation": "translateMcpJson",
       "input": "*",
