@@ -5336,6 +5336,363 @@
       }
     },
     {
+      "id": "check-vtcode-xdg-config",
+      "operation": "checkHarness",
+      "input": "vt-code",
+      "platforms": [
+        "linux",
+        "freebsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/custom-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/custom-xdg/vtcode/vtcode.toml"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-xdg"
+        ]
+      }
+    },
+    {
+      "id": "check-vtcode-config-and-legacy-overrides",
+      "operation": "checkHarness",
+      "input": "vtcode",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "VTCODE_CONFIG": "${TMP}/vtcode-canonical",
+        "VTCODE_HOME": "${TMP}/vtcode-legacy",
+        "XDG_CONFIG_HOME": "${TMP}/vtcode-ignored-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/vtcode-canonical/vtcode.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/vtcode-legacy/vtcode.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/vtcode-ignored-xdg/vtcode/vtcode.toml"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-config",
+          "user-config-xdg"
+        ]
+      }
+    },
+    {
+      "id": "check-vtcode-macos-native-config",
+      "operation": "checkHarness",
+      "input": "vtcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/vtcode-ignored-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/com.vinhnx.vtcode/vtcode.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/vtcode-ignored-xdg/vtcode/vtcode.toml"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-macos"
+        ]
+      }
+    },
+    {
+      "id": "check-vtcode-windows-native-config",
+      "operation": "checkHarness",
+      "input": "vtcode",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/vtcode-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/vtcode-appdata/vinhnx/vtcode/config/vtcode.toml"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-vtcode-workspace-fallback",
+      "operation": "checkHarness",
+      "input": "vtcode",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.vtcode/vtcode.toml"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-fallback-config"
+        ]
+      }
+    },
+    {
+      "id": "check-vtcode-ignores-shared-files-and-explicit-config",
+      "operation": "checkHarness",
+      "input": "vtcode",
+      "cwd": "${CWD}/vtcode-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "VTCODE_CONFIG_PATH": "${CWD}/vtcode-negative/settings.toml"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/vtcode-negative/AGENTS.md"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/vtcode-negative/settings.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/vtcode-negative/.agents/skills/common/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "vtcode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-vtcode-local",
+      "operation": "translateMcpJson",
+      "input": "vtcode",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "local-tool": {
+            "command": "example-mcp"
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "X-Client": "test"
+            }
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "toml",
+        "keyPath": [
+          "mcp",
+          "providers"
+        ],
+        "config": {
+          "mcp": {
+            "providers": [
+              {
+                "name": "docs",
+                "endpoint": "https://example.com/mcp",
+                "headers": {
+                  "X-Client": "test"
+                }
+              },
+              {
+                "name": "local-tool",
+                "command": "example-mcp",
+                "args": []
+              }
+            ]
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "check-eca-xdg-config",
+      "operation": "checkHarness",
+      "input": "editor-code-assistant",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/eca-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/eca-xdg/eca/config.json"
+        }
+      ],
+      "expect": {
+        "key": "eca",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-eca-project-config",
+      "operation": "checkHarness",
+      "input": "eca",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.eca/config.json"
+        }
+      ],
+      "expect": {
+        "key": "eca",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-eca-ignores-shared-files-and-inline-config",
+      "operation": "checkHarness",
+      "input": "eca",
+      "cwd": "${CWD}/eca-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ECA_CONFIG": "{\"defaultAgent\":\"plan\"}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/eca-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/eca-negative/.agents/skills/common/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "eca",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-eca-global",
+      "operation": "translateMcpJson",
+      "input": "eca",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "local-tool": {
+            "command": "example-mcp"
+          },
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "X-Client": "test"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "jsonc",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "local-tool": {
+              "command": "example-mcp",
+              "args": []
+            },
+            "docs": {
+              "url": "https://example.com/mcp",
+              "headers": {
+                "X-Client": "test"
+              }
+            }
+          }
+        },
+        "skipped": [
+          {
+            "name": "legacy",
+            "reason": "unsupported transport: sse"
+          }
+        ]
+      }
+    },
+    {
       "id": "translate-probe-every-harness",
       "operation": "translateMcpJson",
       "input": "*",
