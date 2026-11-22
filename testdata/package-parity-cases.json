@@ -4658,6 +4658,11 @@
       "scope": "local",
       "mcpJson": {
         "mcpServers": {
+          "custom": {
+            "command": "/opt/MCP Tools/runner's tool",
+            "args": ["", "--label", " two words ", "a\\b"],
+            "env": { "MODE": "test" }
+          },
           "docs": {
             "type": "http",
             "url": "https://example.com/mcp"
@@ -4672,6 +4677,11 @@
         ],
         "config": {
           "mcpServers": {
+            "custom": {
+              "command": "'/opt/MCP Tools/runner'\"'\"'s tool' '' '--label' ' two words ' 'a\\b'",
+              "args": [],
+              "env": { "MODE": "test" }
+            },
             "docs": {
               "type": "streamable-http",
               "url": "https://example.com/mcp"

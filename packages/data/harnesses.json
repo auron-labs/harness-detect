@@ -24156,6 +24156,7 @@
           "typeField": "type",
           "stdio": {
             "command": "command",
+            "commandFormat": "shlex",
             "args": "args",
             "env": "env"
           },
@@ -24172,6 +24173,8 @@
         },
         "sources": [
           "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/mcp_handler.py#L75-L99",
+          "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/mcp_handler.py#L118-L154",
+          "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/mcp_handler.py#L699-L708",
           "https://github.com/agent0ai/agent-zero/blob/v2.16/docs/developer/mcp-configuration.md#L11-L48"
         ],
         "confidence": "source"

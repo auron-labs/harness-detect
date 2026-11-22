@@ -181,7 +181,7 @@ are managed only through a UI or database is `supported` with empty `paths`.
 | `container` | `map` (object keyed by server name) or `array` (list of entries; requires `nameField`). |
 | `nameField` | Field that stores the server name inside each entry; optional for maps. |
 | `typeField` | Field that names the transport. Required when any transport sets `type`. |
-| `stdio` | `{type?, command, args?, env?}`. Omitting `args` means the command field holds an argv array `[command, ...args]` (OpenCode style). |
+| `stdio` | `{type?, command, commandFormat?, args?, env?}`. With `commandFormat: "shlex"`, the command field holds a quoted string containing the executable and all arguments; any mapped `args` field is an empty list. Without either field, the command holds an argv array `[command, ...args]`. |
 | `http`, `sse` | `{type?, url, headers?}`. Omit a transport the harness cannot use. |
 | `defaults` | Static scalar fields written into every entry before mapped fields (for example `{"enabled": true}`). |
 

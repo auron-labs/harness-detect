@@ -7,6 +7,7 @@ import (
 	"maps"
 	"slices"
 	"sort"
+	"strings"
 )
 
 // HarnessMCPScope describes where a harness stores MCP servers for one scope.
@@ -30,8 +31,9 @@ type HarnessMCPScope struct {
 type HarnessMCPStdioFormat struct {
 	Type    string `json:"type,omitempty"`
 	Command string `json:"command"`
-	// Args is empty when the command field holds an argv array
-	// [command, ...args].
+	// CommandFormat specifies shlex encoding of the executable and arguments.
+	CommandFormat string `json:"commandFormat,omitempty"`
+	// Args names the argument list field (an empty list for shlex).
 	Args string `json:"args,omitempty"`
 	// Env is empty when the harness cannot set server environment variables.
 	Env string `json:"env,omitempty"`
@@ -275,10 +277,20 @@ func translateMCPServer(name string, raw any, format *HarnessMCPServerFormat) (m
 		if !valid {
 			return nil, "invalid env"
 		}
-		if target.Args != "" {
+		switch {
+		case target.CommandFormat == "shlex":
+			words := []string{"'" + strings.ReplaceAll(command, "'", "'\"'\"'") + "'"}
+			for _, arg := range args {
+				words = append(words, "'"+strings.ReplaceAll(arg.(string), "'", "'\"'\"'")+"'")
+			}
+			entry[target.Command] = strings.Join(words, " ")
+			if target.Args != "" {
+				entry[target.Args] = []any{}
+			}
+		case target.Args != "":
 			entry[target.Command] = command
 			entry[target.Args] = args
-		} else {
+		default:
 			entry[target.Command] = append([]any{command}, args...)
 		}
 		if len(env) > 0 {

@@ -250,8 +250,12 @@
           "properties": {
             "type": { "type": "string", "minLength": 1 },
             "command": { "$ref": "#/$defs/McpFieldName" },
+            "commandFormat": {
+              "description": "Encode the executable and all arguments as one string for a POSIX shlex parser.",
+              "const": "shlex"
+            },
             "args": {
-              "description": "Field for the argument list. When omitted, the command field holds an argv array [command, ...args].",
+              "description": "Field for the argument list, empty when commandFormat is set. If neither is set, the command field holds an argv array [command, ...args].",
               "$ref": "#/$defs/McpFieldName"
             },
             "env": {
