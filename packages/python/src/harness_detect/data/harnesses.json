@@ -22566,6 +22566,453 @@
       }
     },
     {
+      "key": "browser-use",
+      "name": "Browser Use",
+      "version": "1.0.8",
+      "aliases": [
+        "browseruse",
+        "browser-use-tui",
+        "browser-use/browser-use"
+      ],
+      "executables": [
+        "browser-use",
+        "browseruse",
+        "browser-use-tui"
+      ],
+      "roots": [
+        {
+          "name": "BROWSER_USE_PROFILE_ROOT",
+          "env": "BROWSER_USE_CONFIG_DIR",
+          "fallback": "${XDG_CONFIG_HOME}/browseruse"
+        },
+        {
+          "name": "BROWSER_USE_LEGACY_CONFIG",
+          "env": "BROWSER_USE_CONFIG_PATH",
+          "fallback": "${BROWSER_USE_PROFILE_ROOT}/config.json"
+        }
+      ],
+      "paths": [
+        {
+          "id": "device-id",
+          "category": "state",
+          "kind": "file",
+          "template": "${BROWSER_USE_PROFILE_ROOT}/device_id"
+        },
+        {
+          "id": "update-cache",
+          "category": "cache",
+          "kind": "file",
+          "template": "${BROWSER_USE_PROFILE_ROOT}/latest_version.json"
+        }
+      ],
+      "env": [
+        {
+          "name": "BROWSER_USE_CONFIG_DIR",
+          "description": "Overrides the Browser Use data directory (default: $XDG_CONFIG_HOME/browseruse)."
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Sets the base for the default Browser Use data directory."
+        },
+        {
+          "name": "BROWSER_USE_CONFIG_PATH",
+          "description": "Overrides the legacy config file read by the compatibility MCP server."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/browser-use/1.0.8/",
+        "https://github.com/browser-use/browser-use/blob/1.0.8/pyproject.toml#L52-L55",
+        "https://github.com/browser-use/browser-use/blob/1.0.8/browser_use/config.py#L53-L58",
+        "https://github.com/browser-use/browser-use/blob/1.0.8/browser_use/telemetry/service.py#L98-L117",
+        "https://github.com/browser-use/browser-use/blob/1.0.8/browser_use/update_check.py#L82-L109"
+      ],
+      "installations": [
+        {
+          "method": "uv",
+          "package": "browser-use",
+          "command": "uv tool install browser-use==1.0.8",
+          "url": "https://github.com/browser-use/browser-use/blob/1.0.8/README.md#L95-L101"
+        },
+        {
+          "method": "pip",
+          "package": "browser-use",
+          "command": "pip install browser-use==1.0.8",
+          "url": "https://github.com/browser-use/browser-use/blob/1.0.8/README.md#L109-L120"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "legacy-config",
+                "kind": "file",
+                "template": "${BROWSER_USE_LEGACY_CONFIG}"
+              }
+            ],
+            "sources": [
+              "https://github.com/browser-use/browser-use/blob/1.0.8/browser_use/cli.py#L148-L170"
+            ],
+            "confidence": "source",
+            "notes": "Only the legacy MCP server compatibility mode reads browser-profile settings from this file. It is not installation evidence."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown",
+            "notes": "The CLI installs its own skill for other harnesses; this does not establish native skill discovery."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unsupported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/browser-use/browser-use/blob/1.0.8/MIGRATING.md#L275-L281",
+          "https://github.com/browser-use/browser-use/blob/1.0.8/MIGRATING.md#L298-L309"
+        ],
+        "confidence": "official",
+        "notes": "Browser Use provides an MCP server. The former MCP client API was removed; using MCP through a custom Python tool is not native MCP configuration."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "deerflow",
+      "name": "DeerFlow",
+      "version": "2.2.0",
+      "aliases": [
+        "deer-flow",
+        "bytedance/deer-flow"
+      ],
+      "executables": [
+        "deerflow"
+      ],
+      "roots": [
+        {
+          "name": "DEERFLOW_PROJECT_ROOT",
+          "env": "DEER_FLOW_PROJECT_ROOT",
+          "fallback": "${CWD}"
+        },
+        {
+          "name": "DEERFLOW_RUNTIME_ROOT",
+          "env": "DEER_FLOW_HOME",
+          "fallback": "${DEERFLOW_PROJECT_ROOT}/.deer-flow"
+        },
+        {
+          "name": "DEERFLOW_CONFIG_FILE",
+          "env": "DEER_FLOW_CONFIG_PATH",
+          "fallback": "${DEERFLOW_PROJECT_ROOT}/config.yaml"
+        },
+        {
+          "name": "DEERFLOW_SKILLS_ROOT",
+          "env": "DEER_FLOW_SKILLS_PATH",
+          "fallback": "${DEERFLOW_PROJECT_ROOT}/skills"
+        }
+      ],
+      "paths": [
+        {
+          "id": "project-runtime",
+          "category": "state",
+          "kind": "dir",
+          "template": "${DEERFLOW_PROJECT_ROOT}/.deer-flow"
+        },
+        {
+          "id": "checkout-backend-runtime",
+          "category": "state",
+          "kind": "dir",
+          "template": "${DEERFLOW_PROJECT_ROOT}/backend/.deer-flow"
+        },
+        {
+          "id": "managed-subagents",
+          "category": "state",
+          "kind": "dir",
+          "template": "${DEERFLOW_RUNTIME_ROOT}/managed-subagents"
+        }
+      ],
+      "env": [
+        {
+          "name": "DEER_FLOW_PROJECT_ROOT",
+          "description": "Overrides the project root (default: working directory)."
+        },
+        {
+          "name": "DEER_FLOW_HOME",
+          "description": "Overrides the DeerFlow runtime state directory. A managed-subagents directory is recognized under this root; the root alone is not installation evidence."
+        },
+        {
+          "name": "DEER_FLOW_CONFIG_PATH",
+          "description": "Selects the application YAML configuration file."
+        },
+        {
+          "name": "DEER_FLOW_SKILLS_PATH",
+          "description": "Overrides the deployment's skill source directory when skills.path is unset."
+        },
+        {
+          "name": "DEER_FLOW_EXTENSIONS_CONFIG_PATH",
+          "description": "Selects the extensions JSON configuration file."
+        }
+      ],
+      "sources": [
+        "https://github.com/bytedance/deer-flow/releases/tag/v2.2.0",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/README.md#L3867-L3888",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/pyproject.toml#L69-L75",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/runtime_paths.py#L7-L23",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/scripts/serve.sh#L371-L384",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/paths.py#L218-L228",
+        "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/agent_storage_config.py#L8-L15"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/bytedance/deer-flow/blob/v2.2.0/README.md#L167-L182",
+          "notes": "Clone the release source and run make setup, then make install. The local backend workspace provides the deerflow terminal entry point."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${DEERFLOW_CONFIG_FILE}"
+              }
+            ],
+            "sources": [
+              "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/docs/CONFIGURATION.md#L2122-L2133"
+            ],
+            "confidence": "official",
+            "notes": "The explicit application argument and legacy backend/repository fallback paths are not inferred."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${DEERFLOW_SKILLS_ROOT}"
+              }
+            ],
+            "sources": [
+              "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/docs/CONFIGURATION.md#L1897-L1904"
+            ],
+            "confidence": "official",
+            "notes": "An explicit skills.path in YAML takes precedence. Per-user custom skills are stored separately in runtime state."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "managed-subagents",
+                "kind": "dir",
+                "template": "${DEERFLOW_RUNTIME_ROOT}/managed-subagents"
+              }
+            ],
+            "sources": [
+              "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/agent_storage_config.py#L8-L15"
+            ],
+            "confidence": "source",
+            "notes": "Deployment-managed definitions use this directory with the default file backend."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/docs/CONFIGURATION.md#L1897-L1904"
+            ],
+            "confidence": "official",
+            "notes": "Default discovery uses the deployment's own skills directory and runtime-managed paths."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/docs/CONFIGURATION.md#L1897-L1904"
+            ],
+            "confidence": "official",
+            "notes": "The deployment uses skills/, not .agents/skills, by default."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown",
+          "notes": "Personal Gateway MCP settings require a DeerFlow user ID."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-extensions",
+              "kind": "file",
+              "template": "${CWD}/extensions_config.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/extensions_config.py#L487-L508",
+            "https://github.com/bytedance/deer-flow/blob/v2.2.0/extensions_config.example.json#L6-L30"
+          ],
+          "confidence": "source",
+          "notes": "Use the deployment project root as CWD. Explicit path overrides and legacy fallback files are not inferred.",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "http",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/extensions_config.py#L487-L508",
+          "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/extensions_config.py#L218-L228",
+          "https://github.com/bytedance/deer-flow/blob/v2.2.0/extensions_config.example.json#L6-L30"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/bytedance/deer-flow/blob/v2.2.0/backend/packages/harness/deerflow/config/acp_config.py#L13-L19"
+        ],
+        "confidence": "source",
+        "notes": "DeerFlow launches other ACP agents; no DeerFlow agent-side ACP launch was verified."
+      }
+    },
+    {
       "acp": {
         "status": "supported",
         "launches": [

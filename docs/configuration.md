@@ -412,6 +412,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `amp` | — | `AMP_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/amp` |
 | `amp` | `AMP_DATA_HOME` | `AMP_DATA_ROOT` | `${XDG_DATA_HOME}/amp` |
 | `autogenstudio` | `AUTOGENSTUDIO_APPDIR` | `AUTOGENSTUDIO_ROOT` | `${HOME}/.autogenstudio` |
+| `browser-use` | `BROWSER_USE_CONFIG_DIR` | `BROWSER_USE_PROFILE_ROOT` | `${XDG_CONFIG_HOME}/browseruse` |
+| `browser-use` | `BROWSER_USE_CONFIG_PATH` | `BROWSER_USE_LEGACY_CONFIG` | `${BROWSER_USE_PROFILE_ROOT}/config.json` |
 | `claude-code` | `CLAUDE_CONFIG_DIR` | `CLAUDE_ROOT` | `${HOME}/.claude` |
 | `claude-code` | — | `CLAUDE_JSON_STATE` | `${HOME}/.claude.json` |
 | `cline` | `CLINE_DIR` | `CLINE_ROOT` | `${HOME}/.cline` |
@@ -425,6 +427,10 @@ The following table lists harness-specific env vars that affect path resolution 
 | `crush` | `CRUSH_SKILLS_DIR` | `CRUSH_SKILLS_ROOT` | `${CRUSH_CONFIG_ROOT}/skills` |
 | `deepagents-code` | `DEEPAGENTS_HOME` | `DEEPAGENTS_ROOT` | `${HOME}/.deepagents` |
 | `deepseek-harness` | `DSH_HOME` | `DSH_ROOT` | `${HOME}/.dsh` |
+| `deerflow` | `DEER_FLOW_PROJECT_ROOT` | `DEERFLOW_PROJECT_ROOT` | `${CWD}` |
+| `deerflow` | `DEER_FLOW_HOME` | `DEERFLOW_RUNTIME_ROOT` | `${DEERFLOW_PROJECT_ROOT}/.deer-flow` |
+| `deerflow` | `DEER_FLOW_CONFIG_PATH` | `DEERFLOW_CONFIG_FILE` | `${DEERFLOW_PROJECT_ROOT}/config.yaml` |
+| `deerflow` | `DEER_FLOW_SKILLS_PATH` | `DEERFLOW_SKILLS_ROOT` | `${DEERFLOW_PROJECT_ROOT}/skills` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
@@ -534,7 +540,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 75
+console.log(harnesses.harnesses.length);  // 77
 ```
 
 <!-- /automd -->
