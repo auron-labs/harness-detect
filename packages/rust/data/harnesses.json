@@ -26985,7 +26985,7 @@
               "https://github.com/stakpak/agent/blob/v0.3.88/libs/api/src/local/skills/mod.rs#L153-L164"
             ],
             "confidence": "source",
-            "notes": "Upstream uses the literal HOME environment variable for global skills, not the Windows profile directory."
+            "notes": "Upstream reads the literal HOME environment variable on all platforms. Windows is not listed as a resolvable path here because the registry normalizes HOME to the profile directory when unset."
           },
           "local": {
             "status": "supported",
@@ -27056,68 +27056,30 @@
         "mcpJson": "unsupported",
         "local": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "cwd-mcp",
-              "kind": "file",
-              "template": "${CWD}/mcp.toml"
-            },
-            {
-              "id": "project-mcp",
-              "kind": "file",
-              "template": "${CWD}/.stakpak/mcp.toml"
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
             "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52"
           ],
           "confidence": "source",
-          "notes": "The implementation searches the working directory before .stakpak and the user home. Each location also accepts mcp.json without a leading dot.",
-          "format": "toml",
-          "keyPath": [
-            "mcpServers"
-          ]
-        },
-        "serverFormat": {
-          "container": "map",
-          "stdio": {
-            "command": "command",
-            "args": "args",
-            "env": "env"
-          },
-          "http": {
-            "url": "url",
-            "headers": "headers"
-          }
+          "notes": "The mcpServers table is read from mcp.toml or mcp.json in the working directory, then in the project's .stakpak directory."
         },
         "sources": [
           "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52",
           "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
-          "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/agent/run/mcp_init.rs#L237-L255",
-          "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/proxy/src/client/mod.rs#L180-L192"
+          "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/agent/run/mcp_init.rs#L237-L255"
         ],
         "confidence": "source",
-        "notes": "Upstream source orders project files ahead of the global file, unlike the README. The reader does not load .mcp.json by default.",
+        "notes": "Project files take precedence over global files. The reader does not load .mcp.json by default. Translation is unavailable because the runtime drops external servers named stakpak, paks, or aap and the registry cannot express these reserved names.",
         "global": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "user-mcp",
-              "kind": "file",
-              "template": "${HOME}/.stakpak/mcp.toml"
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
             "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52"
           ],
           "confidence": "source",
-          "notes": "The same location also accepts mcp.json; only TOML is modeled for translation.",
-          "format": "toml",
-          "keyPath": [
-            "mcpServers"
-          ]
+          "notes": "The mcpServers table is read from mcp.toml or mcp.json under ~/.stakpak if no project file is found."
         }
       },
       "acp": {
@@ -27248,7 +27210,7 @@
               "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/config.rs#L342-L359"
             ],
             "confidence": "source",
-            "notes": "Models the default config and OPENFANG_HOME, not an explicit config-file argument."
+            "notes": "Models the default config and OPENFANG_HOME, not an explicit config-file argument. Use an absolute override: upstream treats an empty value as the current directory and does not expand ~, while the registry falls back to ~/.openfang for an empty value and expands a leading ~. A config.toml at an explicitly overridden location counts as installed without checking its contents."
           },
           "local": {
             "status": "unknown",

@@ -7261,99 +7261,47 @@
       }
     },
     {
-      "id": "translate-stakpak-global-mcp",
+      "id": "translate-stakpak-global-mcp-rejects-reserved-names",
       "operation": "translateMcpJson",
       "input": "stakpak",
       "scope": "global",
       "mcpJson": {
         "mcpServers": {
-          "stdio": {
-            "command": "fixture-mcp",
-            "env": {
-              "TEST_MODE": "fixture"
-            }
+          "stakpak": {
+            "command": "fixture-mcp"
           },
-          "http": {
-            "type": "http",
-            "url": "https://example.com/mcp",
-            "headers": {
-              "X-Fixture": "yes"
-            }
+          "paks": {
+            "command": "fixture-mcp"
+          },
+          "aap": {
+            "command": "fixture-mcp"
           }
         }
       },
       "expect": {
-        "scope": "global",
-        "format": "toml",
-        "keyPath": [
-          "mcpServers"
-        ],
-        "config": {
-          "mcpServers": {
-            "stdio": {
-              "command": "fixture-mcp",
-              "args": [],
-              "env": {
-                "TEST_MODE": "fixture"
-              }
-            },
-            "http": {
-              "url": "https://example.com/mcp",
-              "headers": {
-                "X-Fixture": "yes"
-              }
-            }
-          }
-        },
-        "skipped": []
+        "error": "Harness stakpak has no file-based MCP config for scope global"
       }
     },
     {
-      "id": "translate-stakpak-local-mcp",
+      "id": "translate-stakpak-local-mcp-rejects-reserved-names",
       "operation": "translateMcpJson",
       "input": "stakpak",
       "scope": "local",
       "mcpJson": {
         "mcpServers": {
-          "stdio": {
-            "command": "fixture-mcp",
-            "env": {
-              "TEST_MODE": "fixture"
-            }
+          "stakpak": {
+            "command": "fixture-mcp"
           },
-          "http": {
-            "type": "http",
-            "url": "https://example.com/mcp",
-            "headers": {
-              "X-Fixture": "yes"
-            }
+          "paks": {
+            "command": "fixture-mcp"
+          },
+          "aap": {
+            "command": "fixture-mcp"
           }
         }
       },
       "expect": {
-        "scope": "local",
-        "format": "toml",
-        "keyPath": [
-          "mcpServers"
-        ],
-        "config": {
-          "mcpServers": {
-            "stdio": {
-              "command": "fixture-mcp",
-              "args": [],
-              "env": {
-                "TEST_MODE": "fixture"
-              }
-            },
-            "http": {
-              "url": "https://example.com/mcp",
-              "headers": {
-                "X-Fixture": "yes"
-              }
-            }
-          }
-        },
-        "skipped": []
+        "error": "Harness stakpak has no file-based MCP config for scope local"
       }
     },
     {
