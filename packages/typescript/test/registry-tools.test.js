@@ -129,6 +129,28 @@ test("semantic validation rejects ambiguous lookup and repeated path/root IDs", 
   assert.match(errors, /support.config.global.paths: duplicate id/u);
 });
 
+test("global shared skills accept a derived home with the standard default", () => {
+  const candidate = minimal();
+  const [harness] = candidate.harnesses;
+  const root = {
+    env: "TEST_HOME_OVERRIDE",
+    fallback: `\${HOME}`,
+    name: "SHARED_SKILLS_HOME",
+    use: `\${TEST_HOME_OVERRIDE}/external`,
+  };
+  harness.roots.push(root);
+  harness.support.agentsSkills.global = {
+    confidence: "source",
+    paths: [{ id: "global-agents-skills", kind: "dir", template: `\${SHARED_SKILLS_HOME}/.agents/skills` }],
+    sources: ["https://example.com/skills"],
+    status: "supported",
+  };
+
+  assert.deepEqual(validateRegistry(candidate), []);
+  root.fallback = `\${HOME}/.vendor`;
+  assert.match(validateRegistry(candidate).join("\n"), /support\.agentsSkills\.global/u);
+});
+
 test("validation CLI rejects malformed and invalid files without changing them", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "registry-cli-"));
   try {

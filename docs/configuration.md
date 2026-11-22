@@ -215,7 +215,7 @@ Every harness must include `support`, and it must include all categories and bot
 | `skills` | object | yes | Support status for skills/prompts directories or files. |
 | `commands` | object | yes | Support status for slash commands, command packs, or equivalent command files. |
 | `agents` | object | yes | Support status for agent definitions or agent manifests. |
-| `agentsSkills` | object | yes | Whether the harness discovers Agent Skills from the shared `.agents/skills` directory by default (`${HOME}/.agents/skills` globally, `${CWD}/.agents/skills` locally). Opt-in discovery is `unsupported` with a note; vendor directories such as `.claude/skills` belong under `skills`. |
+| `agentsSkills` | object | yes | Whether the harness discovers Agent Skills from the shared `.agents/skills` directory by default (`${HOME}/.agents/skills` globally, `${CWD}/.agents/skills` locally). Global paths may use a derived home root for an override. Opt-in discovery is `unsupported` with a note; vendor directories such as `.claude/skills` belong under `skills`. |
 
 Each category object must contain both scopes:
 
@@ -436,6 +436,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_STATE_HOME}/goose/history.txt` |
 | `grok-build-cli` | `GROK_HOME` | `GROK_ROOT` | `${HOME}/.grok` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
+| `jcode` | `JCODE_HOME` | `JCODE_ROOT` | `${HOME}/.jcode` |
+| `jcode` | `JCODE_HOME` | `JCODE_EXTERNAL_HOME` | `${JCODE_ROOT}/external` (use) or `${HOME}` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_WINDOWS_ROOT` | `${LOCALAPPDATA}/mini-swe-agent/mini-swe-agent` |
@@ -528,7 +530,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 69
+console.log(harnesses.harnesses.length);  // 71
 ```
 
 <!-- /automd -->

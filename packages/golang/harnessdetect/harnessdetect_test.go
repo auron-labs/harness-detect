@@ -36,7 +36,7 @@ var expectedUnknownInstallationHarnesses = []string{
 
 var (
 	allowedPlatforms        = []string{"aix", "android", "cygwin", "darwin", "freebsd", "haiku", "linux", "netbsd", "openbsd", "sunos", "win32"}
-	expectedUsedPlatforms   = []string{"darwin", "linux", "win32"}
+	expectedUsedPlatforms   = []string{"darwin", "freebsd", "linux", "win32"}
 	supportAreas            = []string{"config", "skills", "commands", "agents", "agentsSkills"}
 	supportScopes           = []string{"global", "local"}
 	supportStatuses         = []string{"supported", "unsupported", "unknown"}

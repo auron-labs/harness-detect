@@ -104,13 +104,20 @@ const agentsSkillsTemplates = {
   local: "${CWD}/.agents/skills",
 };
 
-// agentsSkills is strictly the shared .agents/skills directory, so a
-// supported leaf must list that directory.
+// A global skills path may use a derived home when it defaults to HOME.
 function agentsSkillsErrors(harness) {
   const errors = [];
   for (const [scope, template] of Object.entries(agentsSkillsTemplates)) {
     const leaf = harness.support.agentsSkills[scope];
-    if (leaf.status === "supported" && !leaf.paths.some((entry) => entry.template === template)) {
+    const templates = new Set([template]);
+    if (scope === "global") {
+      for (const root of harness.roots ?? []) {
+        if (root.env && !root.fallbackEnv && root.fallback === `\${HOME}`) {
+          templates.add(`\${${root.name}}/.agents/skills`);
+        }
+      }
+    }
+    if (leaf.status === "supported" && !leaf.paths.some((entry) => templates.has(entry.template))) {
       errors.push(`${harness.key}.support.agentsSkills.${scope} is supported but does not list ${template}`);
     }
   }
