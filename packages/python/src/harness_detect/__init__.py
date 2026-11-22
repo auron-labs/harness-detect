@@ -1117,6 +1117,8 @@ def _current_platform() -> str:
         return "win32"
     if sys.platform.startswith("freebsd"):
         return "freebsd"
+    if sys.platform.startswith("openbsd"):
+        return "openbsd"
     return sys.platform
 
 
