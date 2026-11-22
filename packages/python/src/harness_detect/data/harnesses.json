@@ -22751,6 +22751,645 @@
       }
     },
     {
+      "key": "openharness",
+      "name": "OpenHarness",
+      "version": "0.1.9",
+      "aliases": [
+        "hkuds/openharness",
+        "openharness-ai",
+        "ohmo"
+      ],
+      "executables": [
+        "openharness",
+        "ohmo",
+        "openh"
+      ],
+      "paths": [
+        {
+          "id": "settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${OPENHARNESS_CONFIG_ROOT}/settings.json"
+        },
+        {
+          "id": "sessions",
+          "category": "state",
+          "kind": "dir",
+          "template": "${OPENHARNESS_DATA_ROOT}/sessions"
+        },
+        {
+          "id": "cron-log",
+          "category": "state",
+          "kind": "file",
+          "template": "${OPENHARNESS_LOGS_ROOT}/cron_scheduler.log"
+        },
+        {
+          "id": "project-home",
+          "category": "project",
+          "kind": "dir",
+          "template": "${CWD}/.openharness"
+        },
+        {
+          "id": "ohmo-gateway",
+          "category": "config",
+          "kind": "file",
+          "template": "${OHMO_WORKSPACE_ROOT}/gateway.json"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPENHARNESS_CONFIG_ROOT",
+          "env": "OPENHARNESS_CONFIG_DIR",
+          "fallback": "${HOME}/.openharness"
+        },
+        {
+          "name": "OPENHARNESS_DATA_ROOT",
+          "env": "OPENHARNESS_DATA_DIR",
+          "fallback": "${OPENHARNESS_CONFIG_ROOT}/data"
+        },
+        {
+          "name": "OPENHARNESS_LOGS_ROOT",
+          "env": "OPENHARNESS_LOGS_DIR",
+          "fallback": "${OPENHARNESS_CONFIG_ROOT}/logs"
+        },
+        {
+          "name": "OHMO_WORKSPACE_ROOT",
+          "env": "OHMO_WORKSPACE",
+          "fallback": "${HOME}/.ohmo"
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENHARNESS_CONFIG_DIR",
+          "description": "Overrides the OpenHarness settings directory and the base for the default data and log directories."
+        },
+        {
+          "name": "OPENHARNESS_DATA_DIR",
+          "description": "Overrides the data directory that contains the sessions directory."
+        },
+        {
+          "name": "OPENHARNESS_LOGS_DIR",
+          "description": "Overrides the directory that contains the cron scheduler log."
+        },
+        {
+          "name": "OHMO_WORKSPACE",
+          "description": "Overrides the bundled ohmo personal agent's workspace root."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/openharness-ai/0.1.9/",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/pyproject.toml#L48-L55",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/config/paths.py#L11-L75",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/config/paths.py#L102-L106",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/services/cron_scheduler.py#L303-L312",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/ohmo/workspace.py#L163-L175",
+        "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/ohmo/workspace.py#L230-L231",
+        "https://github.com/michaelmacinnis/oh"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "openharness-ai",
+          "command": "pip install openharness-ai",
+          "url": "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/README.md#L197-L220",
+          "notes": "Requires Python 3.10 or later. The package also exposes the short oh command, which is not used for detection because it is shared by an unrelated shell."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "settings",
+                "kind": "file",
+                "template": "${OPENHARNESS_CONFIG_ROOT}/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/config/settings.py#L910-L926"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown",
+            "notes": "The project directory stores project state; it is not a second settings.json lookup location."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${OPENHARNESS_CONFIG_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/skills/loader.py#L24-L55"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/plugins/loader.py#L81-L115"
+            ],
+            "confidence": "source",
+            "notes": "Project plugins can supply skills when explicitly allowed. The .openharness/skills scaffold is not a default standalone search path."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/cli.py#L433-L440"
+            ],
+            "confidence": "source",
+            "notes": "Enabled plugins can provide slash commands."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/plugins/loader.py#L81-L115"
+            ],
+            "confidence": "source",
+            "notes": "Project plugins can supply slash commands when explicitly allowed."
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents",
+                "kind": "dir",
+                "template": "${OPENHARNESS_CONFIG_ROOT}/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/coordinator/agent_definitions.py#L900-L925"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/coordinator/agent_definitions.py#L927-L943"
+            ],
+            "confidence": "source",
+            "notes": "Project agents can come from explicitly allowed, enabled plugins."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/skills/loader.py#L24-L55"
+            ],
+            "confidence": "source",
+            "notes": "Default discovery uses the OpenHarness config root and plugins, not ~/.agents/skills."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/skills/loader.py#L24-L55"
+            ],
+            "confidence": "source",
+            "notes": "The main CLI does not search .agents/skills by default."
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "settings",
+              "kind": "file",
+              "template": "${OPENHARNESS_CONFIG_ROOT}/settings.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/config/settings.py#L518-L521"
+          ],
+          "confidence": "source",
+          "format": "json",
+          "keyPath": [
+            "mcp_servers"
+          ]
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/plugins/loader.py#L138-L160"
+          ],
+          "confidence": "source",
+          "notes": "An enabled project plugin may provide a plugin-scoped .mcp.json when allow_project_plugins is enabled. This is not automatic loading of a project-root .mcp.json."
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "http",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/mcp/config.py#L8-L16",
+          "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/mcp/types.py#L11-L37",
+          "https://github.com/HKUDS/OpenHarness/blob/v0.1.9/src/openharness/mcp/client.py#L218-L230"
+        ],
+        "confidence": "source"
+      }
+    },
+    {
+      "key": "fast-agent",
+      "name": "fast-agent",
+      "version": "0.10.65",
+      "aliases": [
+        "fast-agent-mcp",
+        "fast-agent-acp",
+        "evalstate/fast-agent"
+      ],
+      "executables": [
+        "fast-agent",
+        "fast-agent-mcp",
+        "fast-agent-acp"
+      ],
+      "paths": [
+        {
+          "id": "home-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${FAST_AGENT_ROOT}/fast-agent.yaml"
+        },
+        {
+          "id": "home-transitional-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${FAST_AGENT_ROOT}/fast-agent.config.yaml"
+        },
+        {
+          "id": "home-legacy-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${FAST_AGENT_ROOT}/fastagent.config.yaml"
+        },
+        {
+          "id": "project-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/fast-agent.yaml"
+        },
+        {
+          "id": "project-transitional-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/fast-agent.config.yaml"
+        },
+        {
+          "id": "project-legacy-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/fastagent.config.yaml"
+        },
+        {
+          "id": "agent-cards",
+          "category": "config",
+          "kind": "dir",
+          "template": "${FAST_AGENT_ROOT}/agent-cards"
+        },
+        {
+          "id": "sessions",
+          "category": "state",
+          "kind": "dir",
+          "template": "${FAST_AGENT_ROOT}/sessions"
+        }
+      ],
+      "roots": [
+        {
+          "name": "FAST_AGENT_ROOT",
+          "env": "FAST_AGENT_HOME",
+          "fallback": "${CWD}/.fast-agent"
+        },
+        {
+          "name": "FAST_AGENT_GLOBAL_PLUGIN_ROOT",
+          "env": "FAST_AGENT_HOME",
+          "fallback": "${HOME}/.fast-agent"
+        }
+      ],
+      "env": [
+        {
+          "name": "FAST_AGENT_HOME",
+          "description": "Overrides the workspace-local .fast-agent home used for config and runtime data. Pass an absolute path when supplying a different detection CWD; launch flags are not inferred."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/fast-agent-mcp/0.10.65/",
+        "https://github.com/evalstate/fast-agent/blob/v0.10.65/pyproject.toml#L164-L168",
+        "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/home.py#L18-L29",
+        "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/home.py#L67-L132",
+        "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/guides/core-concepts.md#L39-L65"
+      ],
+      "installations": [
+        {
+          "method": "uv",
+          "package": "fast-agent-mcp",
+          "command": "uv tool install -U fast-agent-mcp",
+          "url": "https://github.com/evalstate/fast-agent/blob/v0.10.65/README.md#L47-L54",
+          "notes": "Requires Python 3.12 through 3.15. The installation includes the ACP runner."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-plugin-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fast-agent.yaml"
+              },
+              {
+                "id": "global-plugin-transitional-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fast-agent.config.yaml"
+              },
+              {
+                "id": "global-plugin-legacy-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fastagent.config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/config.py#L2361-L2436"
+            ],
+            "confidence": "source",
+            "notes": "Only plugin selections are merged from the separate user-level config. FAST_AGENT_HOME redirects that lookup to the active home."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "home-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_ROOT}/fast-agent.yaml"
+              },
+              {
+                "id": "home-transitional-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_ROOT}/fast-agent.config.yaml"
+              },
+              {
+                "id": "home-legacy-config",
+                "kind": "file",
+                "template": "${FAST_AGENT_ROOT}/fastagent.config.yaml"
+              },
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/fast-agent.yaml"
+              },
+              {
+                "id": "project-transitional-config",
+                "kind": "file",
+                "template": "${CWD}/fast-agent.config.yaml"
+              },
+              {
+                "id": "project-legacy-config",
+                "kind": "file",
+                "template": "${CWD}/fastagent.config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/home.py#L67-L132"
+            ],
+            "confidence": "source",
+            "notes": "The active home is checked before the workspace root. Each directory may contain only one config filename. Detection reports existing files, not their precedence or validity."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "home-skills",
+                "kind": "dir",
+                "template": "${FAST_AGENT_ROOT}/skills"
+              },
+              {
+                "id": "project-claude-skills",
+                "kind": "dir",
+                "template": "${CWD}/.claude/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/guides/skills.md#L12-L23"
+            ],
+            "confidence": "official"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-cards",
+                "kind": "dir",
+                "template": "${FAST_AGENT_ROOT}/agent-cards"
+              }
+            ],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/guides/core-concepts.md#L39-L65"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/paths.py#L126-L154"
+            ],
+            "confidence": "source",
+            "notes": "Default shared skill discovery is workspace-relative."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/guides/skills.md#L12-L23"
+            ],
+            "confidence": "official"
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "uvx",
+            "args": [
+              "fast-agent-acp@latest"
+            ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "fast-agent-acp",
+            "args": []
+          }
+        ],
+        "sources": [
+          "https://github.com/evalstate/fast-agent/blob/v0.10.65/publish/fast-agent-acp/README.md",
+          "https://pypi.org/project/fast-agent-acp/0.10.65/"
+        ],
+        "confidence": "official",
+        "notes": "ACP runs over stdio. The uvx package is a convenience launcher for the same fast-agent ACP entry point. Configure a model and any credentials required by its provider."
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unsupported",
+          "paths": [],
+          "sources": [
+            "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/config.py#L2361-L2395"
+          ],
+          "confidence": "source",
+          "notes": "The separate user-level config only contributes plugin selections."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "default-home-config",
+              "kind": "file",
+              "template": "${CWD}/.fast-agent/fast-agent.yaml"
+            },
+            {
+              "id": "default-home-transitional-config",
+              "kind": "file",
+              "template": "${CWD}/.fast-agent/fast-agent.config.yaml"
+            },
+            {
+              "id": "default-home-legacy-config",
+              "kind": "file",
+              "template": "${CWD}/.fast-agent/fastagent.config.yaml"
+            },
+            {
+              "id": "project-config",
+              "kind": "file",
+              "template": "${CWD}/fast-agent.yaml"
+            },
+            {
+              "id": "project-transitional-config",
+              "kind": "file",
+              "template": "${CWD}/fast-agent.config.yaml"
+            },
+            {
+              "id": "project-legacy-config",
+              "kind": "file",
+              "template": "${CWD}/fastagent.config.yaml"
+            }
+          ],
+          "sources": [
+            "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/ref/config_file.md#L763-L805"
+          ],
+          "confidence": "official",
+          "notes": "Set mcp.servers in the selected YAML config. These paths show the default home and workspace fallback; use the selected config when FAST_AGENT_HOME or a launch flag overrides them.",
+          "format": "yaml",
+          "keyPath": [
+            "mcp",
+            "servers"
+          ]
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "transport",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "http",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/evalstate/fast-agent/blob/v0.10.65/docs/docs/ref/config_file.md#L763-L805"
+        ],
+        "confidence": "official"
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",

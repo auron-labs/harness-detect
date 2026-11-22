@@ -435,6 +435,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
+| `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_ROOT` | `${CWD}/.fast-agent` |
+| `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_GLOBAL_PLUGIN_ROOT` | `${HOME}/.fast-agent` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
 | `github-copilot-cli` | `COPILOT_HOME` | `COPILOT_ROOT` | `${HOME}/.copilot` |
@@ -460,6 +462,10 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `openharness` | `OPENHARNESS_CONFIG_DIR` | `OPENHARNESS_CONFIG_ROOT` | `${HOME}/.openharness` |
+| `openharness` | `OPENHARNESS_DATA_DIR` | `OPENHARNESS_DATA_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/data` |
+| `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
+| `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
 | `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
@@ -540,7 +546,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 77
+console.log(harnesses.harnesses.length);  // 79
 ```
 
 <!-- /automd -->
