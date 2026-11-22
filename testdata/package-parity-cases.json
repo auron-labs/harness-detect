@@ -9687,7 +9687,7 @@
       }
     },
     {
-      "id": "check-khoj-executable",
+      "id": "check-khoj-ignores-shared-khoj-executable",
       "operation": "checkHarness",
       "input": "khoj",
       "platforms": [
@@ -9707,8 +9707,8 @@
       ],
       "expect": {
         "key": "khoj",
-        "installed": true,
-        "executablePath": "${BIN}/khoj",
+        "installed": false,
+        "executablePath": null,
         "matchedPathIds": []
       }
     },

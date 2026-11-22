@@ -32774,9 +32774,7 @@
       "aliases": [
         "khoj-ai/khoj"
       ],
-      "executables": [
-        "khoj"
-      ],
+      "executables": [],
       "paths": [
         {
           "id": "beta-log",
@@ -32830,7 +32828,7 @@
             "linux",
             "win32"
           ],
-          "notes": "Requires external PostgreSQL with pgvector before starting. On macOS or glibc Linux x86-64 with CPython 3.10–3.12, install the local extra instead and set USE_EMBEDDED_DB=true to use embedded PostgreSQL. Use external PostgreSQL on native Windows and Linux ARM64. The stable 1.42.10 CLI and default log also remain detectable."
+          "notes": "Requires external PostgreSQL with pgvector before starting. On macOS or glibc Linux x86-64 with CPython 3.10–3.12, install the local extra instead and set USE_EMBEDDED_DB=true to use embedded PostgreSQL. Use external PostgreSQL on native Windows and Linux ARM64. The khoj command alone is not detected because khoj-cli also provides it; detection uses Khoj's server log or documented Compose location."
         },
         {
           "method": "manual",
@@ -32848,6 +32846,7 @@
         "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/documentation/docs/get-started/setup.mdx#L196-L203",
         "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/app/settings.py#L121-L185",
         "https://pypi.org/project/pgserver/0.1.4/#files",
+        "https://pypi.org/project/khoj-cli/1.0/#files",
         "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/utils/cli.py#L9-L17",
         "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/main.py#L206-L207",
         "https://github.com/khoj-ai/khoj/blob/2.0.0-beta.28/src/khoj/main.py#L138-L145",
