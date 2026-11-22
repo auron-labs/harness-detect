@@ -9283,6 +9283,324 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-bolt-diy-source-runtime",
+      "operation": "checkHarness",
+      "input": "bolt.diy",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/app/lib/runtime/projectMcp.ts"
+        }
+      ],
+      "expect": {
+        "key": "bolt-diy",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-runtime"
+        ]
+      }
+    },
+    {
+      "id": "check-bolt-diy-ignores-generic-project-files-and-bolt",
+      "operation": "checkHarness",
+      "input": "Bolt Local",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.env.local"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/package.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/app/lib/runtime/action-runner.ts"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/bolt"
+        }
+      ],
+      "expect": {
+        "key": "bolt-diy",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-astrbot-executable",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/astrbot"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": true,
+        "executablePath": "${BIN}/astrbot",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-astrbot-initialized-cli-root",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ASTRBOT_ROOT": "${TMP}/other-deployment"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.astrbot"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cli-init-marker"
+        ]
+      }
+    },
+    {
+      "id": "check-astrbot-deployment-config",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/data/cmd_config.json"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-config"
+        ]
+      }
+    },
+    {
+      "id": "check-astrbot-runtime-root-override",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ASTRBOT_ROOT": "${TMP}/astrbot-runtime"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/data/cmd_config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/astrbot-runtime/data/cmd_config.json"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-config"
+        ]
+      }
+    },
+    {
+      "id": "check-astrbot-no-fallback-when-runtime-root-overridden",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ASTRBOT_ROOT": "${TMP}/astrbot-runtime"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/data/cmd_config.json"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-astrbot-default-desktop-config",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.astrbot/data/cmd_config.json"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-config"
+        ]
+      }
+    },
+    {
+      "id": "check-astrbot-ignores-empty-root-and-shared-config",
+      "operation": "checkHarness",
+      "input": "astrbot",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.astrbot"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/data/config"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.astrbot"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.agents/skills/example/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "astrbot",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-bolt-diy-browser-settings-not-file-based",
+      "operation": "translateMcpJson",
+      "input": "bolt-diy",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness bolt-diy has no file-based MCP config for scope global"
+      }
+    },
+    {
+      "id": "translate-astrbot-withholds-unmodeled-launch-policy",
+      "operation": "translateMcpJson",
+      "input": "astrbot",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness astrbot has no file-based MCP config for scope global"
+      }
     }
   ]
 }

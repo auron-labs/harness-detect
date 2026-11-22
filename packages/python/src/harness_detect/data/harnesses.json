@@ -32162,6 +32162,444 @@
         "sources": [],
         "confidence": "unknown"
       }
+    },
+    {
+      "key": "bolt-diy",
+      "name": "bolt.diy",
+      "version": "1.0.3",
+      "aliases": [
+        "bolt.diy",
+        "Bolt Local",
+        "stackblitz-labs/bolt.diy"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "source-runtime",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/app/lib/runtime/projectMcp.ts"
+        },
+        {
+          "id": "macos-app",
+          "category": "install",
+          "kind": "dir",
+          "template": "/Applications/Bolt Local.app",
+          "platforms": [
+            "darwin"
+          ]
+        }
+      ],
+      "env": [],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/README.md#L29-L51",
+          "notes": "Clone the release checkout and install dependencies with pnpm. The source runtime marker identifies the checkout, not whether dependencies are installed."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/README.md#L55-L70",
+          "notes": "The documented Docker Compose deployment uses the application checkout; image-only deployments without a host-visible checkout are not detected."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/stackblitz-labs/bolt.diy/releases/tag/v1.0.3",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Only the standard macOS bundle location is modeled for desktop-only installs. A bare bolt command is not a detection signal."
+        }
+      ],
+      "sources": [
+        "https://github.com/stackblitz-labs/bolt.diy/releases/tag/v1.0.3",
+        "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/app/lib/runtime/projectMcp.ts#L1-L13",
+        "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/electron-builder.yml#L1-L13",
+        "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/README.md#L29-L51",
+        "https://github.com/stackblitz/bolt.new/tree/main/app/lib/runtime"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-env",
+                "kind": "file",
+                "template": "${CWD}/.env.local"
+              }
+            ],
+            "sources": [
+              "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/README.md#L86-L105"
+            ],
+            "confidence": "official",
+            "notes": "Provider configuration for the application checkout, not for an end-user project. A standalone .env.local does not identify bolt.diy."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/app/lib/stores/mcp.ts#L59-L104"
+          ],
+          "confidence": "source",
+          "notes": "The Settings UI stores the server map in browser local storage under mcp_settings; there is no ordinary file-based translation target."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/app/lib/stores/mcp.ts#L59-L104",
+          "https://github.com/stackblitz-labs/bolt.diy/blob/v1.0.3/app/lib/services/mcpService.ts#L65-L75"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "astrbot",
+      "name": "AstrBot",
+      "version": "4.29.4",
+      "aliases": [
+        "AstrBotDevs/AstrBot"
+      ],
+      "executables": [
+        "astrbot"
+      ],
+      "roots": [
+        {
+          "name": "ASTRBOT_RUNTIME_ROOT",
+          "env": "ASTRBOT_ROOT",
+          "fallback": "${CWD}"
+        }
+      ],
+      "paths": [
+        {
+          "id": "cli-init-marker",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.astrbot"
+        },
+        {
+          "id": "deployment-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${ASTRBOT_RUNTIME_ROOT}/data/cmd_config.json"
+        },
+        {
+          "id": "desktop-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.astrbot/data/cmd_config.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "ASTRBOT_ROOT",
+          "description": "Override the direct runtime/deployment root. Use an absolute path. The astrbot run CLI sets this to its initialized working directory."
+        }
+      ],
+      "installations": [
+        {
+          "method": "uv",
+          "package": "astrbot",
+          "command": "uv tool install astrbot --python 3.12",
+          "url": "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/README.md#L65-L82",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/compose.yml#L5-L18",
+          "notes": "For the documented Compose deployment use the directory containing the host-mounted data folder as cwd, or point ASTRBOT_ROOT there."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/AstrBotDevs/AstrBot-desktop/releases/tag/v4.29.4",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop detection uses the default AstrBot data file after initialization, not the mere presence of ~/.astrbot."
+        }
+      ],
+      "sources": [
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/pyproject.toml#L88-L92",
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/cli/commands/cmd_init.py#L21-L44",
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24",
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/cli/commands/cmd_run.py#L39-L51",
+        "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/runtime_env.py#L9-L10",
+        "https://github.com/AstrBotDevs/AstrBot-desktop/releases/tag/v4.29.4"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "desktop-config",
+                "kind": "file",
+                "template": "${HOME}/.astrbot/data/cmd_config.json",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24"
+            ],
+            "confidence": "source",
+            "notes": "Default packaged desktop location. A custom root is listed under the deployment scope."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "deployment-config",
+                "kind": "file",
+                "template": "${ASTRBOT_RUNTIME_ROOT}/data/cmd_config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/cli/commands/cmd_run.py#L39-L51"
+            ],
+            "confidence": "source",
+            "notes": "Use the deployment directory as cwd, or set an absolute ASTRBOT_ROOT for direct runtime launches. The astrbot run CLI uses its initialized cwd instead."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "desktop-skills",
+                "kind": "dir",
+                "template": "${HOME}/.astrbot/data/skills",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L81-L83",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/skills/skill_manager.py#L424-L439"
+            ],
+            "confidence": "source",
+            "notes": "Default packaged desktop location."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "deployment-skills",
+                "kind": "dir",
+                "template": "${ASTRBOT_RUNTIME_ROOT}/data/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L81-L83",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/skills/skill_manager.py#L424-L439"
+            ],
+            "confidence": "source",
+            "notes": "AstrBot loads SKILL.md from subdirectories of its deployment skills directory."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "desktop-config",
+                "kind": "file",
+                "template": "${HOME}/.astrbot/data/cmd_config.json",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/astr_main_agent.py#L669-L680"
+            ],
+            "confidence": "source",
+            "notes": "The subagent orchestrator uses AstrBot configuration, not standalone agent definition files."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "deployment-config",
+                "kind": "file",
+                "template": "${ASTRBOT_RUNTIME_ROOT}/data/cmd_config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/config/astrbot_config.py#L20-L24",
+              "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/astr_main_agent.py#L669-L680"
+            ],
+            "confidence": "source",
+            "notes": "The subagent orchestrator uses AstrBot configuration, not standalone agent definition files."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/utils/astrbot_path.py#L30-L46",
+            "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/provider/func_tool_manager.py#L542-L585",
+            "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/agent/mcp_client.py#L215-L248"
+          ],
+          "confidence": "source",
+          "notes": "The deployment-wide server map is mcpServers in data/mcp_server.json (under ~/.astrbot for the default desktop install). Translation is withheld because the native stdio launcher allowlist and argument policy are not expressible in the registry."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/provider/func_tool_manager.py#L542-L585",
+          "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/agent/mcp_client.py#L215-L248",
+          "https://github.com/AstrBotDevs/AstrBot/blob/v4.29.4/astrbot/core/agent/mcp_client.py#L535-L576"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
     }
   ]
 }
