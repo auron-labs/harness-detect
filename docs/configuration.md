@@ -376,6 +376,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `amazon-q-cli` | `Q_CLI_DATA_DIR` | `Q_CLI_DATA_ROOT` | (empty — path resolves to null) |
 | `amp` | — | `AMP_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/amp` |
 | `amp` | `AMP_DATA_HOME` | `AMP_DATA_ROOT` | `${XDG_DATA_HOME}/amp` |
+| `astrbot` | `ASTRBOT_ROOT` | `ASTRBOT_RUNTIME_ROOT` | `${CWD}` |
 | `autogenstudio` | `AUTOGENSTUDIO_APPDIR` | `AUTOGENSTUDIO_ROOT` | `${HOME}/.autogenstudio` |
 | `browser-use` | `BROWSER_USE_CONFIG_DIR` | `BROWSER_USE_PROFILE_ROOT` | `${XDG_CONFIG_HOME}/browseruse` |
 | `browser-use` | `BROWSER_USE_CONFIG_PATH` | `BROWSER_USE_LEGACY_CONFIG` | `${BROWSER_USE_PROFILE_ROOT}/config.json` |
@@ -548,7 +549,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 105
+console.log(harnesses.harnesses.length);  // 107
 ```
 
 <!-- /automd -->
