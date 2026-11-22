@@ -21212,6 +21212,499 @@
       }
     },
     {
+      "key": "happy-cli",
+      "name": "Happy CLI",
+      "version": "1.2.6",
+      "aliases": [
+        "happy",
+        "happy-coder",
+        "slopus/happy"
+      ],
+      "executables": [
+        "happy-mcp"
+      ],
+      "roots": [
+        {
+          "name": "HAPPY_ROOT",
+          "env": "HAPPY_HOME_DIR",
+          "fallback": "${HOME}/.happy"
+        }
+      ],
+      "paths": [
+        {
+          "id": "global-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${HAPPY_ROOT}/settings.json"
+        },
+        {
+          "id": "daemon-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${HAPPY_ROOT}/daemon.state.json"
+        },
+        {
+          "id": "sessions",
+          "category": "state",
+          "kind": "file",
+          "template": "${HAPPY_ROOT}/sessions.json"
+        }
+      ],
+      "env": [
+        {
+          "name": "HAPPY_HOME_DIR",
+          "description": "Overrides the Happy CLI data directory (default: ~/.happy); a leading ~/ is expanded."
+        }
+      ],
+      "sources": [
+        "https://registry.npmjs.org/happy/1.2.6",
+        "https://github.com/slopus/happy/blob/42d90b4c786b3bcff6111b363ff8fe3fbc42b4f2/packages/happy-cli/package.json#L1-L17",
+        "https://github.com/slopus/happy/blob/42d90b4c786b3bcff6111b363ff8fe3fbc42b4f2/packages/happy-cli/src/configuration.ts#L37-L51",
+        "https://hackage.haskell.org/package/happy"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "happy",
+          "command": "npm install -g happy",
+          "url": "https://github.com/slopus/happy/blob/42d90b4c786b3bcff6111b363ff8fe3fbc42b4f2/packages/happy-cli/README.md#L7-L13",
+          "notes": "Replaces the happy-coder npm package. Only happy-mcp is used for PATH detection because the unrelated Haskell parser generator also installs a happy executable."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-settings",
+                "kind": "file",
+                "template": "${HAPPY_ROOT}/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/slopus/happy/blob/42d90b4c786b3bcff6111b363ff8fe3fbc42b4f2/packages/happy-cli/src/configuration.ts#L37-L51"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "The bundled happy-mcp executable is a bridge for provider sessions, not a verified Happy-native server configuration."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "The happy acp subcommand starts other ACP agents as a client; no Happy CLI agent-side launch was verified."
+      }
+    },
+    {
+      "key": "emdash",
+      "name": "Emdash",
+      "version": "1.2.13",
+      "aliases": [
+        "emdash-desktop",
+        "generalaction/emdash",
+        "emdash-workspace-server"
+      ],
+      "executables": [
+        "emdash-workspace-server"
+      ],
+      "roots": [
+        {
+          "name": "EMDASH_PROFILE_LINUX",
+          "env": "EMDASH_USER_DATA_DIR",
+          "fallback": "${XDG_CONFIG_HOME}/emdash"
+        },
+        {
+          "name": "EMDASH_PROFILE_DARWIN",
+          "env": "EMDASH_USER_DATA_DIR",
+          "fallback": "${HOME}/Library/Application Support/emdash"
+        },
+        {
+          "name": "EMDASH_PROFILE_WIN32",
+          "env": "EMDASH_USER_DATA_DIR",
+          "fallback": "${APPDATA}/emdash"
+        }
+      ],
+      "paths": [
+        {
+          "id": "macos-app",
+          "category": "install",
+          "kind": "file",
+          "template": "/Applications/Emdash.app/Contents/MacOS/Emdash",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "desktop-db-linux",
+          "category": "state",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_LINUX}/emdash4.db",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "desktop-db-darwin",
+          "category": "state",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_DARWIN}/emdash4.db",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "desktop-db-win32",
+          "category": "state",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_WIN32}/emdash4.db",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "desktop-host-settings-linux",
+          "category": "config",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_LINUX}/host-settings.json",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "desktop-host-settings-darwin",
+          "category": "config",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_DARWIN}/host-settings.json",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "desktop-host-settings-win32",
+          "category": "config",
+          "kind": "file",
+          "template": "${EMDASH_PROFILE_WIN32}/host-settings.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "server-workspace-registry",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.emdash/workspace-server/state/workspace-registry.db",
+          "platforms": [
+            "linux",
+            "darwin"
+          ]
+        },
+        {
+          "id": "server-host-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.emdash/workspace-server/state/host-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "EMDASH_USER_DATA_DIR",
+          "description": "Overrides the desktop profile directory. Without this override, profile detection checks stable defaults only, not the emdash-canary or emdash-dev directories."
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "On Linux, provides the default base directory for the desktop profile."
+        },
+        {
+          "name": "APPDATA",
+          "description": "On Windows, provides the default roaming application data base directory."
+        }
+      ],
+      "sources": [
+        "https://github.com/generalaction/emdash/releases/tag/v1.2.13",
+        "https://github.com/Homebrew/homebrew-cask/blob/9fed4ed4113a21a53b7374182a31ffb080fe066c/Casks/e/emdash.rb",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/electron-builder.config.ts#L12-L16",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/core/primitives/app-identity/api/app-identity.ts#L7-L12",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/bootstrap/boot/phases/apply-identity.ts#L6-L13",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/db/default-path.ts#L4-L30",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/db/path.ts#L11-L19",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/gateway/desktop-workers.ts#L366-L371",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/workspace-server/docs/daemon.md#L65-L85",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/workspace-server/src/runtime/paths.ts#L18-L35",
+        "https://github.com/generalaction/emdash/blob/v1.2.13/apps/workspace-server/docs/daemon.md#L39-L55"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "emdash",
+          "command": "brew install --cask emdash",
+          "url": "https://github.com/generalaction/emdash/blob/v1.2.13/README.md#L39-L48",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/generalaction/emdash/releases/tag/v1.2.13",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop releases provide macOS DMGs, Linux AppImages and system packages, and Windows installers and portable EXEs."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "desktop-host-settings-linux",
+                "kind": "file",
+                "template": "${EMDASH_PROFILE_LINUX}/host-settings.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "desktop-host-settings-darwin",
+                "kind": "file",
+                "template": "${EMDASH_PROFILE_DARWIN}/host-settings.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "desktop-host-settings-win32",
+                "kind": "file",
+                "template": "${EMDASH_PROFILE_WIN32}/host-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "server-host-settings",
+                "kind": "file",
+                "template": "${HOME}/.emdash/workspace-server/state/host-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/bootstrap/boot/phases/apply-identity.ts#L6-L13",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/core/primitives/app-identity/api/app-identity.ts#L7-L12",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/db/default-path.ts#L4-L30",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/emdash-desktop/src/main/gateway/desktop-workers.ts#L366-L371",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/workspace-server/docs/daemon.md#L65-L85",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/apps/workspace-server/src/runtime/paths.ts#L18-L35"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.emdash.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/generalaction/emdash/blob/v1.2.13/agents/architecture/settings.md#L7-L24"
+            ],
+            "confidence": "source",
+            "notes": "Team configuration can be committed to a repository, so it is not installation evidence."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agentskills"
+              }
+            ],
+            "sources": [
+              "https://github.com/generalaction/emdash/blob/v1.2.13/packages/core/src/runtimes/agent-config/node/runtime/skills.ts#L14-L16",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/packages/core/src/runtimes/agent-config/node/runtime/skills.ts#L133-L157"
+            ],
+            "confidence": "source",
+            "notes": "The Emdash skills manager discovers host-local skills in this directory."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/generalaction/emdash/blob/v1.2.13/packages/core/src/runtimes/agent-config/node/runtime/skills.ts#L14-L16",
+              "https://github.com/generalaction/emdash/blob/v1.2.13/packages/core/src/runtimes/agent-config/node/runtime/skills.ts#L133-L157"
+            ],
+            "confidence": "source",
+            "notes": "The Emdash skills manager reads .agentskills, not .agents/skills."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unsupported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/generalaction/emdash/blob/v1.2.13/packages/core/src/runtimes/agent-config/node/runtime/mcp.ts#L32-L56",
+          "https://github.com/generalaction/emdash/blob/v1.2.13/agents/integrations/mcp.md#L11-L20"
+        ],
+        "confidence": "source",
+        "notes": "Emdash manages MCP server configuration for selected provider agents; those agents are the MCP clients."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "Emdash is an ACP client for provider agents; no agent-side ACP launch was verified."
+      }
+    },
+    {
       "key": "prime-agent",
       "name": "Prime Agent",
       "version": "0.10.3",

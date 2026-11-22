@@ -426,6 +426,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `deepagents-code` | `DEEPAGENTS_HOME` | `DEEPAGENTS_ROOT` | `${HOME}/.deepagents` |
 | `deepseek-harness` | `DSH_HOME` | `DSH_ROOT` | `${HOME}/.dsh` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
+| `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
+| `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
+| `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
 | `github-copilot-cli` | `COPILOT_HOME` | `COPILOT_ROOT` | `${HOME}/.copilot` |
@@ -435,6 +438,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_STATE_ROOT` | `${GOOSE_PATH_ROOT}/state` (use) or `${XDG_STATE_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_STATE_HOME}/goose/history.txt` |
 | `grok-build-cli` | `GROK_HOME` | `GROK_ROOT` | `${HOME}/.grok` |
+| `happy-cli` | `HAPPY_HOME_DIR` | `HAPPY_ROOT` | `${HOME}/.happy` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
 | `jcode` | `JCODE_HOME` | `JCODE_ROOT` | `${HOME}/.jcode` |
 | `jcode` | `JCODE_HOME` | `JCODE_EXTERNAL_HOME` | `${JCODE_ROOT}/external` (use) or `${HOME}` |
@@ -530,7 +534,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 73
+console.log(harnesses.harnesses.length);  // 75
 ```
 
 <!-- /automd -->
