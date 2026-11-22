@@ -859,6 +859,390 @@
       }
     },
     {
+      "id": "check-openharness-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "hkuds/openharness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/openharness",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openharness",
+        "installed": true,
+        "executablePath": "${BIN}/openharness",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openharness-default-roots",
+      "operation": "checkHarness",
+      "input": "openharness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openharness/settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.openharness/data/sessions"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openharness/logs/cron_scheduler.log"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ohmo/gateway.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.openharness"
+        }
+      ],
+      "expect": {
+        "key": "openharness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cron-log",
+          "ohmo-gateway",
+          "project-home",
+          "sessions",
+          "settings"
+        ]
+      }
+    },
+    {
+      "id": "check-openharness-config-override-and-derived-fallbacks",
+      "operation": "checkHarness",
+      "input": "openharness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENHARNESS_CONFIG_DIR": "${TMP}/oh-config"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openharness/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/oh-config/settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/oh-config/data/sessions"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/oh-config/logs/cron_scheduler.log"
+        }
+      ],
+      "expect": {
+        "key": "openharness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cron-log",
+          "sessions",
+          "settings"
+        ]
+      }
+    },
+    {
+      "id": "check-openharness-data-logs-and-ohmo-overrides",
+      "operation": "checkHarness",
+      "input": "ohmo",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENHARNESS_DATA_DIR": "${TMP}/oh-data",
+        "OPENHARNESS_LOGS_DIR": "${TMP}/oh-logs",
+        "OHMO_WORKSPACE": "${TMP}/oh-workspace"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.openharness/data/sessions"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openharness/logs/cron_scheduler.log"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ohmo/gateway.json"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/oh-data/sessions"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/oh-logs/cron_scheduler.log"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/oh-workspace/gateway.json"
+        }
+      ],
+      "expect": {
+        "key": "openharness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "cron-log",
+          "ohmo-gateway",
+          "sessions"
+        ]
+      }
+    },
+    {
+      "id": "check-openharness-ignores-oh-and-shared-files",
+      "operation": "checkHarness",
+      "input": "openharness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/oh",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/CLAUDE.md"
+        }
+      ],
+      "expect": {
+        "key": "openharness",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-fast-agent-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "fast-agent-acp",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/fast-agent-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "fast-agent",
+        "installed": true,
+        "executablePath": "${BIN}/fast-agent-acp",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-fast-agent-default-home",
+      "operation": "checkHarness",
+      "input": "evalstate/fast-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.fast-agent"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.fast-agent/fast-agent.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.fast-agent/agent-cards"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.fast-agent/sessions"
+        }
+      ],
+      "expect": {
+        "key": "fast-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "agent-cards",
+          "home-config",
+          "sessions"
+        ]
+      }
+    },
+    {
+      "id": "check-fast-agent-home-override",
+      "operation": "checkHarness",
+      "input": "fast-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "FAST_AGENT_HOME": "~/custom-fast-agent"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.fast-agent"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.fast-agent/fast-agent.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/custom-fast-agent/fast-agent.config.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/custom-fast-agent/sessions"
+        }
+      ],
+      "expect": {
+        "key": "fast-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "home-transitional-config",
+          "sessions"
+        ]
+      }
+    },
+    {
+      "id": "check-fast-agent-workspace-config-fallback",
+      "operation": "checkHarness",
+      "input": "fast-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "FAST_AGENT_HOME": "${TMP}/empty-fast-agent-home"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/fastagent.config.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/empty-fast-agent-home"
+        }
+      ],
+      "expect": {
+        "key": "fast-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-legacy-config"
+        ]
+      }
+    },
+    {
+      "id": "check-fast-agent-ignores-shared-files-and-secrets",
+      "operation": "checkHarness",
+      "input": "fast-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.fast-agent"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.fast-agent/fast-agent.secrets.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "fast-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "check-deerflow-on-path",
       "operation": "checkHarness",
       "platforms": [
@@ -3346,6 +3730,35 @@
       }
     },
     {
+      "id": "acp-launches-fast-agent",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/fast-agent-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "fast-agent",
+            "command": "${BIN}/fast-agent-acp",
+            "args": []
+          }
+        ]
+      }
+    },
+    {
       "id": "acp-launches-jcode",
       "operation": "detectInstalledAcpLaunches",
       "platforms": [
@@ -3982,6 +4395,127 @@
             }
           }
         ]
+      }
+    },
+    {
+      "id": "translate-openharness-global-settings",
+      "operation": "translateMcpJson",
+      "input": "openharness",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-server",
+            "args": [
+              "--stdio"
+            ],
+            "env": {
+              "PROFILE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Accept": "application/json"
+            }
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "json",
+        "keyPath": [
+          "mcp_servers"
+        ],
+        "config": {
+          "mcp_servers": {
+            "stdio": {
+              "type": "stdio",
+              "command": "fixture-server",
+              "args": [
+                "--stdio"
+              ],
+              "env": {
+                "PROFILE": "fixture"
+              }
+            },
+            "http": {
+              "type": "http",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Accept": "application/json"
+              }
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "translate-fast-agent-project-config",
+      "operation": "translateMcpJson",
+      "input": "fast-agent",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-server",
+            "args": [
+              "--stdio"
+            ],
+            "env": {
+              "PROFILE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Accept": "application/json"
+            }
+          },
+          "sse": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "yaml",
+        "keyPath": [
+          "mcp",
+          "servers"
+        ],
+        "config": {
+          "mcp": {
+            "servers": {
+              "stdio": {
+                "transport": "stdio",
+                "command": "fixture-server",
+                "args": [
+                  "--stdio"
+                ],
+                "env": {
+                  "PROFILE": "fixture"
+                }
+              },
+              "http": {
+                "transport": "http",
+                "url": "https://example.com/mcp",
+                "headers": {
+                  "Accept": "application/json"
+                }
+              },
+              "sse": {
+                "transport": "sse",
+                "url": "https://example.com/sse"
+              }
+            }
+          }
+        },
+        "skipped": []
       }
     },
     {
