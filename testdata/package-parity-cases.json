@@ -9601,6 +9601,304 @@
       "expect": {
         "error": "Harness astrbot has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-gpt-researcher-web-checkout",
+      "operation": "checkHarness",
+      "input": "assafelovic/gpt-researcher",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/frontend/static/gptr-logo.png"
+        }
+      ],
+      "expect": {
+        "key": "gpt-researcher",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "web-checkout"
+        ]
+      }
+    },
+    {
+      "id": "check-gpt-researcher-ignores-generic-runtime-and-config",
+      "operation": "checkHarness",
+      "input": "gpt-researcher",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "CONFIG_PATH": "${CWD}/config.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/main.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/docker-compose.yml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/logs/app.log"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/skills/gpt-researcher/SKILL.md"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/uvicorn"
+        }
+      ],
+      "expect": {
+        "key": "gpt-researcher",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-khoj-ignores-shared-khoj-executable",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/khoj"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-khoj-beta-default-log-relative-to-cwd",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/~/.khoj/khoj.log"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "beta-log"
+        ]
+      }
+    },
+    {
+      "id": "check-khoj-stable-home-log",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.khoj/khoj.log"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "home-log"
+        ]
+      }
+    },
+    {
+      "id": "check-khoj-windows-stable-log-uses-userprofile",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${CWD}/profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/profile/.khoj/khoj.log"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-home-log"
+        ]
+      }
+    },
+    {
+      "id": "check-khoj-documented-compose-location",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.khoj/docker-compose.yml"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "compose-deployment"
+        ]
+      }
+    },
+    {
+      "id": "check-khoj-ignores-empty-state-and-generic-compose",
+      "operation": "checkHarness",
+      "input": "khoj",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.khoj"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/docker-compose.yml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/khoj.log"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/khoj.log"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "khoj",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-gpt-researcher-no-file-target",
+      "operation": "translateMcpJson",
+      "input": "gpt-researcher",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness gpt-researcher has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-khoj-no-file-target",
+      "operation": "translateMcpJson",
+      "input": "khoj",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness khoj has no file-based MCP config for scope global"
+      }
     }
   ]
 }
