@@ -266,6 +266,225 @@
       }
     },
     {
+      "id": "check-anythingllm-linux-desktop-db",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "AnythingLLM",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/anythingllm-desktop/storage/anythingllm.db"
+        }
+      ],
+      "expect": {
+        "key": "anythingllm-desktop",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-anythingllm-macos-desktop-db",
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin"
+      ],
+      "input": "anythingllm-desktop",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/anythingllm-desktop/storage/anythingllm.db"
+        }
+      ],
+      "expect": {
+        "key": "anythingllm-desktop",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-darwin"
+        ]
+      }
+    },
+    {
+      "id": "check-anythingllm-windows-desktop-db",
+      "operation": "checkHarness",
+      "platforms": [
+        "win32"
+      ],
+      "input": "anythingllm-desktop",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/anythingllm-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/anythingllm-roaming/anythingllm-desktop/storage/anythingllm.db"
+        }
+      ],
+      "expect": {
+        "key": "anythingllm-desktop",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-win32"
+        ]
+      }
+    },
+    {
+      "id": "check-anythingllm-ignores-project-storage",
+      "operation": "checkHarness",
+      "input": "anythingllm-desktop",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/anythingllm-empty",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/storage/anythingllm.db"
+        }
+      ],
+      "expect": {
+        "key": "anythingllm-desktop",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-agent-browser-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "agent-browser",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/agent-browser-exe-home",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/agent-browser",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "agent-browser",
+        "installed": true,
+        "executablePath": "${BIN}/agent-browser",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-agent-browser-user-config",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "vercel-labs/agent-browser",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.agent-browser/config.json",
+          "content": "{}"
+        }
+      ],
+      "expect": {
+        "key": "agent-browser",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-unix"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-browser-windows-profile-config",
+      "operation": "checkHarness",
+      "platforms": [
+        "win32"
+      ],
+      "input": "agent-browser",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/agent-browser-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/agent-browser-profile/.agent-browser/config.json",
+          "content": "{}"
+        }
+      ],
+      "expect": {
+        "key": "agent-browser",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-win32"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-browser-ignores-project-and-explicit-config",
+      "operation": "checkHarness",
+      "input": "agent-browser",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/agent-browser-empty",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/agent-browser-empty",
+        "AGENT_BROWSER_CONFIG": "${CWD}/custom-agent-browser.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/agent-browser.json",
+          "content": "{}"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/custom-agent-browser.json",
+          "content": "{}"
+        }
+      ],
+      "expect": {
+        "key": "agent-browser",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "support-record-codex",
       "operation": "getHarnessSupport",
       "input": "codex"
@@ -2993,6 +3212,68 @@
             }
           }
         }
+      }
+    },
+    {
+      "id": "translate-anythingllm-desktop",
+      "operation": "translateMcpJson",
+      "input": "anythingllm-desktop",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-server",
+            "args": [
+              "--stdio"
+            ],
+            "env": {
+              "PROFILE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Accept": "application/json"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "stdio": {
+              "command": "fixture-server",
+              "args": [
+                "--stdio"
+              ],
+              "env": {
+                "PROFILE": "fixture"
+              }
+            },
+            "http": {
+              "type": "streamable",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Accept": "application/json"
+              }
+            },
+            "legacy": {
+              "type": "sse",
+              "url": "https://example.com/sse"
+            }
+          }
+        },
+        "skipped": []
       }
     },
     {

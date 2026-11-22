@@ -20647,6 +20647,566 @@
       }
     },
     {
+      "key": "anythingllm-desktop",
+      "name": "AnythingLLM Desktop",
+      "version": "1.20.0",
+      "aliases": [
+        "AnythingLLM",
+        "Mintplex-Labs/anything-llm"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "desktop-db-darwin",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/anythingllm-desktop/storage/anythingllm.db",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "desktop-db-linux",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.config/anythingllm-desktop/storage/anythingllm.db",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "desktop-db-win32",
+          "category": "state",
+          "kind": "file",
+          "template": "${APPDATA}/anythingllm-desktop/storage/anythingllm.db",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "APPDATA",
+          "description": "Windows roaming app data directory that contains the desktop storage."
+        }
+      ],
+      "sources": [
+        "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/installation-desktop/storage.mdx#L8-L29",
+        "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/prisma/schema.prisma#L13-L16",
+        "https://github.com/Mintplex-Labs/anything-llm/releases/tag/v1.20.0"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/Mintplex-Labs/anything-llm/releases/tag/v1.20.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop releases provide macOS DMGs, Linux AppImages, and Windows installers. This entry does not detect Docker data or generic storage paths."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-mcp-darwin",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "global-mcp-linux",
+                "kind": "file",
+                "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "global-mcp-win32",
+                "kind": "file",
+                "template": "${APPDATA}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/installation-desktop/storage.mdx#L8-L29",
+              "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/mcp-compatibility/desktop.mdx#L42-L72"
+            ],
+            "confidence": "official",
+            "notes": "This file configures MCP servers; general settings are managed by the app."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "custom-skills-darwin",
+                "kind": "dir",
+                "template": "${HOME}/Library/Application Support/anythingllm-desktop/storage/plugins/agent-skills",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "custom-skills-linux",
+                "kind": "dir",
+                "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/agent-skills",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "custom-skills-win32",
+                "kind": "dir",
+                "template": "${APPDATA}/anythingllm-desktop/storage/plugins/agent-skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/installation-desktop/storage.mdx#L8-L29",
+              "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/utils/agents/imported.js#L6-L23"
+            ],
+            "confidence": "source",
+            "notes": "AnythingLLM imports its own handler.js plugins, not shared Agent Skills."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "global-mcp-darwin",
+              "kind": "file",
+              "template": "${HOME}/Library/Application Support/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+              "platforms": [
+                "darwin"
+              ]
+            },
+            {
+              "id": "global-mcp-linux",
+              "kind": "file",
+              "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+              "platforms": [
+                "linux"
+              ]
+            },
+            {
+              "id": "global-mcp-win32",
+              "kind": "file",
+              "template": "${APPDATA}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+              "platforms": [
+                "win32"
+              ]
+            }
+          ],
+          "sources": [
+            "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/mcp-compatibility/desktop.mdx#L42-L72",
+            "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/utils/MCP/hypervisor/index.js#L70-L115"
+          ],
+          "confidence": "official",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "streamable",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/mcp-compatibility/desktop.mdx#L42-L72",
+          "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/utils/MCP/hypervisor/index.js#L70-L115",
+          "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/utils/MCP/hypervisor/index.js#L475-L519"
+        ],
+        "confidence": "source",
+        "notes": "Reads the desktop storage MCP configuration, not a project-root .mcp.json."
+      }
+    },
+    {
+      "key": "agent-browser",
+      "name": "agent-browser",
+      "version": "0.43.0",
+      "aliases": [
+        "vercel-labs/agent-browser"
+      ],
+      "executables": [
+        "agent-browser"
+      ],
+      "paths": [
+        {
+          "id": "user-config-unix",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.agent-browser/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "user-config-win32",
+          "category": "config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.agent-browser/config.json",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "AGENT_BROWSER_CONFIG",
+          "description": "Selects a trusted config file instead of loading the default home and project files."
+        },
+        {
+          "name": "AGENT_BROWSER_SKILLS_DIR",
+          "description": "Overrides where the CLI finds skill bundles."
+        },
+        {
+          "name": "AI_GATEWAY_API_KEY",
+          "description": "Vercel AI Gateway credential required for the chat command."
+        },
+        {
+          "name": "AI_GATEWAY_MODEL",
+          "description": "Overrides the default model for AI chat."
+        },
+        {
+          "name": "AI_GATEWAY_URL",
+          "description": "Overrides the Vercel AI Gateway base URL."
+        }
+      ],
+      "sources": [
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/package.json#L2-L19",
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/package.json#L55-L62",
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/configuration.mdx#L8-L31",
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/flags.rs#L452-L482",
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/commands.mdx#L555-L573",
+        "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/configuration.mdx#L337-L339"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "agent-browser",
+          "command": "npm install -g agent-browser",
+          "url": "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/installation.mdx#L6-L19",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "npm requires Node.js 22 or newer. Browser provisioning is separate."
+        },
+        {
+          "method": "homebrew",
+          "package": "agent-browser",
+          "command": "brew install agent-browser",
+          "url": "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/installation.mdx#L39-L44",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "method": "cargo",
+          "package": "agent-browser",
+          "command": "cargo install agent-browser",
+          "url": "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/installation.mdx#L46-L53",
+          "notes": "Compiling from source requires Node.js 24+, pnpm 11+, and the Rust toolchain."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/vercel-labs/agent-browser/releases/tag/v0.43.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config-override",
+                "kind": "file",
+                "template": "${AGENT_BROWSER_CONFIG}"
+              },
+              {
+                "id": "user-config-unix",
+                "kind": "file",
+                "template": "${HOME}/.agent-browser/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-win32",
+                "kind": "file",
+                "template": "${USERPROFILE}/.agent-browser/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/configuration.mdx#L8-L31",
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/flags.rs#L452-L482"
+            ],
+            "confidence": "source",
+            "notes": "AGENT_BROWSER_CONFIG or --config replaces both default files; an explicitly selected file can use any filename."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/agent-browser.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/configuration.mdx#L8-L31",
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/flags.rs#L452-L482"
+            ],
+            "confidence": "official",
+            "notes": "Only allowlisted preferences load automatically. A project file alone does not establish installation."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "skills-override",
+                "kind": "dir",
+                "template": "${AGENT_BROWSER_SKILLS_DIR}"
+              },
+              {
+                "id": "user-skills-unix",
+                "kind": "dir",
+                "template": "${HOME}/.agent-browser/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-skills-win32",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agent-browser/skills",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "user-skill-data-unix",
+                "kind": "dir",
+                "template": "${HOME}/.agent-browser/skill-data",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-skill-data-win32",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agent-browser/skill-data",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/skills.rs#L66-L87",
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/skills.mdx#L59-L67"
+            ],
+            "confidence": "source",
+            "notes": "A valid override takes priority. Without one, the CLI serves bundled skills, using these home folders only when it cannot find the package root."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/skills.rs#L66-L87",
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/skills.mdx#L59-L67"
+            ],
+            "confidence": "source",
+            "notes": "The CLI discovers its own skill directories; its discovery stub can be installed into a different harness."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/cli/src/skills.rs#L66-L87",
+              "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/skills.mdx#L59-L67"
+            ],
+            "confidence": "source",
+            "notes": "The CLI discovers its own skill directories; its discovery stub can be installed into a different harness."
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/commands.mdx#L746-L758",
+          "https://github.com/vercel-labs/agent-browser/blob/v0.43.0/docs/content/docs/webmcp.mdx#L1-L8"
+        ],
+        "confidence": "unknown",
+        "notes": "The CLI exposes a stdio MCP server and can use page-provided WebMCP tools. Neither establishes support for configuring external MCP servers."
+      }
+    },
+    {
       "key": "prime-agent",
       "name": "Prime Agent",
       "version": "0.10.3",
