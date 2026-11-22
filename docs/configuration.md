@@ -448,6 +448,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_STATE_HOME}/goose/history.txt` |
 | `grok-build-cli` | `GROK_HOME` | `GROK_ROOT` | `${HOME}/.grok` |
 | `happy-cli` | `HAPPY_HOME_DIR` | `HAPPY_ROOT` | `${HOME}/.happy` |
+| `herdr` | `APPDATA` | `HERDR_WINDOWS_CONFIG` | `${APPDATA}/herdr` (use) or `${USERPROFILE}/AppData/Roaming/herdr` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
 | `jcode` | `JCODE_HOME` | `JCODE_ROOT` | `${HOME}/.jcode` |
 | `jcode` | `JCODE_HOME` | `JCODE_EXTERNAL_HOME` | `${JCODE_ROOT}/external` (use) or `${HOME}` |
@@ -469,6 +470,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
 | `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
 | `paradev` | `SUPERSET_HOME` | `PARADEV_CLI_INSTALL_ROOT` | `${HOME}/superset` |
+| `pipali` | `APPDATA` | `PIPALI_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
+| `pipali` | `PIPALI_SKILLS_DIR` | `PIPALI_SKILLS_ROOT` | `${HOME}/.pipali/skills` |
 | `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
@@ -556,7 +559,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 85
+console.log(harnesses.harnesses.length);  // 87
 ```
 
 <!-- /automd -->

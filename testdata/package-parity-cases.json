@@ -5693,6 +5693,265 @@
       }
     },
     {
+      "id": "check-herdr-xdg-config",
+      "operation": "checkHarness",
+      "input": "herdr",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/herdr-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/herdr-xdg/herdr/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "herdr",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-xdg"
+        ]
+      }
+    },
+    {
+      "id": "check-herdr-explicit-config-and-session",
+      "operation": "checkHarness",
+      "input": "herdr",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "HERDR_CONFIG_PATH": "${TMP}/herdr-profile.toml"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/herdr-profile.toml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.config/herdr/session.json"
+        }
+      ],
+      "expect": {
+        "key": "herdr",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "explicit-config",
+          "session-xdg"
+        ]
+      }
+    },
+    {
+      "id": "check-herdr-windows-session",
+      "operation": "checkHarness",
+      "input": "herdr",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/herdr-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/herdr-roaming/herdr/session.json"
+        }
+      ],
+      "expect": {
+        "key": "herdr",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "session-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-herdr-ignores-dev-install-and-project-config",
+      "operation": "checkHarness",
+      "input": "herdr",
+      "cwd": "${CWD}/herdr-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/herdr-dev/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/herdr-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/herdr-negative/.herdr/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "herdr",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-pipali-desktop-xdg-db",
+      "operation": "checkHarness",
+      "input": "pipali",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_DATA_HOME": "${TMP}/pipali-xdg"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/pipali-xdg/ai.pipali/db"
+        }
+      ],
+      "expect": {
+        "key": "pipali",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-pipali-legacy-macos-db",
+      "operation": "checkHarness",
+      "input": "pipali",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Library/Application Support/pipali/db"
+        }
+      ],
+      "expect": {
+        "key": "pipali",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-db-macos"
+        ]
+      }
+    },
+    {
+      "id": "check-pipali-desktop-windows-db",
+      "operation": "checkHarness",
+      "input": "pipali",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/pipali-roaming"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/pipali-roaming/ai.pipali/db"
+        }
+      ],
+      "expect": {
+        "key": "pipali",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-pipali-standalone-data-override",
+      "operation": "checkHarness",
+      "input": "pipali",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "PIPALI_DATA_DIR": "${TMP}/pipali-data"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/pipali-data/db"
+        }
+      ],
+      "expect": {
+        "key": "pipali",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "server-db-override"
+        ]
+      }
+    },
+    {
+      "id": "check-pipali-ignores-shared-project-markers",
+      "operation": "checkHarness",
+      "input": "pipali",
+      "cwd": "${CWD}/pipali-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/pipali-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/pipali-negative/.agents/skills/sample/SKILL.md"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/pipali-negative/db"
+        }
+      ],
+      "expect": {
+        "key": "pipali",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "translate-probe-every-harness",
       "operation": "translateMcpJson",
       "input": "*",
