@@ -6292,6 +6292,60 @@
       }
     },
     {
+      "id": "check-openhuman-debian-desktop-binary",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/OpenHuman",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": "${BIN}/OpenHuman",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openhuman-windows-system-app-without-cli",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "ProgramFiles": "${TMP}/oh-program-files"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-program-files/OpenHuman/OpenHuman.exe"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "system-windows-app"
+        ]
+      }
+    },
+    {
       "id": "translate-probe-every-harness",
       "operation": "translateMcpJson",
       "input": "*",

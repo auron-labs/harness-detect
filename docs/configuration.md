@@ -469,6 +469,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
 | `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
 | `openhuman` | `OPENHUMAN_HOME` | `OPENHUMAN_AGENT_DEFINITIONS_ROOT` | `${HOME}/.openhuman` |
+| `openhuman` | `ProgramFiles` | `OPENHUMAN_PROGRAM_FILES` | (empty — path resolves to null) |
 | `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
 | `paradev` | `SUPERSET_HOME` | `PARADEV_CLI_INSTALL_ROOT` | `${HOME}/superset` |
 | `pipali` | `APPDATA` | `PIPALI_ROAMING` | `${USERPROFILE}/AppData/Roaming` |

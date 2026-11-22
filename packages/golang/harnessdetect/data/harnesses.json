@@ -25962,7 +25962,8 @@
       "version": "0.64.15",
       "aliases": [],
       "executables": [
-        "openhuman-core"
+        "openhuman-core",
+        "OpenHuman"
       ],
       "paths": [
         {
@@ -26018,6 +26019,24 @@
             "darwin"
           ],
           "category": "install"
+        },
+        {
+          "id": "user-windows-app",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/Programs/OpenHuman/OpenHuman.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-windows-app",
+          "kind": "file",
+          "template": "${OPENHUMAN_PROGRAM_FILES}/OpenHuman/OpenHuman.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
         }
       ],
       "roots": [
@@ -26025,6 +26044,12 @@
           "name": "OPENHUMAN_AGENT_DEFINITIONS_ROOT",
           "env": "OPENHUMAN_HOME",
           "fallback": "${HOME}/.openhuman"
+        },
+        {
+          "name": "OPENHUMAN_PROGRAM_FILES",
+          "env": "ProgramFiles",
+          "fallbackEnv": "PROGRAMFILES",
+          "fallback": ""
         }
       ],
       "env": [
@@ -26048,7 +26073,9 @@
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.sh#L513-L557",
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load/dirs.rs",
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load_user_state.rs",
-        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/app_env.rs"
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/app_env.rs",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-app/postinst#L4-L16",
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.ps1#L269-L273"
       ],
       "installations": [
         {
