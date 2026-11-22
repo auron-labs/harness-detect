@@ -21,6 +21,7 @@ from harness_detect import (
     HarnessSupportPath,
     HarnessSupportRecord,
     HarnessSupportScope,
+    _current_platform,
     check_harness,
     detect_harnesses,
     detect_installed_acp_launches,
@@ -231,17 +232,7 @@ def expand_string(value: str, roots: dict[str, str]) -> str:
 
 def should_skip_platform(case: dict[str, Any]) -> bool:
     platforms = case.get("platforms")
-    return isinstance(platforms, list) and current_platform() not in platforms
-
-
-def current_platform() -> str:
-    if sys.platform == "darwin":
-        return "darwin"
-    if sys.platform == "win32":
-        return "win32"
-    if sys.platform.startswith("freebsd"):
-        return "freebsd"
-    return sys.platform
+    return isinstance(platforms, list) and _current_platform() not in platforms
 
 
 def prepare_setup(
