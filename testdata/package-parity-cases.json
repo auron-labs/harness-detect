@@ -1243,6 +1243,348 @@
       }
     },
     {
+      "id": "check-paradev-cli-alias",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "superset-sh/superset",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/paradev",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "paradev",
+        "installed": true,
+        "executablePath": "${BIN}/paradev",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-paradev-default-runtime-and-project",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "paradev",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.paradev/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.paradev/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/superset/bin/paradev"
+        }
+      ],
+      "expect": {
+        "key": "paradev",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config",
+          "project-config",
+          "standalone-cli-alias"
+        ]
+      }
+    },
+    {
+      "id": "check-paradev-legacy-runtime-and-project",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "superset",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.superset/app-state.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.superset/bin/superset"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.superset/config.json"
+        }
+      ],
+      "expect": {
+        "key": "paradev",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-desktop-cli-shim",
+          "legacy-desktop-state",
+          "legacy-project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-paradev-distinct-runtime-and-installer-overrides",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "paradev",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "SUPERSET_HOME_DIR": "${TMP}/paradev-runtime",
+        "SUPERSET_HOME": "${TMP}/paradev-prefix"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paradev-runtime/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/paradev-runtime/plugins/installed_plugins.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/paradev-prefix/bin/paradev"
+        }
+      ],
+      "expect": {
+        "key": "paradev",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config",
+          "plugin-state",
+          "standalone-cli-alias"
+        ],
+        "pathAssertions": [
+          {
+            "id": "global-config",
+            "path": "${TMP}/paradev-runtime/config.json",
+            "exists": true
+          },
+          {
+            "id": "standalone-cli-alias",
+            "path": "${TMP}/paradev-prefix/bin/paradev",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-paradev-ignores-apache-superset",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "paradev",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/superset",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.superset/superset.db"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/superset_config.py"
+        }
+      ],
+      "expect": {
+        "key": "paradev",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openai-symphony-release-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "openai/symphony",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/symphony-v0.0.3-linux_x86_64",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": true,
+        "executablePath": "${BIN}/symphony-v0.0.3-linux_x86_64",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openai-symphony-local-release",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "symphony",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/symphony-v0.0.3-linux_arm64"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/symphony-v0.0.3-macos_arm64"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "release-linux-arm64"
+        ],
+        "pathAssertions": [
+          {
+            "id": "release-macos-arm64",
+            "path": null,
+            "exists": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-openai-symphony-built-checkout",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "symphony",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${CWD}/elixir/bin/symphony",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-checkout-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-openai-symphony-run-directory",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "openai-symphony",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/log/symphony.log"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "runtime-log"
+        ]
+      }
+    },
+    {
+      "id": "check-openai-symphony-ignores-workflow-and-bare-cli",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "openai-symphony",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/symphony",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/WORKFLOW.md"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "check-deerflow-on-path",
       "operation": "checkHarness",
       "platforms": [

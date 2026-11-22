@@ -23390,6 +23390,525 @@
       }
     },
     {
+      "key": "paradev",
+      "name": "Paradev",
+      "version": "2.0.11",
+      "aliases": [
+        "superset",
+        "paradevai/paradev",
+        "superset-sh/superset"
+      ],
+      "executables": [
+        "paradev"
+      ],
+      "roots": [
+        {
+          "name": "PARADEV_ROOT",
+          "env": "SUPERSET_HOME_DIR",
+          "fallback": "${HOME}/.paradev"
+        },
+        {
+          "name": "PARADEV_CLI_INSTALL_ROOT",
+          "env": "SUPERSET_HOME",
+          "fallback": "${HOME}/superset"
+        }
+      ],
+      "paths": [
+        {
+          "id": "global-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${PARADEV_ROOT}/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "desktop-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${PARADEV_ROOT}/app-state.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "plugin-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${PARADEV_ROOT}/plugins/installed_plugins.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "desktop-cli-shim",
+          "category": "install",
+          "kind": "file",
+          "template": "${PARADEV_ROOT}/bin/superset",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "standalone-cli-alias",
+          "category": "install",
+          "kind": "file",
+          "template": "${PARADEV_CLI_INSTALL_ROOT}/bin/paradev",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "legacy-global-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.superset/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "legacy-desktop-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.superset/app-state.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "legacy-desktop-cli-shim",
+          "category": "install",
+          "kind": "file",
+          "template": "${HOME}/.superset/bin/superset",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "project-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.paradev/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "legacy-project-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.superset/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "SUPERSET_HOME_DIR",
+          "description": "Overrides Paradev's machine-level runtime home (default ~/.paradev)."
+        },
+        {
+          "name": "SUPERSET_HOME",
+          "description": "Overrides the standalone CLI script's installation prefix (default ~/superset), not the runtime home."
+        }
+      ],
+      "sources": [
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/packages/agent-setup/src/paths.ts#L5-L28",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/packages/agent-setup/src/paths.ts#L52-L54",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/packages/agent-setup/src/legacy-home-move.ts#L19-L52",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/packages/cli/src/lib/config.ts#L20-L49",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/desktop/src/main/lib/app-environment.ts#L49-L53",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/desktop/src/main/lib/bundled-cli.ts#L15-L18",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/desktop/src/main/lib/bundled-cli.ts#L178-L196",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/marketing/public/cli/install.sh#L12-L14",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/marketing/public/cli/install.sh#L134-L149",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/docs/plugins.md#L118-L131",
+        "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/docs/content/docs/setup-teardown-scripts.mdx#L6-L14"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/ParadevAI/Paradev/releases/tag/desktop-v2.0.11",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Desktop DMGs for macOS and experimental x64 packages for Linux. The desktop app bundles the workspace CLI."
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/README.md#L244-L250",
+          "command": "curl -fsSL https://paradev.com/cli/install.sh | sh",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Installs the standalone workspace CLI (superset, with the paradev alias)."
+        },
+        {
+          "method": "homebrew",
+          "package": "paradevai/tap/superset",
+          "command": "brew install paradevai/tap/superset",
+          "url": "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/README.md#L244-L250",
+          "platforms": [
+            "darwin"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-config",
+                "kind": "file",
+                "template": "${PARADEV_ROOT}/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/packages/cli/src/lib/config.ts#L20-L49"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.paradev/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "legacy-project-config",
+                "kind": "file",
+                "template": "${CWD}/.superset/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/ParadevAI/Paradev/blob/desktop-v2.0.11/apps/docs/content/docs/setup-teardown-scripts.mdx#L6-L14"
+            ],
+            "confidence": "official"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "The desktop uses ACP agents and bundles the separately versioned pdev agent. The Paradev workspace CLI is not the pdev ACP server."
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "Paradev publishes an MCP server and provisions other agents' MCP settings. The bundled, separately versioned pdev agent's settings are not workspace CLI settings."
+      }
+    },
+    {
+      "key": "openai-symphony",
+      "name": "OpenAI Symphony",
+      "version": "0.0.3",
+      "aliases": [
+        "symphony",
+        "openai/symphony"
+      ],
+      "executables": [
+        "symphony-v0.0.3-linux_arm64",
+        "symphony-v0.0.3-linux_x86_64",
+        "symphony-v0.0.3-macos_arm64",
+        "symphony-v0.0.3-macos_x86_64"
+      ],
+      "paths": [
+        {
+          "id": "source-checkout-launcher",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/elixir/bin/symphony",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "runtime-log",
+          "category": "state",
+          "kind": "file",
+          "template": "${CWD}/log/symphony.log",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "release-linux-arm64",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/symphony-v0.0.3-linux_arm64",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "release-linux-x64",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/symphony-v0.0.3-linux_x86_64",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "release-macos-arm64",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/symphony-v0.0.3-macos_arm64",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "release-macos-x64",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/symphony-v0.0.3-macos_x86_64",
+          "platforms": [
+            "darwin"
+          ]
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/openai/symphony/releases/tag/v0.0.3",
+        "https://github.com/openai/symphony/blob/v0.0.3/elixir/README.md#L65-L98",
+        "https://github.com/openai/symphony/blob/v0.0.3/elixir/mix.exs#L97-L115",
+        "https://github.com/openai/symphony/blob/v0.0.3/elixir/lib/symphony_elixir/log_file.ex#L8-L21"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/openai/symphony/releases/tag/v0.0.3",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Self-contained Elixir releases for arm64 and x86_64. Codex, Git, and tracker credentials are required separately."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/openai/symphony/blob/v0.0.3/elixir/README.md#L56-L75",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "The documented source build produces elixir/bin/symphony in the checkout."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workflow",
+                "kind": "file",
+                "template": "${CWD}/WORKFLOW.md",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/openai/symphony/blob/v0.0.3/elixir/README.md#L100-L116"
+            ],
+            "confidence": "official"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "Symphony runs Codex in app-server mode; this is not an ACP launch."
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "MCP is handled by the delegated Codex app server; no independent native MCP settings were verified."
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",
