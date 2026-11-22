@@ -6512,6 +6512,31 @@
       }
     },
     {
+      "id": "check-open-design-relocated-source-runtime-db",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OD_DATA_DIR": "${TMP}/open-design-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/open-design-data/app.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-runtime-db"
+        ]
+      }
+    },
+    {
       "id": "check-open-design-macos-bundle",
       "operation": "checkHarness",
       "input": "open-design",

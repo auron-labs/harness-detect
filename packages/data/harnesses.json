@@ -26351,8 +26351,8 @@
         {
           "id": "source-runtime-db",
           "kind": "file",
-          "template": "${CWD}/.od/app.sqlite",
-          "category": "project"
+          "template": "${OPEN_DESIGN_SOURCE_DATA}/app.sqlite",
+          "category": "state"
         },
         {
           "id": "user-macos-app",
