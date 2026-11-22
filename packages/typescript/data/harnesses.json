@@ -23935,6 +23935,12 @@
       "executables": [],
       "paths": [
         {
+          "id": "default-instance-uploads",
+          "kind": "dir",
+          "template": "${HOME}/agent-zero/agent-zero/usr/uploads",
+          "category": "state"
+        },
+        {
           "id": "default-instance-settings",
           "kind": "file",
           "template": "${HOME}/agent-zero/agent-zero/usr/settings.json",
@@ -23953,6 +23959,7 @@
         "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/README.md#L146-L157",
         "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/install.sh#L1989-L2013",
         "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/install.ps1#L2229-L2252",
+        "https://github.com/agent0ai/agent-zero/blob/v2.16/docker/run/fs/exe/initialize.sh#L53-L59",
         "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/settings.py#L189",
         "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/projects.py#L308-L318"
       ],
@@ -23965,7 +23972,7 @@
             "linux",
             "win32"
           ],
-          "notes": "A0 Install sets up a Docker instance. The host settings path covers the default first instance; custom names or data directories and Docker-only volumes are not inferred."
+          "notes": "A0 Install sets up a Docker instance. Host uploads and settings paths cover the default first instance; custom names or data directories and Docker-only volumes are not inferred."
         },
         {
           "method": "binary",

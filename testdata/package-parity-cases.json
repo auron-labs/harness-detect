@@ -1635,6 +1635,30 @@
       }
     },
     {
+      "id": "check-agent-zero-first-start",
+      "operation": "checkHarness",
+      "input": "agent-zero",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/agent-zero/agent-zero/usr/uploads"
+        }
+      ],
+      "expect": {
+        "key": "agent-zero",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-instance-uploads"
+        ]
+      }
+    },
+    {
       "id": "check-agent-zero-project",
       "operation": "checkHarness",
       "input": "agent-zero",
