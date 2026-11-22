@@ -857,17 +857,16 @@ fn with_defaults(
         None => std::env::vars().collect(),
     };
 
-    let home = {
-        let h = out.get("HOME").map(|s| s.as_str()).unwrap_or("");
-        if !h.is_empty() {
-            h.to_string()
-        } else {
-            std::env::var("HOME")
-                .ok()
-                .filter(|s| !s.is_empty())
-                .unwrap_or_else(|| "/".to_string())
-        }
-    };
+    let home = out
+        .get("HOME")
+        .filter(|s| !s.is_empty())
+        .or_else(|| {
+            out.get("USERPROFILE")
+                .filter(|s| cfg!(windows) && !s.is_empty())
+        })
+        .cloned()
+        .or_else(|| std::env::home_dir().map(|p| p.to_string_lossy().into_owned()))
+        .unwrap_or_else(|| "/".to_string());
 
     let userprofile = {
         let up = out.get("USERPROFILE").map(|s| s.as_str()).unwrap_or("");

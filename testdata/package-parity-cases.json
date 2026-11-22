@@ -1739,6 +1739,34 @@
       }
     },
     {
+      "id": "check-deepseek-windows-userprofile",
+      "operation": "checkHarness",
+      "platforms": [
+        "win32"
+      ],
+      "input": "deepseek-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "USERPROFILE": "${TMP}/deepseek-windows-profile",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/deepseek-windows-profile/.dsh/profiles/desktop/package.json",
+          "content": "{}"
+        }
+      ],
+      "expect": {
+        "key": "deepseek-harness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-profile"
+        ]
+      }
+    },
+    {
       "id": "check-deepseek-home-override",
       "operation": "checkHarness",
       "input": "deepseek-harness",
