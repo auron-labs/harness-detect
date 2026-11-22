@@ -1519,6 +1519,34 @@
       }
     },
     {
+      "id": "check-openai-symphony-default-build-directory",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "symphony",
+      "cwd": "${CWD}/elixir",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/elixir/_build/dev/lib/symphony_elixir/ebin/symphony_elixir.app"
+        }
+      ],
+      "expect": {
+        "key": "openai-symphony",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-build-app"
+        ]
+      }
+    },
+    {
       "id": "check-openai-symphony-run-directory",
       "operation": "checkHarness",
       "platforms": [
@@ -1563,6 +1591,11 @@
         {
           "type": "executable",
           "path": "${BIN}/symphony",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${CWD}/bin/symphony",
           "content": "#!/bin/sh\nexit 0\n"
         },
         {

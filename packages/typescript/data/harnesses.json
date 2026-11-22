@@ -23725,6 +23725,16 @@
           ]
         },
         {
+          "id": "source-build-app",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/_build/dev/lib/symphony_elixir/ebin/symphony_elixir.app",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
           "id": "runtime-log",
           "category": "state",
           "kind": "file",
@@ -23775,7 +23785,12 @@
       "sources": [
         "https://github.com/openai/symphony/releases/tag/v0.0.3",
         "https://github.com/openai/symphony/blob/v0.0.3/elixir/README.md#L65-L98",
+        "https://github.com/openai/symphony/blob/v0.0.3/elixir/mix.exs#L4-L8",
+        "https://github.com/openai/symphony/blob/v0.0.3/elixir/mix.exs#L89-L103",
         "https://github.com/openai/symphony/blob/v0.0.3/elixir/mix.exs#L97-L115",
+        "https://github.com/elixir-lang/elixir/blob/v1.19.0/lib/mix/lib/mix/tasks/escript.build.ex#L138-L142",
+        "https://github.com/elixir-lang/elixir/blob/v1.19.0/lib/mix/lib/mix/project.ex#L865-L878",
+        "https://github.com/elixir-lang/elixir/blob/v1.19.0/lib/mix/lib/mix/tasks/compile.app.ex#L145-L153",
         "https://github.com/openai/symphony/blob/v0.0.3/elixir/lib/symphony_elixir/log_file.ex#L8-L21",
         "https://github.com/openai/symphony/blob/v0.0.3/elixir/lib/symphony_elixir/log_file.ex#L68-L77",
         "https://github.com/erlang/otp/blob/OTP-28.1/lib/kernel/src/disk_log.erl#L248-L254"
