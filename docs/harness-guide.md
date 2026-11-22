@@ -2,6 +2,14 @@
 
 Agent-facing instructions for adding or editing harnesses in `harness-detect`. For the user-facing documentation map, start at `docs/index.md`. Keep `docs/configuration.md`, `docs/testing.md`, `docs/troubleshooting.md`, and `docs/maintainers.md` aligned when a registry change affects documented counts, commands, schema behavior, validation, or troubleshooting guidance.
 
+## Triage a harness request
+
+1. **Check for overlap.** Search the registry by key, aliases, and upstream URL, then check open PRs. Extend an existing entry rather than adding a duplicate. Confirm which product, distribution, and version the issue refers to.
+2. **Rank the request.** Favor actively maintained, runnable local harnesses that matter to downstream users. Use releases, install channels, and adoption as signals, not as substitutes for evidence. A library, legacy project, or wrapper with no distinguishable local footprint needs more research before it is ready.
+3. **Prove the detection signal.** Verify the published release and link to exact upstream evidence for each executable, path, override, and platform. Look for executable-name collisions and paths shared with other tools. A product-owned config file can be a better signal than a bare executable; if the registry cannot distinguish the products, defer rather than guessing.
+4. **Implement and verify.** Follow the registry workflow below. Use the existing hermetic smoke coverage for ordinary signals and add shared parity cases for new overrides, platform restrictions, project paths, or plausible false positives. Do not run the detected binary or read credential contents to establish installation.
+5. **Hand off a focused PR.** Link each issue, name the verified release and platforms, explain what is deliberately not detected, and include the refresh, check, and fixture results. Keep unsupported or unverified surfaces explicit. For a batch, parallelize upstream evidence gathering and let one integrator update the shared registry, fixtures, and generated outputs.
+
 ## 1. Canonical file first
 
 The canonical registry is:
@@ -104,7 +112,7 @@ Checklist:
 - Support path entries reuse the existing path vocabulary where possible: `id`, `kind`, `template`, optional `platforms`, optional `description`.
 - Unknown support data must be explicit: prefer `status: "unknown"`, `confidence: "unknown"`, and empty `paths` / `sources` arrays instead of partial or omitted leaves.
 - Keep top-level registry `version` at `1`. The per-harness `version` string is different: set it to the upstream release you verified against (no leading `v`) and update it whenever you re-verify the entry.
-- `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local); opt-in discovery is `unsupported` with a note.
+- `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local). A documented override can replace `${HOME}` in the global path with a derived root that defaults to `${HOME}`. Opt-in discovery is `unsupported` with a note.
 - `mcp.mcpJson` covers only the project-root `.mcp.json`; vendor files such as `.cursor/mcp.json` belong in `mcp.local.paths`. Supported scopes with paths need `format` and `keyPath`, and the entry needs a `serverFormat` taken from the docs' own stdio and remote examples. See [MCP metadata](./configuration.md#mcp-metadata-mcp).
 - Do not add shared paths (`.mcp.json`, `AGENTS.md`, `.agents/...`, `.claude/skills`) as detection `paths`; they are read by many products and cause false positives.
 - Keep contributor-facing support documentation aligned across `docs/api.md`, `docs/configuration.md`, and `docs/support-matrix.md`.

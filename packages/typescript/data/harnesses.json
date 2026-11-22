@@ -20410,6 +20410,558 @@
       }
     },
     {
+      "key": "jcode",
+      "name": "jcode",
+      "version": "1.0.3",
+      "aliases": [
+        "1jehuang/jcode"
+      ],
+      "executables": [
+        "jcode"
+      ],
+      "paths": [
+        {
+          "id": "global-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${JCODE_ROOT}/config.toml"
+        },
+        {
+          "id": "global-mcp",
+          "category": "config",
+          "kind": "file",
+          "template": "${JCODE_ROOT}/mcp.json"
+        },
+        {
+          "id": "project-mcp",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/.jcode/mcp.json"
+        },
+        {
+          "id": "unix-launcher",
+          "category": "install",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/jcode",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-launcher",
+          "category": "install",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/jcode/bin/jcode.exe",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "roots": [
+        {
+          "name": "JCODE_ROOT",
+          "env": "JCODE_HOME",
+          "fallback": "${HOME}/.jcode"
+        },
+        {
+          "name": "JCODE_EXTERNAL_HOME",
+          "env": "JCODE_HOME",
+          "use": "${JCODE_ROOT}/external",
+          "fallback": "${HOME}"
+        }
+      ],
+      "env": [
+        {
+          "name": "JCODE_HOME",
+          "description": "Overrides the jcode configuration and state root and redirects shared home-relative files under its external subdirectory."
+        }
+      ],
+      "sources": [
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/README.md#installation",
+        "https://github.com/1jehuang/jcode/releases/tag/v1.0.3",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-storage/src/lib.rs#L163-L170",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/config/config_file.rs#L24-L32",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L716-L731",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L680-L695",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/scripts/install.sh",
+        "https://github.com/1jehuang/jcode/blob/v1.0.3/scripts/install.ps1#L1-L17"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "command": "curl -fsSL https://jcode.sh/install | bash",
+          "url": "https://github.com/1jehuang/jcode/blob/v1.0.3/README.md#installation",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "script",
+          "command": "irm https://jcode.sh/install.ps1 | iex",
+          "url": "https://github.com/1jehuang/jcode/blob/v1.0.3/scripts/install.ps1#L1-L17",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "method": "homebrew",
+          "package": "jcode",
+          "command": "brew install jcode",
+          "url": "https://formulae.brew.sh/formula/jcode",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "The Homebrew formula may lag upstream releases."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/1jehuang/jcode/releases/tag/v1.0.3",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-config",
+                "kind": "file",
+                "template": "${JCODE_ROOT}/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-storage/src/lib.rs#L163-L170",
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/config/config_file.rs#L24-L32"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-jcode-skills",
+                "kind": "dir",
+                "template": "${JCODE_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L283-L295"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-jcode-skills",
+                "kind": "dir",
+                "template": "${CWD}/.jcode/skills"
+              },
+              {
+                "id": "project-claude-skills",
+                "kind": "dir",
+                "template": "${CWD}/.claude/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L346-L359"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${JCODE_EXTERNAL_HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L283-L295",
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-storage/src/lib.rs#L231-L251"
+            ],
+            "confidence": "source",
+            "notes": "Setting JCODE_HOME redirects this lookup to its external/.agents/skills subdirectory."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L346-L359"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "jcode",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "freebsd",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/src/cli/args.rs#L199-L200",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/src/cli/acp.rs#L392-L422",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/src/cli/acp.rs#L897-L917",
+          "https://github.com/1jehuang/jcode/releases/tag/v1.0.3"
+        ],
+        "confidence": "source",
+        "notes": "The CLI serves ACP over stdio and starts the jcode daemon if needed. Configure a model provider in jcode for agent requests.",
+        "installedLaunches": [
+          {
+            "command": "jcode",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "freebsd",
+              "linux",
+              "win32"
+            ]
+          }
+        ]
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "supported",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "global-mcp",
+              "kind": "file",
+              "template": "${JCODE_ROOT}/mcp.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L716-L731",
+            "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L361-L368"
+          ],
+          "confidence": "source",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-mcp",
+              "kind": "file",
+              "template": "${CWD}/.jcode/mcp.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L680-L695",
+            "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L361-L368"
+          ],
+          "confidence": "source",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "http",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L680-L695",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L716-L731",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L361-L368",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/mcp/protocol.rs#L188-L217",
+          "https://github.com/1jehuang/jcode/blob/v1.0.3/docs/MCP_REMOTE.md#configuration"
+        ],
+        "confidence": "source",
+        "notes": "Project-root .mcp.json is loaded by default, as is the legacy .claude/mcp.json. Neither shared file identifies a jcode installation."
+      }
+    },
+    {
+      "key": "nanobot",
+      "name": "nanobot",
+      "version": "0.4.2",
+      "aliases": [
+        "HKUDS/nanobot",
+        "nanobot-ai"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "global-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.nanobot/config.json"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/concepts.md#config-vs-workspace",
+        "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/multiple-instances.md",
+        "https://github.com/HKUDS/nanobot/blob/v0.4.2/pyproject.toml#L127-L129",
+        "https://github.com/obot-platform/nanobot/blob/95eaf9ff183cba37e5b32d3594bc696d55ce537c/README.md#installation"
+      ],
+      "installations": [
+        {
+          "method": "uv",
+          "package": "nanobot-ai",
+          "command": "uv tool install nanobot-ai",
+          "url": "https://github.com/HKUDS/nanobot/blob/v0.4.2/README.md#L101-L115",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The nanobot command is also used by an unrelated MCP host; detection uses the HKUDS product's default config file instead."
+        },
+        {
+          "method": "pip",
+          "package": "nanobot-ai",
+          "command": "python -m pip install nanobot-ai",
+          "url": "https://github.com/HKUDS/nanobot/blob/v0.4.2/README.md#L111-L116",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Upstream recommends installing inside a virtual environment."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-config",
+                "kind": "file",
+                "template": "${HOME}/.nanobot/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/concepts.md#config-vs-workspace",
+              "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/multiple-instances.md"
+            ],
+            "confidence": "official",
+            "notes": "Custom --home and --config values are per-invocation and cannot be inferred from the current environment."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-agent-workspace-skills",
+                "kind": "dir",
+                "template": "${HOME}/.nanobot/workspace/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/concepts.md#config-vs-workspace"
+            ],
+            "confidence": "official",
+            "notes": "This path is for the default agent workspace, which can be relocated and is separate from an ordinary project workspace."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "global-config",
+              "kind": "file",
+              "template": "${HOME}/.nanobot/config.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/configuration.md#mcp-model-context-protocol",
+            "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/concepts.md#config-vs-workspace"
+          ],
+          "confidence": "official",
+          "format": "json",
+          "keyPath": [
+            "tools",
+            "mcpServers"
+          ]
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "streamableHttp",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/HKUDS/nanobot/blob/v0.4.2/docs/configuration.md#mcp-model-context-protocol",
+          "https://github.com/HKUDS/nanobot/blob/v0.4.2/nanobot/config/schema.py#L410-L423"
+        ],
+        "confidence": "official",
+        "notes": "Instance config is distinct from a project workspace. Enabled plugins can supply additional MCP servers; OAuth credential storage is not a detection signal."
+      }
+    },
+    {
       "acp": {
         "status": "supported",
         "launches": [
