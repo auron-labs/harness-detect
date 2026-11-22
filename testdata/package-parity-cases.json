@@ -4691,6 +4691,13 @@
           "docs": {
             "type": "http",
             "url": "https://example.com/mcp"
+          },
+          "events": {
+            "type": "sse",
+            "url": "https://example.com/events",
+            "headers": {
+              "X-Client": "test"
+            }
           }
         }
       },
@@ -4705,6 +4712,13 @@
             "docs": {
               "type": "streamable_http",
               "url": "https://example.com/mcp"
+            },
+            "events": {
+              "type": "sse",
+              "url": "https://example.com/events",
+              "headers": {
+                "X-Client": "test"
+              }
             }
           }
         },

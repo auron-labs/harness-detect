@@ -24378,11 +24378,18 @@
             "type": "streamable_http",
             "url": "url",
             "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
           }
         },
         "sources": [
           "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron/main/utils/mcpConfig.ts#L19-L39",
-          "https://github.com/eigent-ai/eigent/blob/v1.0.8/src/store/chatStore.ts#L753-L763"
+          "https://github.com/eigent-ai/eigent/blob/v1.0.8/src/store/chatStore.ts#L753-L763",
+          "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/agent/factory/toolkit_assembler.py#L727-L746",
+          "https://github.com/camel-ai/camel/blob/v0.2.91a7/camel/utils/mcp_client.py#L159-L167"
         ],
         "confidence": "source"
       }

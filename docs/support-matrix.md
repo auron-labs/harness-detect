@@ -130,7 +130,7 @@ MCP client status: supported: 60; unsupported: 8; unknown: 15. Project-root `.mc
 | `deerflow` | supported | unsupported | unknown | `${CWD}/extensions_config.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `devin-for-terminal` | supported | supported | `${XDG_CONFIG_HOME}/devin/mcp_config.json` (darwin, linux)<br>`${APPDATA}/devin/mcp_config.json` (win32)<br>json: `mcpServers` | `${CWD}/.devin/mcp_config.json`<br>`${CWD}/.devin/mcp_config.local.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `droid` | supported | unknown | `${FACTORY_ROOT}/mcp.json`<br>json: `mcpServers` | `${CWD}/.factory/mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
-| `eigent` | supported | unknown | `${HOME}/.eigent/mcp.json`<br>json: `mcpServers` | unknown | map; stdio, http |
+| `eigent` | supported | unknown | `${HOME}/.eigent/mcp.json`<br>json: `mcpServers` | unknown | map; stdio, http, sse |
 | `emdash` | unsupported | unsupported | unknown | unknown | — |
 | `fast-agent` | supported | unsupported | unsupported | `${CWD}/.fast-agent/fast-agent.yaml`<br>`${CWD}/.fast-agent/fast-agent.config.yaml`<br>`${CWD}/.fast-agent/fastagent.config.yaml`<br>`${CWD}/fast-agent.yaml`<br>`${CWD}/fast-agent.config.yaml`<br>`${CWD}/fastagent.config.yaml`<br>yaml: `mcp` → `servers` | map; stdio, http, sse |
 | `gemini-cli` | supported | unknown | `${GEMINI_ROOT}/settings.json`<br>json: `mcpServers` | `${CWD}/.gemini/settings.json`<br>json: `mcpServers` | map; stdio, http, sse |
