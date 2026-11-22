@@ -8644,32 +8644,22 @@
       }
     },
     {
-      "id": "translate-cc-haha-local-mcp",
+      "id": "translate-cc-haha-local-mcp-withholds-reserved-names",
       "operation": "translateMcpJson",
       "input": "cc-haha",
       "scope": "local",
       "mcpJson": {
         "mcpServers": {
-          "docs": {
-            "type": "sse",
-            "url": "https://example.com/sse"
+          "claude-in-chrome": {
+            "command": "fixture-chrome"
+          },
+          "computer-use": {
+            "command": "fixture-computer-use"
           }
         }
       },
       "expect": {
-        "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
-        "skipped": [],
-        "config": {
-          "mcpServers": {
-            "docs": {
-              "type": "sse",
-              "url": "https://example.com/sse"
-            }
-          }
-        }
+        "error": "Harness cc-haha has no file-based MCP config for scope local"
       }
     },
     {

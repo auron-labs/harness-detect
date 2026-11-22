@@ -29190,48 +29190,20 @@
         },
         "local": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "project-mcp",
-              "kind": "file",
-              "template": "${CWD}/.mcp.json"
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L84-L92"
           ],
           "confidence": "source",
-          "notes": "Shared project MCP servers; private local servers are stored separately in global state.",
-          "format": "json",
-          "keyPath": [
-            "mcpServers"
-          ]
-        },
-        "serverFormat": {
-          "container": "map",
-          "typeField": "type",
-          "stdio": {
-            "type": "stdio",
-            "command": "command",
-            "args": "args",
-            "env": "env"
-          },
-          "http": {
-            "type": "http",
-            "url": "url",
-            "headers": "headers"
-          },
-          "sse": {
-            "type": "sse",
-            "url": "url",
-            "headers": "headers"
-          }
+          "notes": "Shared project servers are read from the mcpServers object in ${CWD}/.mcp.json. Private project servers are stored in global state."
         },
         "sources": [
           "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L84-L92",
-          "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/services/mcp/types.ts#L28-L116"
+          "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/services/mcp/client.ts#L1068-L1115",
+          "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/services/mcp/config.ts#L772-L792"
         ],
-        "confidence": "source"
+        "confidence": "source",
+        "notes": "Translation is unavailable because cc-haha rejects the reserved names claude-in-chrome and computer-use when writing config and connects them to built-ins instead of running the configured stdio commands. The registry cannot express these reserved names."
       },
       "acp": {
         "status": "unknown",

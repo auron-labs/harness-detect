@@ -135,7 +135,7 @@ MCP client status: supported: 77; unsupported: 8; unknown: 18. Project-root `.mc
 | `autohand` | supported | unsupported | `${HOME}/.autohand/config.json`<br>json: `mcp` → `servers` | `${CWD}/.autohand/settings.local.json`<br>`${CWD}/.autohand/config.json`<br>json: `mcp` → `servers` | array; stdio, http |
 | `boltai` | supported | unsupported | `${HOME}/.boltai/mcp.json` (darwin)<br>json: `mcpServers` | unsupported | map; stdio |
 | `browser-use` | unsupported | unsupported | unknown | unknown | — |
-| `cc-haha` | supported | supported | supported (no config file) | `${CWD}/.mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
+| `cc-haha` | supported | supported | supported (no config file) | supported (no config file) | — |
 | `claude-agent-acp` | unknown | unknown | unknown | unknown | — |
 | `claude-code` | supported | supported | `${CLAUDE_JSON_STATE}`<br>json: `mcpServers` | `${CWD}/.mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `cline` | supported | unknown | `${CLINE_DATA_ROOT}/settings/cline_mcp_settings.json`<br>json: `mcpServers` | unknown | map; stdio, http, sse |
