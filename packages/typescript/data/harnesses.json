@@ -24398,6 +24398,777 @@
       }
     },
     {
+      "key": "vtcode",
+      "name": "VT Code",
+      "version": "0.185.0",
+      "aliases": [
+        "vt-code"
+      ],
+      "executables": [
+        "vtcode"
+      ],
+      "paths": [
+        {
+          "id": "user-config-xdg",
+          "kind": "file",
+          "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
+          "platforms": [
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-macos",
+          "kind": "file",
+          "template": "${VTCODE_CONFIG_MACOS}/vtcode.toml",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${VTCODE_CONFIG_WINDOWS}/vtcode.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "legacy-config",
+          "kind": "file",
+          "template": "${VTCODE_LEGACY_ROOT}/vtcode.toml",
+          "category": "config"
+        },
+        {
+          "id": "project-config",
+          "kind": "file",
+          "template": "${CWD}/vtcode.toml",
+          "category": "project"
+        },
+        {
+          "id": "project-fallback-config",
+          "kind": "file",
+          "template": "${CWD}/.vtcode/vtcode.toml",
+          "category": "project"
+        },
+        {
+          "id": "user-desktop",
+          "category": "install",
+          "kind": "dir",
+          "template": "${HOME}/Applications/VT Code.app",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "system-desktop",
+          "category": "install",
+          "kind": "dir",
+          "template": "/Applications/VT Code.app",
+          "platforms": [
+            "darwin"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "VTCODE_CONFIG",
+          "description": "Overrides the canonical VT Code configuration directory."
+        },
+        {
+          "name": "VTCODE_DATA",
+          "description": "Overrides the user data directory, including installed skills."
+        },
+        {
+          "name": "VTCODE_HOME",
+          "description": "Overrides the legacy VT Code directory, not the canonical configuration directory."
+        },
+        {
+          "name": "VTCODE_CONFIG_PATH",
+          "description": "Selects the explicit session config file instead of the normal workspace file."
+        }
+      ],
+      "roots": [
+        {
+          "name": "VTCODE_CONFIG_XDG",
+          "env": "VTCODE_CONFIG",
+          "fallback": "${XDG_CONFIG_HOME}/vtcode"
+        },
+        {
+          "name": "VTCODE_CONFIG_MACOS",
+          "env": "VTCODE_CONFIG",
+          "fallback": "${HOME}/Library/Application Support/com.vinhnx.vtcode"
+        },
+        {
+          "name": "VTCODE_CONFIG_WINDOWS",
+          "env": "VTCODE_CONFIG",
+          "fallback": "${APPDATA}/vinhnx/vtcode/config"
+        },
+        {
+          "name": "VTCODE_DATA_XDG",
+          "env": "VTCODE_DATA",
+          "fallback": "${XDG_DATA_HOME}/vtcode"
+        },
+        {
+          "name": "VTCODE_DATA_MACOS",
+          "env": "VTCODE_DATA",
+          "fallback": "${HOME}/Library/Application Support/com.vinhnx.vtcode"
+        },
+        {
+          "name": "VTCODE_DATA_WINDOWS",
+          "env": "VTCODE_DATA",
+          "fallback": "${APPDATA}/vinhnx/vtcode/data"
+        },
+        {
+          "name": "VTCODE_LEGACY_ROOT",
+          "env": "VTCODE_HOME",
+          "fallback": "${HOME}/.vtcode"
+        }
+      ],
+      "sources": [
+        "https://github.com/vinhnx/VTCode/releases/tag/0.185.0",
+        "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/installation/README.md",
+        "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/config/configuration_precedence.md",
+        "https://github.com/vinhnx/VTCode/blob/0.185.0/crates/common/vtcode-commons/src/vtcode_paths/mod.rs"
+      ],
+      "installations": [
+        {
+          "method": "cargo",
+          "package": "vtcode",
+          "command": "cargo install vtcode",
+          "url": "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/installation/README.md"
+        },
+        {
+          "method": "homebrew",
+          "package": "vinhnx/tap/vtcode",
+          "command": "brew install vinhnx/tap/vtcode",
+          "url": "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/installation/README.md",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/vinhnx/VTCode/releases/tag/0.185.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config-xdg",
+                "kind": "file",
+                "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-macos",
+                "kind": "file",
+                "template": "${VTCODE_CONFIG_MACOS}/vtcode.toml",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${VTCODE_CONFIG_WINDOWS}/vtcode.toml",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "legacy-config",
+                "kind": "file",
+                "template": "${VTCODE_LEGACY_ROOT}/vtcode.toml"
+              }
+            ],
+            "notes": "The canonical user layer overrides the legacy layer.",
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/config/configuration_precedence.md",
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/crates/common/vtcode-commons/src/vtcode_paths/mod.rs"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/vtcode.toml"
+              },
+              {
+                "id": "project-fallback-config",
+                "kind": "file",
+                "template": "${CWD}/.vtcode/vtcode.toml"
+              }
+            ],
+            "notes": "Named project profiles and explicit config files are not statically resolved.",
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/config/configuration_precedence.md"
+            ],
+            "confidence": "official"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              },
+              {
+                "id": "user-skills-xdg",
+                "kind": "dir",
+                "template": "${VTCODE_DATA_XDG}/skills",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-skills-macos",
+                "kind": "dir",
+                "template": "${VTCODE_DATA_MACOS}/skills",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "user-skills-windows",
+                "kind": "dir",
+                "template": "${VTCODE_DATA_WINDOWS}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "legacy-skills",
+                "kind": "dir",
+                "template": "${VTCODE_LEGACY_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/crates/codegen/vtcode-core/src/skills/loader/discovery.rs"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "notes": "Searches upward to the repository root.",
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/skills/skills_guide.md#discovery"
+            ],
+            "confidence": "official"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents-xdg",
+                "kind": "dir",
+                "template": "${VTCODE_CONFIG_XDG}/agents",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-agents-macos",
+                "kind": "dir",
+                "template": "${VTCODE_CONFIG_MACOS}/agents",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "user-agents-windows",
+                "kind": "dir",
+                "template": "${VTCODE_CONFIG_WINDOWS}/agents",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/user-guide/subagents.md#discovery-and-precedence"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents",
+                "kind": "dir",
+                "template": "${CWD}/.vtcode/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/user-guide/subagents.md#discovery-and-precedence"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/skills/skills_guide.md#discovery"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/skills/skills_guide.md#discovery"
+            ],
+            "confidence": "official"
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "vtcode",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/guides/zed-acp.md"
+        ],
+        "confidence": "official",
+        "notes": "Enable the ACP and Zed stdio bridge in VT Code config or with VT_ACP_ENABLED and VT_ACP_ZED_ENABLED; configure a model and credentials."
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-config",
+              "kind": "file",
+              "template": "${CWD}/vtcode.toml"
+            },
+            {
+              "id": "project-fallback-config",
+              "kind": "file",
+              "template": "${CWD}/.vtcode/vtcode.toml"
+            }
+          ],
+          "format": "toml",
+          "keyPath": [
+            "mcp",
+            "providers"
+          ],
+          "sources": [
+            "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/guides/mcp-integration.md#provider-transports",
+            "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/config/configuration_precedence.md"
+          ],
+          "confidence": "official"
+        },
+        "serverFormat": {
+          "container": "array",
+          "nameField": "name",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "url": "endpoint",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/guides/mcp-integration.md#provider-transports",
+          "https://github.com/vinhnx/VTCode/blob/0.185.0/crates/codegen/vtcode-core/src/plugins/components.rs"
+        ],
+        "confidence": "source",
+        "notes": "Enable MCP with mcp.enabled in vtcode.toml. Root .mcp.json is not loaded as workspace config; installed plugins can define their own .mcp.json.",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "user-config-xdg",
+              "kind": "file",
+              "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
+              "platforms": [
+                "linux"
+              ]
+            },
+            {
+              "id": "user-config-macos",
+              "kind": "file",
+              "template": "${VTCODE_CONFIG_MACOS}/vtcode.toml",
+              "platforms": [
+                "darwin"
+              ]
+            },
+            {
+              "id": "user-config-windows",
+              "kind": "file",
+              "template": "${VTCODE_CONFIG_WINDOWS}/vtcode.toml",
+              "platforms": [
+                "win32"
+              ]
+            }
+          ],
+          "format": "toml",
+          "keyPath": [
+            "mcp",
+            "providers"
+          ],
+          "sources": [
+            "https://github.com/vinhnx/VTCode/blob/0.185.0/docs/guides/mcp-integration.md#provider-transports"
+          ],
+          "confidence": "official"
+        }
+      }
+    },
+    {
+      "key": "eca",
+      "name": "ECA (Editor Code Assistant)",
+      "version": "0.173.1",
+      "aliases": [
+        "editor-code-assistant"
+      ],
+      "executables": [
+        "eca"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/eca/config.json",
+          "category": "config"
+        },
+        {
+          "id": "project-config",
+          "kind": "file",
+          "template": "${CWD}/.eca/config.json",
+          "category": "project"
+        }
+      ],
+      "env": [
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Base directory for ECA's global config, skills, commands, and agents."
+        },
+        {
+          "name": "ECA_CONFIG",
+          "description": "Inline JSON configuration, not a path or installation signal."
+        }
+      ],
+      "sources": [
+        "https://github.com/editor-code-assistant/eca/releases/tag/0.173.1",
+        "https://github.com/editor-code-assistant/eca/blob/0.173.1/README.md",
+        "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/introduction.md",
+        "https://github.com/editor-code-assistant/eca/blob/0.173.1/src/eca/shared.clj#L160-L166"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "editor-code-assistant/brew/eca",
+          "command": "brew install editor-code-assistant/brew/eca",
+          "url": "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/overrides/install.html"
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/editor-code-assistant/eca/releases/tag/0.173.1",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/eca/config.json"
+              }
+            ],
+            "notes": "--config-file replaces normal global and workspace file lookup.",
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/introduction.md",
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/src/eca/shared.clj#L160-L166"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.eca/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/introduction.md"
+            ],
+            "confidence": "official"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/eca/skills"
+              },
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/skills.md"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.eca/skills"
+              },
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/skills.md"
+            ],
+            "confidence": "official"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-commands",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/eca/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/commands.md"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-commands",
+                "kind": "dir",
+                "template": "${CWD}/.eca/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/commands.md"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents",
+                "kind": "dir",
+                "template": "${XDG_CONFIG_HOME}/eca/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/agents.md#custom-agents-and-prompts"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents",
+                "kind": "dir",
+                "template": "${CWD}/.eca/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/agents.md#custom-agents-and-prompts"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/skills.md"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/skills.md"
+            ],
+            "confidence": "official"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-config",
+              "kind": "file",
+              "template": "${CWD}/.eca/config.json"
+            }
+          ],
+          "format": "jsonc",
+          "keyPath": [
+            "mcpServers"
+          ],
+          "sources": [
+            "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/introduction.md",
+            "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/tools.md#mcp"
+          ],
+          "confidence": "official"
+        },
+        "serverFormat": {
+          "container": "map",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/editor-code-assistant/eca/blob/0.173.1/src/eca/modules/mcp.clj#L189-L214",
+          "https://github.com/editor-code-assistant/eca/blob/0.173.1/src/eca/config.clj",
+          "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/plugins.md"
+        ],
+        "confidence": "source",
+        "notes": "The runtime only supports Streamable HTTP for remote servers. Root .mcp.json is not a workspace config; plugin-local .mcp.json is supported.",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "user-config",
+              "kind": "file",
+              "template": "${XDG_CONFIG_HOME}/eca/config.json"
+            }
+          ],
+          "format": "jsonc",
+          "keyPath": [
+            "mcpServers"
+          ],
+          "sources": [
+            "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/introduction.md",
+            "https://github.com/editor-code-assistant/eca/blob/0.173.1/docs/config/tools.md#mcp"
+          ],
+          "confidence": "official"
+        }
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",
