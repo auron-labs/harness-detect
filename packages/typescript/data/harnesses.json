@@ -21494,7 +21494,7 @@
       "env": [
         {
           "name": "EMDASH_USER_DATA_DIR",
-          "description": "Overrides the desktop profile directory."
+          "description": "Overrides the desktop profile directory. Without this override, profile detection checks stable defaults only, not the emdash-canary or emdash-dev directories."
         },
         {
           "name": "XDG_CONFIG_HOME",
