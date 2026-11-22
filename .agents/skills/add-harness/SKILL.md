@@ -61,7 +61,7 @@ discoverable through ACP APIs but never count as installed from metadata.
 
 ## Research `.agents/skills` and MCP
 
-`support.agentsSkills` answers exactly one question per scope: does the harness discover Agent Skills (folders with `SKILL.md`) from the shared `.agents/skills` directory **by default**? Supported leaves list `{"id": "global-agents-skills", "kind": "dir", "template": "${HOME}/.agents/skills"}` (global) or `{"id": "project-agents-skills", "kind": "dir", "template": "${CWD}/.agents/skills"}` (local); the validator enforces this. Vendor directories such as `.claude/skills` belong in `support.skills`. Opt-in discovery (a setting that defaults off) is `unsupported` with a note.
+`support.agentsSkills` answers exactly one question per scope: does the harness discover Agent Skills (folders with `SKILL.md`) from the shared `.agents/skills` directory **by default**? Supported leaves list `{"id": "global-agents-skills", "kind": "dir", "template": "${HOME}/.agents/skills"}` (global) or `{"id": "project-agents-skills", "kind": "dir", "template": "${CWD}/.agents/skills"}` (local). If the harness redirects its global lookup with an environment override, use a derived home that defaults to `${HOME}`. Vendor directories such as `.claude/skills` belong in `support.skills`. Opt-in discovery (a setting that defaults off) is `unsupported` with a note.
 
 Read [the MCP workflow](../../../docs/harness-guide.md#finding-and-updating-mcp-records) and [MCP fields](../../../docs/configuration.md#mcp-metadata-mcp). Every entry has explicit `mcp` metadata:
 

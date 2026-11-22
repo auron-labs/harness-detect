@@ -112,7 +112,7 @@ Checklist:
 - Support path entries reuse the existing path vocabulary where possible: `id`, `kind`, `template`, optional `platforms`, optional `description`.
 - Unknown support data must be explicit: prefer `status: "unknown"`, `confidence: "unknown"`, and empty `paths` / `sources` arrays instead of partial or omitted leaves.
 - Keep top-level registry `version` at `1`. The per-harness `version` string is different: set it to the upstream release you verified against (no leading `v`) and update it whenever you re-verify the entry.
-- `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local); opt-in discovery is `unsupported` with a note.
+- `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local). A documented override can replace `${HOME}` in the global path with a derived root that defaults to `${HOME}`. Opt-in discovery is `unsupported` with a note.
 - `mcp.mcpJson` covers only the project-root `.mcp.json`; vendor files such as `.cursor/mcp.json` belong in `mcp.local.paths`. Supported scopes with paths need `format` and `keyPath`, and the entry needs a `serverFormat` taken from the docs' own stdio and remote examples. See [MCP metadata](./configuration.md#mcp-metadata-mcp).
 - Do not add shared paths (`.mcp.json`, `AGENTS.md`, `.agents/...`, `.claude/skills`) as detection `paths`; they are read by many products and cause false positives.
 - Keep contributor-facing support documentation aligned across `docs/api.md`, `docs/configuration.md`, and `docs/support-matrix.md`.

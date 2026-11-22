@@ -20463,12 +20463,18 @@
           "name": "JCODE_ROOT",
           "env": "JCODE_HOME",
           "fallback": "${HOME}/.jcode"
+        },
+        {
+          "name": "JCODE_EXTERNAL_HOME",
+          "env": "JCODE_HOME",
+          "use": "${JCODE_ROOT}/external",
+          "fallback": "${HOME}"
         }
       ],
       "env": [
         {
           "name": "JCODE_HOME",
-          "description": "Overrides the jcode configuration and state root."
+          "description": "Overrides the jcode configuration and state root and redirects shared home-relative files under its external subdirectory."
         }
       ],
       "sources": [
@@ -20615,13 +20621,15 @@
               {
                 "id": "global-agents-skills",
                 "kind": "dir",
-                "template": "${HOME}/.agents/skills"
+                "template": "${JCODE_EXTERNAL_HOME}/.agents/skills"
               }
             ],
             "sources": [
-              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L283-L295"
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-base/src/skill.rs#L283-L295",
+              "https://github.com/1jehuang/jcode/blob/v1.0.3/crates/jcode-storage/src/lib.rs#L231-L251"
             ],
-            "confidence": "source"
+            "confidence": "source",
+            "notes": "Setting JCODE_HOME redirects this lookup to its external/.agents/skills subdirectory."
           },
           "local": {
             "status": "supported",
