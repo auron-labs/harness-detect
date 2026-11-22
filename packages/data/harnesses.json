@@ -26892,12 +26892,38 @@
           "id": "user-config",
           "kind": "file",
           "template": "${HOME}/.stakpak/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
           "category": "config"
         },
         {
           "id": "autopilot-config",
           "kind": "file",
           "template": "${HOME}/.stakpak/autopilot.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${USERPROFILE}/.stakpak/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "autopilot-config-windows",
+          "kind": "file",
+          "template": "${USERPROFILE}/.stakpak/autopilot.toml",
+          "platforms": [
+            "win32"
+          ],
           "category": "config"
         }
       ],
@@ -26944,12 +26970,36 @@
               {
                 "id": "user-config",
                 "kind": "file",
-                "template": "${HOME}/.stakpak/config.toml"
+                "template": "${HOME}/.stakpak/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
               },
               {
                 "id": "autopilot-config",
                 "kind": "file",
-                "template": "${HOME}/.stakpak/autopilot.toml"
+                "template": "${HOME}/.stakpak/autopilot.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${USERPROFILE}/.stakpak/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "autopilot-config-windows",
+                "kind": "file",
+                "template": "${USERPROFILE}/.stakpak/autopilot.toml",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
@@ -27118,6 +27168,19 @@
           "id": "user-config",
           "kind": "file",
           "template": "${OPENFANG_ROOT}/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${OPENFANG_WINDOWS_ROOT}/config.toml",
+          "platforms": [
+            "win32"
+          ],
           "category": "config"
         },
         {
@@ -27145,6 +27208,11 @@
           "name": "OPENFANG_ROOT",
           "env": "OPENFANG_HOME",
           "fallback": "${HOME}/.openfang"
+        },
+        {
+          "name": "OPENFANG_WINDOWS_ROOT",
+          "env": "OPENFANG_HOME",
+          "fallback": "${USERPROFILE}/.openfang"
         },
         {
           "name": "OPENFANG_INSTALL_ROOT",
@@ -27203,7 +27271,19 @@
               {
                 "id": "user-config",
                 "kind": "file",
-                "template": "${OPENFANG_ROOT}/config.toml"
+                "template": "${OPENFANG_ROOT}/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${OPENFANG_WINDOWS_ROOT}/config.toml",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
@@ -27226,7 +27306,19 @@
               {
                 "id": "user-skills",
                 "kind": "dir",
-                "template": "${OPENFANG_ROOT}/skills"
+                "template": "${OPENFANG_ROOT}/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-skills-windows",
+                "kind": "dir",
+                "template": "${OPENFANG_WINDOWS_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
@@ -27265,7 +27357,19 @@
               {
                 "id": "user-agents",
                 "kind": "dir",
-                "template": "${OPENFANG_ROOT}/agents"
+                "template": "${OPENFANG_ROOT}/agents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-agents-windows",
+                "kind": "dir",
+                "template": "${OPENFANG_WINDOWS_ROOT}/agents",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
@@ -27308,7 +27412,7 @@
             "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/configuration.md#mcp_servers"
           ],
           "confidence": "source",
-          "notes": "Servers are stored in [[mcp_servers]] in ${OPENFANG_ROOT}/config.toml. The file is not exposed as a translation target."
+          "notes": "Servers are stored in [[mcp_servers]] in config.toml under the OpenFang home. The file is not exposed as a translation target."
         },
         "local": {
           "status": "unknown",

@@ -7202,6 +7202,10 @@
       "id": "check-stakpak-autopilot-config",
       "operation": "checkHarness",
       "input": "stakpak",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -7339,6 +7343,10 @@
       "id": "check-openfang-home-override",
       "operation": "checkHarness",
       "input": "openfang",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -7358,6 +7366,152 @@
         "matchedPathIds": [
           "user-config"
         ]
+      }
+    },
+    {
+      "id": "check-stakpak-windows-profile-config",
+      "operation": "checkHarness",
+      "input": "stakpak",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/windows-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/windows-profile/.stakpak/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/windows-profile/.stakpak/autopilot.toml"
+        }
+      ],
+      "expect": {
+        "key": "stakpak",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "autopilot-config-windows",
+          "user-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-stakpak-ignores-windows-shell-home",
+      "operation": "checkHarness",
+      "input": "stakpak",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/windows-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.stakpak/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.stakpak/autopilot.toml"
+        }
+      ],
+      "expect": {
+        "key": "stakpak",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openfang-windows-profile-config",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/windows-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/windows-profile/.openfang/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-windows-home-override",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/windows-profile",
+        "OPENFANG_HOME": "${TMP}/of-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/of-profile/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-openfang-ignores-windows-shell-home",
+      "operation": "checkHarness",
+      "input": "openfang",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/windows-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openfang/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "openfang",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
       }
     },
     {
