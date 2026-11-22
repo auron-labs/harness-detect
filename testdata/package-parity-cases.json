@@ -208,10 +208,7 @@
         "key": "claude-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-root-env",
-          "settings"
-        ],
+        "matchedPathIds": ["config-root-env", "settings"],
         "pathAssertions": [
           {
             "id": "settings",
@@ -225,10 +222,7 @@
       "id": "check-executable-only-install-codex",
       "operation": "checkHarness",
       "input": "codex",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -268,9 +262,7 @@
     {
       "id": "check-anythingllm-linux-desktop-db",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "AnythingLLM",
       "cwd": "${CWD}",
       "env": {
@@ -287,17 +279,13 @@
         "key": "anythingllm-desktop",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-linux"
-        ]
+        "matchedPathIds": ["desktop-db-linux"]
       }
     },
     {
       "id": "check-anythingllm-linux-xdg-config-home",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "anythingllm-desktop",
       "cwd": "${CWD}",
       "env": {
@@ -315,9 +303,7 @@
         "key": "anythingllm-desktop",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-linux"
-        ],
+        "matchedPathIds": ["desktop-db-linux"],
         "pathAssertions": [
           {
             "id": "desktop-db-linux",
@@ -330,9 +316,7 @@
     {
       "id": "check-anythingllm-macos-desktop-db",
       "operation": "checkHarness",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "input": "anythingllm-desktop",
       "cwd": "${CWD}",
       "env": {
@@ -349,17 +333,13 @@
         "key": "anythingllm-desktop",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-darwin"
-        ]
+        "matchedPathIds": ["desktop-db-darwin"]
       }
     },
     {
       "id": "check-anythingllm-windows-desktop-db",
       "operation": "checkHarness",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "input": "anythingllm-desktop",
       "cwd": "${CWD}",
       "env": {
@@ -377,9 +357,7 @@
         "key": "anythingllm-desktop",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-win32"
-        ]
+        "matchedPathIds": ["desktop-db-win32"]
       }
     },
     {
@@ -423,9 +401,7 @@
         "key": "happy-cli",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-settings"
-        ]
+        "matchedPathIds": ["global-settings"]
       }
     },
     {
@@ -448,18 +424,13 @@
         "key": "happy-cli",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "daemon-state"
-        ]
+        "matchedPathIds": ["daemon-state"]
       }
     },
     {
       "id": "check-happy-cli-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "happy-cli",
       "cwd": "${CWD}",
       "env": {
@@ -483,10 +454,7 @@
     {
       "id": "check-happy-haskell-executable-is-not-happy-cli",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "happy-cli",
       "cwd": "${CWD}",
       "env": {
@@ -518,10 +486,7 @@
     {
       "id": "check-emdash-workspace-server-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -545,10 +510,7 @@
     {
       "id": "check-emdash-workspace-server-state",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -565,17 +527,13 @@
         "key": "emdash",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "server-workspace-registry"
-        ]
+        "matchedPathIds": ["server-workspace-registry"]
       }
     },
     {
       "id": "check-emdash-linux-xdg-profile",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -593,17 +551,13 @@
         "key": "emdash",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-linux"
-        ]
+        "matchedPathIds": ["desktop-db-linux"]
       }
     },
     {
       "id": "check-emdash-macos-default-profile",
       "operation": "checkHarness",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -620,17 +574,13 @@
         "key": "emdash",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-darwin"
-        ]
+        "matchedPathIds": ["desktop-db-darwin"]
       }
     },
     {
       "id": "check-emdash-windows-appdata-profile",
       "operation": "checkHarness",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -648,17 +598,13 @@
         "key": "emdash",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-win32"
-        ]
+        "matchedPathIds": ["desktop-db-win32"]
       }
     },
     {
       "id": "check-emdash-desktop-profile-override",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "emdash",
       "cwd": "${CWD}",
       "env": {
@@ -676,9 +622,7 @@
         "key": "emdash",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-linux"
-        ]
+        "matchedPathIds": ["desktop-db-linux"]
       }
     },
     {
@@ -714,10 +658,7 @@
     {
       "id": "check-browser-use-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "browser-use/browser-use",
       "cwd": "${CWD}",
       "env": {
@@ -758,9 +699,7 @@
         "key": "browser-use",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "device-id"
-        ]
+        "matchedPathIds": ["device-id"]
       }
     },
     {
@@ -783,9 +722,7 @@
         "key": "browser-use",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "update-cache"
-        ]
+        "matchedPathIds": ["update-cache"]
       }
     },
     {
@@ -813,18 +750,13 @@
         "key": "browser-use",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "update-cache"
-        ]
+        "matchedPathIds": ["update-cache"]
       }
     },
     {
       "id": "check-browser-use-ignores-browser-harness-and-legacy-settings",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "browser-use",
       "cwd": "${CWD}",
       "env": {
@@ -861,10 +793,7 @@
     {
       "id": "check-openharness-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "hkuds/openharness",
       "cwd": "${CWD}",
       "env": {
@@ -961,11 +890,7 @@
         "key": "openharness",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "cron-log",
-          "sessions",
-          "settings"
-        ]
+        "matchedPathIds": ["cron-log", "sessions", "settings"]
       }
     },
     {
@@ -1010,11 +935,7 @@
         "key": "openharness",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "cron-log",
-          "ohmo-gateway",
-          "sessions"
-        ]
+        "matchedPathIds": ["cron-log", "ohmo-gateway", "sessions"]
       }
     },
     {
@@ -1067,10 +988,7 @@
     {
       "id": "check-fast-agent-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "fast-agent-acp",
       "cwd": "${CWD}",
       "env": {
@@ -1122,11 +1040,7 @@
         "key": "fast-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "agent-cards",
-          "home-config",
-          "sessions"
-        ]
+        "matchedPathIds": ["agent-cards", "home-config", "sessions"]
       }
     },
     {
@@ -1161,10 +1075,7 @@
         "key": "fast-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "home-transitional-config",
-          "sessions"
-        ]
+        "matchedPathIds": ["home-transitional-config", "sessions"]
       }
     },
     {
@@ -1191,9 +1102,7 @@
         "key": "fast-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-legacy-config"
-        ]
+        "matchedPathIds": ["project-legacy-config"]
       }
     },
     {
@@ -1245,10 +1154,7 @@
     {
       "id": "check-paradev-cli-alias",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "superset-sh/superset",
       "cwd": "${CWD}",
       "env": {
@@ -1272,10 +1178,7 @@
     {
       "id": "check-paradev-default-runtime-and-project",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "paradev",
       "cwd": "${CWD}",
       "env": {
@@ -1310,10 +1213,7 @@
     {
       "id": "check-paradev-legacy-runtime-and-project",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "superset",
       "cwd": "${CWD}",
       "env": {
@@ -1348,10 +1248,7 @@
     {
       "id": "check-paradev-distinct-runtime-and-installer-overrides",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "paradev",
       "cwd": "${CWD}",
       "env": {
@@ -1400,10 +1297,7 @@
     {
       "id": "check-paradev-ignores-apache-superset",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "paradev",
       "cwd": "${CWD}",
       "env": {
@@ -1435,9 +1329,7 @@
     {
       "id": "check-openai-symphony-release-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "openai/symphony",
       "cwd": "${CWD}",
       "env": {
@@ -1461,9 +1353,7 @@
     {
       "id": "check-openai-symphony-local-release",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "symphony",
       "cwd": "${CWD}",
       "env": {
@@ -1484,18 +1374,13 @@
         "key": "openai-symphony",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "release-linux-arm64"
-        ]
+        "matchedPathIds": ["release-linux-arm64"]
       }
     },
     {
       "id": "check-openai-symphony-built-checkout",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "symphony",
       "cwd": "${CWD}",
       "env": {
@@ -1513,18 +1398,13 @@
         "key": "openai-symphony",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "source-checkout-launcher"
-        ]
+        "matchedPathIds": ["source-checkout-launcher"]
       }
     },
     {
       "id": "check-openai-symphony-default-build-directory",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "symphony",
       "cwd": "${CWD}/elixir",
       "env": {
@@ -1541,18 +1421,13 @@
         "key": "openai-symphony",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "source-build-app"
-        ]
+        "matchedPathIds": ["source-build-app"]
       }
     },
     {
       "id": "check-openai-symphony-run-directory",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "openai-symphony",
       "cwd": "${CWD}",
       "env": {
@@ -1569,18 +1444,13 @@
         "key": "openai-symphony",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "runtime-log"
-        ]
+        "matchedPathIds": ["runtime-log"]
       }
     },
     {
       "id": "check-openai-symphony-ignores-workflow-and-bare-cli",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "openai-symphony",
       "cwd": "${CWD}",
       "env": {
@@ -1629,9 +1499,7 @@
         "key": "agent-zero",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "default-instance-settings"
-        ]
+        "matchedPathIds": ["default-instance-settings"]
       }
     },
     {
@@ -1653,9 +1521,7 @@
         "key": "agent-zero",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "default-instance-uploads"
-        ]
+        "matchedPathIds": ["default-instance-uploads"]
       }
     },
     {
@@ -1677,9 +1543,7 @@
         "key": "agent-zero",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-config"
-        ]
+        "matchedPathIds": ["project-config"]
       }
     },
     {
@@ -1736,10 +1600,7 @@
         "key": "eigent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-mcp",
-          "run-journal"
-        ]
+        "matchedPathIds": ["global-mcp", "run-journal"]
       }
     },
     {
@@ -1762,9 +1623,7 @@
         "key": "eigent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "run-journal"
-        ]
+        "matchedPathIds": ["run-journal"]
       }
     },
     {
@@ -1801,10 +1660,7 @@
     {
       "id": "check-deerflow-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "deer-flow",
       "cwd": "${CWD}",
       "env": {
@@ -1844,9 +1700,7 @@
         "key": "deerflow",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-runtime"
-        ]
+        "matchedPathIds": ["project-runtime"]
       }
     },
     {
@@ -1868,9 +1722,7 @@
         "key": "deerflow",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "checkout-backend-runtime"
-        ]
+        "matchedPathIds": ["checkout-backend-runtime"]
       }
     },
     {
@@ -1893,9 +1745,7 @@
         "key": "deerflow",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-runtime"
-        ]
+        "matchedPathIds": ["project-runtime"]
       }
     },
     {
@@ -1918,9 +1768,7 @@
         "key": "deerflow",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "managed-subagents"
-        ]
+        "matchedPathIds": ["managed-subagents"]
       }
     },
     {
@@ -1965,10 +1813,7 @@
     {
       "id": "check-agent-browser-on-path",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "agent-browser",
       "cwd": "${CWD}",
       "env": {
@@ -1992,10 +1837,7 @@
     {
       "id": "check-agent-browser-user-config",
       "operation": "checkHarness",
-      "platforms": [
-        "linux",
-        "darwin"
-      ],
+      "platforms": ["linux", "darwin"],
       "input": "vercel-labs/agent-browser",
       "cwd": "${CWD}",
       "env": {
@@ -2013,17 +1855,13 @@
         "key": "agent-browser",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-unix"
-        ]
+        "matchedPathIds": ["user-config-unix"]
       }
     },
     {
       "id": "check-agent-browser-windows-profile-config",
       "operation": "checkHarness",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "input": "agent-browser",
       "cwd": "${CWD}",
       "env": {
@@ -2042,9 +1880,7 @@
         "key": "agent-browser",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-win32"
-        ]
+        "matchedPathIds": ["user-config-win32"]
       }
     },
     {
@@ -2133,10 +1969,7 @@
         }
       ],
       "id": "check-executable-neovate-code-neovate",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "neovate-code",
         "installed": true,
@@ -2209,10 +2042,7 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -2236,10 +2066,7 @@
         }
       ],
       "id": "check-executable-mini-swe-agent-mini-swe-agent",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "mini-swe-agent",
         "installed": true,
@@ -2312,10 +2139,7 @@
         }
       ],
       "id": "check-executable-deepagents-code-deepagents-code",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -2339,10 +2163,7 @@
         }
       ],
       "id": "check-executable-deepagents-code-dcode",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "deepagents-code",
         "installed": true,
@@ -2415,10 +2236,7 @@
         }
       ],
       "id": "check-executable-shai-shai",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "shai",
         "installed": true,
@@ -2491,10 +2309,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -2518,10 +2333,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-cbc",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -2545,10 +2357,7 @@
         }
       ],
       "id": "check-executable-codebuddy-code-codebuddy-code",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "expect": {
         "key": "codebuddy-code",
         "installed": true,
@@ -2608,10 +2417,7 @@
         "key": "neovate-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-config",
-          "project-dir"
-        ],
+        "matchedPathIds": ["project-config", "project-dir"],
         "pathAssertions": [
           {
             "id": "project-config",
@@ -2642,10 +2448,7 @@
         "key": "deepagents-code",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config",
-          "config-dir"
-        ],
+        "matchedPathIds": ["config", "config-dir"],
         "pathAssertions": [
           {
             "id": "config",
@@ -2676,10 +2479,7 @@
         "key": "shai",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "auth-config",
-          "config-dir"
-        ],
+        "matchedPathIds": ["auth-config", "config-dir"],
         "pathAssertions": [
           {
             "id": "auth-config",
@@ -2693,9 +2493,7 @@
       "id": "check-mini-config-linux-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2713,10 +2511,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-linux",
-          "config-linux"
-        ],
+        "matchedPathIds": ["config-dir-linux", "config-linux"],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -2730,9 +2525,7 @@
       "id": "check-mini-config-linux-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2751,10 +2544,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-linux",
-          "config-linux"
-        ],
+        "matchedPathIds": ["config-dir-linux", "config-linux"],
         "pathAssertions": [
           {
             "id": "config-linux",
@@ -2768,9 +2558,7 @@
       "id": "check-mini-config-darwin-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2788,10 +2576,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-darwin",
-          "config-darwin"
-        ],
+        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -2805,9 +2590,7 @@
       "id": "check-mini-config-darwin-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2826,10 +2609,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-darwin",
-          "config-darwin"
-        ],
+        "matchedPathIds": ["config-dir-darwin", "config-darwin"],
         "pathAssertions": [
           {
             "id": "config-darwin",
@@ -2843,9 +2623,7 @@
       "id": "check-mini-config-win32-default",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2863,10 +2641,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-win32",
-          "config-win32"
-        ],
+        "matchedPathIds": ["config-dir-win32", "config-win32"],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -2880,9 +2655,7 @@
       "id": "check-mini-config-win32-override",
       "operation": "checkHarness",
       "input": "mini-swe-agent",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -2901,10 +2674,7 @@
         "key": "mini-swe-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "config-dir-win32",
-          "config-win32"
-        ],
+        "matchedPathIds": ["config-dir-win32", "config-win32"],
         "pathAssertions": [
           {
             "id": "config-win32",
@@ -2987,19 +2757,13 @@
         "executablePath": "${BIN}/perch",
         "matchedPathIds": []
       },
-      "platforms": [
-        "darwin",
-        "linux"
-      ]
+      "platforms": ["darwin", "linux"]
     },
     {
       "id": "check-path-only-devin-user-mcp",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -3015,9 +2779,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp"
-        ],
+        "matchedPathIds": ["user-mcp"],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -3031,10 +2793,7 @@
       "id": "check-path-only-devin-user-mcp-xdg",
       "operation": "checkHarness",
       "input": "devin-cli",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -3051,9 +2810,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp"
-        ],
+        "matchedPathIds": ["user-mcp"],
         "pathAssertions": [
           {
             "id": "user-mcp",
@@ -3067,9 +2824,7 @@
       "id": "check-path-only-devin-user-mcp-windows",
       "operation": "checkHarness",
       "input": "devin",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -3086,9 +2841,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-mcp-windows"
-        ],
+        "matchedPathIds": ["user-mcp-windows"],
         "pathAssertions": [
           {
             "id": "user-mcp-windows",
@@ -3117,9 +2870,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp"
-        ],
+        "matchedPathIds": ["project-mcp"],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -3148,9 +2899,7 @@
         "key": "devin-for-terminal",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp-local"
-        ],
+        "matchedPathIds": ["project-mcp-local"],
         "pathAssertions": [
           {
             "id": "project-mcp-local",
@@ -3179,9 +2928,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-mcp"
-        ],
+        "matchedPathIds": ["global-mcp"],
         "pathAssertions": [
           {
             "id": "global-mcp",
@@ -3210,9 +2957,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-manual"
-        ],
+        "matchedPathIds": ["global-manual"],
         "pathAssertions": [
           {
             "id": "global-manual",
@@ -3241,9 +2986,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp"
-        ],
+        "matchedPathIds": ["project-mcp"],
         "pathAssertions": [
           {
             "id": "project-mcp",
@@ -3272,9 +3015,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-manual"
-        ],
+        "matchedPathIds": ["project-manual"],
         "pathAssertions": [
           {
             "id": "project-manual",
@@ -3303,9 +3044,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-rules"
-        ],
+        "matchedPathIds": ["project-rules"],
         "pathAssertions": [
           {
             "id": "project-rules",
@@ -3334,9 +3073,7 @@
         "key": "perch",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-memory"
-        ],
+        "matchedPathIds": ["project-memory"],
         "pathAssertions": [
           {
             "id": "project-memory",
@@ -3384,9 +3121,7 @@
     {
       "id": "check-vibe-kanban-linux-default",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "BloopAI/vibe-kanban",
       "cwd": "${CWD}",
       "env": {
@@ -3403,17 +3138,13 @@
         "key": "vibe-kanban",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-config-linux"
-        ]
+        "matchedPathIds": ["global-config-linux"]
       }
     },
     {
       "id": "check-vibe-kanban-linux-xdg",
       "operation": "checkHarness",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "input": "vibe-kanban",
       "cwd": "${CWD}",
       "env": {
@@ -3435,17 +3166,13 @@
         "key": "vibe-kanban",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "workspace-db-linux"
-        ]
+        "matchedPathIds": ["workspace-db-linux"]
       }
     },
     {
       "id": "check-vibe-kanban-macos",
       "operation": "checkHarness",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "input": "vibe-kanban",
       "cwd": "${CWD}",
       "env": {
@@ -3462,17 +3189,13 @@
         "key": "vibe-kanban",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-profiles-darwin"
-        ]
+        "matchedPathIds": ["global-profiles-darwin"]
       }
     },
     {
       "id": "check-vibe-kanban-windows",
       "operation": "checkHarness",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "input": "vibe-kanban",
       "cwd": "${CWD}",
       "env": {
@@ -3490,9 +3213,7 @@
         "key": "vibe-kanban",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-config-win32"
-        ]
+        "matchedPathIds": ["global-config-win32"]
       }
     },
     {
@@ -3545,17 +3266,13 @@
         "key": "deepseek-harness",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "web-profile"
-        ]
+        "matchedPathIds": ["web-profile"]
       }
     },
     {
       "id": "check-deepseek-windows-userprofile",
       "operation": "checkHarness",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "input": "deepseek-harness",
       "cwd": "${CWD}",
       "env": {
@@ -3573,9 +3290,7 @@
         "key": "deepseek-harness",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-profile"
-        ]
+        "matchedPathIds": ["desktop-profile"]
       }
     },
     {
@@ -3604,9 +3319,7 @@
         "key": "deepseek-harness",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "home-patch"
-        ],
+        "matchedPathIds": ["home-patch"],
         "pathAssertions": [
           {
             "id": "home-patch",
@@ -3619,10 +3332,7 @@
     {
       "id": "check-deepseek-ignores-unrelated-dsh-and-patch",
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "input": "deepseek-harness",
       "cwd": "${CWD}",
       "env": {
@@ -3659,10 +3369,7 @@
     {
       "id": "acp-launches-deepseek-does-not-trust-bare-dsh",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -3728,10 +3435,7 @@
         "executablePath": "${BIN}/prime-agent",
         "matchedPathIds": []
       },
-      "platforms": [
-        "darwin",
-        "linux"
-      ]
+      "platforms": ["darwin", "linux"]
     },
     {
       "id": "check-path-only-prime-agent-global-settings",
@@ -3752,10 +3456,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-settings",
-          "root"
-        ],
+        "matchedPathIds": ["global-settings", "root"],
         "pathAssertions": [
           {
             "id": "global-settings",
@@ -3785,10 +3486,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-settings",
-          "root"
-        ],
+        "matchedPathIds": ["global-settings", "root"],
         "pathAssertions": [
           {
             "id": "global-settings",
@@ -3817,9 +3515,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-settings"
-        ],
+        "matchedPathIds": ["project-settings"],
         "pathAssertions": [
           {
             "id": "project-settings",
@@ -3850,9 +3546,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "sessions"
-        ],
+        "matchedPathIds": ["sessions"],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -3882,9 +3576,7 @@
         "key": "prime-agent",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "sessions"
-        ],
+        "matchedPathIds": ["sessions"],
         "pathAssertions": [
           {
             "id": "sessions",
@@ -3918,9 +3610,7 @@
         "key": "jcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-config"
-        ]
+        "matchedPathIds": ["global-config"]
       }
     },
     {
@@ -3969,9 +3659,7 @@
         "key": "jcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-mcp"
-        ]
+        "matchedPathIds": ["project-mcp"]
       }
     },
     {
@@ -4012,9 +3700,7 @@
       "id": "check-jcode-windows-launcher",
       "operation": "checkHarness",
       "input": "jcode",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4031,9 +3717,7 @@
         "key": "jcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "windows-launcher"
-        ]
+        "matchedPathIds": ["windows-launcher"]
       }
     },
     {
@@ -4055,19 +3739,14 @@
         "key": "nanobot",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "global-config"
-        ]
+        "matchedPathIds": ["global-config"]
       }
     },
     {
       "id": "check-nanobot-ignores-obot-cli-and-yaml",
       "operation": "checkHarness",
       "input": "nanobot",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4108,18 +3787,13 @@
           },
           "local": {
             "command": "mcp-tool",
-            "args": [
-              "--stdio"
-            ]
+            "args": ["--stdio"]
           }
         }
       },
       "expect": {
         "format": "json",
-        "keyPath": [
-          "tools",
-          "mcpServers"
-        ],
+        "keyPath": ["tools", "mcpServers"],
         "config": {
           "tools": {
             "mcpServers": {
@@ -4130,9 +3804,7 @@
               "local": {
                 "type": "stdio",
                 "command": "mcp-tool",
-                "args": [
-                  "--stdio"
-                ]
+                "args": ["--stdio"]
               }
             }
           }
@@ -4154,10 +3826,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4181,10 +3850,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4208,10 +3874,7 @@
     },
     {
       "operation": "checkHarness",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4257,10 +3920,7 @@
     {
       "id": "acp-launches-installed-binary-without-runner",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4278,9 +3938,7 @@
           {
             "key": "gemini-cli",
             "command": "${BIN}/gemini",
-            "args": [
-              "--acp"
-            ]
+            "args": ["--acp"]
           }
         ]
       }
@@ -4288,10 +3946,7 @@
     {
       "id": "acp-launches-fast-agent",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4317,10 +3972,7 @@
     {
       "id": "acp-launches-jcode",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4338,9 +3990,7 @@
           {
             "key": "jcode",
             "command": "${BIN}/jcode",
-            "args": [
-              "acp"
-            ]
+            "args": ["acp"]
           }
         ]
       }
@@ -4348,10 +3998,7 @@
     {
       "id": "acp-launches-package-runner-alone",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4380,10 +4027,7 @@
     },
     {
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4408,10 +4052,7 @@
     },
     {
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4440,9 +4081,7 @@
           {
             "key": "gemini-cli",
             "command": "${BIN}/gemini",
-            "args": [
-              "--acp"
-            ]
+            "args": ["--acp"]
           }
         ]
       }
@@ -4450,10 +4089,7 @@
     {
       "id": "acp-launches-adapters-installed",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4489,10 +4125,7 @@
     {
       "id": "acp-launches-base-clis-skip-adapter-records",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4517,10 +4150,7 @@
     {
       "id": "acp-launches-detected-binary-differs-from-launch-command",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4540,10 +4170,7 @@
     {
       "id": "acp-launches-launch-command-present",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4561,9 +4188,7 @@
           {
             "key": "cursor",
             "command": "${BIN}/cursor-agent",
-            "args": [
-              "acp"
-            ]
+            "args": ["acp"]
           }
         ]
       }
@@ -4571,10 +4196,7 @@
     {
       "id": "acp-launches-other-platform-recipe",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -4624,10 +4246,7 @@
         }
       ],
       "expect": {
-        "installedKeys": [
-          "claude-code",
-          "codex"
-        ],
+        "installedKeys": ["claude-code", "codex"],
         "count": 2
       }
     },
@@ -4672,9 +4291,7 @@
       "expect": {
         "scope": "local",
         "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "custom": {
@@ -4714,9 +4331,7 @@
       "expect": {
         "scope": "global",
         "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "docs": {
@@ -4743,11 +4358,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -4768,9 +4379,7 @@
       "expect": {
         "scope": "local",
         "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "docs": {
@@ -4783,11 +4392,7 @@
             "fs": {
               "type": "stdio",
               "command": "npx",
-              "args": [
-                "-y",
-                "@modelcontextprotocol/server-filesystem",
-                "."
-              ],
+              "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
               "env": {
                 "ROOT": "."
               }
@@ -4810,11 +4415,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -4834,9 +4435,7 @@
       },
       "expect": {
         "format": "toml",
-        "keyPath": [
-          "mcp_servers"
-        ],
+        "keyPath": ["mcp_servers"],
         "config": {
           "mcp_servers": {
             "docs": {
@@ -4847,11 +4446,7 @@
             },
             "fs": {
               "command": "npx",
-              "args": [
-                "-y",
-                "@modelcontextprotocol/server-filesystem",
-                "."
-              ],
+              "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
               "env": {
                 "ROOT": "."
               }
@@ -4874,11 +4469,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -4929,9 +4520,7 @@
         "mcpServers": {
           "stdio": {
             "command": "fixture-server",
-            "args": [
-              "--stdio"
-            ],
+            "args": ["--stdio"],
             "env": {
               "PROFILE": "fixture"
             }
@@ -4952,16 +4541,12 @@
       "expect": {
         "scope": "global",
         "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "stdio": {
               "command": "fixture-server",
-              "args": [
-                "--stdio"
-              ],
+              "args": ["--stdio"],
               "env": {
                 "PROFILE": "fixture"
               }
@@ -4991,11 +4576,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -5025,11 +4606,7 @@
           {
             "name": "fs",
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -5046,9 +4623,7 @@
         "mcpServers": {
           "stdio": {
             "command": "fixture-server",
-            "args": [
-              "--stdio"
-            ],
+            "args": ["--stdio"],
             "env": {
               "PROFILE": "fixture"
             }
@@ -5065,17 +4640,13 @@
       "expect": {
         "scope": "global",
         "format": "json",
-        "keyPath": [
-          "mcp_servers"
-        ],
+        "keyPath": ["mcp_servers"],
         "config": {
           "mcp_servers": {
             "stdio": {
               "type": "stdio",
               "command": "fixture-server",
-              "args": [
-                "--stdio"
-              ],
+              "args": ["--stdio"],
               "env": {
                 "PROFILE": "fixture"
               }
@@ -5101,9 +4672,7 @@
         "mcpServers": {
           "stdio": {
             "command": "fixture-server",
-            "args": [
-              "--stdio"
-            ],
+            "args": ["--stdio"],
             "env": {
               "PROFILE": "fixture"
             }
@@ -5124,19 +4693,14 @@
       "expect": {
         "scope": "local",
         "format": "yaml",
-        "keyPath": [
-          "mcp",
-          "servers"
-        ],
+        "keyPath": ["mcp", "servers"],
         "config": {
           "mcp": {
             "servers": {
               "stdio": {
                 "transport": "stdio",
                 "command": "fixture-server",
-                "args": [
-                  "--stdio"
-                ],
+                "args": ["--stdio"],
                 "env": {
                   "PROFILE": "fixture"
                 }
@@ -5167,9 +4731,7 @@
         "mcpServers": {
           "stdio": {
             "command": "fixture-server",
-            "args": [
-              "--stdio"
-            ],
+            "args": ["--stdio"],
             "env": {
               "PROFILE": "fixture"
             }
@@ -5190,17 +4752,13 @@
       "expect": {
         "scope": "local",
         "format": "json",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "stdio": {
               "type": "stdio",
               "command": "fixture-server",
-              "args": [
-                "--stdio"
-              ],
+              "args": ["--stdio"],
               "env": {
                 "PROFILE": "fixture"
               }
@@ -5230,11 +4788,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -5264,11 +4818,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -5309,11 +4859,7 @@
         "mcpServers": {
           "fs": {
             "command": "npx",
-            "args": [
-              "-y",
-              "@modelcontextprotocol/server-filesystem",
-              "."
-            ],
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
             "env": {
               "ROOT": "."
             }
@@ -5339,10 +4885,7 @@
       "id": "check-vtcode-xdg-config",
       "operation": "checkHarness",
       "input": "vt-code",
-      "platforms": [
-        "linux",
-        "freebsd"
-      ],
+      "platforms": ["linux", "freebsd"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5359,18 +4902,14 @@
         "key": "vtcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-xdg"
-        ]
+        "matchedPathIds": ["user-config-xdg"]
       }
     },
     {
       "id": "check-vtcode-config-and-legacy-overrides",
       "operation": "checkHarness",
       "input": "vtcode",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5397,19 +4936,14 @@
         "key": "vtcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "legacy-config",
-          "user-config-xdg"
-        ]
+        "matchedPathIds": ["legacy-config", "user-config-xdg"]
       }
     },
     {
       "id": "check-vtcode-macos-native-config",
       "operation": "checkHarness",
       "input": "vtcode",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5430,18 +4964,14 @@
         "key": "vtcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-macos"
-        ]
+        "matchedPathIds": ["user-config-macos"]
       }
     },
     {
       "id": "check-vtcode-windows-native-config",
       "operation": "checkHarness",
       "input": "vtcode",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5458,9 +4988,7 @@
         "key": "vtcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-windows"
-        ]
+        "matchedPathIds": ["user-config-windows"]
       }
     },
     {
@@ -5482,9 +5010,7 @@
         "key": "vtcode",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-fallback-config"
-        ]
+        "matchedPathIds": ["project-fallback-config"]
       }
     },
     {
@@ -5540,10 +5066,7 @@
       "expect": {
         "scope": "local",
         "format": "toml",
-        "keyPath": [
-          "mcp",
-          "providers"
-        ],
+        "keyPath": ["mcp", "providers"],
         "config": {
           "mcp": {
             "providers": [
@@ -5585,9 +5108,7 @@
         "key": "eca",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config"
-        ]
+        "matchedPathIds": ["user-config"]
       }
     },
     {
@@ -5609,9 +5130,7 @@
         "key": "eca",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "project-config"
-        ]
+        "matchedPathIds": ["project-config"]
       }
     },
     {
@@ -5667,9 +5186,7 @@
       "expect": {
         "scope": "global",
         "format": "jsonc",
-        "keyPath": [
-          "mcpServers"
-        ],
+        "keyPath": ["mcpServers"],
         "config": {
           "mcpServers": {
             "local-tool": {
@@ -5696,10 +5213,7 @@
       "id": "check-herdr-xdg-config",
       "operation": "checkHarness",
       "input": "herdr",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5716,19 +5230,14 @@
         "key": "herdr",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config-xdg"
-        ]
+        "matchedPathIds": ["user-config-xdg"]
       }
     },
     {
       "id": "check-herdr-explicit-config-and-session",
       "operation": "checkHarness",
       "input": "herdr",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5749,19 +5258,14 @@
         "key": "herdr",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "explicit-config",
-          "session-xdg"
-        ]
+        "matchedPathIds": ["explicit-config", "session-xdg"]
       }
     },
     {
       "id": "check-herdr-windows-session",
       "operation": "checkHarness",
       "input": "herdr",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5778,9 +5282,7 @@
         "key": "herdr",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "session-windows"
-        ]
+        "matchedPathIds": ["session-windows"]
       }
     },
     {
@@ -5817,9 +5319,7 @@
       "id": "check-pipali-desktop-xdg-db",
       "operation": "checkHarness",
       "input": "pipali",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5836,18 +5336,14 @@
         "key": "pipali",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-linux"
-        ]
+        "matchedPathIds": ["desktop-db-linux"]
       }
     },
     {
       "id": "check-pipali-legacy-macos-db",
       "operation": "checkHarness",
       "input": "pipali",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5863,18 +5359,14 @@
         "key": "pipali",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "legacy-db-macos"
-        ]
+        "matchedPathIds": ["legacy-db-macos"]
       }
     },
     {
       "id": "check-pipali-desktop-windows-db",
       "operation": "checkHarness",
       "input": "pipali",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -5891,9 +5383,7 @@
         "key": "pipali",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "desktop-db-windows"
-        ]
+        "matchedPathIds": ["desktop-db-windows"]
       }
     },
     {
@@ -5916,9 +5406,7 @@
         "key": "pipali",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "server-db-override"
-        ]
+        "matchedPathIds": ["server-db-override"]
       }
     },
     {
@@ -5970,9 +5458,7 @@
         "key": "qwenpaw",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config"
-        ]
+        "matchedPathIds": ["user-config"]
       }
     },
     {
@@ -5995,9 +5481,7 @@
         "key": "qwenpaw",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-config"
-        ]
+        "matchedPathIds": ["user-config"]
       }
     },
     {
@@ -6033,10 +5517,7 @@
     {
       "id": "acp-launches-qwenpaw",
       "operation": "detectInstalledAcpLaunches",
-      "platforms": [
-        "darwin",
-        "linux"
-      ],
+      "platforms": ["darwin", "linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -6054,9 +5535,7 @@
           {
             "key": "qwenpaw",
             "command": "${BIN}/qwenpaw",
-            "args": [
-              "acp"
-            ]
+            "args": ["acp"]
           }
         ]
       }
@@ -6080,9 +5559,7 @@
         "key": "openhuman",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "local-user-config"
-        ]
+        "matchedPathIds": ["local-user-config"]
       }
     },
     {
@@ -6105,9 +5582,7 @@
         "key": "openhuman",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "staging-active-user"
-        ]
+        "matchedPathIds": ["staging-active-user"]
       }
     },
     {
@@ -6167,9 +5642,7 @@
       "id": "check-openhuman-macos-user-app",
       "operation": "checkHarness",
       "input": "openhuman",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${TMP}/oh-macos-home",
@@ -6185,9 +5658,7 @@
         "key": "openhuman",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-macos-app"
-        ]
+        "matchedPathIds": ["user-macos-app"]
       }
     },
     {
@@ -6203,19 +5674,14 @@
           },
           "stdio": {
             "command": "fixture-mcp",
-            "args": [
-              "--stdio"
-            ]
+            "args": ["--stdio"]
           }
         }
       },
       "expect": {
         "scope": "global",
         "format": "toml",
-        "keyPath": [
-          "mcp_client",
-          "servers"
-        ],
+        "keyPath": ["mcp_client", "servers"],
         "config": {
           "mcp_client": {
             "servers": [
@@ -6226,9 +5692,7 @@
               {
                 "name": "stdio",
                 "command": "fixture-mcp",
-                "args": [
-                  "--stdio"
-                ]
+                "args": ["--stdio"]
               }
             ]
           }
@@ -6240,9 +5704,7 @@
       "id": "check-qwenpaw-macos-user-app",
       "operation": "checkHarness",
       "input": "qwenpaw",
-      "platforms": [
-        "darwin"
-      ],
+      "platforms": ["darwin"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${TMP}/paw-mac-home",
@@ -6258,18 +5720,14 @@
         "key": "qwenpaw",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-macos-app"
-        ]
+        "matchedPathIds": ["user-macos-app"]
       }
     },
     {
       "id": "check-qwenpaw-windows-user-app-without-cli",
       "operation": "checkHarness",
       "input": "qwenpaw",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -6286,18 +5744,14 @@
         "key": "qwenpaw",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-windows-app"
-        ]
+        "matchedPathIds": ["user-windows-app"]
       }
     },
     {
       "id": "check-openhuman-debian-desktop-binary",
       "operation": "checkHarness",
       "input": "openhuman",
-      "platforms": [
-        "linux"
-      ],
+      "platforms": ["linux"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -6321,9 +5775,7 @@
       "id": "check-openhuman-windows-user-app-without-cli",
       "operation": "checkHarness",
       "input": "openhuman",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -6340,18 +5792,14 @@
         "key": "openhuman",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "user-windows-app"
-        ]
+        "matchedPathIds": ["user-windows-app"]
       }
     },
     {
       "id": "check-openhuman-windows-system-app-without-cli",
       "operation": "checkHarness",
       "input": "openhuman",
-      "platforms": [
-        "win32"
-      ],
+      "platforms": ["win32"],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -6368,9 +5816,7 @@
         "key": "openhuman",
         "installed": true,
         "executablePath": null,
-        "matchedPathIds": [
-          "system-windows-app"
-        ]
+        "matchedPathIds": ["system-windows-app"]
       }
     },
     {
@@ -6382,10 +5828,7 @@
           "stdio-full": {
             "type": "stdio",
             "command": "npx",
-            "args": [
-              "-y",
-              "pkg"
-            ],
+            "args": ["-y", "pkg"],
             "env": {
               "TOKEN": "${TOKEN}"
             }
@@ -6434,9 +5877,7 @@
           },
           "bad-args": {
             "command": "server",
-            "args": [
-              1
-            ]
+            "args": [1]
           },
           "bad-env": {
             "command": "server",
@@ -6446,9 +5887,7 @@
           },
           "bad-headers": {
             "url": "https://example.com/mcp",
-            "headers": [
-              "x"
-            ]
+            "headers": ["x"]
           },
           "empty-command": {
             "command": ""
@@ -6461,6 +5900,329 @@
             "command": "proto-server"
           }
         }
+      }
+    },
+    {
+      "id": "check-open-design-default-agent-profile",
+      "operation": "checkHarness",
+      "input": "opendesign",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.open-design/agents.local.json"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["user-agent-profiles"]
+      }
+    },
+    {
+      "id": "check-open-design-source-runtime-db",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.od/app.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["source-runtime-db"]
+      }
+    },
+    {
+      "id": "check-open-design-macos-bundle",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": ["darwin"],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/Open Design.app"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["user-macos-app"]
+      }
+    },
+    {
+      "id": "check-open-design-windows-default-installer",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": ["win32"],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/od-local"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/od-local/Programs/Open Design/Open Design.exe"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["user-windows-app"]
+      }
+    },
+    {
+      "id": "check-open-design-ignores-system-od-and-shared-files",
+      "operation": "checkHarness",
+      "input": "open-design",
+      "platforms": ["darwin", "linux"],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OD_AGENT_PROFILES_CONFIG": "${TMP}/foreign.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/foreign.json"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/od",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "open-design",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-open-design-global",
+      "operation": "translateMcpJson",
+      "input": "opendesign",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "X-Example": "fixture"
+            }
+          },
+          "events": {
+            "type": "sse",
+            "url": "https://example.com/events"
+          },
+          "local": {
+            "command": "fixture-mcp",
+            "args": ["--stdio"],
+            "env": {
+              "FIXTURE_MODE": "demo"
+            }
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "json",
+        "keyPath": ["servers"],
+        "config": {
+          "servers": [
+            {
+              "id": "docs",
+              "transport": "http",
+              "enabled": true,
+              "url": "https://example.com/mcp",
+              "headers": {
+                "X-Example": "fixture"
+              }
+            },
+            {
+              "id": "events",
+              "transport": "sse",
+              "enabled": true,
+              "url": "https://example.com/events"
+            },
+            {
+              "id": "local",
+              "transport": "stdio",
+              "enabled": true,
+              "command": "fixture-mcp",
+              "args": ["--stdio"],
+              "env": {
+                "FIXTURE_MODE": "demo"
+              }
+            }
+          ]
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "check-omnigent-independent-config-and-data-overrides",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OMNIGENT_CONFIG_HOME": "${TMP}/om-config",
+        "OMNIGENT_DATA_DIR": "${TMP}/om-state"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/om-config/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/om-state/chat.db"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["local-session-db", "user-config"]
+      }
+    },
+    {
+      "id": "check-omnigent-default-config-with-data-override",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OMNIGENT_DATA_DIR": "${TMP}/other-state"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.omnigent/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["user-config"]
+      }
+    },
+    {
+      "id": "check-omnigent-project-config",
+      "operation": "checkHarness",
+      "input": "omni",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.omnigent/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["project-config"]
+      }
+    },
+    {
+      "id": "check-omnigent-macos-bundle",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "platforms": ["darwin"],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/Omnigent.app"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": ["user-macos-app"]
+      }
+    },
+    {
+      "id": "check-omnigent-ignores-unrelated-omni-and-shared-files",
+      "operation": "checkHarness",
+      "input": "omnigent",
+      "platforms": ["darwin", "linux"],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/omni",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "omnigent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
       }
     }
   ]
