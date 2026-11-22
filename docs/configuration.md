@@ -290,6 +290,8 @@ These are computed by `withDefaults()` in all packages and are always available:
 | `${CWD}` | `process.cwd()` / `os.Getwd()` (or `options.cwd`) | `withDefaults()` |
 | `${PATH}` | `process.env.PATH` / caller-supplied | Used for executable lookup |
 
+**Stakpak and OpenFang on Windows:** Detection uses `USERPROFILE` for the default config paths. If it is unset or empty, the registry falls back to normalized `HOME`, which may not be the Windows profile these harnesses use. Changing `USERPROFILE` also does not move the Windows Known Folder used by Stakpak Autopilot and OpenFang.
+
 ### Harness-specific derived roots
 
 Each harness can declare its own derived roots. For example, Codex declares:
@@ -368,6 +370,7 @@ The following table lists harness-specific env vars that affect path resolution 
 
 | Harness key | Override env var | Derived root | Default fallback |
 |---|---|---|---|
+| `agent-swarm` | `AGENT_SWARM_DIR` | `AGENT_SWARM_INSTALL_ROOT` | `${HOME}/agent-swarm` |
 | `amazon-q-cli` | `Q_CLI_DATA_DIR` | `Q_CLI_DATA_ROOT` | (empty — path resolves to null) |
 | `amp` | — | `AMP_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/amp` |
 | `amp` | `AMP_DATA_HOME` | `AMP_DATA_ROOT` | `${XDG_DATA_HOME}/amp` |
@@ -533,7 +536,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 95
+console.log(harnesses.harnesses.length);  // 97
 ```
 
 <!-- /automd -->
