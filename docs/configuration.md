@@ -66,16 +66,9 @@ A machine-checked JSON Schema (draft 2020-12) is published at `packages/data/har
 
 ### ACP metadata (`acp`)
 
-ACP (Agent Client Protocol) metadata is a top-level harness field, separate from
-`support`, whose categories describe file locations at global/local scopes.
-ACP is descriptive and never counts as installation evidence. Registry version
-remains `1`.
+ACP (Agent Client Protocol) metadata is a top-level harness field, separate from `support`, whose categories describe file locations at global/local scopes. ACP is descriptive and never counts as installation evidence. Registry version remains `1`.
 
-The canonical registry and bundled copies contain researched ACP records,
-including explicit unknowns and separate adapter entries. `acp` remains optional
-in stored definitions. Raw/list/detection JSON surfaces preserve omission; Python's immutable typed definitions expose
-`acp=None`. Dedicated ACP getters normalize absent metadata to
-`{"status":"unknown","sources":[],"confidence":"unknown"}`.
+The canonical registry and bundled copies contain researched ACP records, including explicit unknowns and separate adapter entries. `acp` remains optional in stored definitions. Raw/list/detection JSON surfaces preserve omission; Python's immutable typed definitions expose `acp=None`. Dedicated ACP getters normalize absent metadata to `{"status":"unknown","sources":[],"confidence":"unknown"}`.
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
@@ -87,31 +80,11 @@ in stored definitions. Raw/list/detection JSON surfaces preserve omission; Pytho
 | `confidence` | string | yes | Same values as support confidence; cannot be `unknown` for a known status. |
 | `notes` | string | no | Nonempty factual qualifier. |
 
-A `supported` entry has exactly one of `launches` or `adapter`. An `unsupported`
-or `unknown` entry has neither. An adapter target must use its exact registry
-key; aliases, self references, missing targets, adapter chains, and cycles are
-invalid. The referenced entry owns the launch and describes its installation
-requirements through its existing `installations`, `env`, and installation notes.
-Those requirements may include bundled components; a separate host CLI is not
-inherently required.
+A `supported` entry has exactly one of `launches` or `adapter`. An `unsupported` or `unknown` entry has neither. An adapter target must use its exact registry key; aliases, self references, missing targets, adapter chains, and cycles are invalid. The referenced entry owns the launch and describes its installation requirements through its existing `installations`, `env`, and installation notes. Those requirements may include bundled components; a separate host CLI is not inherently required.
 
-`launches[].command` is the executable name or path. Each `launches[].args` value is one
-argv argument, with no shell parsing or template expansion. An empty argv array
-and empty individual arguments are valid. Optional `launches[].platforms` is a
-nonempty, unique array of the registry's approved platform values; omission
-applies no platform restriction and is allowed only for a sole recipe. When there
-are multiple recipes, each must specify platforms, with no overlap between
-recipes. Consumers select the matching platform; the list is not an ordered
-fallback chain. Launches describe local stdio only. These APIs
-do not execute commands, install adapters, authenticate, or probe ACP at runtime.
+`launches[].command` is the executable name or path. Each `launches[].args` value is one argv argument, with no shell parsing or template expansion. An empty argv array and empty individual arguments are valid. Optional `launches[].platforms` is a nonempty, unique array of the registry's approved platform values; omission applies no platform restriction and is allowed only for a sole recipe. When there are multiple recipes, each must specify platforms, with no overlap between recipes. Consumers select the matching platform; the list is not an ordered fallback chain. Launches describe local stdio only. These APIs do not execute commands, install adapters, authenticate, or probe ACP at runtime.
 
-`installedLaunches` lets an entry describe both routes: `launches` keeps the
-package-runner recipe, while `installedLaunches` starts the binary a user already
-has. Populate it only where upstream documentation or the package manifest
-confirms that binary serves ACP. Entries without that evidence are not returned
-by `detectInstalledAcpLaunches` unless their `launches` already avoid package
-runners. An empty `installedLaunches` list opts a launch record out of
-installed-launch detection entirely.
+`installedLaunches` lets an entry describe both routes: `launches` keeps the package-runner recipe, while `installedLaunches` starts the binary a user already has. Populate it only where upstream documentation or the package manifest confirms that binary serves ACP. Entries without that evidence are not returned by `detectInstalledAcpLaunches` unless their `launches` already avoid package runners. An empty `installedLaunches` list opts a launch record out of installed-launch detection entirely.
 
 ```json
 {
@@ -134,23 +107,13 @@ Synthetic direct-launch example:
 }
 ```
 
-An adapter-backed entry would replace `launches` with `"adapter": "example-bridge"`
-and cite evidence for that relationship. Consumers read the host's ACP record,
-then look up `acp.adapter` once to read the owning entry's launch list.
+An adapter-backed entry would replace `launches` with `"adapter": "example-bridge"` and cite evidence for that relationship. Consumers read the host's ACP record, then look up `acp.adapter` once to read the owning entry's launch list.
 
-A documented ACP launch record may omit detection signals when no portable,
-unambiguous signal exists, but must include setup `notes`. For example,
-`aider-acp` runs `node dist/index.js` from its built checkout; the caller must
-choose that working directory or supply the absolute script path. This entry
-is discoverable as metadata and never counts as installed from ACP alone: it
-sets `installedLaunches: []` so the `node` fallback is not reported.
-See [the lookup workflow](harness-guide.md#finding-and-updating-acp-records) for
-real examples and adapter discovery.
+A documented ACP launch record may omit detection signals when no portable, unambiguous signal exists, but must include setup `notes`. For example, `aider-acp` runs `node dist/index.js` from its built checkout; the caller must choose that working directory or supply the absolute script path. This entry is discoverable as metadata and never counts as installed from ACP alone: it sets `installedLaunches: []` so the `node` fallback is not reported. See [the lookup workflow](harness-guide.md#finding-and-updating-acp-records) for real examples and adapter discovery.
 
 ### MCP metadata (`mcp`)
 
-`mcp` is required on every harness. It describes the harness as an MCP client
-and never affects installed status.
+`mcp` is required on every harness. It describes the harness as an MCP client and never affects installed status.
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
@@ -167,12 +130,11 @@ Scope objects (`global`, `local`) mirror support leaves plus two fields:
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `status`, `paths`, `sources`, `confidence`, `notes` | | | Same meaning and rules as support leaves. `paths` lists the config files (or directories of config files) holding MCP servers. Global templates must not start with `${CWD}`; local templates must. |
+| `status`, `paths`, `sources`, `confidence`, `notes` |  |  | Same meaning and rules as support leaves. `paths` lists the config files (or directories of config files) holding MCP servers. Global templates must not start with `${CWD}`; local templates must. |
 | `format` | enum | when supported with paths | `json`, `jsonc`, `toml`, or `yaml`. Forbidden otherwise. |
 | `keyPath` | string[] | when supported with paths | Key segments the servers live under, outermost first: `["mcpServers"]`, `["mcp_servers"]`, `["mcp", "servers"]`. A literal key containing a dot is one segment (`["amp.mcpServers"]`). |
 
-All paths in one scope share `format` and `keyPath`; a harness whose MCP servers
-are managed only through a UI or database is `supported` with empty `paths`.
+All paths in one scope share `format` and `keyPath`; a harness whose MCP servers are managed only through a UI or database is `supported` with empty `paths`.
 
 `serverFormat` maps `.mcp.json` fields to native field names:
 
@@ -185,9 +147,7 @@ are managed only through a UI or database is `supported` with empty `paths`.
 | `http`, `sse` | `{type?, url, headers?}`. Omit a transport the harness cannot use. |
 | `defaults` | Static scalar fields written into every entry before mapped fields (for example `{"enabled": true}`). |
 
-Omitting `env` or `headers` means servers that set them are skipped rather than
-translated without them. Example (Gemini CLI, which selects transports by field
-name instead of a type field):
+Omitting `env` or `headers` means servers that set them are skipped rather than translated without them. Example (Gemini CLI, which selects transports by field name instead of a type field):
 
 ```json
 "serverFormat": {
@@ -468,6 +428,10 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `openfang` | `OPENFANG_HOME` | `OPENFANG_ROOT` | `${HOME}/.openfang` |
+| `openfang` | `OPENFANG_HOME` | `OPENFANG_WINDOWS_ROOT` | `${USERPROFILE}/.openfang` |
+| `openfang` | `OPENFANG_INSTALL_DIR` | `OPENFANG_INSTALL_ROOT` | `${HOME}/.openfang/bin` |
+| `openfang` | `OPENFANG_INSTALL_DIR` | `OPENFANG_WINDOWS_INSTALL_ROOT` | `${USERPROFILE}/.openfang/bin` |
 | `openharness` | `OPENHARNESS_CONFIG_DIR` | `OPENHARNESS_CONFIG_ROOT` | `${HOME}/.openharness` |
 | `openharness` | `OPENHARNESS_DATA_DIR` | `OPENHARNESS_DATA_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/data` |
 | `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
@@ -569,7 +533,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 93
+console.log(harnesses.harnesses.length);  // 95
 ```
 
 <!-- /automd -->

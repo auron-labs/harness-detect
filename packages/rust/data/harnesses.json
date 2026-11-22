@@ -26880,6 +26880,560 @@
       }
     },
     {
+      "key": "stakpak",
+      "name": "Stakpak",
+      "version": "0.3.88",
+      "aliases": [],
+      "executables": [
+        "stakpak"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${HOME}/.stakpak/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "autopilot-config",
+          "kind": "file",
+          "template": "${HOME}/.stakpak/autopilot.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${USERPROFILE}/.stakpak/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "autopilot-config-windows",
+          "kind": "file",
+          "template": "${USERPROFILE}/.stakpak/autopilot.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        }
+      ],
+      "env": [
+        {
+          "name": "STAKPAK_PROFILE",
+          "description": "Selects a profile in the Stakpak config; it does not relocate the file."
+        }
+      ],
+      "sources": [
+        "https://github.com/stakpak/agent/releases/tag/v0.3.88",
+        "https://github.com/stakpak/agent/blob/v0.3.88/cli/Cargo.toml#L1-L6",
+        "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/config/app.rs#L180-L188",
+        "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/main.rs#L244-L250",
+        "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/autopilot/mod.rs#L413-L421",
+        "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/config/mod.rs#L39-L42"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "stakpak/stakpak/stakpak",
+          "command": "brew tap stakpak/stakpak && brew install stakpak",
+          "url": "https://github.com/stakpak/agent/blob/v0.3.88/README.md#homebrew-linux--macos",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/stakpak/agent/releases/tag/v0.3.88",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${HOME}/.stakpak/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "autopilot-config",
+                "kind": "file",
+                "template": "${HOME}/.stakpak/autopilot.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${USERPROFILE}/.stakpak/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "autopilot-config-windows",
+                "kind": "file",
+                "template": "${USERPROFILE}/.stakpak/autopilot.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/config/app.rs#L180-L188",
+              "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/main.rs#L244-L250",
+              "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/autopilot/mod.rs#L413-L421"
+            ],
+            "confidence": "source",
+            "notes": "The main config can be selected with --config; this records the two default files, not command-line overrides."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${HOME}/.stakpak/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/stakpak/agent/blob/v0.3.88/libs/api/src/local/skills/mod.rs#L153-L164"
+            ],
+            "confidence": "source",
+            "notes": "Upstream reads the literal HOME environment variable on all platforms. Windows is not listed as a resolvable path here because the registry normalizes HOME to the profile directory when unset."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.stakpak/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/stakpak/agent/blob/v0.3.88/libs/api/src/local/skills/mod.rs#L153-L164"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/stakpak/agent/blob/v0.3.88/libs/api/src/local/skills/mod.rs#L153-L164"
+            ],
+            "confidence": "source",
+            "notes": "The default lookup uses .stakpak/skills, not .agents/skills."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/stakpak/agent/blob/v0.3.88/libs/api/src/local/skills/mod.rs#L153-L164"
+            ],
+            "confidence": "source",
+            "notes": "The default lookup uses .stakpak/skills, not .agents/skills."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
+            "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52"
+          ],
+          "confidence": "source",
+          "notes": "The mcpServers table is read from mcp.toml or mcp.json in the working directory, then in the project's .stakpak directory."
+        },
+        "sources": [
+          "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52",
+          "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
+          "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/agent/run/mcp_init.rs#L237-L255"
+        ],
+        "confidence": "source",
+        "notes": "Project files take precedence over global files. The reader does not load .mcp.json by default. Translation is unavailable because the runtime drops external servers named stakpak, paks, or aap and the registry cannot express these reserved names.",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L102-L154",
+            "https://github.com/stakpak/agent/blob/v0.3.88/libs/mcp/config/src/lib.rs#L23-L52"
+          ],
+          "confidence": "source",
+          "notes": "The mcpServers table is read from mcp.toml or mcp.json under ~/.stakpak if no project file is found."
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "stakpak",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/stakpak/agent/blob/v0.3.88/README.md#agent-client-protocol-acp",
+          "https://github.com/stakpak/agent/blob/v0.3.88/cli/src/commands/mod.rs#L552-L605"
+        ],
+        "confidence": "official",
+        "notes": "Requires a configured provider. This release checks for a CLI update before starting the ACP session."
+      }
+    },
+    {
+      "key": "openfang",
+      "name": "OpenFang",
+      "version": "0.6.9",
+      "aliases": [],
+      "executables": [
+        "openfang"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${OPENFANG_ROOT}/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${OPENFANG_WINDOWS_ROOT}/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "cli-install",
+          "kind": "file",
+          "template": "${OPENFANG_INSTALL_ROOT}/openfang",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "cli-install-windows",
+          "kind": "file",
+          "template": "${OPENFANG_WINDOWS_INSTALL_ROOT}/openfang.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPENFANG_ROOT",
+          "env": "OPENFANG_HOME",
+          "fallback": "${HOME}/.openfang"
+        },
+        {
+          "name": "OPENFANG_WINDOWS_ROOT",
+          "env": "OPENFANG_HOME",
+          "fallback": "${USERPROFILE}/.openfang"
+        },
+        {
+          "name": "OPENFANG_INSTALL_ROOT",
+          "env": "OPENFANG_INSTALL_DIR",
+          "fallback": "${HOME}/.openfang/bin"
+        },
+        {
+          "name": "OPENFANG_WINDOWS_INSTALL_ROOT",
+          "env": "OPENFANG_INSTALL_DIR",
+          "fallback": "${USERPROFILE}/.openfang/bin"
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENFANG_HOME",
+          "description": "Overrides the default config location and runtime home; it does not move the CLI installer destination."
+        },
+        {
+          "name": "OPENFANG_INSTALL_DIR",
+          "description": "Overrides the shell and PowerShell CLI installer destination independently of OPENFANG_HOME."
+        }
+      ],
+      "sources": [
+        "https://github.com/RightNow-AI/openfang/releases/tag/v0.6.9",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-cli/Cargo.toml#L1-L10",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/config.rs#L342-L359",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/getting-started.md#installation",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/scripts/install.sh#L6-L12",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/scripts/install.sh#L118-L121",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/scripts/install.ps1#L6-L13",
+        "https://github.com/RightNow-AI/openfang/blob/v0.6.9/scripts/install.ps1#L138-L155"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/RightNow-AI/openfang/releases/tag/v0.6.9",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Upstream publishes both CLI archives and desktop installers."
+        },
+        {
+          "method": "cargo",
+          "package": "openfang-cli",
+          "command": "cargo install --git https://github.com/RightNow-AI/openfang openfang-cli",
+          "url": "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/getting-started.md#installation"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${OPENFANG_ROOT}/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${OPENFANG_WINDOWS_ROOT}/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/config.rs#L342-L359"
+            ],
+            "confidence": "source",
+            "notes": "Models the default config and OPENFANG_HOME, not an explicit config-file argument. Use an absolute override: upstream treats an empty value as the current directory and does not expand ~, while the registry falls back to ~/.openfang for an empty value and expands a leading ~. A config.toml at an explicitly overridden location counts as installed without checking its contents."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${OPENFANG_ROOT}/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-skills-windows",
+                "kind": "dir",
+                "template": "${OPENFANG_WINDOWS_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-types/src/config.rs#L1667-L1676",
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/kernel.rs#L867-L875",
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/skill-development.md"
+            ],
+            "confidence": "source",
+            "notes": "Models the default location and OPENFANG_HOME, not a home_dir value inside config.toml or bundled skills."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents",
+                "kind": "dir",
+                "template": "${OPENFANG_ROOT}/agents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-agents-windows",
+                "kind": "dir",
+                "template": "${OPENFANG_WINDOWS_ROOT}/agents",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-types/src/config.rs#L1667-L1676",
+              "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/kernel.rs#L1468-L1484"
+            ],
+            "confidence": "source",
+            "notes": "Loads agent.toml from per-agent subdirectories. A home_dir value inside config.toml can relocate it."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-kernel/src/config.rs#L342-L359",
+            "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/configuration.md#mcp_servers"
+          ],
+          "confidence": "source",
+          "notes": "Servers are stored in [[mcp_servers]] in config.toml under the OpenFang home. The file is not exposed as a translation target."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/RightNow-AI/openfang/blob/v0.6.9/docs/configuration.md#mcp_servers",
+          "https://github.com/RightNow-AI/openfang/blob/v0.6.9/crates/openfang-types/src/config.rs#L1411-L1447"
+        ],
+        "confidence": "source",
+        "notes": "Translation is unavailable: each entry requires a nested transport object, with environment and headers represented as string lists rather than maps."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
       "key": "openrig",
       "name": "OpenRig",
       "version": "0.7.21",
