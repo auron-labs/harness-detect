@@ -313,6 +313,19 @@ def test_check_harness_platform_gated():
     assert app_macos.path == os.path.normpath("/Applications/Cursor.app")
 
 
+def test_check_harness_detects_tuios_config_on_versioned_openbsd(tmp_path, monkeypatch):
+    config = tmp_path / ".config" / "tuios" / "config.toml"
+    config.parent.mkdir(parents=True)
+    config.touch()
+    monkeypatch.setattr(sys, "platform", "openbsd7")
+
+    result = check_harness("tuios", CheckOptions(env=_env_home(str(tmp_path))))
+
+    assert result.installed
+    assert result.executable_path is None
+    assert [path.id for path in result.matched_paths] == ["user-config-xdg"]
+
+
 # ---------------------------------------------------------------------------
 # Path match installs
 # ---------------------------------------------------------------------------

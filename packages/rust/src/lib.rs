@@ -1123,6 +1123,8 @@ fn current_platform() -> &'static str {
         "win32"
     } else if cfg!(target_os = "freebsd") {
         "freebsd"
+    } else if cfg!(target_os = "openbsd") {
+        "openbsd"
     } else {
         "unknown"
     }
