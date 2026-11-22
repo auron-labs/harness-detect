@@ -12,9 +12,6 @@ updates:
     directory: /.github/workflows
     multi-ecosystem-group: dependencies
     patterns: ["*"]
-    labels:
-      - dependencies
-      - github-actions
     cooldown:
       default-days: 7
 
@@ -22,9 +19,6 @@ updates:
     directory: /packages/typescript
     multi-ecosystem-group: dependencies
     patterns: ["*"]
-    labels:
-      - dependencies
-      - typescript
     cooldown:
       default-days: 7
 
@@ -32,9 +26,6 @@ updates:
     directory: /packages/golang
     multi-ecosystem-group: dependencies
     patterns: ["*"]
-    labels:
-      - dependencies
-      - go
     cooldown:
       default-days: 7
 
@@ -42,9 +33,6 @@ updates:
     directory: /packages/rust
     multi-ecosystem-group: dependencies
     patterns: ["*"]
-    labels:
-      - dependencies
-      - rust
     cooldown:
       default-days: 7
 
@@ -52,8 +40,5 @@ updates:
     directory: /packages/python
     multi-ecosystem-group: dependencies
     patterns: ["*"]
-    labels:
-      - dependencies
-      - python
     cooldown:
       default-days: 7
