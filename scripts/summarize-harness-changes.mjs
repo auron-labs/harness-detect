@@ -99,6 +99,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
         execFileSync("git", ["show", `${values.base}:${registryFile}`], {
           cwd: repoRoot,
           encoding: "utf-8",
+          maxBuffer: 16 * 1024 * 1024,
           stdio: ["ignore", "pipe", "pipe"],
         })
       );

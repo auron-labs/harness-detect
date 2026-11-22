@@ -28979,7 +28979,7 @@
               "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L63-L66"
             ],
             "confidence": "source",
-            "notes": "Of these config files, only the cc-haha provider index identifies the app. For a data location chosen only in the desktop UI, supply its absolute path as CLAUDE_CONFIG_DIR to the detector."
+            "notes": "Of these config files, only the cc-haha provider index identifies the app. For a data location chosen only in the desktop UI, supply its absolute path as CLAUDE_CONFIG_DIR to the detector. cc-haha can create ~/.claude, which also matches Claude Code's existing directory-only detection. That match alone does not prove a separate Claude Code installation."
           },
           "local": {
             "status": "supported",
@@ -29309,7 +29309,7 @@
               "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/store/schema.rs#L170-L174"
             ],
             "confidence": "source",
-            "notes": "For reliable detection pass absolute overrides; upstream can resolve relative overrides against its launch context. Custom SQLite locations and the no-HOME project store fallback are not detected."
+            "notes": "For reliable detection pass absolute overrides; upstream can resolve relative overrides against its launch context. Custom SQLite locations and the no-HOME project store fallback are not detected. An explicitly empty NAC_HOME selects the launch directory upstream but falls back to XDG/default in the detector. A literal ~ is a relative directory name upstream but expands to the user home in the detector."
           },
           "local": {
             "status": "unknown",
@@ -31626,6 +31626,539 @@
           "sources": [],
           "confidence": "unknown"
         },
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "ekko-studio",
+      "name": "Ekko Studio",
+      "version": "0.8.30",
+      "aliases": [
+        "hermes-web-ui",
+        "ekko-studio-web",
+        "hermes studio"
+      ],
+      "executables": [
+        "ekko-studio-web",
+        "hermes-web-ui",
+        "ekko-studio"
+      ],
+      "paths": [
+        {
+          "id": "studio-config",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_HOME}/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "studio-config-windows",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_WINDOWS_HOME}/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "runtime-config",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_HOME}/.ekko/config/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "runtime-config-windows",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_WINDOWS_HOME}/.ekko/config/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "startup-tasks",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_HOME}/startup-tasks.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "startup-tasks-windows",
+          "kind": "file",
+          "template": "${EKKO_STUDIO_WINDOWS_HOME}/startup-tasks.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-app",
+          "kind": "file",
+          "template": "/Applications/Ekko Studio.app/Contents/MacOS/Ekko Studio",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "env": [
+        {
+          "name": "HERMES_WEB_UI_HOME",
+          "description": "Primary Studio data-directory override. Use an absolute path."
+        },
+        {
+          "name": "HERMES_WEBUI_STATE_DIR",
+          "description": "Legacy web-server alias when HERMES_WEB_UI_HOME is unset. Use an absolute path."
+        }
+      ],
+      "roots": [
+        {
+          "name": "EKKO_STUDIO_HOME",
+          "env": "HERMES_WEB_UI_HOME",
+          "fallback": "${HOME}/.hermes-web-ui",
+          "fallbackEnv": "HERMES_WEBUI_STATE_DIR"
+        },
+        {
+          "name": "EKKO_STUDIO_WINDOWS_HOME",
+          "env": "HERMES_WEB_UI_HOME",
+          "fallback": "${USERPROFILE}/.hermes-web-ui",
+          "fallbackEnv": "HERMES_WEBUI_STATE_DIR"
+        }
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "ekko-studio",
+          "command": "npm install -g ekko-studio",
+          "url": "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/README.md#L344-L354",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "method": "npm",
+          "package": "hermes-web-ui",
+          "command": "npm install -g hermes-web-ui",
+          "url": "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/README.md#L344-L354",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Legacy distribution; install one npm package because the commands overlap."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/EKKOLearnAI/ekko-studio/releases/tag/v0.8.30",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Only the standard macOS bundle path is modeled before first launch. On Windows/Linux, detection uses the installed CLI/shim or Studio data."
+        }
+      ],
+      "sources": [
+        "https://github.com/EKKOLearnAI/ekko-studio/releases/tag/v0.8.30",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/package.json#L37-L44",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/studio/public/config.ts#L52-L55",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/studio/services/config/app-config.ts#L1-L7",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/studio/services/startup-tasks.ts#L57-L60",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/README.md#L310-L332",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/desktop/scripts/build-update-test.mjs#L15-L22",
+        "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/ekko-agent/src/directories.ts#L84-L93"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "studio-config",
+                "kind": "file",
+                "template": "${EKKO_STUDIO_HOME}/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "studio-config-windows",
+                "kind": "file",
+                "template": "${EKKO_STUDIO_WINDOWS_HOME}/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "runtime-config",
+                "kind": "file",
+                "template": "${EKKO_STUDIO_HOME}/.ekko/config/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "runtime-config-windows",
+                "kind": "file",
+                "template": "${EKKO_STUDIO_WINDOWS_HOME}/.ekko/config/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/studio/public/config.ts#L52-L55",
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/studio/services/config/app-config.ts#L1-L7",
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/ekko/services/manager.ts#L259-L278",
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/ekko-agent/src/directories.ts#L84-L93",
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/desktop/src/main/desktop-storage-bootstrap.ts#L18-L23"
+            ],
+            "confidence": "source",
+            "notes": "Studio data is separate from Hermes Agent's ~/.hermes. Use absolute overrides: the web server trims whitespace and resolves relative values against its process working directory, while the detector does not mimic that normalization. The desktop wrapper uses only the primary override for its own default state."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-profile-skills",
+                "kind": "dir",
+                "template": "${EKKO_STUDIO_HOME}/.ekko/skills/default",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "default-profile-skills-windows",
+                "kind": "dir",
+                "template": "${EKKO_STUDIO_WINDOWS_HOME}/.ekko/skills/default",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/ekko/services/manager.ts#L259-L278",
+              "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/ekko-agent/src/directories.ts#L136-L146"
+            ],
+            "confidence": "source",
+            "notes": "Lists the built-in Ekko runtime's default profile under Studio's data root. Other profiles use sibling directories; external agents have their own skill discovery."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/ekko-agent/src/config-store.ts#L858-L873",
+          "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/server/src/modules/ekko/services/mcp.ts#L247-L260"
+        ],
+        "confidence": "source",
+        "notes": "Studio's built-in Ekko runtime reads profile-scoped MCP from its own config. It does not use a project .mcp.json by default; external coding-agent adapters have their own behavior.",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/EKKOLearnAI/ekko-studio/blob/v0.8.30/packages/ekko-agent/src/config-store.ts#L858-L873"
+          ],
+          "confidence": "source",
+          "notes": "Config is .ekko/config/config.json under Studio's data root. MCP servers live at mcp.profiles.<profile>.servers; translation does not choose a profile."
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "agentbox",
+      "name": "AgentBox",
+      "version": "0.33.1",
+      "aliases": [
+        "@madarco/agentbox"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "global-config",
+          "kind": "file",
+          "template": "${HOME}/.agentbox/config.yaml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "registered-agents",
+          "kind": "file",
+          "template": "${HOME}/.agentbox/agents.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "host-tool-grants",
+          "kind": "file",
+          "template": "${HOME}/.agentbox/tools.yaml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        }
+      ],
+      "env": [],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@madarco/agentbox",
+          "command": "npm install -g @madarco/agentbox",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "url": "https://github.com/madarco/agentbox/blob/v0.33.1/README.md#L72-L84",
+          "notes": "The documented local runtime requires macOS or Linux, Node >=20.10, and Docker. The detector requires AgentBox-owned settings or state because mattolson/agent-sandbox also installs an agentbox command."
+        }
+      ],
+      "sources": [
+        "https://www.npmjs.com/package/@madarco/agentbox/v/0.33.1",
+        "https://github.com/madarco/agentbox/blob/v0.33.1/apps/cli/package.json#L1-L13",
+        "https://github.com/madarco/agentbox/blob/v0.33.1/README.md#L72-L84",
+        "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L7-L20",
+        "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L28-L50",
+        "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L143-L153",
+        "https://github.com/mattolson/agent-sandbox/blob/v0.13.0/docs/cli.md#L1-L8"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-config",
+                "kind": "file",
+                "template": "${HOME}/.agentbox/config.yaml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "host-tool-grants",
+                "kind": "file",
+                "template": "${HOME}/.agentbox/tools.yaml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L7-L20",
+              "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L143-L153",
+              "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L102-L121"
+            ],
+            "confidence": "source",
+            "notes": "Dynamic per-project config and metadata under ~/.agentbox/projects/<hash>-<mnemonic> are not modeled."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-config",
+                "kind": "file",
+                "template": "${CWD}/agentbox.yaml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L28-L50"
+            ],
+            "confidence": "source",
+            "notes": "Upstream walks ancestors to find the nearest workspace file. The listed path assumes cwd is the workspace root. A checked-in workspace file alone does not identify an installed CLI."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [
+              "https://github.com/madarco/agentbox/blob/v0.33.1/apps/web/content/docs/skills.mdx#L14-L24"
+            ],
+            "confidence": "source",
+            "notes": "The installer ships an integration for other agents: Claude Code skills, Codex prompts, and OpenCode commands. These are not AgentBox-native skill discovery locations."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "registered-agents",
+                "kind": "file",
+                "template": "${HOME}/.agentbox/agents.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/madarco/agentbox/blob/v0.33.1/packages/config/src/paths.ts#L7-L20"
+            ],
+            "confidence": "source",
+            "notes": "Agent plugin descriptors registered with AgentBox; child agent configuration is separate."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/madarco/agentbox/blob/v0.33.1/apps/web/content/docs/skills.mdx#L59-L65"
+        ],
+        "confidence": "source",
+        "notes": "AgentBox passes some agent configuration, including MCP settings, into launched tools. No separate native AgentBox MCP client configuration was verified.",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
         "sources": [],
         "confidence": "unknown"
       }

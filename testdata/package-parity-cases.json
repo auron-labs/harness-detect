@@ -8897,6 +8897,392 @@
           }
         }
       }
+    },
+    {
+      "id": "check-ekko-studio-hermes-web-ui-on-path",
+      "operation": "checkHarness",
+      "input": "hermes-web-ui",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/hermes-web-ui"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": "${BIN}/hermes-web-ui",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-ekko-studio-ekko-studio-web-on-path",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/ekko-studio-web"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": "${BIN}/ekko-studio-web",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-ekko-studio-default-startup-state",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.hermes-web-ui/startup-tasks.json"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "startup-tasks"
+        ]
+      }
+    },
+    {
+      "id": "check-ekko-studio-primary-home-precedes-legacy",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "HERMES_WEB_UI_HOME": "${TMP}/ekko-primary",
+        "HERMES_WEBUI_STATE_DIR": "${TMP}/ekko-legacy"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ekko-primary/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/ekko-legacy/startup-tasks.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.hermes-web-ui/startup-tasks.json"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "studio-config"
+        ]
+      }
+    },
+    {
+      "id": "check-ekko-studio-legacy-home",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "HERMES_WEBUI_STATE_DIR": "${TMP}/ekko-legacy"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ekko-legacy/.ekko/config/config.json"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "runtime-config"
+        ]
+      }
+    },
+    {
+      "id": "check-ekko-studio-windows-userprofile",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/ekko-win"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/ekko-win/.hermes-web-ui/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.hermes-web-ui/startup-tasks.json"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "studio-config-windows"
+        ]
+      }
+    },
+    {
+      "id": "check-ekko-studio-not-hermes-agent-or-standalone-ekko",
+      "operation": "checkHarness",
+      "input": "ekko-studio",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/hermes"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.hermes/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.ekko/config/config.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.hermes-web-ui"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "ekko-studio",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-ekko-studio-does-not-choose-profile",
+      "operation": "translateMcpJson",
+      "input": "ekko-studio",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness ekko-studio has no file-based MCP config for scope global"
+      }
+    },
+    {
+      "id": "check-agentbox-ignores-shared-agentbox-executable",
+      "operation": "checkHarness",
+      "input": "@madarco/agentbox",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/agentbox"
+        }
+      ],
+      "expect": {
+        "key": "agentbox",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-agentbox-global-config",
+      "operation": "checkHarness",
+      "input": "agentbox",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.agentbox/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "agentbox",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config"
+        ]
+      }
+    },
+    {
+      "id": "check-agentbox-registered-agents",
+      "operation": "checkHarness",
+      "input": "agentbox",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.agentbox/agents.json"
+        }
+      ],
+      "expect": {
+        "key": "agentbox",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "registered-agents"
+        ]
+      }
+    },
+    {
+      "id": "check-agentbox-host-tool-grants",
+      "operation": "checkHarness",
+      "input": "agentbox",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.agentbox/tools.yaml"
+        }
+      ],
+      "expect": {
+        "key": "agentbox",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "host-tool-grants"
+        ]
+      }
+    },
+    {
+      "id": "check-agentbox-ignore-workspace-and-child-agent-files",
+      "operation": "checkHarness",
+      "input": "agentbox",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/agentbox.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agentbox"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/skills/agentbox/SKILL.md"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.codex/prompts/agentbox.md"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "agentbox",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }

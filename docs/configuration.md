@@ -401,6 +401,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `deerflow` | `DEER_FLOW_SKILLS_PATH` | `DEERFLOW_SKILLS_ROOT` | `${DEERFLOW_PROJECT_ROOT}/skills` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
 | `eigent` | `EIGENT_RUN_JOURNAL_PATH` | `EIGENT_JOURNAL_FILE` | `${HOME}/.eigent/run-journal.sqlite3` |
+| `ekko-studio` | `HERMES_WEB_UI_HOME` | `EKKO_STUDIO_HOME` | `${HOME}/.hermes-web-ui` |
+| `ekko-studio` | `HERMES_WEB_UI_HOME` | `EKKO_STUDIO_WINDOWS_HOME` | `${USERPROFILE}/.hermes-web-ui` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
@@ -546,7 +548,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 103
+console.log(harnesses.harnesses.length);  // 105
 ```
 
 <!-- /automd -->
