@@ -8458,6 +8458,455 @@
       "expect": {
         "error": "Harness ouroboros-q00 has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-cc-haha-path-executable",
+      "operation": "checkHarness",
+      "input": "claude-haha",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/claude-haha"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": true,
+        "executablePath": "${BIN}/claude-haha",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-cc-haha-provider-index",
+      "operation": "checkHarness",
+      "input": "cc-haha",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/cc-haha/providers.json"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-providers"
+        ]
+      }
+    },
+    {
+      "id": "check-cc-haha-portable-override",
+      "operation": "checkHarness",
+      "input": "cc-haha",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "CLAUDE_CONFIG_DIR": "${TMP}/cc-haha-fixture/portable"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/portable/cc-haha/providers.json"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-providers"
+        ]
+      }
+    },
+    {
+      "id": "check-cc-haha-windows-profile",
+      "operation": "checkHarness",
+      "input": "cc-haha",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${TMP}/cc-haha-fixture/windows"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/windows/.claude/cc-haha/providers.json"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-providers"
+        ]
+      }
+    },
+    {
+      "id": "check-cc-haha-windows-desktop-off-path",
+      "operation": "checkHarness",
+      "input": "cc-haha",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/cc-haha-fixture/local-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/local-appdata/Programs/Claude Code Haha/Claude Code Haha.exe"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-desktop-executable"
+        ]
+      }
+    },
+    {
+      "id": "check-cc-haha-ignores-shared-claude-files",
+      "operation": "checkHarness",
+      "input": "cc-haha",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${TMP}/cc-haha-fixture/project",
+      "env": {
+        "HOME": "${TMP}/cc-haha-fixture",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/claude"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/.claude/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/.claude.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/project/.claude/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/project/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cc-haha-fixture/project/.agents/skills/shared/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "cc-haha",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-cc-haha-local-mcp",
+      "operation": "translateMcpJson",
+      "input": "cc-haha",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "skipped": [],
+        "config": {
+          "mcpServers": {
+            "docs": {
+              "type": "sse",
+              "url": "https://example.com/sse"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "check-nac-path-executable",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/nac-web"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": true,
+        "executablePath": "${BIN}/nac-web",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-nac-default-config",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/nac/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-nac-xdg-config",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/nac-fixture/xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/xdg/nac/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-nac-home-wins-over-xdg",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "NAC_HOME": "${TMP}/nac-fixture/home",
+        "XDG_CONFIG_HOME": "${TMP}/nac-fixture/xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/xdg/nac/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/home/store.db"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-store"
+        ]
+      }
+    },
+    {
+      "id": "check-nac-default-bin-off-path",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/bin/nac-web"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-binary"
+        ]
+      }
+    },
+    {
+      "id": "check-nac-ignores-project-files",
+      "operation": "checkHarness",
+      "input": "nac",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${TMP}/nac-fixture/project",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/project/.nac/store.db"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/project/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/project/AGENTS.md"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/nac-fixture/project/.agents/skills/shared/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "nac",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-nac-global-mcp",
+      "operation": "translateMcpJson",
+      "input": "nac",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-mcp",
+            "args": [
+              "--fixture"
+            ],
+            "env": {
+              "MODE": "local"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Authorization": "Bearer ${TOKEN}"
+            }
+          }
+        }
+      },
+      "expect": {
+        "format": "toml",
+        "keyPath": [
+          "mcp_servers"
+        ],
+        "skipped": [],
+        "config": {
+          "mcp_servers": {
+            "stdio": {
+              "transport": "stdio",
+              "command": "fixture-mcp",
+              "args": [
+                "--fixture"
+              ],
+              "env": {
+                "MODE": "local"
+              }
+            },
+            "http": {
+              "transport": "streamable_http",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Authorization": "Bearer ${TOKEN}"
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }

@@ -28397,6 +28397,8 @@
         "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/README.md#installation",
         "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/internal/config/userconfig.go#L2557-L2579",
         "https://github.com/Gaurav-Gosain/tuios/blob/v0.13.3/go.mod#L15",
+        "https://github.com/adrg/xdg/blob/v0.5.3/internal/pathutil/pathutil.go#L90-L100",
+        "https://github.com/adrg/xdg/blob/v0.5.3/internal/pathutil/pathutil_unix.go#L13-L20",
         "https://github.com/adrg/xdg/blob/v0.5.3/paths_unix.go#L19-L27",
         "https://github.com/adrg/xdg/blob/v0.5.3/paths_darwin.go#L15-L31",
         "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L17-L23",
@@ -28465,6 +28467,7 @@
               }
             ],
             "sources": [
+              "https://github.com/adrg/xdg/blob/v0.5.3/internal/pathutil/pathutil.go#L90-L100",
               "https://github.com/adrg/xdg/blob/v0.5.3/paths_darwin.go#L15-L31",
               "https://github.com/adrg/xdg/blob/v0.5.3/paths_unix.go#L19-L27",
               "https://github.com/adrg/xdg/blob/v0.5.3/paths_windows.go#L110-L114",
@@ -28472,7 +28475,7 @@
               "https://github.com/gaurav-gosain/tuios/blob/v0.13.3/internal/config/userconfig.go#L2557-L2579"
             ],
             "confidence": "source",
-            "notes": "Models the user config file, not the full XDG_CONFIG_DIRS search, included files, or config.d fragments. On macOS the registry checks the native default and the XDG candidate without enforcing lookup precedence. On Windows it approximates the Local AppData Known Folder with LOCALAPPDATA or the default profile path and does not resolve a custom XDG_CONFIG_HOME."
+            "notes": "Models the user config file, not the full XDG_CONFIG_DIRS search, included files, or config.d fragments. Pass an absolute XDG_CONFIG_HOME: upstream ignores relative overrides after home expansion, and uses / as its Unix home when HOME is unset or empty. The registry does not reproduce those fallback rules. On macOS the registry checks the native default and the XDG candidate without enforcing lookup precedence. On Windows it approximates the Local AppData Known Folder with LOCALAPPDATA or the default profile path and does not resolve a custom XDG_CONFIG_HOME."
           },
           "local": {
             "status": "unknown",
@@ -28803,6 +28806,723 @@
           "confidence": "source",
           "notes": "The bridge uses mcp_servers.yaml in the Ouroboros home, or an existing file explicitly selected by OUROBOROS_MCP_CONFIG."
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "cc-haha",
+      "name": "cc-haha",
+      "version": "0.7.9",
+      "aliases": [
+        "claude-haha",
+        "claude code haha"
+      ],
+      "executables": [
+        "claude-haha"
+      ],
+      "paths": [
+        {
+          "id": "user-providers",
+          "kind": "file",
+          "template": "${CC_HAHA_ROOT}/cc-haha/providers.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-user-providers",
+          "kind": "file",
+          "template": "${CC_HAHA_WINDOWS_ROOT}/cc-haha/providers.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-app",
+          "kind": "file",
+          "template": "/Applications/Claude Code Haha.app/Contents/MacOS/Claude Code Haha",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-desktop-executable",
+          "kind": "file",
+          "template": "${CC_HAHA_LOCAL_APPDATA}/Programs/Claude Code Haha/Claude Code Haha.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-desktop-executable",
+          "kind": "file",
+          "template": "/opt/Claude Code Haha/claude-code-desktop",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "CC_HAHA_ROOT",
+          "env": "CLAUDE_CONFIG_DIR",
+          "fallback": "${HOME}/.claude"
+        },
+        {
+          "name": "CC_HAHA_WINDOWS_ROOT",
+          "env": "CLAUDE_CONFIG_DIR",
+          "fallback": "${USERPROFILE}/.claude"
+        },
+        {
+          "name": "CC_HAHA_LOCAL_APPDATA",
+          "env": "LOCALAPPDATA",
+          "fallback": "${USERPROFILE}/AppData/Local"
+        }
+      ],
+      "env": [
+        {
+          "name": "CLAUDE_CONFIG_DIR",
+          "description": "Override the shared Claude-compatible configuration directory. Use an absolute path."
+        }
+      ],
+      "sources": [
+        "https://github.com/nanmicoder/cc-haha/releases/tag/v0.7.9",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/package.json#L7-L9",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/start/install.md#L12-L35",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/server/services/providerService.ts#L228-L238",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L63-L66",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/desktop/package.json#L2-L16",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/desktop/bun.lock#L963",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/desktop/scripts/windows-installer-smoke.ps1#L34-L40",
+        "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/scripts/quality-gate/package-smoke/index.ts#L1043-L1051",
+        "https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.8.1/packages/app-builder-lib/templates/nsis/multiUser.nsh#L24-L41",
+        "https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.8.1/packages/app-builder-lib/src/targets/targetUtil.ts#L39-L41",
+        "https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.8.1/packages/app-builder-lib/src/linuxPackager.ts#L14-L22",
+        "https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.8.1/packages/app-builder-lib/src/targets/FpmTarget.ts#L233-L236",
+        "https://github.com/electron-userland/electron-builder/blob/electron-builder%4026.8.1/packages/app-builder-lib/src/targets/LinuxTargetHelper.ts#L9"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/nanmicoder/cc-haha/releases/tag/v0.7.9",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Checks the default macOS app, per-user Windows NSIS install, and system Linux package. Custom install directories and standalone AppImages require the provider index or CLI instead."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/start/install.md#running-from-source",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The source CLI requires Bun. Put bin/claude-haha on PATH for executable detection."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-providers",
+                "kind": "file",
+                "template": "${CC_HAHA_ROOT}/cc-haha/providers.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-providers",
+                "kind": "file",
+                "template": "${CC_HAHA_WINDOWS_ROOT}/cc-haha/providers.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "user-settings",
+                "kind": "file",
+                "template": "${CC_HAHA_ROOT}/settings.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-settings",
+                "kind": "file",
+                "template": "${CC_HAHA_WINDOWS_ROOT}/settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/server/services/providerService.ts#L228-L238",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/cli/env.md#L103-L119",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L63-L66"
+            ],
+            "confidence": "source",
+            "notes": "Of these config files, only the cc-haha provider index identifies the app. For a data location chosen only in the desktop UI, supply its absolute path as CLAUDE_CONFIG_DIR to the detector."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-settings",
+                "kind": "file",
+                "template": "${CWD}/.claude/settings.json"
+              },
+              {
+                "id": "project-private-settings",
+                "kind": "file",
+                "template": "${CWD}/.claude/settings.local.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/cli/env.md#L103-L119"
+            ],
+            "confidence": "source"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${CC_HAHA_ROOT}/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${CC_HAHA_WINDOWS_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/skillRoots.ts#L91-L149"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.claude/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/skillRoots.ts#L91-L149"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-commands",
+                "kind": "dir",
+                "template": "${CC_HAHA_ROOT}/commands",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-commands",
+                "kind": "dir",
+                "template": "${CC_HAHA_WINDOWS_ROOT}/commands",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/loadSkillsDir.ts#L646-L657",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/utils/markdownConfigLoader.ts#L280-L328"
+            ],
+            "confidence": "source",
+            "notes": "Legacy commands are loaded as skills."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-commands",
+                "kind": "dir",
+                "template": "${CWD}/.claude/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/loadSkillsDir.ts#L646-L657",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/utils/markdownConfigLoader.ts#L280-L328"
+            ],
+            "confidence": "source"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents",
+                "kind": "dir",
+                "template": "${CC_HAHA_ROOT}/agents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-agents",
+                "kind": "dir",
+                "template": "${CC_HAHA_WINDOWS_ROOT}/agents",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/agents.md#L55-L62"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents",
+                "kind": "dir",
+                "template": "${CWD}/.claude/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/agents.md#L55-L62"
+            ],
+            "confidence": "source"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-agents-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agents/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/skills.md#L79-L83",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/skillRoots.ts#L91-L149"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/skills.md#L79-L83",
+              "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/skills/skillRoots.ts#L91-L149"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "supported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L84-L92",
+            "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/utils/env.ts#L14-L26"
+          ],
+          "confidence": "source",
+          "notes": "User and private project servers share global state. The filename depends on a legacy-file check and OAuth suffix, so there is no unconditional global translation target."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-mcp",
+              "kind": "file",
+              "template": "${CWD}/.mcp.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L84-L92"
+          ],
+          "confidence": "source",
+          "notes": "Shared project MCP servers; private local servers are stored separately in global state.",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "http",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/docs/en/desktop/settings.md#L84-L92",
+          "https://github.com/nanmicoder/cc-haha/blob/v0.7.9/src/services/mcp/types.ts#L28-L116"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "nac",
+      "name": "nac",
+      "version": "0.1.4",
+      "aliases": [
+        "nac-web",
+        "arcee nac"
+      ],
+      "executables": [
+        "nac-web"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${NAC_CONFIG_ROOT}/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-store",
+          "kind": "file",
+          "template": "${NAC_CONFIG_ROOT}/store.db",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "user-binary",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/nac-web",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "NAC_CONFIG_ROOT",
+          "env": "NAC_HOME",
+          "fallback": "${XDG_CONFIG_HOME}/nac"
+        }
+      ],
+      "env": [
+        {
+          "name": "NAC_HOME",
+          "description": "Override nac's global config and default SQLite store directory. Use an absolute path."
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Base for the nac config directory when NAC_HOME is unset. Use an absolute path."
+        }
+      ],
+      "sources": [
+        "https://github.com/arcee-ai/nac/releases/tag/v0.1.4",
+        "https://github.com/arcee-ai/nac/blob/v0.1.4/scripts/install.sh",
+        "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-server/Cargo.toml#L9-L11",
+        "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/paths.rs#L17-L52",
+        "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/store/schema.rs#L170-L174"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "url": "https://github.com/arcee-ai/nac/blob/v0.1.4/README.md#quickstart",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Official installer supports Apple Silicon macOS and x86_64 Linux (musl). Defaults to ~/.local/bin; the installer also accepts INSTALL_DIR."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${NAC_CONFIG_ROOT}/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/paths.rs#L17-L52",
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/store/schema.rs#L170-L174"
+            ],
+            "confidence": "source",
+            "notes": "For reliable detection pass absolute overrides; upstream can resolve relative overrides against its launch context. Custom SQLite locations and the no-HOME project store fallback are not detected."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${NAC_CONFIG_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/skills.md#L3-L20"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.nac/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/skills.md#L3-L20"
+            ],
+            "confidence": "source",
+            "notes": "Project skill roots are not registered in sandbox or SSH runs."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agent-instructions-override",
+                "kind": "file",
+                "template": "${NAC_CONFIG_ROOT}/AGENTS.override.md"
+              },
+              {
+                "id": "user-agent-instructions",
+                "kind": "file",
+                "template": "${NAC_CONFIG_ROOT}/AGENTS.md"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/agents-md.md#L5-L17"
+            ],
+            "confidence": "source",
+            "notes": "Instructions for the orchestrator and workers, not subagent definitions or installation markers."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agent-instructions-override",
+                "kind": "file",
+                "template": "${CWD}/AGENTS.override.md"
+              },
+              {
+                "id": "project-agent-instructions",
+                "kind": "file",
+                "template": "${CWD}/AGENTS.md"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/agents-md.md#L5-L17"
+            ],
+            "confidence": "source",
+            "notes": "Files are read from the Git root down to the workspace; nac skips them over SSH."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/skills.md#L3-L20"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/usage/skills.md#L3-L20"
+            ],
+            "confidence": "source",
+            "notes": "Project skill roots are not registered in sandbox or SSH runs."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "user-config",
+              "kind": "file",
+              "template": "${NAC_CONFIG_ROOT}/config.toml",
+              "platforms": [
+                "darwin",
+                "linux"
+              ]
+            }
+          ],
+          "sources": [
+            "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/configuration/example.md#L53-L79",
+            "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/mcp/config.rs#L3-L46"
+          ],
+          "confidence": "source",
+          "notes": "The top-level mcp_servers table lives in the same file as other settings.",
+          "format": "toml",
+          "keyPath": [
+            "mcp_servers"
+          ]
+        },
+        "local": {
+          "status": "unsupported",
+          "paths": [],
+          "sources": [
+            "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/mcp/config.rs#L3-L46"
+          ],
+          "confidence": "source",
+          "notes": "Loads MCP servers from the nac home config, not the project .mcp.json."
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "transport",
+          "stdio": {
+            "type": "stdio",
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "streamable_http",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/arcee-ai/nac/blob/v0.1.4/docs/configuration/example.md#L53-L79",
+          "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/mcp/config.rs#L3-L46",
+          "https://github.com/arcee-ai/nac/blob/v0.1.4/crates/nac-core/src/runtime.rs#L1075-L1097"
+        ],
+        "confidence": "source",
+        "notes": "Direct local runs support stdio and Streamable HTTP. SSH runs only connect to Streamable HTTP servers."
       },
       "acp": {
         "status": "unknown",
