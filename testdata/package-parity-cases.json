@@ -293,6 +293,41 @@
       }
     },
     {
+      "id": "check-anythingllm-linux-xdg-config-home",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "anythingllm-desktop",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/anythingllm-xdg-home",
+        "XDG_CONFIG_HOME": "${TMP}/anythingllm-xdg",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/anythingllm-xdg/anythingllm-desktop/storage/anythingllm.db"
+        }
+      ],
+      "expect": {
+        "key": "anythingllm-desktop",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "desktop-db-linux"
+        ],
+        "pathAssertions": [
+          {
+            "id": "desktop-db-linux",
+            "path": "${TMP}/anythingllm-xdg/anythingllm-desktop/storage/anythingllm.db",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
       "id": "check-anythingllm-macos-desktop-db",
       "operation": "checkHarness",
       "platforms": [

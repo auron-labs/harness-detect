@@ -20669,7 +20669,7 @@
           "id": "desktop-db-linux",
           "category": "state",
           "kind": "file",
-          "template": "${HOME}/.config/anythingllm-desktop/storage/anythingllm.db",
+          "template": "${XDG_CONFIG_HOME}/anythingllm-desktop/storage/anythingllm.db",
           "platforms": [
             "linux"
           ]
@@ -20686,12 +20686,17 @@
       ],
       "env": [
         {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Linux app data base directory; defaults to ~/.config."
+        },
+        {
           "name": "APPDATA",
           "description": "Windows roaming app data directory that contains the desktop storage."
         }
       ],
       "sources": [
         "https://github.com/Mintplex-Labs/anythingllm-docs/blob/578980fc73707c03c0556d972c411dd67f878380/pages/installation-desktop/storage.mdx#L8-L29",
+        "https://github.com/electron/electron/blob/4ff6c51a4abb0ff86a59580b247086f4b4433dfa/docs/api/app.md#L700-L708",
         "https://github.com/Mintplex-Labs/anything-llm/blob/v1.20.0/server/prisma/schema.prisma#L13-L16",
         "https://github.com/Mintplex-Labs/anything-llm/releases/tag/v1.20.0"
       ],
@@ -20723,7 +20728,7 @@
               {
                 "id": "global-mcp-linux",
                 "kind": "file",
-                "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+                "template": "${XDG_CONFIG_HOME}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
                 "platforms": [
                   "linux"
                 ]
@@ -20766,7 +20771,7 @@
               {
                 "id": "custom-skills-linux",
                 "kind": "dir",
-                "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/agent-skills",
+                "template": "${XDG_CONFIG_HOME}/anythingllm-desktop/storage/plugins/agent-skills",
                 "platforms": [
                   "linux"
                 ]
@@ -20859,7 +20864,7 @@
             {
               "id": "global-mcp-linux",
               "kind": "file",
-              "template": "${HOME}/.config/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
+              "template": "${XDG_CONFIG_HOME}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json",
               "platforms": [
                 "linux"
               ]
