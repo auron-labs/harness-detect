@@ -23097,6 +23097,11 @@
           "name": "FAST_AGENT_ROOT",
           "env": "FAST_AGENT_HOME",
           "fallback": "${CWD}/.fast-agent"
+        },
+        {
+          "name": "FAST_AGENT_GLOBAL_PLUGIN_ROOT",
+          "env": "FAST_AGENT_HOME",
+          "fallback": "${HOME}/.fast-agent"
         }
       ],
       "env": [
@@ -23129,21 +23134,21 @@
               {
                 "id": "global-plugin-config",
                 "kind": "file",
-                "template": "${HOME}/.fast-agent/fast-agent.yaml"
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fast-agent.yaml"
               },
               {
                 "id": "global-plugin-transitional-config",
                 "kind": "file",
-                "template": "${HOME}/.fast-agent/fast-agent.config.yaml"
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fast-agent.config.yaml"
               },
               {
                 "id": "global-plugin-legacy-config",
                 "kind": "file",
-                "template": "${HOME}/.fast-agent/fastagent.config.yaml"
+                "template": "${FAST_AGENT_GLOBAL_PLUGIN_ROOT}/fastagent.config.yaml"
               }
             ],
             "sources": [
-              "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/config.py#L2361-L2395"
+              "https://github.com/evalstate/fast-agent/blob/v0.10.65/src/fast_agent/config.py#L2361-L2436"
             ],
             "confidence": "source",
             "notes": "Only plugin selections are merged from the separate user-level config. FAST_AGENT_HOME redirects that lookup to the active home."

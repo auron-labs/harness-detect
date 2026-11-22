@@ -436,6 +436,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_ROOT` | `${CWD}/.fast-agent` |
+| `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_GLOBAL_PLUGIN_ROOT` | `${HOME}/.fast-agent` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
 | `github-copilot-cli` | `COPILOT_HOME` | `COPILOT_ROOT` | `${HOME}/.copilot` |
