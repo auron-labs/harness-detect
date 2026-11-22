@@ -181,7 +181,7 @@ MCP client status: supported: 62; unsupported: 8; unknown: 15. Project-root `.mc
 | `toad` | unsupported | unknown | unsupported | unsupported | — |
 | `trae-agent` | supported | unsupported | unsupported | `${CWD}/trae_config.yaml`<br>yaml: `mcp_servers` | map; stdio |
 | `vibe-kanban` | unsupported | unsupported | unknown | unknown | — |
-| `vtcode` | supported | unsupported | `${VTCODE_CONFIG_XDG}/vtcode.toml` (linux)<br>`${VTCODE_CONFIG_MACOS}/vtcode.toml` (darwin)<br>`${VTCODE_CONFIG_WINDOWS}/vtcode.toml` (win32)<br>toml: `mcp` → `providers` | `${CWD}/vtcode.toml`<br>`${CWD}/.vtcode/vtcode.toml`<br>toml: `mcp` → `providers` | array; stdio, http |
+| `vtcode` | supported | unsupported | `${VTCODE_CONFIG_XDG}/vtcode.toml` (linux, freebsd)<br>`${VTCODE_CONFIG_MACOS}/vtcode.toml` (darwin)<br>`${VTCODE_CONFIG_WINDOWS}/vtcode.toml` (win32)<br>toml: `mcp` → `providers` | `${CWD}/vtcode.toml`<br>`${CWD}/.vtcode/vtcode.toml`<br>toml: `mcp` → `providers` | array; stdio, http |
 | `warp` | supported | unsupported | `${HOME}/.warp/.mcp.json`<br>json: `mcpServers` | `${CWD}/.warp/.mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `warp-acp` | unknown | unknown | unknown | unknown | — |
 | `windsurf` | supported | unknown | `${XDG_CONFIG_HOME}/devin/mcp_config.json` (darwin, linux)<br>`${APPDATA}/devin/mcp_config.json` (win32)<br>`${HOME}/.codeium/windsurf/mcp_config.json`<br>json: `mcpServers` | `${CWD}/.devin/mcp_config.json`<br>`${CWD}/.devin/mcp_config.local.json`<br>json: `mcpServers` | map; stdio, http, sse |

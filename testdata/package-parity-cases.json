@@ -5340,7 +5340,8 @@
       "operation": "checkHarness",
       "input": "vt-code",
       "platforms": [
-        "linux"
+        "linux",
+        "freebsd"
       ],
       "cwd": "${CWD}",
       "env": {

@@ -239,6 +239,8 @@ def current_platform() -> str:
         return "darwin"
     if sys.platform == "win32":
         return "win32"
+    if sys.platform.startswith("freebsd"):
+        return "freebsd"
     return sys.platform
 
 

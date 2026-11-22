@@ -24413,7 +24413,8 @@
           "kind": "file",
           "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
           "platforms": [
-            "linux"
+            "linux",
+            "freebsd"
           ],
           "category": "config"
         },
@@ -24570,7 +24571,8 @@
                 "kind": "file",
                 "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
                 "platforms": [
-                  "linux"
+                  "linux",
+                  "freebsd"
                 ]
               },
               {
@@ -24637,7 +24639,8 @@
                 "kind": "dir",
                 "template": "${VTCODE_DATA_XDG}/skills",
                 "platforms": [
-                  "linux"
+                  "linux",
+                  "freebsd"
                 ]
               },
               {
@@ -24706,7 +24709,8 @@
                 "kind": "dir",
                 "template": "${VTCODE_CONFIG_XDG}/agents",
                 "platforms": [
-                  "linux"
+                  "linux",
+                  "freebsd"
                 ]
               },
               {
@@ -24848,7 +24852,8 @@
               "kind": "file",
               "template": "${VTCODE_CONFIG_XDG}/vtcode.toml",
               "platforms": [
-                "linux"
+                "linux",
+                "freebsd"
               ]
             },
             {
