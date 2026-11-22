@@ -432,6 +432,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `deerflow` | `DEER_FLOW_CONFIG_PATH` | `DEERFLOW_CONFIG_FILE` | `${DEERFLOW_PROJECT_ROOT}/config.yaml` |
 | `deerflow` | `DEER_FLOW_SKILLS_PATH` | `DEERFLOW_SKILLS_ROOT` | `${DEERFLOW_PROJECT_ROOT}/skills` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
+| `eigent` | `EIGENT_RUN_JOURNAL_PATH` | `EIGENT_JOURNAL_FILE` | `${HOME}/.eigent/run-journal.sqlite3` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
@@ -548,7 +549,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 81
+console.log(harnesses.harnesses.length);  // 83
 ```
 
 <!-- /automd -->

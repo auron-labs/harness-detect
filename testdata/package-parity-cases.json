@@ -1611,6 +1611,170 @@
       }
     },
     {
+      "id": "check-agent-zero-default-instance",
+      "operation": "checkHarness",
+      "input": "agent0ai/agent-zero",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/agent-zero/agent-zero/usr/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "agent-zero",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-instance-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-zero-project",
+      "operation": "checkHarness",
+      "input": "agent-zero",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.a0proj/project.json"
+        }
+      ],
+      "expect": {
+        "key": "agent-zero",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-zero-ignores-connector-and-generic-settings",
+      "operation": "checkHarness",
+      "input": "agent-zero",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/a0",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/usr/settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.a0proj"
+        }
+      ],
+      "expect": {
+        "key": "agent-zero",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-eigent-home-config-and-journal",
+      "operation": "checkHarness",
+      "input": "eigent-ai/eigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.eigent/mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.eigent/run-journal.sqlite3"
+        }
+      ],
+      "expect": {
+        "key": "eigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-mcp",
+          "run-journal"
+        ]
+      }
+    },
+    {
+      "id": "check-eigent-custom-run-journal",
+      "operation": "checkHarness",
+      "input": "eigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "EIGENT_RUN_JOURNAL_PATH": "${CWD}/eigent-run-journal.sqlite3"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/eigent-run-journal.sqlite3"
+        }
+      ],
+      "expect": {
+        "key": "eigent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "run-journal"
+        ]
+      }
+    },
+    {
+      "id": "check-eigent-ignores-overridden-workspace-and-generic-mcp",
+      "operation": "checkHarness",
+      "input": "eigent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "EIGENT_WORKSPACE": "${CWD}/eigent-workspace"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/eigent-workspace"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/eigent-workspace/mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "eigent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "check-deerflow-on-path",
       "operation": "checkHarness",
       "platforms": [
@@ -4462,6 +4626,66 @@
     {
       "id": "mcp-list",
       "operation": "listHarnessMcp"
+    },
+    {
+      "id": "translate-agent-zero-project",
+      "operation": "translateMcpJson",
+      "input": "agent-zero",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "docs": {
+              "type": "streamable-http",
+              "url": "https://example.com/mcp"
+            }
+          }
+        },
+        "skipped": []
+      }
+    },
+    {
+      "id": "translate-eigent-global",
+      "operation": "translateMcpJson",
+      "input": "eigent",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "type": "http",
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "scope": "global",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "docs": {
+              "type": "streamable_http",
+              "url": "https://example.com/mcp"
+            }
+          }
+        },
+        "skipped": []
+      }
     },
     {
       "id": "translate-claude-default-local",

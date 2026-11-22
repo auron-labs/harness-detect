@@ -23926,6 +23926,461 @@
       }
     },
     {
+      "key": "agent-zero",
+      "name": "Agent Zero",
+      "version": "2.16",
+      "aliases": [
+        "agent0ai/agent-zero"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "default-instance-settings",
+          "kind": "file",
+          "template": "${HOME}/agent-zero/agent-zero/usr/settings.json",
+          "category": "config"
+        },
+        {
+          "id": "project-config",
+          "kind": "file",
+          "template": "${CWD}/.a0proj/project.json",
+          "category": "project"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/agent0ai/agent-zero/releases/tag/v2.16",
+        "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/README.md#L146-L157",
+        "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/install.sh#L1989-L2013",
+        "https://github.com/agent0ai/a0-install/blob/d445296cefe4bb71037f1383cfbbcc5bc8d6ff9c/install.ps1#L2229-L2252",
+        "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/settings.py#L189",
+        "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/projects.py#L308-L318"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/agent0ai/agent-zero/blob/v2.16/docs/setup/installation.md#L103-L137",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "A0 Install sets up a Docker instance. The host settings path covers the default first instance; custom names or data directories and Docker-only volumes are not inferred."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/agent0ai/a0-launcher/releases/tag/v1.11",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The official desktop launcher installs or connects to Agent Zero. The launcher and its separately installed A0 CLI are not standalone runtime signals."
+        },
+        {
+          "method": "manual",
+          "url": "https://hub.docker.com/r/agent0ai/agent-zero",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Docker image agent0ai/agent-zero. Container paths are not probed on the host."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-instance-settings",
+                "kind": "file",
+                "template": "${HOME}/agent-zero/agent-zero/usr/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/settings.py#L189"
+            ],
+            "confidence": "source",
+            "notes": "Host bind mount for the default first instance created by A0 Install."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.a0proj/project.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/projects.py#L308-L318"
+            ],
+            "confidence": "source"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-instance-skills",
+                "kind": "dir",
+                "template": "${HOME}/agent-zero/agent-zero/usr/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/skills.py#L72-L101"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.a0proj/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/skills.py#L72-L101"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-instance-agents",
+                "kind": "dir",
+                "template": "${HOME}/agent-zero/agent-zero/usr/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/docs/guides/agent-profiles.md#L192-L203"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents",
+                "kind": "dir",
+                "template": "${CWD}/.a0proj/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/agent0ai/agent-zero/blob/v2.16/docs/guides/agent-profiles.md#L192-L203"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/mcp_handler.py#L846-L854"
+          ],
+          "confidence": "source",
+          "notes": "Configure through Settings. The instance-wide settings store MCP as a JSON-encoded string, not an object that the translator can patch."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "project-mcp",
+              "kind": "file",
+              "template": "${CWD}/.a0proj/mcp_servers.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/projects.py#L359-L370"
+          ],
+          "confidence": "source",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "streamable-http",
+            "url": "url",
+            "headers": "headers"
+          },
+          "sse": {
+            "type": "sse",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/agent0ai/agent-zero/blob/v2.16/helpers/mcp_handler.py#L75-L99",
+          "https://github.com/agent0ai/agent-zero/blob/v2.16/docs/developer/mcp-configuration.md#L11-L48"
+        ],
+        "confidence": "source"
+      }
+    },
+    {
+      "key": "eigent",
+      "name": "Eigent",
+      "version": "1.0.8",
+      "aliases": [
+        "eigent-ai/eigent"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "mac-app-bundle",
+          "kind": "dir",
+          "template": "/Applications/Eigent.app",
+          "category": "install",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "global-mcp",
+          "kind": "file",
+          "template": "${HOME}/.eigent/mcp.json",
+          "category": "config"
+        },
+        {
+          "id": "run-journal",
+          "kind": "file",
+          "template": "${EIGENT_JOURNAL_FILE}",
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "EIGENT_RUN_JOURNAL_PATH",
+          "description": "Overrides the local run journal database file (default ~/.eigent/run-journal.sqlite3)."
+        },
+        {
+          "name": "EIGENT_WORKSPACE",
+          "description": "Overrides the workspace directory (default ~/.eigent/workspace), not the home-based MCP or skills locations."
+        }
+      ],
+      "sources": [
+        "https://github.com/eigent-ai/eigent/releases/tag/v1.0.8",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron-builder.json#L1-L4",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron-builder.json#L134-L159",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron/main/utils/mcpConfig.ts#L19-L39",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/run_journal/paths.py#L20-L23",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/run_journal/runtime.py#L61-L75",
+        "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/utils/workspace_paths.py#L21-L22"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/eigent-ai/eigent/releases/tag/v1.0.8",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Official desktop downloads: macOS DMG, Windows NSIS setup, and Linux AppImage. No standalone harness CLI is assumed."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-mcp",
+                "kind": "file",
+                "template": "${HOME}/.eigent/mcp.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron/main/utils/mcpConfig.ts#L19-L39"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${HOME}/.eigent/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/service/skill_service.py#L24-L25"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "roots": [
+        {
+          "name": "EIGENT_JOURNAL_FILE",
+          "env": "EIGENT_RUN_JOURNAL_PATH",
+          "fallback": "${HOME}/.eigent/run-journal.sqlite3"
+        }
+      ],
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [
+            {
+              "id": "global-mcp",
+              "kind": "file",
+              "template": "${HOME}/.eigent/mcp.json"
+            }
+          ],
+          "sources": [
+            "https://github.com/eigent-ai/eigent/blob/v1.0.8/backend/app/service/mcp_config.py#L52-L81"
+          ],
+          "confidence": "source",
+          "format": "json",
+          "keyPath": [
+            "mcpServers"
+          ]
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "serverFormat": {
+          "container": "map",
+          "typeField": "type",
+          "stdio": {
+            "command": "command",
+            "args": "args",
+            "env": "env"
+          },
+          "http": {
+            "type": "streamable_http",
+            "url": "url",
+            "headers": "headers"
+          }
+        },
+        "sources": [
+          "https://github.com/eigent-ai/eigent/blob/v1.0.8/electron/main/utils/mcpConfig.ts#L19-L39",
+          "https://github.com/eigent-ai/eigent/blob/v1.0.8/src/store/chatStore.ts#L753-L763"
+        ],
+        "confidence": "source"
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",
