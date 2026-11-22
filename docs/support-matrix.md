@@ -80,7 +80,7 @@ Support leaf status totals: supported: 397; unsupported: 166; unknown: 127. Unkn
 
 ## MCP
 
-MCP client status: supported: 53; unsupported: 5; unknown: 11. Project-root `.mcp.json`: supported: 12; unsupported: 19; unknown: 38. The translation column lists the server container and the transports `translateMcpJson` can write.
+MCP client status: supported: 52; unsupported: 6; unknown: 11. Project-root `.mcp.json`: supported: 12; unsupported: 20; unknown: 37. The translation column lists the server container and the transports `translateMcpJson` can write.
 
 | Harness | MCP | `.mcp.json` | global config | local config | translation |
 | --- | --- | --- | --- | --- | --- |
@@ -149,7 +149,7 @@ MCP client status: supported: 53; unsupported: 5; unknown: 11. Project-root `.mc
 | `swe-agent` | unsupported | unsupported | unsupported | unsupported | — |
 | `toad` | unsupported | unknown | unsupported | unsupported | — |
 | `trae-agent` | supported | unsupported | unsupported | `${CWD}/trae_config.yaml`<br>yaml: `mcp_servers` | map; stdio |
-| `vibe-kanban` | supported | unknown | supported (no config file) | unknown | — |
+| `vibe-kanban` | unsupported | unsupported | unknown | unknown | — |
 | `warp` | supported | unsupported | `${HOME}/.warp/.mcp.json`<br>json: `mcpServers` | `${CWD}/.warp/.mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `warp-acp` | unknown | unknown | unknown | unknown | — |
 | `windsurf` | supported | unknown | `${XDG_CONFIG_HOME}/devin/mcp_config.json` (darwin, linux)<br>`${APPDATA}/devin/mcp_config.json` (win32)<br>`${HOME}/.codeium/windsurf/mcp_config.json`<br>json: `mcpServers` | `${CWD}/.devin/mcp_config.json`<br>`${CWD}/.devin/mcp_config.local.json`<br>json: `mcpServers` | map; stdio, http, sse |

@@ -20361,16 +20361,13 @@
         "confidence": "unknown"
       },
       "mcp": {
-        "status": "supported",
-        "mcpJson": "unknown",
+        "status": "unsupported",
+        "mcpJson": "unsupported",
         "global": {
-          "status": "supported",
+          "status": "unknown",
           "paths": [],
-          "sources": [
-            "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/docs/settings/mcp-servers.mdx#L32-L70"
-          ],
-          "confidence": "official",
-          "notes": "The Settings UI writes to the selected coding agent's global config; Vibe Kanban does not own a shared MCP config file."
+          "sources": [],
+          "confidence": "unknown"
         },
         "local": {
           "status": "unknown",
@@ -20382,7 +20379,7 @@
           "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/docs/settings/mcp-servers.mdx#L32-L70"
         ],
         "confidence": "official",
-        "notes": "MCP servers are configured for delegated coding agents, not a native Vibe Kanban client."
+        "notes": "The Settings UI writes to the selected coding agent's configuration. The agent, not Vibe Kanban, acts as the MCP client."
       }
     },
     {
