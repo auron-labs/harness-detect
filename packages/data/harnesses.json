@@ -25174,6 +25174,520 @@
       }
     },
     {
+      "key": "herdr",
+      "name": "Herdr",
+      "version": "0.9.5",
+      "aliases": [],
+      "executables": [
+        "herdr"
+      ],
+      "paths": [
+        {
+          "id": "explicit-config",
+          "kind": "file",
+          "template": "${HERDR_CONFIG_PATH}",
+          "category": "config"
+        },
+        {
+          "id": "user-config-xdg",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/herdr/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "user-config-windows",
+          "kind": "file",
+          "template": "${HERDR_WINDOWS_CONFIG}/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "session-xdg",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/herdr/session.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "session-windows",
+          "kind": "file",
+          "template": "${HERDR_WINDOWS_CONFIG}/session.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "named-sessions-xdg",
+          "kind": "dir",
+          "template": "${XDG_CONFIG_HOME}/herdr/sessions",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "named-sessions-windows",
+          "kind": "dir",
+          "template": "${HERDR_WINDOWS_CONFIG}/sessions",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "roots": [
+        {
+          "name": "HERDR_WINDOWS_CONFIG",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming/herdr",
+          "use": "${APPDATA}/herdr"
+        }
+      ],
+      "env": [
+        {
+          "name": "HERDR_CONFIG_PATH",
+          "description": "Path to Herdr's config.toml; does not move session state."
+        },
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Herdr configuration and session base on macOS and Linux."
+        },
+        {
+          "name": "APPDATA",
+          "description": "Default configuration and session base on Windows."
+        },
+        {
+          "name": "USERPROFILE",
+          "description": "Windows home fallback when APPDATA is not set."
+        }
+      ],
+      "sources": [
+        "https://github.com/herdrdev/herdr/releases/tag/v0.9.5",
+        "https://github.com/herdrdev/herdr/blob/v0.9.5/README.md#install",
+        "https://github.com/herdrdev/herdr/blob/v0.9.5/src/config/io.rs",
+        "https://github.com/herdrdev/herdr/blob/v0.9.5/src/session.rs#L159-L169",
+        "https://github.com/herdrdev/herdr/blob/v0.9.5/src/persist/io.rs#L11-L17"
+      ],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "herdr",
+          "command": "brew install herdr",
+          "url": "https://github.com/herdrdev/herdr/blob/v0.9.5/README.md#install"
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "url": "https://github.com/herdrdev/herdr/releases/tag/v0.9.5"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "explicit-config",
+                "kind": "file",
+                "template": "${HERDR_CONFIG_PATH}"
+              },
+              {
+                "id": "user-config-xdg",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/herdr/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "user-config-windows",
+                "kind": "file",
+                "template": "${HERDR_WINDOWS_CONFIG}/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/herdrdev/herdr/blob/v0.9.5/src/config/io.rs"
+            ],
+            "confidence": "source",
+            "notes": "HERDR_CONFIG_PATH takes precedence for config only. Paths model the default Windows layout, not an explicit Windows XDG_CONFIG_HOME."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "pipali",
+      "name": "Pipali",
+      "version": "0.12.0",
+      "aliases": [],
+      "executables": [],
+      "paths": [
+        {
+          "id": "desktop-db-linux",
+          "kind": "dir",
+          "template": "${XDG_DATA_HOME}/ai.pipali/db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "legacy-db-linux",
+          "kind": "dir",
+          "template": "${XDG_DATA_HOME}/pipali/db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "desktop-db-macos",
+          "kind": "dir",
+          "template": "${HOME}/Library/Application Support/ai.pipali/db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "legacy-db-macos",
+          "kind": "dir",
+          "template": "${HOME}/Library/Application Support/pipali/db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "desktop-db-windows",
+          "kind": "dir",
+          "template": "${PIPALI_ROAMING}/ai.pipali/db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "legacy-db-windows",
+          "kind": "dir",
+          "template": "${PIPALI_ROAMING}/pipali/db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "server-db-override",
+          "kind": "dir",
+          "template": "${PIPALI_DATA_DIR}/db",
+          "category": "state"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/Pipali.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-macos-app",
+          "kind": "dir",
+          "template": "/Applications/Pipali.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "roots": [
+        {
+          "name": "PIPALI_ROAMING",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "PIPALI_SKILLS_ROOT",
+          "env": "PIPALI_SKILLS_DIR",
+          "fallback": "${HOME}/.pipali/skills"
+        }
+      ],
+      "env": [
+        {
+          "name": "PIPALI_DATA_DIR",
+          "description": "Override for the standalone server's application data; the desktop launcher sets this for its sidecar."
+        },
+        {
+          "name": "PIPALI_SKILLS_DIR",
+          "description": "Overrides the directory for user and shipped skills."
+        },
+        {
+          "name": "XDG_DATA_HOME",
+          "description": "Base for Linux desktop and legacy data directories."
+        },
+        {
+          "name": "APPDATA",
+          "description": "Base for Windows desktop and legacy data directories."
+        }
+      ],
+      "sources": [
+        "https://github.com/khoj-ai/pipali/releases/tag/0.12.0",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/README.md#get-started",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/.github/workflows/desktop.yml#L145-L180",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/src-tauri/tauri.conf.json",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/src-tauri/src/lib.rs#L227-L305",
+        "https://docs.rs/tauri/2.11.1/tauri/path/struct.PathResolver.html#method.app_data_dir",
+        "https://docs.rs/tauri/2.11.1/tauri/path/struct.PathResolver.html#method.data_dir",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/paths.ts",
+        "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/db/utils.ts"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/khoj-ai/pipali/releases/tag/0.12.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop artifacts: macOS ARM64 DMG, Linux x86-64 AppImage, and Windows x64 setup executable."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/db/schema.ts"
+            ],
+            "confidence": "source",
+            "notes": "Application settings are managed by the app and persisted in its local database."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${PIPALI_SKILLS_ROOT}"
+              }
+            ],
+            "sources": [
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/paths.ts",
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/skills/index.ts"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/skills/index.ts"
+            ],
+            "confidence": "source",
+            "notes": "The loader scans the single user skill root, not the project."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/paths.ts",
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/skills/index.ts"
+            ],
+            "confidence": "source",
+            "notes": "The default root is ~/.pipali/skills."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/skills/index.ts"
+            ],
+            "confidence": "source",
+            "notes": "No project .agents/skills discovery in the skill loader."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/routes/mcp.ts#L170-L228",
+            "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/db/schema.ts"
+          ],
+          "confidence": "source",
+          "notes": "App-managed MCP server settings stored in the local database."
+        },
+        "local": {
+          "status": "unsupported",
+          "paths": [],
+          "sources": [
+            "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/routes/mcp.ts#L170-L228"
+          ],
+          "confidence": "source",
+          "notes": "MCP servers are app-wide, not workspace files."
+        },
+        "sources": [
+          "https://github.com/khoj-ai/pipali/blob/0.12.0/README.md#connect-your-tools",
+          "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/routes/mcp.ts#L170-L228",
+          "https://github.com/khoj-ai/pipali/blob/0.12.0/src/server/db/schema.ts"
+        ],
+        "confidence": "source",
+        "notes": "Pipali stores stdio and HTTP MCP servers in its app database, not .mcp.json; there is no file translation target."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
       "key": "deerflow",
       "name": "DeerFlow",
       "version": "2.2.0",
