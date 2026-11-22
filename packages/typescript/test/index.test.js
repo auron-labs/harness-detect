@@ -807,6 +807,7 @@ test("MCP metadata and .mcp.json translation", () => {
   claude.mcp.status = "MUTATED";
   assert.equal(getHarnessMcp("claude-code").mcp.status, "supported");
   assert.equal(listHarnessMcp().length, listHarnesses().length);
+  assert.equal(getHarnessMcp("vibe-kanban").mcp.status, "unsupported");
 
   const translation = translateMcpJson(
     "codex",

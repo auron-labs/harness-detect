@@ -634,6 +634,9 @@ func withDefaults(env map[string]string, cwd string) map[string]string {
 	}
 
 	home := envValue(env, "HOME")
+	if home == "" && runtime.GOOS == "windows" {
+		home = envValue(env, "USERPROFILE")
+	}
 	if home == "" {
 		home, _ = os.UserHomeDir()
 	}

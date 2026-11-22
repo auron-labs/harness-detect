@@ -20101,6 +20101,552 @@
       }
     },
     {
+      "key": "vibe-kanban",
+      "name": "Vibe Kanban",
+      "version": "0.1.46",
+      "aliases": [
+        "BloopAI/vibe-kanban"
+      ],
+      "executables": [
+        "vibe-kanban"
+      ],
+      "paths": [
+        {
+          "id": "global-config-linux",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_DATA_HOME}/vibe-kanban/config.json",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "global-config-darwin",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/config.json",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "global-config-win32",
+          "category": "config",
+          "kind": "file",
+          "template": "${APPDATA}/bloop/vibe-kanban/data/config.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "global-profiles-linux",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_DATA_HOME}/vibe-kanban/profiles.json",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "global-profiles-darwin",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/profiles.json",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "global-profiles-win32",
+          "category": "config",
+          "kind": "file",
+          "template": "${APPDATA}/bloop/vibe-kanban/data/profiles.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "workspace-db-linux",
+          "category": "state",
+          "kind": "file",
+          "template": "${XDG_DATA_HOME}/vibe-kanban/db.v2.sqlite",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "workspace-db-darwin",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/db.v2.sqlite",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "workspace-db-win32",
+          "category": "state",
+          "kind": "file",
+          "template": "${APPDATA}/bloop/vibe-kanban/data/db.v2.sqlite",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "XDG_DATA_HOME",
+          "description": "On Linux, overrides the base directory for Vibe Kanban's application data."
+        },
+        {
+          "name": "APPDATA",
+          "description": "On Windows, provides the roaming application data directory used for Vibe Kanban."
+        }
+      ],
+      "sources": [
+        "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/npx-cli/package.json#L2-L8",
+        "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/npx-cli/src/cli.ts#L62-L72",
+        "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/crates/utils/src/assets.rs#L6-L37",
+        "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/Cargo.lock#L2379-L2382",
+        "https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html#method.data_dir",
+        "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/crates/db/src/lib.rs#L75-L85"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "vibe-kanban",
+          "command": "npx vibe-kanban",
+          "url": "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/README.md#installation",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Runs the local package without a permanent PATH entry. The hosted service is being sunset; local workspaces remain available."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-config-linux",
+                "kind": "file",
+                "template": "${XDG_DATA_HOME}/vibe-kanban/config.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "global-config-darwin",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "global-config-win32",
+                "kind": "file",
+                "template": "${APPDATA}/bloop/vibe-kanban/data/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/crates/utils/src/assets.rs#L6-L37",
+              "https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html#method.data_dir"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-profiles-linux",
+                "kind": "file",
+                "template": "${XDG_DATA_HOME}/vibe-kanban/profiles.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "global-profiles-darwin",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/profiles.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "global-profiles-win32",
+                "kind": "file",
+                "template": "${APPDATA}/bloop/vibe-kanban/data/profiles.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/crates/utils/src/assets.rs#L6-L37",
+              "https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html#method.data_dir",
+              "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/crates/executors/src/profile.rs#L275-L311"
+            ],
+            "confidence": "source",
+            "notes": "Profiles define variants of Vibe Kanban's supported coding agents."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "unsupported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/BloopAI/vibe-kanban/blob/v0.1.46.1794744340/docs/settings/mcp-servers.mdx#L32-L70"
+        ],
+        "confidence": "official",
+        "notes": "The Settings UI writes to the selected coding agent's configuration. The agent, not Vibe Kanban, acts as the MCP client."
+      }
+    },
+    {
+      "key": "deepseek-harness",
+      "name": "DeepSeek Harness",
+      "version": "0.2.2-rc.5",
+      "aliases": [
+        "deepseek-ai/deepseek-harness",
+        "@deepseek-ai/dsh"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "home-patch",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/cordis.patch.yml"
+        },
+        {
+          "id": "web-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/web/package.json"
+        },
+        {
+          "id": "headless-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/headless/package.json"
+        },
+        {
+          "id": "acp-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/acp/package.json"
+        },
+        {
+          "id": "sdk-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/sdk/package.json"
+        },
+        {
+          "id": "sdk-minimal-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/sdk-minimal/package.json"
+        },
+        {
+          "id": "desktop-profile",
+          "category": "config",
+          "kind": "file",
+          "template": "${DSH_ROOT}/profiles/desktop/package.json"
+        }
+      ],
+      "roots": [
+        {
+          "name": "DSH_ROOT",
+          "env": "DSH_HOME",
+          "fallback": "${HOME}/.dsh"
+        }
+      ],
+      "env": [
+        {
+          "name": "DSH_HOME",
+          "description": "Overrides the DeepSeek Harness data and configuration root."
+        },
+        {
+          "name": "DSH_AGENTS_HOME",
+          "description": "Overrides the independent shared Agent Skills root, normally ~/.agents."
+        }
+      ],
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/cli/package.json#L1-L16",
+        "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/cli/README.md#L9-L20",
+        "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/cli/README.md#L34-L46",
+        "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/util/home-paths/src/index.ts#L124-L152",
+        "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/desktop/README.md#bundled-command-runtime"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@deepseek-ai/dsh",
+          "command": "npx @deepseek-ai/dsh web",
+          "url": "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/README.md#run-from-npm",
+          "notes": "Developer preview; the npm package requires Node.js 24.9.0 or newer. The bare dsh executable name is shared with unrelated software."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "home-patch",
+                "kind": "file",
+                "template": "${DSH_ROOT}/cordis.patch.yml"
+              }
+            ],
+            "sources": [
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/cli/README.md#L34-L46",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/util/home-paths/src/index.ts#L124-L152"
+            ],
+            "confidence": "source",
+            "notes": "Named profiles can also define their own patch under the harness home."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-skills",
+                "kind": "dir",
+                "template": "${DSH_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/bundle/base/cordis.patch.yml#L311-L318",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/skill/skill-filesystem/README.md#L44-L75"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.dsh/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/bundle/base/cordis.patch.yml#L311-L318",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/skill/skill-filesystem/README.md#L44-L75"
+            ],
+            "confidence": "source",
+            "notes": "The filesystem provider starts at the nearest ancestor containing .git, or the working directory if no ancestor contains it."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "description": "Default when DSH_AGENTS_HOME is unset."
+              },
+              {
+                "id": "global-agents-skills-override",
+                "kind": "dir",
+                "template": "${DSH_AGENTS_HOME}/skills",
+                "description": "Replaces the default when DSH_AGENTS_HOME is set."
+              }
+            ],
+            "sources": [
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/bundle/base/cordis.patch.yml#L311-L318",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/skill/skill-filesystem/README.md#L44-L75",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/util/home-paths/src/index.ts#L124-L152"
+            ],
+            "confidence": "source",
+            "notes": "Default for profiles using the base filesystem skill provider. The registry lists the default and its replacement separately."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/bundle/base/cordis.patch.yml#L311-L318",
+              "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/skill/skill-filesystem/README.md#L44-L75"
+            ],
+            "confidence": "source",
+            "notes": "The base filesystem skill provider uses the nearest ancestor containing .git, or the working directory if no ancestor contains it."
+          }
+        }
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@deepseek-ai/dsh",
+              "--profile",
+              "acp"
+            ]
+          }
+        ],
+        "installedLaunches": [],
+        "sources": [
+          "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/apps/cli/README.md#L9-L20",
+          "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/README.md#run-from-npm",
+          "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/acp/acp/README.md#L12"
+        ],
+        "confidence": "official",
+        "notes": "Uses the scoped npm package to avoid a different dsh on PATH. Requires Node.js 24.9.0 or newer and npm."
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/docs/user/guide/mcp-memory.md#L25-L33",
+            "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/docs/user/guide/mcp-memory.md#L84-L101"
+          ],
+          "confidence": "official",
+          "notes": "Add MCP client plugin entries to the home or profile Cordis YAML patch. The patch is an ordered plugin overlay, not a native server map."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/docs/user/guide/mcp-memory.md#L84-L101",
+          "https://github.com/deepseek-ai/deepseek-harness/blob/dsh-v0.2.2-rc.5/packages/bundle/acp-app/README.md#L36"
+        ],
+        "confidence": "official",
+        "notes": "The Cordis overlay is not supported by the file translator. ACP clients can also pass session MCP declarations."
+      }
+    },
+    {
       "key": "prime-agent",
       "name": "Prime Agent",
       "version": "0.10.3",
