@@ -712,6 +712,317 @@
       }
     },
     {
+      "id": "check-browser-use-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "browser-use/browser-use",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/browser-use",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "browser-use",
+        "installed": true,
+        "executablePath": "${BIN}/browser-use",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-browser-use-default-device-id",
+      "operation": "checkHarness",
+      "input": "browseruse",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/browseruse/device_id"
+        }
+      ],
+      "expect": {
+        "key": "browser-use",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "device-id"
+        ]
+      }
+    },
+    {
+      "id": "check-browser-use-xdg-update-cache",
+      "operation": "checkHarness",
+      "input": "browser-use",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_CONFIG_HOME": "${TMP}/browser-use-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/browser-use-xdg/browseruse/latest_version.json"
+        }
+      ],
+      "expect": {
+        "key": "browser-use",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "update-cache"
+        ]
+      }
+    },
+    {
+      "id": "check-browser-use-config-dir-override",
+      "operation": "checkHarness",
+      "input": "browser-use",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "BROWSER_USE_CONFIG_DIR": "~/custom-browser-use",
+        "XDG_CONFIG_HOME": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/browseruse/device_id"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/custom-browser-use/latest_version.json"
+        }
+      ],
+      "expect": {
+        "key": "browser-use",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "update-cache"
+        ]
+      }
+    },
+    {
+      "id": "check-browser-use-ignores-browser-harness-and-legacy-settings",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "browser-use",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": ""
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/browser-harness",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.config/browseruse/config.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/browseruse/profiles"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/browseruse/extensions"
+        }
+      ],
+      "expect": {
+        "key": "browser-use",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-deerflow-on-path",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "input": "deer-flow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/deerflow",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": true,
+        "executablePath": "${BIN}/deerflow",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-deerflow-project-runtime",
+      "operation": "checkHarness",
+      "input": "deerflow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.deer-flow"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-runtime"
+        ]
+      }
+    },
+    {
+      "id": "check-deerflow-checkout-backend-runtime",
+      "operation": "checkHarness",
+      "input": "deerflow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/backend/.deer-flow"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-backend-runtime"
+        ]
+      }
+    },
+    {
+      "id": "check-deerflow-project-root-override",
+      "operation": "checkHarness",
+      "input": "deerflow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DEER_FLOW_PROJECT_ROOT": "${TMP}/deerflow-project"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/deerflow-project/.deer-flow"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-runtime"
+        ]
+      }
+    },
+    {
+      "id": "check-deerflow-runtime-home-override",
+      "operation": "checkHarness",
+      "input": "deerflow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DEER_FLOW_HOME": "${TMP}/custom-deerflow"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/custom-deerflow/managed-subagents"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "managed-subagents"
+        ]
+      }
+    },
+    {
+      "id": "check-deerflow-ignores-generic-project-files-and-empty-override",
+      "operation": "checkHarness",
+      "input": "deerflow",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DEER_FLOW_HOME": "${TMP}/empty-deerflow"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/extensions_config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/skills"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/empty-deerflow"
+        }
+      ],
+      "expect": {
+        "key": "deerflow",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
       "id": "check-agent-browser-on-path",
       "operation": "checkHarness",
       "platforms": [
@@ -3671,6 +3982,69 @@
             }
           }
         ]
+      }
+    },
+    {
+      "id": "translate-deerflow-project-extensions",
+      "operation": "translateMcpJson",
+      "input": "deer-flow",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "stdio": {
+            "command": "fixture-server",
+            "args": [
+              "--stdio"
+            ],
+            "env": {
+              "PROFILE": "fixture"
+            }
+          },
+          "http": {
+            "type": "http",
+            "url": "https://example.com/mcp",
+            "headers": {
+              "Accept": "application/json"
+            }
+          },
+          "legacy": {
+            "type": "sse",
+            "url": "https://example.com/sse"
+          }
+        }
+      },
+      "expect": {
+        "scope": "local",
+        "format": "json",
+        "keyPath": [
+          "mcpServers"
+        ],
+        "config": {
+          "mcpServers": {
+            "stdio": {
+              "type": "stdio",
+              "command": "fixture-server",
+              "args": [
+                "--stdio"
+              ],
+              "env": {
+                "PROFILE": "fixture"
+              }
+            },
+            "http": {
+              "type": "http",
+              "url": "https://example.com/mcp",
+              "headers": {
+                "Accept": "application/json"
+              }
+            },
+            "legacy": {
+              "type": "sse",
+              "url": "https://example.com/sse"
+            }
+          }
+        },
+        "skipped": []
       }
     },
     {
