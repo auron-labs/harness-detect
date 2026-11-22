@@ -26033,7 +26033,7 @@
         {
           "id": "user-windows-app",
           "kind": "file",
-          "template": "${LOCALAPPDATA}/Programs/OpenHuman/OpenHuman.exe",
+          "template": "${LOCALAPPDATA}/OpenHuman/OpenHuman.exe",
           "platforms": [
             "win32"
           ],
@@ -26085,7 +26085,8 @@
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/schema/load_user_state.rs",
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-core/src/config/app_env.rs",
         "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/crates/openhuman-app/postinst#L4-L16",
-        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.ps1#L269-L273"
+        "https://github.com/tinyhumansai/openhuman/blob/v0.64.15/scripts/install.ps1#L269-L273",
+        "https://github.com/tauri-apps/tauri/blob/tauri-cli-v2.11.4/crates/tauri-bundler/src/bundle/windows/nsis/installer.nsi#L498-L515"
       ],
       "installations": [
         {

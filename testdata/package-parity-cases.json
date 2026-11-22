@@ -6318,6 +6318,34 @@
       }
     },
     {
+      "id": "check-openhuman-windows-user-app-without-cli",
+      "operation": "checkHarness",
+      "input": "openhuman",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/oh-local-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oh-local-appdata/OpenHuman/OpenHuman.exe"
+        }
+      ],
+      "expect": {
+        "key": "openhuman",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-windows-app"
+        ]
+      }
+    },
+    {
       "id": "check-openhuman-windows-system-app-without-cli",
       "operation": "checkHarness",
       "input": "openhuman",
