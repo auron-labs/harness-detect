@@ -466,6 +466,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openharness` | `OPENHARNESS_DATA_DIR` | `OPENHARNESS_DATA_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/data` |
 | `openharness` | `OPENHARNESS_LOGS_DIR` | `OPENHARNESS_LOGS_ROOT` | `${OPENHARNESS_CONFIG_ROOT}/logs` |
 | `openharness` | `OHMO_WORKSPACE` | `OHMO_WORKSPACE_ROOT` | `${HOME}/.ohmo` |
+| `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
+| `paradev` | `SUPERSET_HOME` | `PARADEV_CLI_INSTALL_ROOT` | `${HOME}/superset` |
 | `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
@@ -546,7 +548,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 79
+console.log(harnesses.harnesses.length);  // 81
 ```
 
 <!-- /automd -->
