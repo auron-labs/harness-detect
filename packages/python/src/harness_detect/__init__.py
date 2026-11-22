@@ -953,11 +953,17 @@ def _with_defaults(
     """
     out: dict[str, str] = dict(env) if env is not None else dict(os.environ)
 
-    home = out.get("HOME", "")
-    if not home and sys.platform == "win32":
-        home = out.get("USERPROFILE", "")
+    windows = sys.platform == "win32"
+
+    def home_env(key: str) -> str:
+        if key not in out and windows:
+            key = min((name for name in out if name.upper() == key), default=key)
+        return out.get(key, "")
+
+    userprofile = home_env("USERPROFILE")
+    home = home_env("HOME") or (userprofile if windows else "")
     home = home or os.path.expanduser("~") or "/"
-    userprofile = out.get("USERPROFILE", "") or home
+    userprofile = userprofile or home
 
     xdg_config_home = out.get("XDG_CONFIG_HOME", "") or os.path.join(home, ".config")
     xdg_data_home = out.get("XDG_DATA_HOME", "") or os.path.join(

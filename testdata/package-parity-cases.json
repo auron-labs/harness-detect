@@ -1747,7 +1747,7 @@
       "input": "deepseek-harness",
       "cwd": "${CWD}",
       "env": {
-        "USERPROFILE": "${TMP}/deepseek-windows-profile",
+        "UserProfile": "${TMP}/deepseek-windows-profile",
         "PATH": ""
       },
       "setup": [

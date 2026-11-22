@@ -857,25 +857,28 @@ fn with_defaults(
         None => std::env::vars().collect(),
     };
 
-    let home = out
-        .get("HOME")
-        .filter(|s| !s.is_empty())
-        .or_else(|| {
-            out.get("USERPROFILE")
-                .filter(|s| cfg!(windows) && !s.is_empty())
+    let home_env = |key: &str| {
+        out.get(key).or_else(|| {
+            if cfg!(windows) {
+                out.iter()
+                    .filter(|(name, _)| name.eq_ignore_ascii_case(key))
+                    .min_by_key(|(name, _)| *name)
+                    .map(|(_, value)| value)
+            } else {
+                None
+            }
         })
+    };
+
+    let userprofile = home_env("USERPROFILE").filter(|s| !s.is_empty());
+    let home = home_env("HOME")
+        .filter(|s| !s.is_empty())
+        .or(userprofile.filter(|_| cfg!(windows)))
         .cloned()
         .or_else(|| std::env::home_dir().map(|p| p.to_string_lossy().into_owned()))
         .unwrap_or_else(|| "/".to_string());
 
-    let userprofile = {
-        let up = out.get("USERPROFILE").map(|s| s.as_str()).unwrap_or("");
-        if !up.is_empty() {
-            up.to_string()
-        } else {
-            home.clone()
-        }
-    };
+    let userprofile = userprofile.cloned().unwrap_or_else(|| home.clone());
 
     let xdg_config_home = out
         .get("XDG_CONFIG_HOME")

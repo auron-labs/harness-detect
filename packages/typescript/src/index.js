@@ -14,7 +14,14 @@ function clone(value) {
 }
 
 function withDefaults(env = process.env, cwd = process.cwd()) {
-  const home = env.HOME || (process.platform === "win32" && env.USERPROFILE) || os.homedir();
+  const windows = process.platform === "win32";
+  const homeEnv = (key) => {
+    if (env[key] !== undefined || !windows) return env[key];
+    const match = Object.keys(env).filter((name) => name.toUpperCase() === key).sort()[0];
+    return match === undefined ? undefined : env[match];
+  };
+  const userprofile = homeEnv("USERPROFILE");
+  const home = homeEnv("HOME") || (windows && userprofile) || os.homedir();
   const xdgConfigHome = env.XDG_CONFIG_HOME || path.join(home, ".config");
   const xdgDataHome = env.XDG_DATA_HOME || path.join(home, ".local", "share");
   const xdgStateHome = env.XDG_STATE_HOME || path.join(home, ".local", "state");
@@ -23,7 +30,7 @@ function withDefaults(env = process.env, cwd = process.cwd()) {
   return {
     ...env,
     HOME: home,
-    USERPROFILE: env.USERPROFILE || home,
+    USERPROFILE: userprofile || home,
     XDG_CONFIG_HOME: xdgConfigHome,
     XDG_DATA_HOME: xdgDataHome,
     XDG_STATE_HOME: xdgStateHome,

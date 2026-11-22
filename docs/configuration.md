@@ -320,7 +320,7 @@ These are computed by `withDefaults()` in all packages and are always available:
 
 | Variable | Default (when env var not set) | Source |
 | --- | --- | --- |
-| `${HOME}` | On Windows, `USERPROFILE` if set; otherwise the process user's home directory | `withDefaults()` |
+| `${HOME}` | On Windows, `USERPROFILE` (case-insensitive) if set; otherwise the process user's home directory | `withDefaults()` |
 | `${USERPROFILE}` | Falls back to `${HOME}` | `withDefaults()` |
 | `${XDG_CONFIG_HOME}` | `${HOME}/.config` | `withDefaults()` |
 | `${XDG_DATA_HOME}` | `${HOME}/.local/share` | `withDefaults()` |
