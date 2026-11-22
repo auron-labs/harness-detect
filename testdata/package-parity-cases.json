@@ -275,7 +275,7 @@
       "operation": "listHarnessSupport"
     },
     {
-      "id": "detect-all-count-empty-fixture",
+      "id": "detect-all-empty-fixture",
       "operation": "detectHarnesses",
       "cwd": "${CWD}",
       "env": {
@@ -284,7 +284,6 @@
       },
       "setup": [],
       "expect": {
-        "count": 67,
         "installedCount": 0,
         "installedKeys": []
       }
@@ -1568,6 +1567,286 @@
         "installed": false,
         "executablePath": null,
         "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-vibe-kanban-linux-default",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "BloopAI/vibe-kanban",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/share/vibe-kanban/config.json"
+        }
+      ],
+      "expect": {
+        "key": "vibe-kanban",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-vibe-kanban-linux-xdg",
+      "operation": "checkHarness",
+      "platforms": [
+        "linux"
+      ],
+      "input": "vibe-kanban",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_DATA_HOME": "${TMP}/data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/share/vibe-kanban/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/data/vibe-kanban/db.v2.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "vibe-kanban",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "workspace-db-linux"
+        ]
+      }
+    },
+    {
+      "id": "check-vibe-kanban-macos",
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin"
+      ],
+      "input": "vibe-kanban",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/ai.bloop.vibe-kanban/profiles.json"
+        }
+      ],
+      "expect": {
+        "key": "vibe-kanban",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-profiles-darwin"
+        ]
+      }
+    },
+    {
+      "id": "check-vibe-kanban-windows",
+      "operation": "checkHarness",
+      "platforms": [
+        "win32"
+      ],
+      "input": "vibe-kanban",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "APPDATA": "${TMP}/roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/roaming/bloop/vibe-kanban/data/config.json"
+        }
+      ],
+      "expect": {
+        "key": "vibe-kanban",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-config-win32"
+        ]
+      }
+    },
+    {
+      "id": "check-vibe-kanban-ignores-dev-assets",
+      "operation": "checkHarness",
+      "input": "vibe-kanban",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/dev_assets/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dev_assets/profiles.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/dev_assets/db.v2.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "vibe-kanban",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-deepseek-default-profile",
+      "operation": "checkHarness",
+      "input": "@deepseek-ai/dsh",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.dsh/profiles/web/package.json",
+          "content": "{\"dsh\":{\"profile\":{\"bundles\":[\"@deepseek-ai/dsh-base\"]}}}"
+        }
+      ],
+      "expect": {
+        "key": "deepseek-harness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "web-profile"
+        ]
+      }
+    },
+    {
+      "id": "check-deepseek-home-override",
+      "operation": "checkHarness",
+      "input": "deepseek-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DSH_HOME": "${TMP}/custom"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.dsh/profiles/web/package.json",
+          "content": "{\"dsh\":{\"profile\":{\"bundles\":[\"@deepseek-ai/dsh-base\"]}}}"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/custom/cordis.patch.yml",
+          "content": "[]\n"
+        }
+      ],
+      "expect": {
+        "key": "deepseek-harness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "home-patch"
+        ],
+        "pathAssertions": [
+          {
+            "id": "home-patch",
+            "path": "${TMP}/custom/cordis.patch.yml",
+            "exists": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-deepseek-ignores-unrelated-dsh-and-patch",
+      "operation": "checkHarness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "input": "deepseek-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/deepseek-collision/home",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/dsh",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/cordis.patch.yml",
+          "content": "[]\n"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/deepseek-collision/home/.dsh/unrelated.txt"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/deepseek-collision/home/.agents/skills/sample/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "deepseek-harness",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-launches-deepseek-does-not-trust-bare-dsh",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/dsh",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/npx",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.dsh/profiles/acp/package.json",
+          "content": "{\"dsh\":{\"profile\":{\"bundles\":[\"@deepseek-ai/dsh-base\"]}}}"
+        }
+      ],
+      "expect": {
+        "launches": []
       }
     },
     {

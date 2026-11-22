@@ -424,6 +424,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `crush` | — | `CRUSH_DATA_FILE` | `${CRUSH_DATA_ROOT}/crush.json` |
 | `crush` | `CRUSH_SKILLS_DIR` | `CRUSH_SKILLS_ROOT` | `${CRUSH_CONFIG_ROOT}/skills` |
 | `deepagents-code` | `DEEPAGENTS_HOME` | `DEEPAGENTS_ROOT` | `${HOME}/.deepagents` |
+| `deepseek-harness` | `DSH_HOME` | `DSH_ROOT` | `${HOME}/.dsh` |
 | `droid` | — | `FACTORY_ROOT` | `${HOME}/.factory` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
@@ -527,7 +528,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 67
+console.log(harnesses.harnesses.length);  // 69
 ```
 
 <!-- /automd -->
