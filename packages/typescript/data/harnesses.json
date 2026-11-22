@@ -32964,6 +32964,344 @@
         "sources": [],
         "confidence": "unknown"
       }
+    },
+    {
+      "key": "openmanus",
+      "name": "OpenManus",
+      "version": "0.3.0",
+      "aliases": [
+        "foundationagents/openmanus",
+        "mannaandpoem/openmanus"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "checkout-agent-source",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/app/agent/manus.py"
+        }
+      ],
+      "env": [],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/README.md#L29-L97",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Clone the source, install its Python 3.12 dependencies, and run python main.py from the checkout. Detection recognizes the checkout, not whether dependencies or API credentials are configured."
+        }
+      ],
+      "sources": [
+        "https://github.com/FoundationAgents/OpenManus/releases/tag/v0.3.0",
+        "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/main.py#L1-L16",
+        "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/app/agent/manus.py#L15-L24",
+        "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/app/config.py#L9-L15"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-config",
+                "kind": "file",
+                "template": "${CWD}/config/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/app/config.py#L146-L160"
+            ],
+            "confidence": "source",
+            "notes": "Relative to the source checkout; upstream resolves it from its own module location. The example TOML is a fallback, not a configured install."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/run_mcp.py#L19-L34"
+          ],
+          "confidence": "source",
+          "notes": "At v0.3.0 the separate MCP runner launches a Python module over stdio or accepts an SSE URL. The TOML server_reference setting names one Python module, not a list of native MCP servers, so there is no file-based translation target."
+        },
+        "sources": [
+          "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/run_mcp.py#L19-L34",
+          "https://github.com/FoundationAgents/OpenManus/blob/v0.3.0/app/config.py#L101-L106"
+        ],
+        "confidence": "source"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "metagpt",
+      "name": "MetaGPT",
+      "version": "0.8.2",
+      "aliases": [
+        "foundationagents/metagpt",
+        "geekan/metagpt"
+      ],
+      "executables": [
+        "metagpt"
+      ],
+      "roots": [
+        {
+          "name": "METAGPT_ROOT",
+          "env": "METAGPT_PROJECT_ROOT",
+          "fallback": "${CWD}"
+        }
+      ],
+      "paths": [
+        {
+          "category": "config",
+          "id": "home-config",
+          "kind": "file",
+          "template": "${HOME}/.metagpt/config2.yaml",
+          "platforms": [
+            "darwin",
+            "linux",
+            "freebsd",
+            "openbsd"
+          ]
+        },
+        {
+          "category": "config",
+          "id": "windows-home-config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.metagpt/config2.yaml",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "METAGPT_PROJECT_ROOT",
+          "description": "Overrides MetaGPT's project root, including its lower-priority project config; does not move the user config."
+        }
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "metagpt",
+          "command": "pip install metagpt==0.8.2",
+          "url": "https://pypi.org/project/metagpt/0.8.2/",
+          "notes": "Requires Python 3.9–3.11. Run metagpt --init-config to create the user config. Container-only installations may not expose the executable or config to the host."
+        }
+      ],
+      "sources": [
+        "https://github.com/FoundationAgents/MetaGPT/releases/tag/v0.8.2",
+        "https://pypi.org/project/metagpt/0.8.2/",
+        "https://files.pythonhosted.org/packages/6f/ea/46c937897f56c3a8b51aa4e14c6cefd3eb5b2843e73ed4565d24b7fa62f2/metagpt-0.8.2-py3-none-any.whl",
+        "https://github.com/FoundationAgents/MetaGPT/blob/v0.8.2/README.md#L67-L106",
+        "https://github.com/FoundationAgents/MetaGPT/blob/v0.8.2/metagpt/const.py#L12-L41"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "home-config",
+                "kind": "file",
+                "template": "${HOME}/.metagpt/config2.yaml",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "freebsd",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-home-config",
+                "kind": "file",
+                "template": "${USERPROFILE}/.metagpt/config2.yaml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/FoundationAgents/MetaGPT/blob/v0.8.2/metagpt/software_company.py#L144-L159"
+            ],
+            "confidence": "source",
+            "notes": "Loads from Python's home directory; native Windows uses USERPROFILE when set. HOMEDRIVE/HOMEPATH-only Windows homes are not modeled."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${METAGPT_ROOT}/config/config2.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/FoundationAgents/MetaGPT/blob/v0.8.2/metagpt/config2.py#L97-L111"
+            ],
+            "confidence": "source",
+            "notes": "The user config overrides project values. Set METAGPT_PROJECT_ROOT to the actual checkout when inspecting it from elsewhere; otherwise the detector uses the current directory. Use an absolute override to avoid differences in tilde handling."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
     }
   ]
 }
