@@ -476,6 +476,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `prime-agent` | `PRIME_AGENT_CODING_AGENT_DIR` | `PRIME_AGENT_ROOT` | `${HOME}/.prime/agent` |
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `qwenpaw` | `QWENPAW_WORKING_DIR` | `QWENPAW_ROOT` | `${HOME}/.qwenpaw` |
+| `qwenpaw` | `ProgramFiles` | `QWENPAW_PROGRAM_FILES` | (empty — path resolves to null) |
 | `trae-agent` | — | `TRAE_AGENT_ROOT` | `${HOME}/.trae-agent` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_XDG` | `${XDG_CONFIG_HOME}/vtcode` |
 | `vtcode` | `VTCODE_CONFIG` | `VTCODE_CONFIG_MACOS` | `${HOME}/Library/Application Support/com.vinhnx.vtcode` |

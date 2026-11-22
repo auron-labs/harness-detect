@@ -6237,6 +6237,61 @@
       }
     },
     {
+      "id": "check-qwenpaw-macos-user-app",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/paw-mac-home",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/paw-mac-home/Applications/QwenPaw Desktop.app"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-macos-app"
+        ]
+      }
+    },
+    {
+      "id": "check-qwenpaw-windows-user-app-without-cli",
+      "operation": "checkHarness",
+      "input": "qwenpaw",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "LOCALAPPDATA": "${TMP}/paw-local-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/paw-local-appdata/QwenPaw Desktop/qwenpaw-desktop.exe"
+        }
+      ],
+      "expect": {
+        "key": "qwenpaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-windows-app"
+        ]
+      }
+    },
+    {
       "id": "translate-probe-every-harness",
       "operation": "translateMcpJson",
       "input": "*",

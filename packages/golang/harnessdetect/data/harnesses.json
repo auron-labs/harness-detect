@@ -25705,9 +25705,36 @@
         {
           "id": "macos-app",
           "kind": "dir",
-          "template": "/Applications/QwenPaw.app",
+          "template": "/Applications/QwenPaw Desktop.app",
           "platforms": [
             "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-macos-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/QwenPaw Desktop.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-windows-app",
+          "kind": "file",
+          "template": "${LOCALAPPDATA}/QwenPaw Desktop/qwenpaw-desktop.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "system-windows-app",
+          "kind": "file",
+          "template": "${QWENPAW_PROGRAM_FILES}/QwenPaw Desktop/qwenpaw-desktop.exe",
+          "platforms": [
+            "win32"
           ],
           "category": "install"
         }
@@ -25717,6 +25744,12 @@
           "name": "QWENPAW_ROOT",
           "env": "QWENPAW_WORKING_DIR",
           "fallback": "${HOME}/.qwenpaw"
+        },
+        {
+          "name": "QWENPAW_PROGRAM_FILES",
+          "env": "ProgramFiles",
+          "fallbackEnv": "PROGRAMFILES",
+          "fallback": ""
         }
       ],
       "env": [
@@ -25731,7 +25764,9 @@
         "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/pyproject.toml#L117-L118",
         "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/constant.py#L82-L94",
         "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/src/qwenpaw/config/utils.py#L450-L452",
-        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/.github/workflows/release-duty.yml#L268-L281",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/scripts/verify/launch_tauri_macos.sh#L6-L15",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/console/src-tauri/nsis/tauri-installer.nsi#L506-L522",
+        "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/scripts/verify/launch_tauri_windows.ps1#L43-L58",
         "https://github.com/agentscope-ai/QwenPaw/blob/v2.3.0.post1/README.md#quick-start"
       ],
       "installations": [
