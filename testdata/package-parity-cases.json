@@ -6793,6 +6793,405 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-nanoclaw-checkout-installer",
+      "operation": "checkHarness",
+      "input": "nanoclaw",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/nanoclaw.sh"
+        }
+      ],
+      "expect": {
+        "key": "nanoclaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-installer"
+        ]
+      }
+    },
+    {
+      "id": "check-nanoclaw-optional-account",
+      "operation": "checkHarness",
+      "input": "nanoclaw",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/nanoclaw/account.json"
+        }
+      ],
+      "expect": {
+        "key": "nanoclaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-account"
+        ]
+      }
+    },
+    {
+      "id": "check-nanoclaw-checkout-journal",
+      "operation": "checkHarness",
+      "input": "nanoclaw",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/data/community-portal.json"
+        }
+      ],
+      "expect": {
+        "key": "nanoclaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-journal"
+        ]
+      }
+    },
+    {
+      "id": "check-nanoclaw-ignores-ncl-and-generic-project-files",
+      "operation": "checkHarness",
+      "input": "nanoclaw",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/ncl",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/data/v2.db"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/groups/demo/CLAUDE.md"
+        }
+      ],
+      "expect": {
+        "key": "nanoclaw",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-nanoclaw-not-native-windows",
+      "operation": "checkHarness",
+      "input": "nanoclaw",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/nanoclaw.sh"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.config/nanoclaw/account.json"
+        }
+      ],
+      "expect": {
+        "key": "nanoclaw",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openrig-default-state",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openrig/openrig.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "daemon-db"
+        ]
+      }
+    },
+    {
+      "id": "check-openrig-preferred-home-over-legacy",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENRIG_HOME": "${TMP}/rig-current",
+        "RIGGED_HOME": "${TMP}/rig-legacy"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/rig-current/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/rig-legacy/openrig.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openrig-legacy-home-fallback",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "RIGGED_HOME": "${TMP}/rig-legacy"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/rig-legacy/config.json"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openrig-not-native-windows",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openrig/openrig.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openrig-distinct-tui-executable",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/openrig-tui",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": true,
+        "executablePath": "${BIN}/openrig-tui",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openrig-ignores-unrelated-rig",
+      "operation": "checkHarness",
+      "input": "openrig",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/rig",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        }
+      ],
+      "expect": {
+        "key": "openrig",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-launches-openrig",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/openrig-acp",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/rig",
+          "content": "#!/bin/sh\nexit 0\n"
+        }
+      ],
+      "expect": {
+        "launches": [
+          {
+            "key": "openrig",
+            "command": "${BIN}/openrig-acp",
+            "args": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "acp-launches-openrig-ignores-unrelated-rig",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/rig",
+          "content": "#!/bin/sh\nexit 0\n"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
     }
   ]
 }

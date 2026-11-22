@@ -26397,7 +26397,7 @@
       "env": [
         {
           "name": "OD_DATA_DIR",
-          "description": "Overrides the daemon data directory. Packaged launches scope it to their namespace."
+          "description": "An explicit OD_DATA_DIR makes app.sqlite under that root installation evidence, even though the filename is generic. The detector does not trim the override; relative values are caller-relative. Packaged base overrides that append namespaces/<namespace>/data are not modeled."
         },
         {
           "name": "OD_AGENT_PROFILES_CONFIG",
@@ -26507,7 +26507,7 @@
               "https://github.com/nexu-io/open-design/blob/open-design-v0.27.2/apps/packaged/src/config.ts#L129-L136"
             ],
             "confidence": "source",
-            "notes": "Models stable desktop defaults and source runs when CWD is the OpenDesign checkout root or OD_DATA_DIR is the absolute daemon data directory."
+            "notes": "Models stable desktop defaults and source runs when CWD is the OpenDesign checkout root or OD_DATA_DIR is the absolute daemon data directory. Unlike upstream, this does not trim the override, resolve relative paths against the upstream project root, or append namespaces/<namespace>/data to packaged base overrides."
           },
           "local": {
             "status": "unknown",
@@ -26656,6 +26656,450 @@
         "status": "unknown",
         "sources": [],
         "confidence": "unknown"
+      }
+    },
+    {
+      "key": "nanoclaw",
+      "name": "NanoClaw",
+      "version": "2026.11.0",
+      "aliases": [],
+      "executables": [],
+      "paths": [
+        {
+          "id": "checkout-installer",
+          "kind": "file",
+          "template": "${CWD}/nanoclaw.sh",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "project"
+        },
+        {
+          "id": "user-account",
+          "kind": "file",
+          "template": "${HOME}/.config/nanoclaw/account.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "checkout-journal",
+          "kind": "file",
+          "template": "${CWD}/data/community-portal.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "project"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/nanocoai/nanoclaw/releases/tag/v2026.11.0",
+        "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/README.md#quick-start",
+        "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/nanoclaw.sh",
+        "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/community-portal/install-identity.ts#L17-L22",
+        "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/community-portal.md#files-and-locks-on-your-machine",
+        "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/package.json",
+        "https://www.ncl.ucar.edu/"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "command": "bash nanoclaw.sh",
+          "url": "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/README.md#quick-start",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Run from the NanoClaw checkout. Windows hosts use WSL2, not a native Windows install."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-account",
+                "kind": "file",
+                "template": "${HOME}/.config/nanoclaw/account.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/community-portal.md#files-and-locks-on-your-machine",
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/community-portal/install-identity.ts#L17-L22"
+            ],
+            "confidence": "source",
+            "notes": "Optional NanoClaw account record. It may hold credentials; detection checks existence only."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "host-env",
+                "kind": "file",
+                "template": "${CWD}/.env",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/config.ts",
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/.env.example"
+            ],
+            "confidence": "source",
+            "notes": "CWD must be the NanoClaw checkout. The generic .env file is not a detection marker."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-groups",
+                "kind": "dir",
+                "template": "${CWD}/groups",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/src/config.ts",
+              "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/db-central.md#115-container_configs"
+            ],
+            "confidence": "source",
+            "notes": "Stores agent-group resources. The host database owns agent identities and runtime config."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/db-central.md#115-container_configs",
+            "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/templates.md#mcp-servers-and-credentials"
+          ],
+          "confidence": "source",
+          "notes": "MCP belongs to the selected group in the host database; templates may supply mcp.json when stamped."
+        },
+        "sources": [
+          "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/db-central.md#115-container_configs",
+          "https://github.com/nanocoai/nanoclaw/blob/v2026.11.0/docs/templates.md#mcp-servers-and-credentials"
+        ],
+        "confidence": "source",
+        "notes": "No fixed translation target. The generated group container.json is not the source of truth; the template format is not a project-root .mcp.json."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "openrig",
+      "name": "OpenRig",
+      "version": "0.7.21",
+      "aliases": [
+        "rig"
+      ],
+      "executables": [
+        "openrig-tui",
+        "openrig-acp"
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "kind": "file",
+          "template": "${OPENRIG_ROOT}/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "daemon-db",
+          "kind": "file",
+          "template": "${OPENRIG_ROOT}/openrig.sqlite",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        }
+      ],
+      "roots": [
+        {
+          "name": "OPENRIG_ROOT",
+          "env": "OPENRIG_HOME",
+          "fallbackEnv": "RIGGED_HOME",
+          "fallback": "${HOME}/.openrig"
+        },
+        {
+          "name": "OPENRIG_SKILLS",
+          "env": "OPENRIG_SKILLS_ROOT",
+          "fallback": "${OPENRIG_ROOT}/skills"
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENRIG_HOME",
+          "description": "Overrides OpenRig's config and default state root."
+        },
+        {
+          "name": "RIGGED_HOME",
+          "description": "Legacy root override, used only if OPENRIG_HOME is unset."
+        },
+        {
+          "name": "OPENRIG_SKILLS_ROOT",
+          "description": "Overrides the default OpenRig skill catalog path."
+        }
+      ],
+      "sources": [
+        "https://github.com/mvschwarz/openrig/releases/tag/v0.7.21",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/README.md#install-it-yourself",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/package.json#L28-L31",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/openrig-compat.ts#L39-L50",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/config-store.ts#L1339-L1343",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/daemon-lifecycle-status.ts#L43-L50",
+        "https://packages.debian.org/stable/rig",
+        "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/acp/package.json#L2-L18"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@openrig/cli",
+          "command": "npm install -g @openrig/cli",
+          "url": "https://github.com/mvschwarz/openrig/blob/v0.7.21/README.md#install-it-yourself",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Windows hosts use WSL2; bare rig is a lookup alias, not a PATH detection signal."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${OPENRIG_ROOT}/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/config-store.ts#L1339-L1343",
+              "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/openrig-compat.ts#L39-L50"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "skill-catalog",
+                "kind": "dir",
+                "template": "${OPENRIG_SKILLS}",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/commands/config.ts#L100-L108",
+              "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/cli/src/config-store.ts#L646-L652"
+            ],
+            "confidence": "source",
+            "notes": "Models the default catalog and environment override, not values stored inside config.json."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/mvschwarz/openrig/blob/v0.7.21/docs/reference/agent-spec.md#resource-categories",
+          "https://github.com/mvschwarz/openrig/blob/v0.7.21/docs/reference/hosted-members.md"
+        ],
+        "confidence": "source",
+        "notes": "OpenRig serves its own MCP endpoint and can project MCP resources into downstream agents. Neither is a verified OpenRig-native MCP client config."
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "npx",
+            "args": [
+              "-y",
+              "@openrig/acp@0.7.21"
+            ],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "installedLaunches": [
+          {
+            "command": "openrig-acp",
+            "args": [],
+            "platforms": [
+              "darwin",
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/mvschwarz/openrig/blob/v0.7.21/docs/reference/acp-agents.md#openrig-as-an-agent-in-acp-apps",
+          "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/acp/README.md",
+          "https://github.com/mvschwarz/openrig/blob/v0.7.21/packages/acp/bin/openrig-acp.js#L1-L28"
+        ],
+        "confidence": "official",
+        "notes": "Requires a running OpenRig daemon, a configured acp.to receiver, and a registered person. A separate @openrig/acp install supplies openrig-acp; the native rig acp serve is also available manually with @openrig/cli."
       }
     },
     {
