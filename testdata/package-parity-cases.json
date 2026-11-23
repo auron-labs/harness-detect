@@ -13241,6 +13241,308 @@
       "id": "support-record-empryo",
       "operation": "getHarnessSupport",
       "input": "empryo"
+    },
+    {
+      "id": "check-qm-deployment",
+      "operation": "checkHarness",
+      "input": "qm",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/qm.config.jsonc"
+        }
+      ],
+      "expect": {
+        "key": "qm",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-config"
+        ]
+      }
+    },
+    {
+      "id": "check-qm-scoped-npm-cli",
+      "operation": "checkHarness",
+      "input": "qm",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/node_modules/@yc-software/qm/dist/bin/qm.js"
+        }
+      ],
+      "expect": {
+        "key": "qm",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-qm-ignores-proxmox-path",
+      "operation": "checkHarness",
+      "input": "qm",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/qm"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/sandbox/skills/example/SKILL.md"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/node_modules/qm/package.json"
+        }
+      ],
+      "expect": {
+        "key": "qm",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-loopx-unix-path",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/loopx"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": "${BIN}/loopx",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-loopx-windows-path",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "PATHEXT": ".EXE"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/loopx.exe"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": "${BIN}/loopx.exe",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-loopx-global-registry",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.loopx/registry.global.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-registry"
+        ]
+      }
+    },
+    {
+      "id": "check-loopx-windows-profile",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${TMP}/different-home",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/profile/.loopx/registry.global.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "global-registry"
+        ]
+      }
+    },
+    {
+      "id": "check-loopx-legacy-registry",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.codex/loopx/registry.global.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-global-registry"
+        ]
+      }
+    },
+    {
+      "id": "check-loopx-project-registry",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.loopx/registry.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-registry"
+        ]
+      }
+    },
+    {
+      "id": "check-loopx-ignores-generic-and-override-paths",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOOPX_REGISTRY": "${TMP}/unrelated.json"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/registry.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.codex/goals/goal/ACTIVE_GOAL_STATE.md"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.agents/skills/loopx/SKILL.md"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.loopx"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/unrelated.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-qm",
+      "operation": "getHarnessMcp",
+      "input": "qm",
+      "expect": {
+        "key": "qm"
+      }
+    },
+    {
+      "id": "support-record-qm",
+      "operation": "getHarnessSupport",
+      "input": "qm"
+    },
+    {
+      "id": "mcp-loopx",
+      "operation": "getHarnessMcp",
+      "input": "loopx",
+      "expect": {
+        "key": "loopx"
+      }
+    },
+    {
+      "id": "support-record-loopx",
+      "operation": "getHarnessSupport",
+      "input": "loopx"
     }
   ]
 }
