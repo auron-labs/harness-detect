@@ -14091,6 +14091,437 @@
       "expect": {
         "key": "gentle-shell"
       }
+    },
+    {
+      "id": "check-fivedive-linux-path",
+      "operation": "checkHarness",
+      "input": "fivedive",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/5dive"
+        }
+      ],
+      "expect": {
+        "key": "fivedive",
+        "installed": true,
+        "executablePath": "${BIN}/5dive",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-fivedive-ignores-team-and-generic-state",
+      "operation": "checkHarness",
+      "input": "fivedive",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "STATE_DIR": "${TMP}/fivedive-fake"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/5dive.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.claude-plugin/plugin.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/fivedive-fake/agents.json"
+        }
+      ],
+      "expect": {
+        "key": "fivedive",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-ignores-shared-orbi-executable",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/orbi"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-default-linux-unit",
+      "operation": "checkHarness",
+      "input": "orbi-cli",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/systemd/user/orbi@.service"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "systemd-service"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-xdg-linux-unit",
+      "operation": "checkHarness",
+      "input": "orbi-cli",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": "${TMP}/xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/xdg/systemd/user/orbi@.service"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "systemd-service"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-custom-linux-unit-dir",
+      "operation": "checkHarness",
+      "input": "orbi-cli",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "ORBI_UNIT_DIR": "${TMP}/units"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/units/orbi@.service"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "systemd-service"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-default-macos-unit",
+      "operation": "checkHarness",
+      "input": "orbi-cli",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/LaunchAgents/org.orbi.runner.1.plist"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "launchd-agent"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-ignores-macos-unit-on-linux",
+      "operation": "checkHarness",
+      "input": "orbi-cli",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/LaunchAgents/org.orbi.runner.1.plist"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-default-deployment-config",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/orbi.toml"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-config"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-relocated-config",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "ORBI_CONFIG": "${TMP}/deployment/production.toml"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/deployment/production.toml"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-config"
+        ]
+      }
+    },
+    {
+      "id": "check-orbi-does-not-fall-back-past-override",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "ORBI_CONFIG": "${TMP}/orbi-nonexistent.toml"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/orbi.toml"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-ignores-policy-and-pi",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.github/orbi.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.toml"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/pi"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-ignores-config-directory",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/orbi.toml"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orbi-windows-deployment-unsupported",
+      "operation": "checkHarness",
+      "input": "orbi",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/orbi.toml"
+        }
+      ],
+      "expect": {
+        "key": "orbi",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-fivedive",
+      "operation": "getHarnessMcp",
+      "input": "fivedive",
+      "expect": {
+        "key": "fivedive"
+      }
+    },
+    {
+      "id": "support-record-fivedive",
+      "operation": "getHarnessSupport",
+      "input": "fivedive"
+    },
+    {
+      "id": "acp-fivedive",
+      "operation": "getHarnessAcp",
+      "input": "fivedive",
+      "expect": {
+        "key": "fivedive"
+      }
+    },
+    {
+      "id": "mcp-orbi",
+      "operation": "getHarnessMcp",
+      "input": "orbi",
+      "expect": {
+        "key": "orbi"
+      }
+    },
+    {
+      "id": "support-record-orbi",
+      "operation": "getHarnessSupport",
+      "input": "orbi"
+    },
+    {
+      "id": "acp-orbi",
+      "operation": "getHarnessAcp",
+      "input": "orbi",
+      "expect": {
+        "key": "orbi"
+      }
     }
   ]
 }

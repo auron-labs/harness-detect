@@ -415,6 +415,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `empryo` | `LOCALAPPDATA` | `EMPRYO_WIN_LOCAL_APPDATA` | (empty — path resolves to null) |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_ROOT` | `${CWD}/.fast-agent` |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_GLOBAL_PLUGIN_ROOT` | `${HOME}/.fast-agent` |
+| `fivedive` | `STATE_DIR` | `FIVEDIVE_STATE_ROOT` | `/var/lib/5dive` |
 | `flowise` | `DATABASE_PATH` | `FLOWISE_SQLITE_DIR` | `${HOME}/.flowise` |
 | `flowise` | `DATABASE_PATH` | `FLOWISE_WINDOWS_SQLITE_DIR` | `${USERPROFILE}/.flowise` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
@@ -476,6 +477,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openjarvis` | `OPENJARVIS_HOME` | `OPENJARVIS_WINDOWS_INSTALL_ROOT` | `${LOCALAPPDATA}/OpenJarvis` |
 | `openrig` | `OPENRIG_HOME` | `OPENRIG_ROOT` | `${HOME}/.openrig` |
 | `openrig` | `OPENRIG_SKILLS_ROOT` | `OPENRIG_SKILLS` | `${OPENRIG_ROOT}/skills` |
+| `orbi` | `ORBI_CONFIG` | `ORBI_CONFIG_FILE` | `${CWD}/orbi.toml` |
+| `orbi` | `ORBI_UNIT_DIR` | `ORBI_SYSTEMD_UNIT_DIR` | `${XDG_CONFIG_HOME}/systemd/user` |
+| `orbi` | `ORBI_UNIT_DIR` | `ORBI_LAUNCHD_UNIT_DIR` | `${HOME}/Library/LaunchAgents` |
 | `orkas` | `ORKAS_WORKSPACE_ROOT` | `ORKAS_UNIX_DATA` | `${HOME}/.orkas/data` |
 | `orkas` | `ORKAS_WORKSPACE_ROOT` | `ORKAS_WIN_DATA` | (empty — path resolves to null) |
 | `orkas` | `LOCALAPPDATA` | `ORKAS_WIN_LOCAL_APPDATA` | `${USERPROFILE}/AppData/Local` |
@@ -585,7 +589,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 133
+console.log(harnesses.harnesses.length);  // 135
 ```
 
 <!-- /automd -->

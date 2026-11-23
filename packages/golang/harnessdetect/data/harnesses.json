@@ -38602,11 +38602,13 @@
         "installedLaunches": [],
         "sources": [
           "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-protocols.md#L26-L39",
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-protocols.md#L70",
           "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/cli/acp_commands.py#L33-L55",
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/acp/methods.py#L1185-L1272",
           "https://github.com/getsentry/raven-python/blob/6.10.0/setup.py#L139-L142"
         ],
         "confidence": "official",
-        "notes": "Requires a configured model provider. Point your client at the verified EverMind Raven executable, preferably by absolute path: the unrelated Sentry CLI has the same basename. Per-session MCP attachments are not accepted."
+        "notes": "Requires a configured model provider. Point your client at the verified EverMind Raven executable, preferably by absolute path: the unrelated Sentry CLI has the same basename. Accepts per-session stdio MCP servers; HTTP/SSE are not advertised."
       }
     },
     {
@@ -38877,6 +38879,460 @@
         "sources": [],
         "confidence": "unknown",
         "notes": "No standalone Gentle Shell ACP launch was verified; the Pi ACP adapter is not assumed to load Gentle Shell."
+      }
+    },
+    {
+      "key": "fivedive",
+      "name": "5dive",
+      "version": "0.141.1",
+      "aliases": [
+        "5dive",
+        "5dive-ai/5dive"
+      ],
+      "executables": [
+        "5dive"
+      ],
+      "paths": [
+        {
+          "id": "linux-registry",
+          "kind": "file",
+          "template": "/var/lib/5dive/agents.json",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "linux-cli",
+          "kind": "file",
+          "template": "/usr/local/bin/5dive",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-service",
+          "kind": "file",
+          "template": "/etc/systemd/system/5dive-agent@.service",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        }
+      ],
+      "env": [
+        {
+          "name": "STATE_DIR",
+          "description": "Overrides the CLI state directory. The override is exposed for support lookup only; a generic agents.json under this root is not standalone installation evidence."
+        }
+      ],
+      "sources": [
+        "https://github.com/5dive-ai/5dive/releases/tag/v0.141.1",
+        "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/header.sh#L72-L79",
+        "https://github.com/5dive-ai/5dive/blob/v0.141.1/install.sh#L576-L580",
+        "https://github.com/5dive-ai/5dive/blob/v0.141.1/install.sh#L919-L927",
+        "https://github.com/5dive-ai/5dive/blob/v0.141.1/install.sh#L1212-L1213"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "command": "curl -fsSL https://install.5dive.ai | sudo bash",
+          "url": "https://github.com/5dive-ai/5dive/blob/v0.141.1/README.md#L25-L38",
+          "platforms": [
+            "linux"
+          ],
+          "notes": "Linux server install; run sudo 5dive init after installation. Desktop client apps are not modeled."
+        }
+      ],
+      "roots": [
+        {
+          "name": "FIVEDIVE_STATE_ROOT",
+          "env": "STATE_DIR",
+          "fallback": "/var/lib/5dive"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-env-dir",
+                "kind": "dir",
+                "template": "${FIVEDIVE_STATE_ROOT}/agents.d",
+                "platforms": [
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/header.sh#L72-L79"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "team-yaml",
+                "kind": "file",
+                "template": "${CWD}/5dive.yaml",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "team-yml",
+                "kind": "file",
+                "template": "${CWD}/5dive.yml",
+                "platforms": [
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/cmd_compose.sh#L60-L65",
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/guide.md#L344-L346"
+            ],
+            "confidence": "source",
+            "notes": "Declarative agent configuration; neither file implies the server is installed."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/guide.md#L309-L328"
+            ],
+            "confidence": "official",
+            "notes": "Manages skills for the underlying agent runtimes through plugins."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/plugin-contract.md#L59-L70"
+            ],
+            "confidence": "source",
+            "notes": "Plugin verbs are registered through the fivedive manifest block."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agent-registry",
+                "kind": "file",
+                "template": "${FIVEDIVE_STATE_ROOT}/agents.json",
+                "platforms": [
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/header.sh#L72-L79"
+            ],
+            "confidence": "source",
+            "notes": "Managed agents are stored in the CLI's registry. A shell override need not change the installed service's state directory."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/plugin-contract.md#L59-L70"
+        ],
+        "confidence": "unknown",
+        "notes": "5dive registers declared plugin MCP capabilities for underlying runtimes. Direct 5dive MCP client support and configuration were not verified."
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "5dive",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "linux"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/guide.md#L243-L244",
+          "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/cmd_acp.sh#L1-L18",
+          "https://github.com/5dive-ai/5dive/blob/v0.141.1/src/cmd_acp.sh#L613-L629"
+        ],
+        "confidence": "official",
+        "notes": "Requires the 5dive CLI plus Bun or a compatible Node.js runtime and an available agent backend. The ACP server does not attach MCP servers from session/new."
+      }
+    },
+    {
+      "key": "orbi",
+      "name": "Orbi",
+      "version": "0.7.61",
+      "aliases": [
+        "orbi-cli",
+        "orbi-build/orbi"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "deployment-config",
+          "kind": "file",
+          "template": "${ORBI_CONFIG_FILE}",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "systemd-service",
+          "kind": "file",
+          "template": "${ORBI_SYSTEMD_UNIT_DIR}/orbi@.service",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "launchd-agent",
+          "kind": "file",
+          "template": "${ORBI_LAUNCHD_UNIT_DIR}/org.orbi.runner.1.plist",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "env": [
+        {
+          "name": "ORBI_CONFIG",
+          "description": "Path to the deployment TOML file (default orbi.toml in the working directory). Set a nonempty absolute path when overriding it."
+        },
+        {
+          "name": "ORBI_UNIT_DIR",
+          "description": "Overrides the directory for systemd user units or LaunchAgents. Only default, unnamed deployment filenames are checked."
+        }
+      ],
+      "roots": [
+        {
+          "name": "ORBI_CONFIG_FILE",
+          "env": "ORBI_CONFIG",
+          "fallback": "${CWD}/orbi.toml"
+        },
+        {
+          "name": "ORBI_SYSTEMD_UNIT_DIR",
+          "env": "ORBI_UNIT_DIR",
+          "fallback": "${XDG_CONFIG_HOME}/systemd/user"
+        },
+        {
+          "name": "ORBI_LAUNCHD_UNIT_DIR",
+          "env": "ORBI_UNIT_DIR",
+          "fallback": "${HOME}/Library/LaunchAgents"
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/orbi-cli/0.7.61/",
+        "https://www.npmjs.com/package/@orbiworkspace/cli/v/0.2.0",
+        "https://www.npmjs.com/package/orbi-ai/v/0.0.7",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/pyproject.toml#L65-L66",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/cli_parser.py#L19-L24",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/docs/configuration.mdx#L6-L8",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/scheduler_units.py#L33-L40",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/systemd_deploy.py#L56-L70",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/launchd_deploy.py#L63-L77",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/launchd_deploy.py#L121-L126",
+        "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/launchd_deploy.py#L140-L144"
+      ],
+      "installations": [
+        {
+          "method": "uv",
+          "package": "orbi-cli",
+          "command": "uv tool install orbi-cli",
+          "url": "https://github.com/orbi-build/orbi/blob/v0.7.61/README.md#L21-L34",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Requires Python 3.14 or newer. This installs the CLI, not a configured deployment or scheduler."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "deployment-config",
+                "kind": "file",
+                "template": "${ORBI_CONFIG_FILE}",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/cli_parser.py#L19-L24",
+              "https://github.com/orbi-build/orbi/blob/v0.7.61/docs/configuration.mdx#L6-L8"
+            ],
+            "confidence": "source",
+            "notes": "Use a nonempty absolute ORBI_CONFIG override. The detector falls back on an empty value; Orbi does not. One-off --config flags and configs found by reading scheduler unit contents are not modeled."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "repo-policy",
+                "kind": "file",
+                "template": "${CWD}/.github/orbi.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/orbi-build/orbi/blob/v0.7.61/src/orbi/repo_config.py#L42-L48"
+            ],
+            "confidence": "source",
+            "notes": "A repository policy can be present without a local Orbi installation."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/orbi-build/orbi/blob/v0.7.61/docs/configuration.mdx#L52-L58"
+            ],
+            "confidence": "official",
+            "notes": "The deployment can pass explicitly configured skill paths to Pi; no default directory is inferred."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/orbi-build/orbi/blob/v0.7.61/docs/operations.mdx#L1437-L1450"
+        ],
+        "confidence": "unknown",
+        "notes": "Orbi launches Pi; Pi MCP configuration is not a separate verified Orbi translation target."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "No published Orbi ACP agent launch was verified; Pi's ACP integration is separate."
       }
     }
   ]
