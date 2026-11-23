@@ -40672,7 +40672,7 @@
         },
         {
           "name": "NPM_CONFIG_PREFIX",
-          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes; npm configuration files are not read."
+          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes. On macOS the detector checks both NPM_CONFIG_PREFIX and npm_config_prefix if set; other spellings and npm configuration files are not read."
         }
       ],
       "executables": [],
@@ -40825,6 +40825,15 @@
           "category": "install"
         },
         {
+          "id": "macos-npm-lowercase-prefix-launcher",
+          "kind": "file",
+          "template": "${LIME_NPM_LOWERCASE_PREFIX}/lib/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
           "id": "windows-npm-default-launcher",
           "kind": "file",
           "template": "${LIME_WINDOWS_CONFIG_BASE}/npm/node_modules/@limecloud/lime/bin/lime.js",
@@ -40857,6 +40866,7 @@
         "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L245-L258",
         "https://github.com/limecloud/lime/blob/v1.180.0/packages/cli/scripts/build_npm_package.py#L118-L134",
         "https://docs.npmjs.com/cli/v11/configuring-npm/folders#node-modules",
+        "https://github.com/npm/cli/blob/787f1520fa412e91a5792468f1c7f25b166867a6/workspaces/config/lib/index.js#L367-L380",
         "https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/n/node.rb#L225",
         "https://github.com/openfl/lime/blob/8ee2143b07e1d8b990863804d4e253bc0146a329/templates/bin/lime.sh"
       ],
@@ -41052,8 +41062,12 @@
         {
           "name": "LIME_NPM_PREFIX",
           "env": "NPM_CONFIG_PREFIX",
-          "fallbackEnv": "npm_config_prefix",
-          "fallback": "${NPM_CONFIG_PREFIX}"
+          "fallback": ""
+        },
+        {
+          "name": "LIME_NPM_LOWERCASE_PREFIX",
+          "env": "npm_config_prefix",
+          "fallback": ""
         }
       ]
     },
