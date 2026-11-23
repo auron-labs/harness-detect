@@ -35006,9 +35006,7 @@
         "jmagly/aiwg",
         "@aiwg/cli"
       ],
-      "executables": [
-        "aiwg"
-      ],
+      "executables": [],
       "roots": [
         {
           "name": "AIWG_LEGACY_ARTIFACT_ROOT",
@@ -35126,7 +35124,8 @@
         "https://github.com/jmagly/aiwg/blob/v2026.11.9/src/config/user-config-dir.mjs#L5-L24",
         "https://github.com/jmagly/aiwg/blob/v2026.11.9/src/config/user-config.ts#L295-L334",
         "https://github.com/jmagly/aiwg/blob/v2026.11.9/src/artifacts/types.ts#L1196-L1207",
-        "https://github.com/jmagly/aiwg/blob/v2026.11.9/src/artifacts/framework-index-paths.ts#L53-L68"
+        "https://github.com/jmagly/aiwg/blob/v2026.11.9/src/artifacts/framework-index-paths.ts#L53-L68",
+        "https://registry.npmjs.org/ai-watermark-guard/0.2.0"
       ],
       "installations": [
         {
@@ -35139,7 +35138,7 @@
             "linux",
             "win32"
           ],
-          "notes": "Full AIWG npm distribution. Requires Node.js 24 or later."
+          "notes": "Full AIWG npm distribution. Requires Node.js 24 or later. The unrelated ai-watermark-guard npm package also provides aiwg, so detection requires AIWG-specific files or state."
         },
         {
           "method": "npm",
@@ -35334,9 +35333,7 @@
         "nausicaa-harness",
         "jackispm/nausicaa-harness"
       ],
-      "executables": [
-        "nausicaa"
-      ],
+      "executables": [],
       "paths": [
         {
           "id": "project-settings",
@@ -35394,7 +35391,8 @@
         "https://github.com/jackispm/nausicaa-harness/blob/v0.2.0/src/config/settings.ts#L159-L184",
         "https://github.com/jackispm/nausicaa-harness/blob/v0.2.0/src/auth/credentials.ts#L50-L65",
         "https://github.com/jackispm/nausicaa-harness/blob/v0.2.0/src/config/settings.ts#L202-L211",
-        "https://nodejs.org/docs/latest-v24.x/api/os.html#oshomedir"
+        "https://nodejs.org/docs/latest-v24.x/api/os.html#oshomedir",
+        "https://github.com/jkwhite/nausicaa/releases/tag/v1.2"
       ],
       "installations": [
         {
@@ -35407,7 +35405,7 @@
             "linux",
             "win32"
           ],
-          "notes": "Requires Node.js 22.19 or later. Release installers and archives are also available."
+          "notes": "Requires Node.js 22.19 or later. Release installers and archives are also available. The unrelated Nausicaa cellular automata app also provides nausicaa, so detection requires harness settings or state."
         }
       ],
       "support": {

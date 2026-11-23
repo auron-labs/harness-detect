@@ -11195,7 +11195,7 @@
       }
     },
     {
-      "id": "check-aiwg-path-executable",
+      "id": "check-aiwg-ignores-ambiguous-path-executable",
       "operation": "checkHarness",
       "input": "aiwg",
       "platforms": [
@@ -11215,8 +11215,8 @@
       ],
       "expect": {
         "key": "aiwg",
-        "installed": true,
-        "executablePath": "${BIN}/aiwg",
+        "installed": false,
+        "executablePath": null,
         "matchedPathIds": []
       }
     },
@@ -11436,7 +11436,7 @@
       }
     },
     {
-      "id": "check-nausicaa-path-executable",
+      "id": "check-nausicaa-ignores-ambiguous-path-executable",
       "operation": "checkHarness",
       "input": "nausicaa",
       "platforms": [
@@ -11456,8 +11456,8 @@
       ],
       "expect": {
         "key": "nausicaa",
-        "installed": true,
-        "executablePath": "${BIN}/nausicaa",
+        "installed": false,
+        "executablePath": null,
         "matchedPathIds": []
       }
     },
