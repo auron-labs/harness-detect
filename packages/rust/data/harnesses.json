@@ -37943,6 +37943,418 @@
         "confidence": "unknown",
         "notes": "Upstream documents empryo acp for ACP development builds. Availability in the published CLI was not verified."
       }
+    },
+    {
+      "key": "qm",
+      "name": "QM",
+      "aliases": [
+        "yc-software/qm",
+        "@yc-software/qm"
+      ],
+      "version": "0.1.18",
+      "executables": [],
+      "paths": [
+        {
+          "id": "deployment-config",
+          "kind": "file",
+          "template": "${CWD}/qm.config.jsonc",
+          "category": "config"
+        },
+        {
+          "id": "deployment-cli",
+          "kind": "file",
+          "template": "${CWD}/node_modules/@yc-software/qm/dist/bin/qm.js",
+          "category": "state"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://registry.npmjs.org/@yc-software%2Fqm/0.1.18",
+        "https://github.com/yc-software/qm/blob/v0.1.18/cli/README.md#L3-L24",
+        "https://github.com/yc-software/qm/blob/v0.1.18/docs/deploy-directory.md#L1-L24",
+        "https://pve.proxmox.com/pve-docs/qm.1.html"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "url": "https://github.com/yc-software/qm/blob/v0.1.18/cli/README.md#L3-L24",
+          "package": "@yc-software/qm",
+          "command": "npm install @yc-software/qm",
+          "notes": "Requires Node.js 24 or newer. The documented qm init workflow scaffolds a deployment and pins this package in its package.json; run npm install in that directory."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "deployment-config",
+                "kind": "file",
+                "template": "${CWD}/qm.config.jsonc"
+              }
+            ],
+            "sources": [
+              "https://github.com/yc-software/qm/blob/v0.1.18/docs/deploy-directory.md#L1-L24"
+            ],
+            "confidence": "official",
+            "notes": "A deployment checkout is detectable even when its dependencies are absent or its runtime is not running. Pass the deployment directory as cwd. Config relocated with --config is not detected."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "sandbox-skills",
+                "kind": "dir",
+                "template": "${CWD}/sandbox/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/yc-software/qm/blob/v0.1.18/cli/src/commands/init.ts#L50-L62"
+            ],
+            "confidence": "source",
+            "notes": "Deployment sandbox skills are separate from the deploy-qm skill installed for the operator's coding agent. The CLI can select a different sandbox via --sandbox-dir."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/yc-software/qm/blob/v0.1.18/docs/mcp-connectors.md#L1-L12"
+          ],
+          "confidence": "official",
+          "notes": "QM administrators register HTTP servers through the Admin UI or API."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/yc-software/qm/blob/v0.1.18/docs/mcp-connectors.md#L1-L12"
+        ],
+        "confidence": "official",
+        "notes": "No file-based translation target: admin registration controls the destination, credential scope, and approval policy."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "loopx",
+      "name": "LoopX",
+      "aliases": [],
+      "version": "2.4.0",
+      "executables": [
+        "loopx"
+      ],
+      "paths": [
+        {
+          "id": "global-registry",
+          "kind": "file",
+          "template": "${HOME}/.loopx/registry.global.json",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "openbsd"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "legacy-global-registry",
+          "kind": "file",
+          "template": "${HOME}/.codex/loopx/registry.global.json",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "openbsd"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-global-registry",
+          "kind": "file",
+          "template": "${USERPROFILE}/.loopx/registry.global.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-legacy-global-registry",
+          "kind": "file",
+          "template": "${USERPROFILE}/.codex/loopx/registry.global.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "project-registry",
+          "kind": "file",
+          "template": "${CWD}/.loopx/registry.json",
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "LOOPX_REGISTRY",
+          "description": "LoopX accepts a project registry path override (including home expansion). Detection checks only the conventional registry paths, not this arbitrary file, --registry, --runtime-root, or a registry's common_runtime_root."
+        }
+      ],
+      "sources": [
+        "https://pypi.org/project/loopx/2.4.0/",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/pyproject.toml#L69-L74",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L10-L17",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L96-L100",
+        "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/getting-started.md#L684-L712",
+        "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/installing-loopx.md#native-windows-powershell-7"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "url": "https://pypi.org/project/loopx/2.4.0/",
+          "package": "loopx",
+          "command": "python3 -m pip install loopx",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Requires Python 3.11+ and Node.js 22.22.3+ (24 LTS recommended). Optional workflow skills are installed into the agent host separately."
+        },
+        {
+          "method": "pip",
+          "url": "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/installing-loopx.md#native-windows-powershell-7",
+          "package": "loopx",
+          "command": "py -3.11 -m pip install loopx",
+          "platforms": [
+            "win32"
+          ],
+          "notes": "Documented for native PowerShell 7. The CLI uses Node.js for the runtime."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-registry",
+                "kind": "file",
+                "template": "${HOME}/.loopx/registry.global.json",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "legacy-global-registry",
+                "kind": "file",
+                "template": "${HOME}/.codex/loopx/registry.global.json",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-global-registry",
+                "kind": "file",
+                "template": "${USERPROFILE}/.loopx/registry.global.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-legacy-global-registry",
+                "kind": "file",
+                "template": "${USERPROFILE}/.codex/loopx/registry.global.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L10-L17",
+              "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236",
+              "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser"
+            ],
+            "confidence": "source",
+            "notes": "Checks both known locations for evidence; does not select the active runtime root or validate the registry. On Windows it uses USERPROFILE when set; if it is missing, detection uses the detector's normalized home, which may differ from Python's HOMEDRIVE/HOMEPATH fallback."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-registry",
+                "kind": "file",
+                "template": "${CWD}/.loopx/registry.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/getting-started.md#L684-L712",
+              "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L96-L100"
+            ],
+            "confidence": "official",
+            "notes": "Only the default project location is checked. LoopX can read a relocated registry via LOOPX_REGISTRY or --registry."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/integrations/runtime-connector-catalog.md#L297-L308"
+        ],
+        "confidence": "unknown",
+        "notes": "LoopX exposes its own MCP servers to other agent hosts. A native LoopX MCP client configuration or file-based translation target was not verified.",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/chat_endpoints.py#L107-L117"
+        ],
+        "confidence": "unknown",
+        "notes": "LoopX can consume other agents over ACP. A published LoopX ACP agent launch was not verified."
+      }
     }
   ]
 }

@@ -581,7 +581,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 129
+console.log(harnesses.harnesses.length);  // 131
 ```
 
 <!-- /automd -->
