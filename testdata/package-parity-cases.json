@@ -10096,6 +10096,229 @@
       "expect": {
         "error": "Harness openmanus has no file-based MCP config for scope local"
       }
+    },
+    {
+      "id": "check-autoresearchclaw-project-config",
+      "operation": "checkHarness",
+      "input": "aiming-lab/autoresearchclaw",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.arc.yaml"
+        }
+      ],
+      "expect": {
+        "key": "autoresearchclaw",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-autoresearchclaw-ignores-shared-config-and-executable",
+      "operation": "checkHarness",
+      "input": "autoresearchclaw",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.researchclaw.example.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.claude/skills"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/researchclaw"
+        }
+      ],
+      "expect": {
+        "key": "autoresearchclaw",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-mirix-server-checkout",
+      "operation": "checkHarness",
+      "input": "mirix-ai/mirix",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/mirix/server/server.py"
+        }
+      ],
+      "expect": {
+        "key": "mirix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "server-checkout"
+        ]
+      }
+    },
+    {
+      "id": "check-mirix-home-config",
+      "operation": "checkHarness",
+      "input": "mirix",
+      "platforms": [
+        "darwin",
+        "linux",
+        "freebsd",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.mirix/config"
+        }
+      ],
+      "expect": {
+        "key": "mirix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "home-server-config"
+        ]
+      }
+    },
+    {
+      "id": "check-mirix-windows-config",
+      "operation": "checkHarness",
+      "input": "mirix",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${CWD}/mirix-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/mirix-profile/.mirix/config"
+        }
+      ],
+      "expect": {
+        "key": "mirix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-server-config"
+        ]
+      }
+    },
+    {
+      "id": "check-mirix-ignores-sdk-and-legacy-config-override",
+      "operation": "checkHarness",
+      "input": "mirix",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "MEMGPT_CONFIG_PATH": "${CWD}/config.ini"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.mirix"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/mirix/client/remote_client.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.ini"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/docker-compose.yml"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/mirix"
+        }
+      ],
+      "expect": {
+        "key": "mirix",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-autoresearchclaw-no-client-file-target",
+      "operation": "translateMcpJson",
+      "input": "autoresearchclaw",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness autoresearchclaw has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-mirix-no-verified-file-target",
+      "operation": "translateMcpJson",
+      "input": "mirix",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness mirix has no file-based MCP config for scope global"
+      }
     }
   ]
 }

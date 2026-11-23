@@ -427,6 +427,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_WINDOWS_ROOT` | `${LOCALAPPDATA}/mini-swe-agent/mini-swe-agent` |
+| `mirix` | `MEMGPT_CONFIG_PATH` | `MIRIX_CONFIG_FILE` | `${HOME}/.mirix/config` |
+| `mirix` | `MEMGPT_CONFIG_PATH` | `MIRIX_WINDOWS_CONFIG_FILE` | `${USERPROFILE}/.mirix/config` |
 | `mistral-vibe` | `VIBE_HOME` | `VIBE_HOME` | `${HOME}/.vibe` |
 | `nac` | `NAC_HOME` | `NAC_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/nac` |
 | `oh-my-pi` | `PI_CODING_AGENT_DIR` | `OMP_ROOT` | `${HOME}/.omp/agent` |
@@ -550,7 +552,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 111
+console.log(harnesses.harnesses.length);  // 113
 ```
 
 <!-- /automd -->

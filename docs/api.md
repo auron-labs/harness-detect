@@ -60,7 +60,7 @@ import { getHarnessMatrix } from "@auron-labs/harness-detect";
 
 const matrix = getHarnessMatrix();
 console.log(matrix.version);           // 1
-console.log(matrix.harnesses.length);  // 111
+console.log(matrix.harnesses.length);  // 113
 ```
 
 <!-- /automd -->
@@ -620,7 +620,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 111
+console.log(harnesses.harnesses.length);  // 113
 ```
 
 <!-- /automd -->
