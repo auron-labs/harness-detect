@@ -481,6 +481,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `vtcode` | `VTCODE_DATA` | `VTCODE_DATA_MACOS` | `${HOME}/Library/Application Support/com.vinhnx.vtcode` |
 | `vtcode` | `VTCODE_DATA` | `VTCODE_DATA_WINDOWS` | `${APPDATA}/vinhnx/vtcode/data` |
 | `vtcode` | `VTCODE_HOME` | `VTCODE_LEGACY_ROOT` | `${HOME}/.vtcode` |
+| `workkit` | `WORKFLOW_HOME` | `WORKKIT_HOME` | `${HOME}/.workkit` |
 
 <!-- END: env-var-table -->
 
@@ -558,7 +559,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 115
+console.log(harnesses.harnesses.length);  // 117
 ```
 
 <!-- /automd -->

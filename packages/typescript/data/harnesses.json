@@ -33966,7 +33966,7 @@
             "darwin",
             "linux"
           ],
-          "notes": "Ships coder, openagents, and microcoder for macOS and Linux on x86-64 and ARM64. For a relocated install without session state, pass CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
+          "notes": "Ships coder, openagents, and microcoder for macOS and Linux on x86-64 and ARM64. For a relocated install without session state, pass an absolute CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
         },
         {
           "method": "script",
@@ -33974,7 +33974,7 @@
           "platforms": [
             "win32"
           ],
-          "notes": "Ships a Windows x86-64 build that also runs in compatibility mode on Windows ARM64. For a relocated install without session state, pass CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
+          "notes": "Ships a Windows x86-64 build that also runs in compatibility mode on Windows ARM64. For a relocated install without session state, pass an absolute CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
         }
       ],
       "support": {
@@ -33998,7 +33998,7 @@
               "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coax/lib/agent/session/writer.coax#L84-L101"
             ],
             "confidence": "source",
-            "notes": "The current Coder CLI reads plugin manifests and named profiles here. This is independent of the installer root. The CLI session writer uses CODER_HOME or HOME, not the Windows installer's USERPROFILE fallback."
+            "notes": "The current Coder CLI reads plugin manifests and named profiles here. This is independent of the installer root. The CLI session writer uses CODER_HOME or HOME, not the Windows installer's USERPROFILE fallback. Use absolute paths for CODER_HOME, CODER_BIN_DIR, and OPENAGENTS_HOME: upstream treats a quoted leading ~ literally, while detection expands it."
           },
           "local": {
             "status": "unknown",
@@ -34116,6 +34116,407 @@
         ],
         "installedLaunches": [],
         "notes": "Use the absolute path to the OpenAgents Coder binary with the acp argument. A bare coder on PATH can be the unrelated Coder workspace CLI, so the registry does not auto-select an installed ACP executable."
+      }
+    },
+    {
+      "key": "agenticseek",
+      "name": "AgenticSeek",
+      "version": "unknown",
+      "aliases": [
+        "agentic-seek",
+        "fosowl/agenticseek"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "source-checkout",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/frontend/agentic-seek-front/package.json"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/frontend/agentic-seek-front/package.json#L1-L5",
+        "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/docker-compose.yml#L53-L68",
+        "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/pyproject.toml#L1-L6",
+        "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/README.md#L48-L54"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/README.md#L297-L326",
+          "notes": "Use a source checkout with the appropriate host installer and run uv run cli.py. The checkout declares 0.1.0, but no published runtime release was found."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/README.md#L267-L295",
+          "notes": "The checkout also supports a Docker Compose web deployment. A container-only runtime is not detected unless the AgenticSeek checkout marker is visible."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/config.ini"
+              },
+              {
+                "id": "project-dotenv",
+                "kind": "file",
+                "template": "${CWD}/.env"
+              }
+            ],
+            "sources": [
+              "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/api.py#L28-L57",
+              "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/cli.py#L18-L30"
+            ],
+            "confidence": "source",
+            "notes": "CLI and web modes read the checkout's config.ini; .env holds service settings. These generic filenames are not detection signals."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-prompts",
+                "kind": "dir",
+                "template": "${CWD}/prompts/base"
+              },
+              {
+                "id": "jarvis-prompts",
+                "kind": "dir",
+                "template": "${CWD}/prompts/jarvis"
+              }
+            ],
+            "sources": [
+              "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/cli.py#L18-L53"
+            ],
+            "confidence": "source",
+            "notes": "The bundled agents read prompt files from one of two checkout directories, selected by jarvis_personality. This is not custom agent discovery."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unsupported",
+        "sources": [
+          "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/cli.py#L51-L57",
+          "https://github.com/Fosowl/agenticSeek/blob/8f705be8ca625e9549389f188b1e37f700d3ed34/sources/agents/mcp_agent.py#L6-L11"
+        ],
+        "confidence": "source",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "notes": "The MCP agent is a work in progress and is not wired into the checked CLI or web runner."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "workkit",
+      "name": "Workkit",
+      "version": "0.100.2",
+      "aliases": [
+        "workkit@workkit",
+        "itw-creative-works/workkit"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "WORKKIT_HOME",
+          "env": "WORKFLOW_HOME",
+          "fallback": "${HOME}/.workkit"
+        }
+      ],
+      "paths": [
+        {
+          "id": "installed-engine",
+          "category": "install",
+          "kind": "file",
+          "template": "${HOME}/.claude/workkit/workkit.sh",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "id": "project-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${CWD}/.workkit/settings.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "id": "default-user-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.workkit/settings.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        },
+        {
+          "id": "user-roster",
+          "category": "state",
+          "kind": "file",
+          "template": "${WORKKIT_HOME}/.repos.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "WORKFLOW_HOME",
+          "description": "Absolute path to Workkit's machine settings and state directory; otherwise the engine uses HOME/.workkit."
+        }
+      ],
+      "sources": [
+        "https://github.com/ITW-Creative-Works/workkit/releases/tag/v0.100.2",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/.claude-plugin/plugin.json#L1-L6",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/docs/setup.md#L193-L200",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L59-L66",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L141-L151",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/docs/setup.md#L226-L237",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/lib/platform.sh#L80-L85",
+        "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/lib.sh#L20-L28",
+        "https://www.npmjs.com/package/workkit/v/0.2.1"
+      ],
+      "installations": [
+        {
+          "method": "marketplace",
+          "marketplace": "claude-code",
+          "id": "workkit@workkit",
+          "url": "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L9-L24",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Add the ITW-Creative-Works/workkit marketplace, install workkit@workkit, then finish setup in Claude Code. A bare workkit executable is ambiguous; npm's unrelated workkit package installs it too. Windows setup uses Git Bash."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L42-L50",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Run ./workflow/workkit.sh setup from the source checkout. Detection recognizes the engine at its stable setup path or a product-owned config or state file, not a plugin-cache-only install."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-settings",
+                "kind": "file",
+                "template": "${WORKKIT_HOME}/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/lib/participation.sh#L59-L74"
+            ],
+            "confidence": "source",
+            "notes": "The engine reads user settings under WORKFLOW_HOME. A generic settings.json in an arbitrary override directory is not an installation marker."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-settings",
+                "kind": "file",
+                "template": "${CWD}/.workkit/settings.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L59-L66"
+            ],
+            "confidence": "official",
+            "notes": "A checked-in project configuration is detectable even when the Claude Code plugin has not been installed on the current machine."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L128-L139"
+            ],
+            "confidence": "official",
+            "notes": "The installed Claude Code plugin bundles namespaced skills; this does not imply shared .agents/skills discovery."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/README.md#L128-L139"
+            ],
+            "confidence": "official",
+            "notes": "Claude Code exposes Workkit's namespaced plugin skills as /workkit:<name> commands."
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agent-addons",
+                "kind": "dir",
+                "template": "${WORKKIT_HOME}/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/docs/agents.md#L331-L349"
+            ],
+            "confidence": "official",
+            "notes": "User Markdown files add context to the plugin's bundled Claude Code agents."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/docs/agents.md#L317-L326"
+            ],
+            "confidence": "official",
+            "notes": "The plugin supplies namespaced agents to Claude Code sessions; it does not discover separate project Workkit agents."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "notes": "Workkit runs within Claude Code; the host's MCP configuration is not a Workkit-native translation target."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
       }
     }
   ]
