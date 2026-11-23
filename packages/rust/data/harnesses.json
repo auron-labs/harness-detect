@@ -39792,8 +39792,8 @@
       "paths": [
         {
           "id": "desktop-app",
-          "kind": "dir",
-          "template": "/Applications/OpenCompany.app",
+          "kind": "file",
+          "template": "/Applications/OpenCompany.app/Contents/MacOS/opencompany-desktop",
           "platforms": [
             "darwin"
           ],
@@ -39801,8 +39801,8 @@
         },
         {
           "id": "user-desktop-app",
-          "kind": "dir",
-          "template": "${HOME}/Applications/OpenCompany.app",
+          "kind": "file",
+          "template": "${HOME}/Applications/OpenCompany.app/Contents/MacOS/opencompany-desktop",
           "platforms": [
             "darwin"
           ],
@@ -39825,6 +39825,8 @@
         "https://github.com/tinyhumansai/opencompany/releases/tag/v0.3.0",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/README.md#L45-L59",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/tauri.conf.json#L2-L6",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/Cargo.toml#L29-L44",
+        "https://github.com/zeenie-ai/OpenCompany/blob/ba81442ba0d21ccac6f2e8c0b462a718c13b36ad/desktop/electron-builder.yml#L20-L21",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/Cargo.toml#L39-L44",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/app/config.rs#L1156-L1194",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/bin/opencompany.rs#L1984-L1999",

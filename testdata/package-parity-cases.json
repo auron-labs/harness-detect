@@ -14844,8 +14844,8 @@
       },
       "setup": [
         {
-          "type": "dir",
-          "path": "${HOME}/Applications/OpenCompany.app"
+          "type": "executable",
+          "path": "${HOME}/Applications/OpenCompany.app/Contents/MacOS/opencompany-desktop"
         }
       ],
       "expect": {
@@ -14855,6 +14855,31 @@
         "matchedPathIds": [
           "user-desktop-app"
         ]
+      }
+    },
+    {
+      "id": "check-opencompany-ignores-zeenie-desktop-app",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${HOME}/Applications/OpenCompany.app/Contents/MacOS/OpenCompany"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
       }
     },
     {
