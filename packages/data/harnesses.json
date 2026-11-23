@@ -33594,7 +33594,7 @@
               "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/config.py#L118-L131"
             ],
             "confidence": "source",
-            "notes": "The override names the INI file directly. Use an absolute path; upstream does not expand a literal tilde in the override. On Windows the default requires USERPROFILE."
+            "notes": "The override names the INI file directly. Use an absolute path; upstream does not expand a literal tilde in the override. On Windows the registry models USERPROFILE; Python's HOMEDRIVE/HOMEPATH-only fallback is not modeled."
           },
           "local": {
             "status": "unknown",
@@ -33682,6 +33682,439 @@
         "status": "unknown",
         "sources": [],
         "confidence": "unknown"
+      }
+    },
+    {
+      "key": "miroflow-agent",
+      "name": "MiroFlow Agent",
+      "version": "unknown",
+      "aliases": [
+        "mirothinker",
+        "miromindai/mirothinker"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "checkout-config",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/apps/miroflow-agent/conf/config.yaml"
+        },
+        {
+          "id": "app-profile",
+          "category": "project",
+          "kind": "file",
+          "template": "${CWD}/conf/agent/mirothinker_1.7_keep5_max200.yaml"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/pyproject.toml#L1-L8",
+        "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/pyproject.toml#L51-L60",
+        "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/conf/config.yaml#L1-L14",
+        "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/conf/agent/mirothinker_1.7_keep5_max200.yaml#L1-L12",
+        "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/main.py#L48-L54"
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/README.md#L386-L400",
+          "notes": "Use the source checkout and run uv sync from apps/miroflow-agent with Python 3.12 or newer. The app is verified at the cited commit; no separate published runtime version was found."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-config",
+                "kind": "file",
+                "template": "${CWD}/apps/miroflow-agent/conf/config.yaml"
+              },
+              {
+                "id": "app-config",
+                "kind": "file",
+                "template": "${CWD}/conf/config.yaml"
+              },
+              {
+                "id": "checkout-dotenv",
+                "kind": "file",
+                "template": "${CWD}/apps/miroflow-agent/.env"
+              },
+              {
+                "id": "app-dotenv",
+                "kind": "file",
+                "template": "${CWD}/.env"
+              }
+            ],
+            "sources": [
+              "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/main.py#L48-L54"
+            ],
+            "confidence": "source",
+            "notes": "Paths cover the repository root and the documented app working directory. Hydra reads conf/config.yaml relative to the app entrypoint; generic app-root config and dotenv paths are not detection signals."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-agent-presets",
+                "kind": "dir",
+                "template": "${CWD}/apps/miroflow-agent/conf/agent"
+              },
+              {
+                "id": "app-agent-presets",
+                "kind": "dir",
+                "template": "${CWD}/conf/agent"
+              }
+            ],
+            "sources": [
+              "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/README.md#L498-L534"
+            ],
+            "confidence": "official",
+            "notes": "Hydra loads agent and optional sub-agent definitions from the selected YAML preset."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "sources": [
+          "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/src/config/settings.py#L68-L104",
+          "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/src/core/pipeline.py#L185-L215"
+        ],
+        "confidence": "source",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/README.md#L498-L534",
+            "https://github.com/MiroMindAI/MiroThinker/blob/1c4253f6774bf40314271a827304b842100e054c/apps/miroflow-agent/src/config/settings.py#L68-L104"
+          ],
+          "confidence": "source",
+          "notes": "Hydra presets select built-in tool IDs. The client maps those IDs to code-defined stdio servers; there is no direct translation target for arbitrary servers."
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "openagents-coder",
+      "name": "OpenAgents Coder",
+      "version": "1.0.0",
+      "aliases": [
+        "openagentsinc/openagents"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "OPENAGENTS_INSTALL_HOME",
+          "env": "OPENAGENTS_HOME",
+          "fallback": "${HOME}/.openagents"
+        },
+        {
+          "name": "OPENAGENTS_WINDOWS_USER_HOME",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "OPENAGENTS_WINDOWS_INSTALL_HOME",
+          "env": "OPENAGENTS_HOME",
+          "fallback": "${OPENAGENTS_WINDOWS_USER_HOME}/.openagents"
+        },
+        {
+          "name": "OPENAGENTS_CODER_BIN",
+          "env": "CODER_BIN_DIR",
+          "fallback": "${OPENAGENTS_INSTALL_HOME}/bin"
+        },
+        {
+          "name": "OPENAGENTS_CODER_WINDOWS_BIN",
+          "env": "CODER_BIN_DIR",
+          "fallback": "${OPENAGENTS_WINDOWS_INSTALL_HOME}/bin"
+        },
+        {
+          "name": "OPENAGENTS_CODER_STATE_HOME",
+          "env": "CODER_HOME",
+          "fallback": "${HOME}"
+        }
+      ],
+      "paths": [
+        {
+          "id": "installed-engine",
+          "category": "install",
+          "kind": "file",
+          "template": "${OPENAGENTS_CODER_BIN}/microcoder",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-installed-engine",
+          "category": "install",
+          "kind": "file",
+          "template": "${OPENAGENTS_CODER_WINDOWS_BIN}/microcoder.exe",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "coder-sessions",
+          "category": "state",
+          "kind": "dir",
+          "template": "${OPENAGENTS_CODER_STATE_HOME}/.openagents/coder/sessions",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "OPENAGENTS_HOME",
+          "description": "Parent of the installer's bin directory, not an override for Coder session state."
+        },
+        {
+          "name": "CODER_BIN_DIR",
+          "description": "Explicit installer output directory; takes precedence over OPENAGENTS_HOME."
+        },
+        {
+          "name": "CODER_HOME",
+          "description": "Home directory for Coder session state, profiles, and plugins; otherwise Coder uses HOME."
+        }
+      ],
+      "sources": [
+        "https://storage.googleapis.com/openagentsgemini-cli-releases/coder/SHA256SUMS-coder-1.0.0",
+        "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/apps/openagents-web/cli/install.sh#L10-L33",
+        "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/apps/openagents-web/cli/install.ps1#L35-L38",
+        "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coax/lib/agent/session/writer.coax#L84-L101",
+        "https://github.com/coder/coder",
+        "https://pypi.org/project/openagents/0.9.3.post20/"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "url": "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/apps/openagents-web/cli/install.sh#L10-L33",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "OpenAgents' shell installer ships coder, openagents, and microcoder for macOS and Linux on x86-64 and ARM64."
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/apps/openagents-web/cli/install.ps1#L4-L19",
+          "platforms": [
+            "win32"
+          ],
+          "notes": "OpenAgents' PowerShell installer ships the Windows x86-64 build, including in compatibility mode on Windows ARM64."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "coder-plugins",
+                "kind": "dir",
+                "template": "${OPENAGENTS_CODER_STATE_HOME}/.openagents/coder/plugins"
+              },
+              {
+                "id": "coder-profiles",
+                "kind": "dir",
+                "template": "${OPENAGENTS_CODER_STATE_HOME}/.openagents/coder/profiles"
+              }
+            ],
+            "sources": [
+              "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coder/tui/plugins.coax#L346-L380",
+              "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coax/lib/agent/session/writer.coax#L84-L101"
+            ],
+            "confidence": "source",
+            "notes": "The current Coder CLI reads plugin manifests and named profiles here. This is independent of the installer root. The CLI session writer uses CODER_HOME or HOME, not the Windows installer's USERPROFILE fallback."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "coder-plugins",
+                "kind": "dir",
+                "template": "${OPENAGENTS_CODER_STATE_HOME}/.openagents/coder/plugins"
+              }
+            ],
+            "sources": [
+              "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coder/tui/plugins.coax#L1-L15"
+            ],
+            "confidence": "source",
+            "notes": "Plugin manifests can register commands."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coder/book/ch023-openagents-coder.md#L3-L13"
+        ],
+        "confidence": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "notes": "Coder serves MCP tools to other clients. Configurable MCP client files were not verified for the standalone CLI."
+      },
+      "acp": {
+        "status": "supported",
+        "sources": [
+          "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coder/book/ch016-speak-the-protocols.md#L675-L700",
+          "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coder/tui/coder.coax#L2621-L2628"
+        ],
+        "confidence": "source",
+        "launches": [
+          {
+            "command": "coder",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "installedLaunches": [],
+        "notes": "Use the absolute path to the OpenAgents Coder binary with the acp argument. A bare coder on PATH can be the unrelated Coder workspace CLI, so the registry does not auto-select an installed ACP executable."
       }
     }
   ]

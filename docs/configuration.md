@@ -436,6 +436,12 @@ The following table lists harness-specific env vars that affect path resolution 
 | `omnigent` | `OMNIGENT_DATA_DIR` | `OMNIGENT_DATA_ROOT` | `${HOME}/.omnigent` |
 | `open-design` | `OD_DATA_DIR` | `OPEN_DESIGN_SOURCE_DATA` | `${CWD}/.od` |
 | `open-design` | `APPDATA` | `OPEN_DESIGN_APPDATA` | `${USERPROFILE}/AppData/Roaming` |
+| `openagents-coder` | `OPENAGENTS_HOME` | `OPENAGENTS_INSTALL_HOME` | `${HOME}/.openagents` |
+| `openagents-coder` | `USERPROFILE` | `OPENAGENTS_WINDOWS_USER_HOME` | `${HOME}` |
+| `openagents-coder` | `OPENAGENTS_HOME` | `OPENAGENTS_WINDOWS_INSTALL_HOME` | `${OPENAGENTS_WINDOWS_USER_HOME}/.openagents` |
+| `openagents-coder` | `CODER_BIN_DIR` | `OPENAGENTS_CODER_BIN` | `${OPENAGENTS_INSTALL_HOME}/bin` |
+| `openagents-coder` | `CODER_BIN_DIR` | `OPENAGENTS_CODER_WINDOWS_BIN` | `${OPENAGENTS_WINDOWS_INSTALL_HOME}/bin` |
+| `openagents-coder` | `CODER_HOME` | `OPENAGENTS_CODER_STATE_HOME` | `${HOME}` |
 | `openclaw` | `OPENCLAW_HOME` | `OPENCLAW_ROOT` | `${HOME}/.openclaw` |
 | `openclaw` | `OPENCLAW_STATE_DIR` | `OPENCLAW_STATE_ROOT` | `${OPENCLAW_ROOT}` |
 | `opencode` | `OPENCODE_CONFIG_DIR` | `OPENCODE_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/opencode` |
@@ -552,7 +558,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 113
+console.log(harnesses.harnesses.length);  // 115
 ```
 
 <!-- /automd -->

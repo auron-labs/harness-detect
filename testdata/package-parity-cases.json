@@ -10319,6 +10319,321 @@
       "expect": {
         "error": "Harness mirix has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-miroflow-agent-repository-root",
+      "operation": "checkHarness",
+      "input": "mirothinker",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/apps/miroflow-agent/conf/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "miroflow-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-config"
+        ]
+      }
+    },
+    {
+      "id": "check-miroflow-agent-working-directory",
+      "operation": "checkHarness",
+      "input": "miroflow-agent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/conf/agent/mirothinker_1.7_keep5_max200.yaml"
+        }
+      ],
+      "expect": {
+        "key": "miroflow-agent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "app-profile"
+        ]
+      }
+    },
+    {
+      "id": "check-miroflow-agent-ignores-generic-working-directory",
+      "operation": "checkHarness",
+      "input": "miroflow-agent",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/main.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/conf/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/uv"
+        }
+      ],
+      "expect": {
+        "key": "miroflow-agent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-miroflow-agent-no-file-target",
+      "operation": "translateMcpJson",
+      "input": "miroflow-agent",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness miroflow-agent has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "check-openagents-coder-default-install",
+      "operation": "checkHarness",
+      "input": "openagentsinc/openagents",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openagents/bin/microcoder"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installed-engine"
+        ]
+      }
+    },
+    {
+      "id": "check-openagents-coder-installer-home-override",
+      "operation": "checkHarness",
+      "input": "openagents-coder",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "OPENAGENTS_HOME": "${CWD}/bundle"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/bundle/bin/microcoder"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installed-engine"
+        ]
+      }
+    },
+    {
+      "id": "check-openagents-coder-installer-bin-precedence",
+      "operation": "checkHarness",
+      "input": "openagents-coder",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "CODER_BIN_DIR": "${CWD}/bundle",
+        "OPENAGENTS_HOME": "${CWD}/ignored"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/bundle/microcoder"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installed-engine"
+        ]
+      }
+    },
+    {
+      "id": "check-openagents-coder-windows-install",
+      "operation": "checkHarness",
+      "input": "openagents-coder",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${CWD}/profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/profile/.openagents/bin/microcoder.exe"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-installed-engine"
+        ]
+      }
+    },
+    {
+      "id": "check-openagents-coder-state-home",
+      "operation": "checkHarness",
+      "input": "openagents-coder",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "CODER_HOME": "${CWD}/state",
+        "OPENAGENTS_HOME": "${CWD}/ignored"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/state/.openagents/coder/sessions"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "coder-sessions"
+        ]
+      }
+    },
+    {
+      "id": "check-openagents-coder-ignores-unrelated-executables",
+      "operation": "checkHarness",
+      "input": "openagents-coder",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/coder"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/openagents"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openagents/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "openagents-coder",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-openagents-coder-recipe",
+      "operation": "getHarnessAcp",
+      "input": "openagentsinc/openagents",
+      "expect": {
+        "key": "openagents-coder"
+      }
+    },
+    {
+      "id": "acp-launches-openagents-coder-does-not-pick-ambiguous-binary",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openagents/bin/microcoder"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/coder"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/openagents"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
     }
   ]
 }
