@@ -37690,12 +37690,17 @@
       ],
       "env": [
         {
+          "name": "EMPRYO_HOME",
+          "description": "The Empryo 3.14.2-beta Linux launcher looks for .empryo/config.json under this directory when the value is absolute. Empty, relative, or literal tilde values fall back to HOME. The detector does not resolve this override, so a relocated config alone may not be detected."
+        },
+        {
           "name": "LOCALAPPDATA",
           "description": "Windows base directory for Empryo's default per-user CLI and configuration."
         }
       ],
       "sources": [
         "https://dl.empryo.com/v3.14.2-beta/SHA256SUMS.txt",
+        "https://dl.empryo.com/v3.14.2-beta/empryo-3.14.2-beta-linux-x64.tar.gz",
         "https://empryo.com/download",
         "https://empryo.com/docs/installation",
         "https://empryo.com/install.sh",
@@ -37757,7 +37762,8 @@
             "sources": [
               "https://empryo.com/docs/reference/configuration"
             ],
-            "confidence": "official"
+            "confidence": "official",
+            "notes": "Only default config locations are resolved. Config relocated via EMPRYO_HOME is not covered; the CLI can still be detected on PATH or at a default install location."
           },
           "local": {
             "status": "supported",
