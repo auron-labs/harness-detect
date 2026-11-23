@@ -38247,10 +38247,11 @@
             "sources": [
               "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L10-L17",
               "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236",
-              "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser"
+              "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser",
+              "https://github.com/python/cpython/blob/v3.11.14/Lib/ntpath.py#L329-L345"
             ],
             "confidence": "source",
-            "notes": "Checks both known locations for evidence; does not select the active runtime root or validate the registry. On Windows it uses USERPROFILE when set; if it is missing, detection uses the detector's normalized home, which may differ from Python's HOMEDRIVE/HOMEPATH fallback."
+            "notes": "Checks both known locations without selecting the active root or validating the registry. Legacy state under ~/.codex/loopx can also satisfy Codex's existing home-directory check. On Windows, use a nonempty, absolute USERPROFILE: the detector falls back to its normalized home for an empty or missing value, while Python treats an empty value as set and uses HOMEDRIVE/HOMEPATH only when it is missing."
           },
           "local": {
             "status": "supported",
@@ -38354,6 +38355,528 @@
         ],
         "confidence": "unknown",
         "notes": "LoopX can consume other agents over ACP. A published LoopX ACP agent launch was not verified."
+      }
+    },
+    {
+      "key": "raven",
+      "name": "Raven",
+      "version": "0.2.8",
+      "aliases": [
+        "evermind-ai/raven"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "config",
+          "kind": "file",
+          "template": "${RAVEN_ROOT}/config.json",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "openbsd"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-config",
+          "kind": "file",
+          "template": "${RAVEN_WIN_ROOT}/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        }
+      ],
+      "env": [
+        {
+          "name": "RAVEN_HOME",
+          "description": "Relocates Raven's configuration and runtime home. Use an absolute path without surrounding whitespace for portable detection."
+        }
+      ],
+      "sources": [
+        "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/home.py#L49-L57",
+        "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/home.py#L72-L76",
+        "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/contracts/path_policy.py#L19-L30",
+        "https://github.com/python/cpython/blob/v3.11.14/Lib/ntpath.py#L329-L345",
+        "https://github.com/EverMind-AI/Raven/blob/v0.2.8/pyproject.toml#L224-L226",
+        "https://github.com/getsentry/raven-python/blob/6.10.0/setup.py#L139-L142",
+        "https://github.com/EverMind-AI/Raven/releases/tag/v0.2.8"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "command": "curl -fsSL https://raven.evermind.ai/install.sh | bash",
+          "url": "https://github.com/EverMind-AI/Raven/blob/v0.2.8/README.md#L233-L239",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Supports Linux, macOS, and WSL2. The installer uses the project's GitHub release wheel; the unrelated PyPI raven distribution is not this product."
+        },
+        {
+          "method": "script",
+          "command": "irm https://raven.evermind.ai/install.ps1 | iex",
+          "url": "https://github.com/EverMind-AI/Raven/blob/v0.2.8/README.md#L241-L253",
+          "platforms": [
+            "win32"
+          ],
+          "notes": "Use modern PowerShell for the short URL; the upstream docs give a direct installer URL for Windows PowerShell 5.1."
+        }
+      ],
+      "roots": [
+        {
+          "name": "RAVEN_ROOT",
+          "env": "RAVEN_HOME",
+          "fallback": "${HOME}/.raven"
+        },
+        {
+          "name": "RAVEN_WIN_ROOT",
+          "env": "RAVEN_HOME",
+          "fallback": "${USERPROFILE}/.raven"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "config",
+                "kind": "file",
+                "template": "${RAVEN_ROOT}/config.json",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-config",
+                "kind": "file",
+                "template": "${RAVEN_WIN_ROOT}/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/home.py#L49-L57",
+              "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/home.py#L72-L76",
+              "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/contracts/path_policy.py#L19-L30",
+              "https://github.com/python/cpython/blob/v3.11.14/Lib/ntpath.py#L329-L345"
+            ],
+            "confidence": "source",
+            "notes": "Raven trims RAVEN_HOME and expands user-home syntax. For consistent detection across runtimes, use an absolute override without surrounding whitespace. An explicit per-process config file is not detected."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-plugin-packages.md#L63-L84"
+            ],
+            "confidence": "official",
+            "notes": "Imports skills beneath the configured workspace's skills directory. That workspace need not be the caller's current directory."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "agents",
+                "kind": "dir",
+                "template": "${RAVEN_ROOT}/agents",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-agents",
+                "kind": "dir",
+                "template": "${RAVEN_WIN_ROOT}/agents",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-integrations.md#L44-L49"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-plugin-packages.md#L163-L172",
+            "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/config/schema.py#L1417-L1429"
+          ],
+          "confidence": "official",
+          "notes": "Configure tools.mcpServers in Raven's config.json. Automated translation is not modeled."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-plugin-packages.md#L163-L172",
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/config/schema.py#L1589-L1599"
+        ],
+        "confidence": "official"
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "raven",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "installedLaunches": [],
+        "sources": [
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/docs-site/docs/agent-protocols.md#L26-L39",
+          "https://github.com/EverMind-AI/Raven/blob/v0.2.8/raven/cli/acp_commands.py#L33-L55",
+          "https://github.com/getsentry/raven-python/blob/6.10.0/setup.py#L139-L142"
+        ],
+        "confidence": "official",
+        "notes": "Requires a configured model provider. Point your client at the verified EverMind Raven executable, preferably by absolute path: the unrelated Sentry CLI has the same basename. Per-session MCP attachments are not accepted."
+      }
+    },
+    {
+      "key": "gentle-shell",
+      "name": "Gentle Shell",
+      "version": "5.0.0",
+      "aliases": [
+        "gentle-pi"
+      ],
+      "executables": [
+        "gentle-shell"
+      ],
+      "paths": [
+        {
+          "id": "launcher-config",
+          "kind": "file",
+          "template": "${HOME}/.gentle-shell/config.json",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "openbsd"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-launcher-config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.gentle-shell/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "owned-home",
+          "kind": "file",
+          "template": "${GENTLE_SHELL_ROOT}/.gentle-shell-home",
+          "platforms": [
+            "darwin",
+            "freebsd",
+            "linux",
+            "openbsd"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-owned-home",
+          "kind": "file",
+          "template": "${GENTLE_SHELL_WIN_ROOT}/.gentle-shell-home",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "GENTLE_SHELL_HOME",
+          "description": "Overrides the isolated home. Use an absolute path for portable detection; a per-invocation flag or saved home can select a different directory."
+        }
+      ],
+      "sources": [
+        "https://registry.npmjs.org/gentle-pi/5.0.0",
+        "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/package.json#L1-L10",
+        "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/runtime/gentle-shell-launcher.mjs#L292-L294",
+        "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/runtime/gentle-shell-launcher.mjs#L406-L408",
+        "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/bin/gentle-shell.mjs#L687-L690",
+        "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/bin/gentle-shell.mjs#L1614-L1633",
+        "https://nodejs.org/api/os.html#oshomedir"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "gentle-pi",
+          "command": "npm install -g gentle-pi",
+          "url": "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#install",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Installs the standalone gentle-shell launcher. An extension-only Pi install does not guarantee a launcher on PATH."
+        }
+      ],
+      "roots": [
+        {
+          "name": "GENTLE_SHELL_ROOT",
+          "env": "GENTLE_SHELL_HOME",
+          "fallback": "${HOME}/.gentle-shell/agent"
+        },
+        {
+          "name": "GENTLE_SHELL_WIN_ROOT",
+          "env": "GENTLE_SHELL_HOME",
+          "fallback": "${USERPROFILE}/.gentle-shell/agent"
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "launcher-config",
+                "kind": "file",
+                "template": "${HOME}/.gentle-shell/config.json",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-launcher-config",
+                "kind": "file",
+                "template": "${USERPROFILE}/.gentle-shell/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "isolated-settings",
+                "kind": "file",
+                "template": "${GENTLE_SHELL_ROOT}/settings.json",
+                "platforms": [
+                  "darwin",
+                  "freebsd",
+                  "linux",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-isolated-settings",
+                "kind": "file",
+                "template": "${GENTLE_SHELL_WIN_ROOT}/settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#install",
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#home-subcommand-and-gentle-shellconfigjson",
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/runtime/gentle-shell-launcher.mjs#L292-L294",
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/runtime/gentle-shell-launcher.mjs#L406-L408",
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/bin/gentle-shell.mjs#L687-L690",
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/bin/gentle-shell.mjs#L1614-L1633",
+              "https://nodejs.org/api/os.html#oshomedir"
+            ],
+            "confidence": "source",
+            "notes": "Lists launcher config and the isolated home's Pi settings. Linked Pi settings, launcher config overrides, and custom homes chosen only through flags or a saved choice are not resolved."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#skill-registry"
+            ],
+            "confidence": "official",
+            "notes": "Included in the Gentle Shell skill registry's home scan."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#skill-registry"
+            ],
+            "confidence": "official",
+            "notes": "Included in the Gentle Shell skill registry's project scan."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#L446-L448",
+            "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#home-subcommand-and-gentle-shellconfigjson"
+          ],
+          "confidence": "official",
+          "notes": "Use gentle-shell mcp to manage mcp.json in the active Pi home. Isolated, linked, and custom homes can differ; automated translation is not modeled."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#L446-L448",
+            "https://pi.dev/docs/latest/mcp"
+          ],
+          "confidence": "official",
+          "notes": "Pi reads .pi/mcp.json in trusted projects; this is not a Gentle Shell-specific install marker."
+        },
+        "sources": [
+          "https://github.com/Gentleman-Programming/gentle-shell/blob/v5.0.0/docs/readme-reference.md#L446-L448",
+          "https://pi.dev/docs/latest/mcp"
+        ],
+        "confidence": "official",
+        "notes": "Delegates to Pi's MCP client."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "No standalone Gentle Shell ACP launch was verified; the Pi ACP adapter is not assumed to load Gentle Shell."
       }
     }
   ]
