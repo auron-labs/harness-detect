@@ -16187,6 +16187,388 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-talon-default-config",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.talon/config.json"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-config"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-relocated-state",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "TALON_HOME": "${TMP}/talon-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-profile/data/talon.db"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-database"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-darwin-bridge",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.talon/native-bridge.json"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-native-bridge"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-windows-profile",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/talon-userprofile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-userprofile/.talon/config.json"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-windows-override",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/talon-userprofile",
+        "TALON_HOME": "${TMP}/talon-win-root"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-win-root/data/talon.db"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-database"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-npm-unix-prefix",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "NPM_CONFIG_PREFIX": "${TMP}/other-prefix",
+        "npm_config_prefix": "${TMP}/talon-npm"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-npm/lib/node_modules/talon-agent/bin/talon.js"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-npm-lowercase-prefix-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-npm-windows-default",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/talon-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-roaming/npm/node_modules/talon-agent/bin/talon.js"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-default-npm-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-npm-windows-prefix",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "NPM_CONFIG_PREFIX": "",
+        "npm_config_prefix": "${TMP}/talon-win-npm"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/talon-win-npm/node_modules/talon-agent/bin/talon.js"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-npm-prefix-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-talon-ignores-unrelated-command-and-home",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/talon"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.talon/user"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.talon/talon.log"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        }
+      ],
+      "expect": {
+        "key": "talon",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-sandbase-workspace-config",
+      "operation": "checkHarness",
+      "input": "sandbase-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.managed-agents/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "sandbase-harness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "workspace-config"
+        ]
+      }
+    },
+    {
+      "id": "check-sandbase-workspace-database",
+      "operation": "checkHarness",
+      "input": "sandbase-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.managed-agents/data.db"
+        }
+      ],
+      "expect": {
+        "key": "sandbase-harness",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "workspace-database"
+        ]
+      }
+    },
+    {
+      "id": "check-sandbase-ignores-shared-markers",
+      "operation": "checkHarness",
+      "input": "sandbase-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/managed-agents"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.managed-agents"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/data.db"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/agents/example.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/skills/example/SKILL.md"
+        }
+      ],
+      "expect": {
+        "key": "sandbase-harness",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-sandbase-does-not-scan-other-workspaces",
+      "operation": "checkHarness",
+      "input": "sandbase-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/other-workspace/.managed-agents/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.managed-agents/data.db"
+        }
+      ],
+      "expect": {
+        "key": "sandbase-harness",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }
