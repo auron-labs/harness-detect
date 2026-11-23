@@ -275,6 +275,24 @@ test("checkHarness resolves harness-specific derived roots", () => {
   assert.equal(sessions?.path, "/tmp/hermes-home/sessions");
 });
 
+test("checkHarness resolves Windows root overrides without case sensitivity", () => {
+  const platform = Object.getOwnPropertyDescriptor(process, "platform");
+  Object.defineProperty(process, "platform", { value: "win32" });
+  try {
+    const options = {
+      cwd: "/repo",
+      env: { HOME: "/home", PATH: "", aiwg_artifacts_path: "/primary", aiwg_project_artifacts_path: "/legacy" }
+    };
+    const getPath = () =>
+      checkHarness("aiwg", options).paths.find((entry) => entry.id === "relocated-project-config")?.path;
+    assert.equal(getPath(), path.normalize("/primary/aiwg.config"));
+    options.env.AIWG_ARTIFACTS_PATH = "";
+    assert.equal(getPath(), path.normalize("/legacy/aiwg.config"));
+  } finally {
+    Object.defineProperty(process, "platform", platform);
+  }
+});
+
 test("checkHarness expands tilde root overrides", () => {
   const result = checkHarness("prime-agent", {
     cwd: "/repo",

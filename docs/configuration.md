@@ -373,6 +373,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | Harness key | Override env var | Derived root | Default fallback |
 |---|---|---|---|
 | `agent-swarm` | `AGENT_SWARM_DIR` | `AGENT_SWARM_INSTALL_ROOT` | `${HOME}/agent-swarm` |
+| `aiwg` | `AIWG_PROJECT_AIWG_DIR` | `AIWG_LEGACY_ARTIFACT_ROOT` | (empty — path resolves to null) |
+| `aiwg` | `AIWG_ARTIFACTS_PATH` | `AIWG_EXPLICIT_ARTIFACT_ROOT` | `${AIWG_LEGACY_ARTIFACT_ROOT}` |
+| `aiwg` | `AIWG_CONFIG` | `AIWG_EXPLICIT_USER_CONFIG` | (empty — path resolves to null) |
 | `amazon-q-cli` | `Q_CLI_DATA_DIR` | `Q_CLI_DATA_ROOT` | (empty — path resolves to null) |
 | `amp` | — | `AMP_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/amp` |
 | `amp` | `AMP_DATA_HOME` | `AMP_DATA_ROOT` | `${XDG_DATA_HOME}/amp` |
@@ -563,7 +566,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 119
+console.log(harnesses.harnesses.length);  // 121
 ```
 
 <!-- /automd -->

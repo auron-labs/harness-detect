@@ -11193,6 +11193,428 @@
       "expect": {
         "error": "Harness n8n has no file-based MCP config for scope local"
       }
+    },
+    {
+      "id": "check-aiwg-ignores-ambiguous-path-executable",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/aiwg"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-aiwg-project-control-config",
+      "operation": "checkHarness",
+      "input": "@aiwg/cli",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_ARTIFACTS_PATH": "${CWD}/external-aiwg-corpus"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.aiwg/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-artifact-location-pointer",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.aiwg-location"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "artifact-location-pointer"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-relocated-artifact-config",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_PROJECT_ARTIFACTS_PATH": "${CWD}/external-aiwg-corpus",
+        "AIWG_PROJECT_AIWG_DIR": "${CWD}/ignored-aiwg-corpus"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/external-aiwg-corpus/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-legacy-relocated-artifact-config",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_PROJECT_AIWG_DIR": "${CWD}/legacy-aiwg-corpus"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/legacy-aiwg-corpus/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-xdg-artifact-index",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "XDG_DATA_HOME": "${CWD}/isolated-xdg"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/isolated-xdg/aiwg/index"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "shared-artifact-index"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-empty-artifact-override-uses-alias",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_ARTIFACTS_PATH": "",
+        "AIWG_PROJECT_ARTIFACTS_PATH": "${CWD}/alternate-aiwg-corpus"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/alternate-aiwg-corpus/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-empty-config-override-uses-known-home-config",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_CONFIG": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/aiwg/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "alternate-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-aiwg-ignores-shared-provider-and-override-config",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "cwd": "${CWD}/aiwg-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "AIWG_CONFIG": "${CWD}/aiwg-negative"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/aiwg-negative/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/aiwg-negative/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/aiwg-negative/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-nausicaa-ignores-ambiguous-path-executable",
+      "operation": "checkHarness",
+      "input": "nausicaa",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/nausicaa"
+        }
+      ],
+      "expect": {
+        "key": "nausicaa",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-nausicaa-user-config",
+      "operation": "checkHarness",
+      "input": "nausicaa-harness",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.nausicaa/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "nausicaa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-nausicaa-project-settings",
+      "operation": "checkHarness",
+      "input": "nausicaa",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.nausicaa/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "nausicaa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-nausicaa-windows-userprofile",
+      "operation": "checkHarness",
+      "input": "nausicaa",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${HOME}/nausicaa-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/nausicaa-profile/.nausicaa/credentials.json"
+        }
+      ],
+      "expect": {
+        "key": "nausicaa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-credentials"
+        ]
+      }
+    },
+    {
+      "id": "check-nausicaa-ignores-generic-skills-and-settings",
+      "operation": "checkHarness",
+      "input": "nausicaa",
+      "cwd": "${CWD}/nausicaa-negative",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/nausicaa-negative/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/nausicaa-negative/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "nausicaa",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-aiwg-windows-lowercase-artifact-override",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "aiwg_artifacts_path": "${CWD}/relocated-aiwg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/relocated-aiwg/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-project-config"
+        ]
+      }
+    },
+    {
+      "id": "support-record-nausicaa",
+      "operation": "getHarnessSupport",
+      "input": "nausicaa"
+    },
+    {
+      "id": "translate-nausicaa-needs-explicit-host-grants",
+      "operation": "translateMcpJson",
+      "input": "nausicaa",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness nausicaa has no file-based MCP config for scope global"
+      }
     }
   ]
 }
