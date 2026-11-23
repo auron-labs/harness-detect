@@ -13,15 +13,23 @@ function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+const lookupEnv = (env, key) => {
+  if (env[key] !== undefined || process.platform !== "win32") {
+    return env[key];
+  }
+  const upperKey = key.toUpperCase();
+  let match;
+  for (const name of Object.keys(env)) {
+    if (name.toUpperCase() === upperKey && (match === undefined || name < match)) {
+      match = name;
+    }
+  }
+  return match === undefined ? undefined : env[match];
+};
+
 function withDefaults(env = process.env, cwd = process.cwd()) {
-  const windows = process.platform === "win32";
-  const homeEnv = (key) => {
-    if (env[key] !== undefined || !windows) return env[key];
-    const match = Object.keys(env).filter((name) => name.toUpperCase() === key).sort()[0];
-    return match === undefined ? undefined : env[match];
-  };
-  const userprofile = homeEnv("USERPROFILE");
-  const home = homeEnv("HOME") || (windows && userprofile) || os.homedir();
+  const userprofile = lookupEnv(env, "USERPROFILE");
+  const home = lookupEnv(env, "HOME") || (process.platform === "win32" && userprofile) || os.homedir();
   const xdgConfigHome = env.XDG_CONFIG_HOME || path.join(home, ".config");
   const xdgDataHome = env.XDG_DATA_HOME || path.join(home, ".local", "share");
   const xdgStateHome = env.XDG_STATE_HOME || path.join(home, ".local", "state");
@@ -56,10 +64,10 @@ function resolveHarnessRoots(harness, baseEnv) {
   const resolved = { ...baseEnv };
 
   for (const root of (harness.roots || [])) {
-    const envVal = root.env ? baseEnv[root.env] : undefined;
+    const envVal = root.env ? lookupEnv(baseEnv, root.env) : undefined;
     // fallbackEnv preserves products that use a legacy override when the
     // preferred override is absent, before applying their static fallback.
-    const fallbackEnvVal = root.fallbackEnv ? baseEnv[root.fallbackEnv] : undefined;
+    const fallbackEnvVal = root.fallbackEnv ? lookupEnv(baseEnv, root.fallbackEnv) : undefined;
 
     let value;
     if (root.env && envVal) {

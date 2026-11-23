@@ -952,6 +952,13 @@ def _find_harness_definition(input: str) -> HarnessDefinition | None:
 # ---------------------------------------------------------------------------
 
 
+def _lookup_env(env: dict[str, str], key: str) -> str:
+    if key not in env and sys.platform == "win32":
+        upper_key = key.upper()
+        key = min((name for name in env if name.upper() == upper_key), default=key)
+    return env.get(key, "")
+
+
 def _with_defaults(
     env: dict[str, str] | None,
     cwd: str | None,
@@ -964,13 +971,8 @@ def _with_defaults(
 
     windows = sys.platform == "win32"
 
-    def home_env(key: str) -> str:
-        if key not in out and windows:
-            key = min((name for name in out if name.upper() == key), default=key)
-        return out.get(key, "")
-
-    userprofile = home_env("USERPROFILE")
-    home = home_env("HOME") or (userprofile if windows else "")
+    userprofile = _lookup_env(out, "USERPROFILE")
+    home = _lookup_env(out, "HOME") or (userprofile if windows else "")
     home = home or os.path.expanduser("~") or "/"
     userprofile = userprofile or home
 
@@ -1025,20 +1027,19 @@ def _resolve_harness_roots(
     out = dict(base_env)
 
     for root in harness.roots:
-        env_val = base_env.get(root.env, "") if root.env else ""
-        env_val_nonempty = env_val if env_val else ""
+        env_val = _lookup_env(base_env, root.env) if root.env else ""
         fallback_env_val = (
-            base_env.get(root.fallback_env, "") if root.fallback_env else ""
+            _lookup_env(base_env, root.fallback_env) if root.fallback_env else ""
         )
 
-        if root.env and env_val_nonempty:
+        if root.env and env_val:
             if root.use:
                 # Resolve "use" against base env + resolved roots + the env var itself.
                 tmp = dict(out)
-                tmp[root.env] = env_val_nonempty
+                tmp[root.env] = env_val
                 value = _resolve_template(root.use, tmp)
             else:
-                value = env_val_nonempty
+                value = env_val
         elif root.fallback_env and fallback_env_val:
             # Use the documented legacy override before the static fallback.
             value = fallback_env_val

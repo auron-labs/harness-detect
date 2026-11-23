@@ -862,6 +862,23 @@ fn clone_harness_support_record(harness: &HarnessDefinition) -> HarnessSupportRe
 // Internal: environment defaults
 // ---------------------------------------------------------------------------
 
+fn lookup_env<'a>(
+    env: &'a HashMap<String, String>,
+    key: &str,
+    case_insensitive: bool,
+) -> Option<&'a String> {
+    env.get(key).or_else(|| {
+        if case_insensitive {
+            env.iter()
+                .filter(|(name, _)| name.eq_ignore_ascii_case(key))
+                .min_by_key(|(name, _)| *name)
+                .map(|(_, value)| value)
+        } else {
+            None
+        }
+    })
+}
+
 /// Computes the universal base-variable map (`HOME`, `XDG_*`, `TMPDIR`, `CWD`)
 /// plus any caller-supplied env vars. Harness-specific derived roots are
 /// resolved separately by [`resolve_harness_roots`].
@@ -874,21 +891,8 @@ fn with_defaults(
         None => std::env::vars().collect(),
     };
 
-    let home_env = |key: &str| {
-        out.get(key).or_else(|| {
-            if cfg!(windows) {
-                out.iter()
-                    .filter(|(name, _)| name.eq_ignore_ascii_case(key))
-                    .min_by_key(|(name, _)| *name)
-                    .map(|(_, value)| value)
-            } else {
-                None
-            }
-        })
-    };
-
-    let userprofile = home_env("USERPROFILE").filter(|s| !s.is_empty());
-    let home = home_env("HOME")
+    let userprofile = lookup_env(&out, "USERPROFILE", cfg!(windows)).filter(|s| !s.is_empty());
+    let home = lookup_env(&out, "HOME", cfg!(windows))
         .filter(|s| !s.is_empty())
         .or(userprofile.filter(|_| cfg!(windows)))
         .cloned()
@@ -960,13 +964,13 @@ fn resolve_harness_roots(
         let env_val = if root.env.is_empty() {
             None
         } else {
-            base_env.get(&root.env).map(|s| s.as_str())
+            lookup_env(base_env, &root.env, cfg!(windows)).map(String::as_str)
         };
         let env_val_nonempty = env_val.filter(|s| !s.is_empty());
         let fallback_env_val = if root.fallback_env.is_empty() {
             None
         } else {
-            base_env.get(&root.fallback_env).filter(|s| !s.is_empty())
+            lookup_env(base_env, &root.fallback_env, cfg!(windows)).filter(|s| !s.is_empty())
         };
 
         let value: Option<String> = if !root.env.is_empty() {
@@ -1245,6 +1249,21 @@ fn find_executable(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn lookup_env_prefers_exact_case_and_only_folds_on_windows() {
+        let mut env = HashMap::from([("aiwg_artifacts_path".to_string(), "/corpus".to_string())]);
+        assert!(lookup_env(&env, "AIWG_ARTIFACTS_PATH", false).is_none());
+        assert_eq!(
+            lookup_env(&env, "AIWG_ARTIFACTS_PATH", true).map(String::as_str),
+            Some("/corpus")
+        );
+        env.insert("AIWG_ARTIFACTS_PATH".to_string(), String::new());
+        assert_eq!(
+            lookup_env(&env, "AIWG_ARTIFACTS_PATH", true).map(String::as_str),
+            Some("")
+        );
+    }
 
     #[test]
     fn normalize_path_basic() {

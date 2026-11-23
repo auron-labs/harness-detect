@@ -207,6 +207,25 @@ def test_check_harness_resolves_derived_roots():
     assert sessions.path == os.path.normpath("/tmp/hermes-home/sessions")
 
 
+def test_check_harness_resolves_windows_root_overrides(monkeypatch, tmp_path):
+    monkeypatch.setattr(sys, "platform", "win32")
+    primary = tmp_path / "primary"
+    fallback = tmp_path / "fallback"
+    env = {
+        "HOME": str(tmp_path),
+        "PATH": "",
+        "aiwg_artifacts_path": str(primary),
+        "aiwg_project_artifacts_path": str(fallback),
+    }
+    options = CheckOptions(cwd=str(tmp_path), env=env)
+    config = _find_path(check_harness("aiwg", options), "relocated-project-config")
+    assert config is not None and config.path == str(primary / "aiwg.config")
+
+    env["AIWG_ARTIFACTS_PATH"] = ""
+    config = _find_path(check_harness("aiwg", options), "relocated-project-config")
+    assert config is not None and config.path == str(fallback / "aiwg.config")
+
+
 def test_check_harness_expands_tilde_root_overrides():
     env = _env_home("/Users/test")
     env["PRIME_AGENT_CODING_AGENT_DIR"] = "~/prime-agent"

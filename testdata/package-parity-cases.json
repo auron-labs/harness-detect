@@ -11568,6 +11568,34 @@
       }
     },
     {
+      "id": "check-aiwg-windows-lowercase-artifact-override",
+      "operation": "checkHarness",
+      "input": "aiwg",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "aiwg_artifacts_path": "${CWD}/relocated-aiwg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/relocated-aiwg/aiwg.config"
+        }
+      ],
+      "expect": {
+        "key": "aiwg",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-project-config"
+        ]
+      }
+    },
+    {
       "id": "support-record-nausicaa",
       "operation": "getHarnessSupport",
       "input": "nausicaa"
