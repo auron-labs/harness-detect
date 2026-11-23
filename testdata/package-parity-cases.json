@@ -10872,6 +10872,327 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "check-flowise-path-executable",
+      "operation": "checkHarness",
+      "input": "flowise",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/flowise"
+        }
+      ],
+      "expect": {
+        "key": "flowise",
+        "installed": true,
+        "executablePath": "${BIN}/flowise",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-flowise-default-sqlite-state",
+      "operation": "checkHarness",
+      "input": "flowiseai",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.flowise/database.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "flowise",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sqlite-state"
+        ]
+      }
+    },
+    {
+      "id": "check-flowise-windows-userprofile",
+      "operation": "checkHarness",
+      "input": "flowise",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${HOME}/flowise-userprofile"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/flowise-userprofile/.flowise/storage"
+        }
+      ],
+      "expect": {
+        "key": "flowise",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-blob-storage"
+        ]
+      }
+    },
+    {
+      "id": "check-flowise-ignores-generic-database-and-storage-overrides",
+      "operation": "checkHarness",
+      "input": "flowise",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "DATABASE_PATH": "${CWD}/data",
+        "BLOB_STORAGE_PATH": "${CWD}/data/storage"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/data/database.sqlite"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/data/storage"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/packages/server/.env"
+        }
+      ],
+      "expect": {
+        "key": "flowise",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-flowise-has-no-workflow-file-target",
+      "operation": "translateMcpJson",
+      "input": "flowise",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness flowise has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "check-n8n-path-executable",
+      "operation": "checkHarness",
+      "input": "n8n",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/n8n"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": true,
+        "executablePath": "${BIN}/n8n",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-n8n-default-instance-config",
+      "operation": "checkHarness",
+      "input": "n8n-self-hosted",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.n8n/config"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-n8n-windows-userprofile",
+      "operation": "checkHarness",
+      "input": "n8n",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${HOME}/n8n-userprofile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/n8n-userprofile/.n8n/config"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-instance-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-n8n-user-folder-parent",
+      "operation": "checkHarness",
+      "input": "n8n",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "N8N_USER_FOLDER": "${CWD}/n8n-volume"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/n8n-volume/.n8n/config"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-n8n-windows-override-wins",
+      "operation": "checkHarness",
+      "input": "n8n",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "N8N_USER_FOLDER": "${CWD}/n8n-volume",
+        "USERPROFILE": "${HOME}/n8n-userprofile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/n8n-volume/.n8n/database.sqlite"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/n8n-userprofile/.n8n/config"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-sqlite-state"
+        ]
+      }
+    },
+    {
+      "id": "check-n8n-ignores-generic-config-and-sqlite-in-user-folder",
+      "operation": "checkHarness",
+      "input": "n8n",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "N8N_USER_FOLDER": "${CWD}/volume"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/volume/config"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/volume/database.sqlite"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        }
+      ],
+      "expect": {
+        "key": "n8n",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-n8n-has-no-workflow-file-target",
+      "operation": "translateMcpJson",
+      "input": "n8n",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness n8n has no file-based MCP config for scope local"
+      }
     }
   ]
 }

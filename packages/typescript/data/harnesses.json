@@ -34398,10 +34398,12 @@
               }
             ],
             "sources": [
-              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/lib/participation.sh#L59-L74"
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/lib/participation.sh#L59-L74",
+              "https://github.com/ITW-Creative-Works/workkit/blob/v0.100.2/workflow/user-dir.js#L9-L24",
+              "https://nodejs.org/docs/latest-v24.x/api/os.html#oshomedir"
             ],
             "confidence": "source",
-            "notes": "The engine reads user settings under WORKFLOW_HOME. A generic settings.json in an arbitrary override directory is not an installation marker."
+            "notes": "The engine reads user settings under WORKFLOW_HOME. A generic settings.json in an arbitrary override directory is not an installation marker. On Windows, Git Bash uses HOME while Workkit's Node code uses os.homedir() (normally USERPROFILE). Detection models the Git Bash default, so if the two differ, use an absolute WORKFLOW_HOME to align overrides; roster readers that explicitly use the Node default can still differ."
           },
           "local": {
             "status": "supported",
@@ -34512,6 +34514,483 @@
           "confidence": "unknown"
         },
         "notes": "Workkit runs within Claude Code; the host's MCP configuration is not a Workkit-native translation target."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "flowise",
+      "name": "Flowise",
+      "version": "3.1.4",
+      "aliases": [
+        "flowiseai",
+        "flowiseai/flowise"
+      ],
+      "executables": [
+        "flowise"
+      ],
+      "roots": [
+        {
+          "name": "FLOWISE_SQLITE_DIR",
+          "env": "DATABASE_PATH",
+          "fallback": "${HOME}/.flowise"
+        },
+        {
+          "name": "FLOWISE_WINDOWS_SQLITE_DIR",
+          "env": "DATABASE_PATH",
+          "fallback": "${USERPROFILE}/.flowise"
+        }
+      ],
+      "paths": [
+        {
+          "id": "sqlite-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.flowise/database.sqlite",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-sqlite-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${USERPROFILE}/.flowise/database.sqlite",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "blob-storage",
+          "category": "state",
+          "kind": "dir",
+          "template": "${HOME}/.flowise/storage",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-blob-storage",
+          "category": "state",
+          "kind": "dir",
+          "template": "${USERPROFILE}/.flowise/storage",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "DATABASE_PATH",
+          "description": "Parent directory for SQLite database.sqlite. An arbitrary override directory does not identify Flowise."
+        },
+        {
+          "name": "BLOB_STORAGE_PATH",
+          "description": "Override for filesystem blob storage; otherwise Flowise uses .flowise/storage under its home directory. Not an installation marker."
+        }
+      ],
+      "sources": [
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/package.json#L1-L9",
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/package.json#L22-L37",
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/utils/index.ts#L114-L125",
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/DataSource.ts#L15-L31",
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/components/src/storageUtils.ts#L47-L65",
+        "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/components/src/utils.ts#L728-L739"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "flowise",
+          "command": "npm install -g flowise@3.1.4",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/README.md#L37-L51",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "The 3.1.4 package requires Node.js 24. Start the server with flowise start; the Python SDK is a client, not the server."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/README.md#L53-L62",
+          "notes": "The official Docker Compose setup maps a host .flowise directory. Detection does not query container or cloud runtimes; their files must be visible at a modeled path."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "posix-workflow-db",
+                "kind": "file",
+                "template": "${FLOWISE_SQLITE_DIR}/database.sqlite",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-workflow-db",
+                "kind": "file",
+                "template": "${FLOWISE_WINDOWS_SQLITE_DIR}/database.sqlite",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/DataSource.ts#L15-L31"
+            ],
+            "confidence": "source",
+            "notes": "Chatflows and Agentflows are stored in the instance database. These paths document SQLite only. A relocated SQLite file or storage directory alone is not evidence of Flowise. The runtime falls back to its working directory when the home variable is absent; detection uses its resolved home instead."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "source-dotenv",
+                "kind": "file",
+                "template": "${CWD}/packages/server/.env"
+              }
+            ],
+            "sources": [
+              "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/commands/base.ts#L1-L6"
+            ],
+            "confidence": "source",
+            "notes": "The CLI reads the .env file relative to the server package. This path assumes a Flowise repository root, not an arbitrary working directory."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/components/nodes/agents/ToolAgent/ToolAgent.ts#L36-L62"
+            ],
+            "confidence": "source",
+            "notes": "Tool Agents are configured as nodes in the visual workflow, not discovered from a host directory."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "sources": [
+          "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/components/nodes/tools/MCP/CustomMCP/CustomMCP.ts#L56-L89",
+          "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/database/entities/CustomMcpServer.ts#L5-L32"
+        ],
+        "confidence": "source",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/server/src/database/entities/CustomMcpServer.ts#L5-L32"
+          ],
+          "confidence": "source",
+          "notes": "The UI stores custom servers as workspace-scoped database records, not a file-based server list."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/FlowiseAI/Flowise/blob/flowise%403.1.4/packages/components/nodes/tools/MCP/CustomMCP/CustomMCP.ts#L56-L89"
+          ],
+          "confidence": "source",
+          "notes": "Custom MCP is configured through a workflow node; there is no file target for translating a standalone server list."
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "n8n",
+      "name": "n8n",
+      "version": "2.48.7",
+      "aliases": [
+        "n8n-io/n8n",
+        "n8n-self-hosted"
+      ],
+      "executables": [
+        "n8n"
+      ],
+      "roots": [
+        {
+          "name": "N8N_STATE_PARENT",
+          "env": "N8N_USER_FOLDER",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "N8N_WINDOWS_STATE_PARENT",
+          "env": "N8N_USER_FOLDER",
+          "fallback": "${USERPROFILE}"
+        }
+      ],
+      "paths": [
+        {
+          "id": "instance-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${N8N_STATE_PARENT}/.n8n/config",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-instance-settings",
+          "category": "config",
+          "kind": "file",
+          "template": "${N8N_WINDOWS_STATE_PARENT}/.n8n/config",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "sqlite-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${N8N_STATE_PARENT}/.n8n/database.sqlite",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-sqlite-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${N8N_WINDOWS_STATE_PARENT}/.n8n/database.sqlite",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "N8N_USER_FOLDER",
+          "description": "Parent directory for .n8n, not the .n8n folder itself. Use an absolute path."
+        },
+        {
+          "name": "DB_SQLITE_DATABASE",
+          "description": "Optional SQLite database filename or path; detection checks only the default filename under .n8n."
+        }
+      ],
+      "sources": [
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/cli/package.json#L48-L62",
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/config/src/utils/utils.ts#L3-L10",
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/core/src/instance-settings/instance-settings.ts#L47-L62",
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/config/src/configs/database.config.ts#L123-L127",
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/db/src/connection/db-connection-options.ts#L71-L83",
+        "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/README.md#L17-L32"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "n8n",
+          "command": "npm install -g n8n@2.48.7",
+          "url": "https://docs.n8n.io/hosting/installation/npm/",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "This package requires Node.js 24 or later. Detection identifies the self-hostable runtime, not an active agent, workflow, or running service."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/README.md#L26-L31",
+          "notes": "The documented Docker command uses a named volume at /home/node/.n8n inside the container. Only files visible at a modeled host path can be detected; cloud-only use does not match."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "instance-settings",
+                "kind": "file",
+                "template": "${N8N_STATE_PARENT}/.n8n/config",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-instance-settings",
+                "kind": "file",
+                "template": "${N8N_WINDOWS_STATE_PARENT}/.n8n/config",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/config/src/utils/utils.ts#L3-L10",
+              "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/core/src/instance-settings/instance-settings.ts#L47-L62"
+            ],
+            "confidence": "source",
+            "notes": "The instance file can contain encryption material; detection only checks that the file exists. Detection uses its resolved home, not the runtime's working-directory fallback when the home variable is missing."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "working-directory-dotenv",
+                "kind": "file",
+                "template": "${CWD}/.env"
+              }
+            ],
+            "sources": [
+              "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/cli/bin/n8n#L40-L50"
+            ],
+            "confidence": "source",
+            "notes": "The CLI loads dotenv at startup outside e2e tests. The file does not identify n8n."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/cli/src/modules/agents/agent-skills.service.ts#L46-L63"
+            ],
+            "confidence": "source",
+            "notes": "The agent builder manages skills attached to an agent in an n8n project. This does not imply a host .agents/skills directory is scanned."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/"
+            ],
+            "confidence": "official",
+            "notes": "AI Agent is a workflow node. Detection does not inspect saved workflows for it."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "sources": [
+          "https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolmcp/",
+          "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/nodes-langchain/nodes/mcp/McpClientTool/McpClientTool.node.ts#L24-L63"
+        ],
+        "confidence": "source",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/n8n-io/n8n/blob/n8n%402.48.7/packages/@n8n/nodes-langchain/nodes/mcp/McpClientTool/McpClientTool.node.ts#L24-L63"
+          ],
+          "confidence": "source",
+          "notes": "The MCP Client Tool reads connection and credential settings from a workflow node; a standalone mcpServers file is not a workflow import."
+        }
       },
       "acp": {
         "status": "unknown",
