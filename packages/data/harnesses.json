@@ -40669,6 +40669,10 @@
         {
           "name": "LIME_AGENT_RUNTIME_ROOT",
           "description": "Overrides the App Server storage root. Use an absolute path; upstream trims whitespace and keeps a literal leading tilde, while detection expands a leading tilde."
+        },
+        {
+          "name": "NPM_CONFIG_PREFIX",
+          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes; npm configuration files are not read."
         }
       ],
       "executables": [],
@@ -40792,6 +40796,51 @@
             "darwin"
           ],
           "category": "install"
+        },
+        {
+          "id": "macos-npm-local-prefix-launcher",
+          "kind": "file",
+          "template": "/usr/local/lib/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-npm-homebrew-launcher",
+          "kind": "file",
+          "template": "/opt/homebrew/lib/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-npm-prefix-launcher",
+          "kind": "file",
+          "template": "${LIME_NPM_PREFIX}/lib/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-npm-default-launcher",
+          "kind": "file",
+          "template": "${LIME_WINDOWS_CONFIG_BASE}/npm/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-npm-prefix-launcher",
+          "kind": "file",
+          "template": "${LIME_NPM_PREFIX}/node_modules/@limecloud/lime/bin/lime.js",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
         }
       ],
       "sources": [
@@ -40806,6 +40855,9 @@
         "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L43-L58",
         "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L203-L219",
         "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L245-L258",
+        "https://github.com/limecloud/lime/blob/v1.180.0/packages/cli/scripts/build_npm_package.py#L118-L134",
+        "https://docs.npmjs.com/cli/v11/configuring-npm/folders#node-modules",
+        "https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/n/node.rb#L225",
         "https://github.com/openfl/lime/blob/8ee2143b07e1d8b990863804d4e253bc0146a329/templates/bin/lime.sh"
       ],
       "version": "1.180.0",
@@ -40996,6 +41048,12 @@
           "name": "LIME_WINDOWS_RUNTIME",
           "env": "LIME_AGENT_RUNTIME_ROOT",
           "fallback": "${LIME_WINDOWS_DATA_BASE}/LimeCloud/lime/app-server"
+        },
+        {
+          "name": "LIME_NPM_PREFIX",
+          "env": "NPM_CONFIG_PREFIX",
+          "fallbackEnv": "npm_config_prefix",
+          "fallback": "${NPM_CONFIG_PREFIX}"
         }
       ]
     },

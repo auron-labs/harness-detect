@@ -15781,6 +15781,90 @@
       }
     },
     {
+      "id": "check-lime-macos-npm-prefix",
+      "operation": "checkHarness",
+      "input": "lime",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "NPM_CONFIG_PREFIX": "${TMP}/lime-mac-prefix"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/lime-mac-prefix/lib/node_modules/@limecloud/lime/bin/lime.js"
+        }
+      ],
+      "expect": {
+        "key": "lime",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "macos-npm-prefix-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-lime-windows-npm-default",
+      "operation": "checkHarness",
+      "input": "lime",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/lime-win-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/lime-win-roaming/npm/node_modules/@limecloud/lime/bin/lime.js"
+        }
+      ],
+      "expect": {
+        "key": "lime",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-npm-default-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-lime-windows-npm-prefix",
+      "operation": "checkHarness",
+      "input": "lime",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "NPM_CONFIG_PREFIX": "${TMP}/lime-win-prefix"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/lime-win-prefix/node_modules/@limecloud/lime/bin/lime.js"
+        }
+      ],
+      "expect": {
+        "key": "lime",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-npm-prefix-launcher"
+        ]
+      }
+    },
+    {
       "id": "check-lime-windows-local-state",
       "operation": "checkHarness",
       "input": "lime",
