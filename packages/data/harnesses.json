@@ -33302,6 +33302,387 @@
         "sources": [],
         "confidence": "unknown"
       }
+    },
+    {
+      "key": "autoresearchclaw",
+      "name": "AutoResearchClaw",
+      "version": "0.5.0",
+      "aliases": [
+        "aiming-lab/autoresearchclaw"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "project-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${CWD}/config.arc.yaml"
+        }
+      ],
+      "env": [],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/README.md#L124-L142",
+          "notes": "Install the released source checkout with pip install -e . and Python 3.11 or newer. The unrelated researchclaw package on PyPI provides the same command; it is not the AutoResearchClaw installer or a detection signal."
+        }
+      ],
+      "sources": [
+        "https://github.com/aiming-lab/AutoResearchClaw/releases/tag/v0.5.0",
+        "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/pyproject.toml#L1-L5",
+        "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/pyproject.toml#L31-L35",
+        "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/cli.py#L798-L811",
+        "https://pypi.org/project/researchclaw/0.1.4/"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/config.arc.yaml"
+              },
+              {
+                "id": "project-fallback-config",
+                "kind": "file",
+                "template": "${CWD}/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/config.py#L65-L76"
+            ],
+            "confidence": "source",
+            "notes": "An explicit --config path takes precedence, followed by config.arc.yaml and config.yaml. The generic fallback and explicit paths are not detection signals."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-skills",
+                "kind": "dir",
+                "template": "${HOME}/.researchclaw/skills",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "freebsd",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.researchclaw/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/pipeline/_helpers.py#L56-L104"
+            ],
+            "confidence": "source",
+            "notes": "The Windows path models USERPROFILE, not Python's HOMEDRIVE/HOMEPATH-only fallback."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-skills",
+                "kind": "dir",
+                "template": "${CWD}/.claude/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/pipeline/_helpers.py#L56-L104"
+            ],
+            "confidence": "source",
+            "notes": "This path assumes CWD is the checkout root. The pipeline loads it relative to its source checkout, not an arbitrary working directory."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/pipeline/_helpers.py#L56-L104"
+            ],
+            "confidence": "source",
+            "notes": "The shared .agents/skills directory is not scanned by default. Configure additional directories explicitly."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/pipeline/_helpers.py#L56-L104"
+            ],
+            "confidence": "source",
+            "notes": "The checkout defaults to .claude/skills, not .agents/skills."
+          }
+        }
+      },
+      "mcp": {
+        "status": "unsupported",
+        "sources": [
+          "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/mcp/client.py#L82-L95",
+          "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/researchclaw/cli.py#L642-L653"
+        ],
+        "confidence": "source",
+        "notes": "The CLI exposes an MCP server; the separate outbound client is a stub and does not connect to external servers.",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/aiming-lab/AutoResearchClaw/blob/v0.5.0/README.md#L240-L261"
+        ],
+        "confidence": "unknown",
+        "notes": "The documented ACP backend consumes other agents as a client; it is not an AutoResearchClaw ACP launch."
+      }
+    },
+    {
+      "key": "mirix",
+      "name": "MIRIX",
+      "version": "0.1.6",
+      "aliases": [
+        "mirix-ai/mirix"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "MIRIX_CONFIG_FILE",
+          "env": "MEMGPT_CONFIG_PATH",
+          "fallback": "${HOME}/.mirix/config"
+        },
+        {
+          "name": "MIRIX_WINDOWS_CONFIG_FILE",
+          "env": "MEMGPT_CONFIG_PATH",
+          "fallback": "${USERPROFILE}/.mirix/config"
+        }
+      ],
+      "paths": [
+        {
+          "id": "server-checkout",
+          "category": "install",
+          "kind": "file",
+          "template": "${CWD}/mirix/server/server.py"
+        },
+        {
+          "id": "home-server-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.mirix/config",
+          "platforms": [
+            "darwin",
+            "linux",
+            "freebsd",
+            "openbsd"
+          ]
+        },
+        {
+          "id": "windows-server-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.mirix/config",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "MEMGPT_CONFIG_PATH",
+          "description": "Explicit backend config file override. It is also used by MemGPT, so it cannot identify MIRIX."
+        }
+      ],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/README.md#L57-L73",
+          "notes": "Use the tagged server checkout and its backend dependencies. The newer mirix PyPI artifact is a client SDK, not the server distribution."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/docker-compose.yml#L1-L14",
+          "notes": "Run the tagged checkout's Docker Compose stack for the backend, dashboard, PostgreSQL with pgvector, and Redis. Remote or container-only installs without host-visible markers are not detected."
+        }
+      ],
+      "sources": [
+        "https://github.com/Mirix-AI/MIRIX/tree/v0.1.6",
+        "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/README.md#L7-L13",
+        "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/constants.py#L65-L70",
+        "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/server/server.py#L155-L161",
+        "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/server/server.py#L465-L472",
+        "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/config.py#L118-L131",
+        "https://files.pythonhosted.org/packages/4f/34/04a118e61291654ea1b6b30403c7d64ba33460190974b7ce0a3433f92670/mirix-0.1.7.tar.gz"
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "server-config",
+                "kind": "file",
+                "template": "${MIRIX_CONFIG_FILE}",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "freebsd",
+                  "openbsd"
+                ]
+              },
+              {
+                "id": "windows-server-config",
+                "kind": "file",
+                "template": "${MIRIX_WINDOWS_CONFIG_FILE}",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/Mirix-AI/MIRIX/blob/v0.1.6/mirix/config.py#L118-L131"
+            ],
+            "confidence": "source",
+            "notes": "The override names the INI file directly. Use an absolute path; upstream does not expand a literal tilde in the override. On Windows the default requires USERPROFILE."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
     }
   ]
 }
