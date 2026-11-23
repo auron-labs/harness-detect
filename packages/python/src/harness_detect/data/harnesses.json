@@ -36306,9 +36306,9 @@
       ],
       "paths": [
         {
-          "id": "default-unix-config",
+          "id": "unix-user-config",
           "kind": "file",
-          "template": "${HOME}/.reasonix/config.toml",
+          "template": "${REASONIX_UNIX_HOME}/config.toml",
           "platforms": [
             "darwin",
             "linux"
@@ -36316,9 +36316,9 @@
           "category": "config"
         },
         {
-          "id": "default-windows-config",
+          "id": "windows-user-config",
           "kind": "file",
-          "template": "${REASONIX_ROAMING}/reasonix/config.toml",
+          "template": "${REASONIX_WIN_HOME}/config.toml",
           "platforms": [
             "win32"
           ],
@@ -36340,7 +36340,7 @@
       "env": [
         {
           "name": "REASONIX_HOME",
-          "description": "Overrides the user config root, normally ~/.reasonix on macOS and Linux or APPDATA/reasonix on Windows. Use an absolute path; the override is resolved for configuration lookup, but a generic config.toml under an arbitrary override is not proof of installation."
+          "description": "Overrides the user config root, normally ~/.reasonix on macOS and Linux or APPDATA/reasonix on Windows. Detection checks for config.toml in the selected root; the variable alone is not evidence. Use an absolute path for consistent resolution."
         },
         {
           "name": "APPDATA",

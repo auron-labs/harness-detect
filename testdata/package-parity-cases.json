@@ -1,3 +1,4 @@
+
 {
   "version": 1,
   "placeholders": {
@@ -12209,7 +12210,7 @@
         "installed": true,
         "executablePath": null,
         "matchedPathIds": [
-          "default-unix-config"
+          "unix-user-config"
         ]
       }
     },
@@ -12238,7 +12239,7 @@
         "installed": true,
         "executablePath": null,
         "matchedPathIds": [
-          "default-windows-config"
+          "windows-user-config"
         ]
       }
     },
@@ -12267,12 +12268,70 @@
         "installed": true,
         "executablePath": null,
         "matchedPathIds": [
-          "default-windows-config"
+          "windows-user-config"
         ]
       }
     },
     {
-      "id": "check-reasonix-ignores-shared-files-and-generic-overrides",
+      "id": "check-reasonix-tilde-home",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "REASONIX_HOME": "~/reasonix-portable"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/reasonix-portable/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-windows-custom-home",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "REASONIX_HOME": "${HOME}/reasonix-portable",
+        "USERPROFILE": "${TMP}/reasonix-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/reasonix-portable/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-ignores-shared-files-and-empty-override-directory",
       "operation": "checkHarness",
       "input": "reasonix",
       "cwd": "${CWD}",
@@ -12288,7 +12347,11 @@
         },
         {
           "type": "file",
-          "path": "${TMP}/reasonix-generic/config.toml"
+          "path": "${CWD}/config.toml"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/reasonix-generic"
         },
         {
           "type": "dir",
