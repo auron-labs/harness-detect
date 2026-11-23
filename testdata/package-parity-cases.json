@@ -12520,6 +12520,320 @@
       "id": "support-record-cowagent",
       "operation": "getHarnessSupport",
       "input": "cowagent"
+    },
+    {
+      "id": "check-sourcegraph-cody-jetbrains-settings",
+      "operation": "checkHarness",
+      "input": "cody",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.idea/.sourcegraph/cody_settings.json"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "jetbrains-project-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-sourcegraph-cody-linux-vscode-index",
+      "operation": "checkHarness",
+      "input": "sourcegraph.cody-ai",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-vscode-index"
+        ]
+      }
+    },
+    {
+      "id": "check-sourcegraph-cody-macos-vscode-index",
+      "operation": "checkHarness",
+      "input": "sourcegraph-cody",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Library/Application Support/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "macos-vscode-index"
+        ]
+      }
+    },
+    {
+      "id": "check-sourcegraph-cody-windows-vscode-roaming-override",
+      "operation": "checkHarness",
+      "input": "sourcegraph-cody",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/roaming",
+        "USERPROFILE": "${TMP}/cody-profile"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/roaming/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-vscode-index"
+        ]
+      }
+    },
+    {
+      "id": "check-sourcegraph-cody-windows-vscode-roaming-fallback",
+      "operation": "checkHarness",
+      "input": "sourcegraph-cody",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "",
+        "USERPROFILE": "${TMP}/cody-profile"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${TMP}/cody-profile/AppData/Roaming/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-vscode-index"
+        ]
+      }
+    },
+    {
+      "id": "check-sourcegraph-cody-ignores-generic-editor-config-and-other-index",
+      "operation": "checkHarness",
+      "input": "sourcegraph-cody",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.vscode/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.idea/cody_settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/Code/User/globalStorage/other.extension/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-qoder-cn-legacy-lingma-rules",
+      "operation": "checkHarness",
+      "input": "lingma",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.lingma/rules"
+        }
+      ],
+      "expect": {
+        "key": "qoder-cn",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-project-rules"
+        ]
+      }
+    },
+    {
+      "id": "check-qoder-cn-unix-ide-user-mcp",
+      "operation": "checkHarness",
+      "input": "qoder-cn",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.qoder-cn/mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "qoder-cn",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-user-mcp"
+        ]
+      }
+    },
+    {
+      "id": "check-qoder-cn-windows-ide-user-mcp",
+      "operation": "checkHarness",
+      "input": "qoder-cn",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/qoder-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/qoder-profile/.qoder-cn/mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "qoder-cn",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-mcp"
+        ]
+      }
+    },
+    {
+      "id": "check-qoder-cn-ignores-qoder-cli-and-shared-settings",
+      "operation": "checkHarness",
+      "input": "tongyi-lingma",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.qoder/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.qoder-cn/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.qoder/settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.qoder/rules"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.vscode/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "qoder-cn",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-sourcegraph-cody",
+      "operation": "getHarnessMcp",
+      "input": "cody",
+      "expect": {
+        "key": "sourcegraph-cody"
+      }
+    },
+    {
+      "id": "mcp-qoder-cn",
+      "operation": "getHarnessMcp",
+      "input": "lingma",
+      "expect": {
+        "key": "qoder-cn"
+      }
+    },
+    {
+      "id": "support-record-sourcegraph-cody",
+      "operation": "getHarnessSupport",
+      "input": "sourcegraph-cody"
+    },
+    {
+      "id": "support-record-qoder-cn",
+      "operation": "getHarnessSupport",
+      "input": "qodercn"
     }
   ]
 }

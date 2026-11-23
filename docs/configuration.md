@@ -484,6 +484,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `reasonix` | `APPDATA` | `REASONIX_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
 | `reasonix` | `REASONIX_HOME` | `REASONIX_UNIX_HOME` | `${HOME}/.reasonix` |
 | `reasonix` | `REASONIX_HOME` | `REASONIX_WIN_HOME` | `${REASONIX_ROAMING}/reasonix` |
+| `sourcegraph-cody` | `APPDATA` | `CODY_WIN_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
 | `tianshu` | `LOCALAPPDATA` | `TIANSHU_LOCAL_DATA` | `${USERPROFILE}/AppData/Local` |
 | `tianshu` | `APPDATA` | `TIANSHU_ROAMING_DATA` | `${USERPROFILE}/AppData/Roaming` |
 | `tianshu` | `RIVET_HOME` | `TIANSHU_DATA_ROOT` | `${HOME}/.rivet` |
@@ -576,7 +577,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 125
+console.log(harnesses.harnesses.length);  // 127
 ```
 
 <!-- /automd -->
