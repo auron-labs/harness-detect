@@ -35850,7 +35850,7 @@
         }
       },
       "mcp": {
-        "status": "unknown",
+        "status": "supported",
         "sources": [
           "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/architecture.md#L280-L290"
         ],

@@ -134,7 +134,7 @@ Support leaf status totals: supported: 584; unsupported: 185; unknown: 461. Unkn
 
 ## MCP
 
-MCP client status: supported: 88; unsupported: 10; unknown: 25. Project-root `.mcp.json`: supported: 15; unsupported: 53; unknown: 55. The translation column lists the server container and the transports `translateMcpJson` can write.
+MCP client status: supported: 89; unsupported: 10; unknown: 24. Project-root `.mcp.json`: supported: 15; unsupported: 53; unknown: 55. The translation column lists the server container and the transports `translateMcpJson` can write.
 
 | Harness | MCP | `.mcp.json` | global config | local config | translation |
 | --- | --- | --- | --- | --- | --- |
@@ -154,7 +154,7 @@ MCP client status: supported: 88; unsupported: 10; unknown: 25. Project-root `.m
 | `antigravity-cli` | supported | unknown | `${HOME}/.gemini/config/mcp_config.json`<br>json: `mcpServers` | `${CWD}/.agents/mcp_config.json`<br>json: `mcpServers` | map; stdio, http |
 | `anythingllm-desktop` | supported | unsupported | `${HOME}/Library/Application Support/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json` (darwin)<br>`${XDG_CONFIG_HOME}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json` (linux)<br>`${APPDATA}/anythingllm-desktop/storage/plugins/anythingllm_mcp_servers.json` (win32)<br>json: `mcpServers` | unknown | map; stdio, http, sse |
 | `astrbot` | supported | unsupported | supported (no config file) | unknown | — |
-| `atlas` | unknown | unknown | unknown | unknown | — |
+| `atlas` | supported | unknown | unknown | unknown | — |
 | `auggie-cli` | supported | unsupported | `${HOME}/.augment/settings.json`<br>json: `mcpServers` | `${CWD}/.augment/settings.json`<br>`${CWD}/.augment/settings.local.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `autogenstudio` | supported | unknown | supported (no config file) | unsupported | — |
 | `autohand` | supported | unsupported | `${HOME}/.autohand/config.json`<br>json: `mcp` → `servers` | `${CWD}/.autohand/settings.local.json`<br>`${CWD}/.autohand/config.json`<br>json: `mcp` → `servers` | array; stdio, http |
