@@ -14522,6 +14522,259 @@
       "expect": {
         "key": "orbi"
       }
+    },
+    {
+      "id": "check-reef-native-executable",
+      "operation": "checkHarness",
+      "input": "reef-native",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/reef-native"
+        }
+      ],
+      "expect": {
+        "key": "reef",
+        "installed": true,
+        "executablePath": "${BIN}/reef-native",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-reef-pulled-tree",
+      "operation": "checkHarness",
+      "input": "reef",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.reef-harness-release"
+        }
+      ],
+      "expect": {
+        "key": "reef",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "release-manifest"
+        ]
+      }
+    },
+    {
+      "id": "check-reef-pi-wrapper",
+      "operation": "checkHarness",
+      "input": "reef",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/bin/reef-pi"
+        }
+      ],
+      "expect": {
+        "key": "reef",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "pi-wrapper"
+        ]
+      }
+    },
+    {
+      "id": "check-reef-ignores-shared-cli-and-layout",
+      "operation": "checkHarness",
+      "input": "reef",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "REEF_NATIVE_DIR": "${TMP}/reef-native-compose"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/reef"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/pi"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/native/tree.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/reef-native-compose/models.json"
+        }
+      ],
+      "expect": {
+        "key": "reef",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-agent-qa-project-install",
+      "operation": "checkHarness",
+      "input": "vostride/agent-qa",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/node_modules/agent-qa/dist/cli.js"
+        }
+      ],
+      "expect": {
+        "key": "agent-qa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "npm-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-qa-runs-db",
+      "operation": "checkHarness",
+      "input": "agent-qa",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.agent-qa/runs.db"
+        }
+      ],
+      "expect": {
+        "key": "agent-qa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "runs-db"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-qa-legacy-db",
+      "operation": "checkHarness",
+      "input": "agent-qa",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.agent-qa/dashboard.db"
+        }
+      ],
+      "expect": {
+        "key": "agent-qa",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "legacy-dashboard-db"
+        ]
+      }
+    },
+    {
+      "id": "check-agent-qa-ignores-shared-cli-and-repo-config",
+      "operation": "checkHarness",
+      "input": "agent-qa",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/agent-qa"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/agent-qa.config.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agent-qa/auth-states"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/node_modules/sf-agent-qa/dist/cli/bin.js"
+        }
+      ],
+      "expect": {
+        "key": "agent-qa",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "support-record-reef",
+      "operation": "getHarnessSupport",
+      "input": "reef"
+    },
+    {
+      "id": "support-record-agent-qa",
+      "operation": "getHarnessSupport",
+      "input": "agent-qa"
+    },
+    {
+      "id": "mcp-reef",
+      "operation": "getHarnessMcp",
+      "input": "reef",
+      "expect": {
+        "key": "reef"
+      }
+    },
+    {
+      "id": "mcp-agent-qa",
+      "operation": "getHarnessMcp",
+      "input": "agent-qa",
+      "expect": {
+        "key": "agent-qa"
+      }
     }
   ]
 }
