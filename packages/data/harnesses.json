@@ -35997,7 +35997,7 @@
       "env": [
         {
           "name": "RIVET_HOME",
-          "description": "Data-root override. Use a non-empty absolute path. Upstream trims whitespace but resolves relative paths from its working directory and keeps a quoted tilde literal; the detector resolves relative paths from the supplied cwd and expands a leading tilde. Detection can identify project-trust.json in the relocated root."
+          "description": "Data-root override. Use a non-empty absolute path. Upstream trims whitespace but resolves relative paths from its working directory and keeps a quoted tilde literal; the detector checks relative paths against the process working directory, not the supplied cwd, and expands a leading tilde. Detection can identify project-trust.json in the relocated root."
         },
         {
           "name": "RIVET_CONFIG_PATH",
@@ -36938,6 +36938,449 @@
         ],
         "confidence": "source",
         "notes": "The established target belongs to a configured CowAgent workspace, not the caller's project root. The desktop runtime skips MCP startup warmup; automatic translation is not advertised."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "sourcegraph-cody",
+      "name": "Sourcegraph Cody",
+      "version": "1.156.0",
+      "aliases": [
+        "cody",
+        "sourcegraph.cody-ai"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "CODY_WIN_ROAMING",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        }
+      ],
+      "paths": [
+        {
+          "id": "jetbrains-project-settings",
+          "kind": "file",
+          "template": "${CWD}/.idea/.sourcegraph/cody_settings.json",
+          "category": "project"
+        },
+        {
+          "id": "linux-vscode-index",
+          "kind": "dir",
+          "template": "${HOME}/.config/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-vscode-index",
+          "kind": "dir",
+          "template": "${HOME}/Library/Application Support/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-vscode-index",
+          "kind": "dir",
+          "template": "${CODY_WIN_ROAMING}/Code/User/globalStorage/sourcegraph.cody-ai/symf/indexroot",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "APPDATA",
+          "description": "Windows roaming AppData root for the standard VS Code profile. Detection falls back to USERPROFILE/AppData/Roaming when APPDATA is unset."
+        }
+      ],
+      "sources": [
+        "https://open-vsx.org/extension/sourcegraph/cody-ai/1.156.0",
+        "https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai",
+        "https://7.6.sourcegraph.com/cody/core-concepts/local-indexing",
+        "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support"
+      ],
+      "installations": [
+        {
+          "method": "marketplace",
+          "marketplace": "vscode",
+          "id": "sourcegraph.cody-ai",
+          "url": "https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Version refers to the VS Code extension. VS Code detection checks the standard local index, so an extension that never indexed a workspace may not match."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "jetbrains-project-settings",
+                "kind": "file",
+                "template": "${CWD}/.idea/.sourcegraph/cody_settings.json"
+              }
+            ],
+            "sources": [
+              "https://7.6.sourcegraph.com/cody/core-concepts/local-indexing"
+            ],
+            "confidence": "official",
+            "notes": "JetBrains project settings. Generic VS Code settings are not a detection signal."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support"
+          ],
+          "confidence": "official",
+          "notes": "Configure the cody.mcpServers key in VS Code extension settings."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support",
+            "https://7.6.sourcegraph.com/cody/core-concepts/local-indexing"
+          ],
+          "confidence": "official",
+          "notes": "JetBrains uses cody.mcpServers in the project cody_settings.json."
+        },
+        "sources": [
+          "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support"
+        ],
+        "confidence": "official",
+        "notes": "Disabled by default; requires the agentic-context-mcp-enabled Enterprise Sourcegraph feature flag. Detection does not imply MCP or terminal access is enabled. No automated translation is advertised."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "qoder-cn",
+      "name": "Qoder CN (Lingma)",
+      "version": "2.6.11",
+      "aliases": [
+        "lingma",
+        "tongyi-lingma",
+        "qodercn"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "unix-user-mcp",
+          "kind": "file",
+          "template": "${HOME}/.qoder-cn/mcp.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-user-mcp",
+          "kind": "file",
+          "template": "${USERPROFILE}/.qoder-cn/mcp.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "legacy-project-rules",
+          "kind": "dir",
+          "template": "${CWD}/.lingma/rules",
+          "category": "project"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://docs.qoder.cn/product-overview/introduction-of-qodercn",
+        "https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma",
+        "https://help.aliyun.com/en/lingma/rules",
+        "https://docs.qoder.cn/user-guide/rules",
+        "https://help.aliyun.com/en/lingma/agent",
+        "https://docs.qoder.cn/user-guide/guide-for-using-mcp",
+        "https://docs.qoder.cn/user-guide/skills"
+      ],
+      "installations": [
+        {
+          "method": "marketplace",
+          "marketplace": "vscode",
+          "id": "Alibaba-Cloud.tongyi-lingma",
+          "url": "https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Version refers to the VS Code extension, formerly Tongyi Lingma."
+        },
+        {
+          "method": "binary",
+          "url": "https://qoder.cn/download",
+          "notes": "Select Qoder CN IDE, not QoderWork CN or Qoder CLI CN."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-user-rules",
+                "kind": "dir",
+                "template": "${HOME}/.qoder-cn/rules",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-rules",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.qoder-cn/rules",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "unix-user-mcp",
+                "kind": "file",
+                "template": "${HOME}/.qoder-cn/mcp.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-mcp",
+                "kind": "file",
+                "template": "${USERPROFILE}/.qoder-cn/mcp.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://docs.qoder.cn/user-guide/rules",
+              "https://docs.qoder.cn/user-guide/guide-for-using-mcp"
+            ],
+            "confidence": "official",
+            "notes": "The current Qoder CN IDE uses a dedicated user directory."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "legacy-project-rules",
+                "kind": "dir",
+                "template": "${CWD}/.lingma/rules"
+              },
+              {
+                "id": "ide-project-rules",
+                "kind": "dir",
+                "template": "${CWD}/.qoder/rules"
+              }
+            ],
+            "sources": [
+              "https://help.aliyun.com/en/lingma/rules",
+              "https://docs.qoder.cn/user-guide/rules"
+            ],
+            "confidence": "official",
+            "notes": "Legacy Lingma extensions document .lingma/rules. Current Qoder CN IDE documents .qoder/rules; the shared path is not a detection signal."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-user-skills",
+                "kind": "dir",
+                "template": "${HOME}/.qoder-cn/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.qoder-cn/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://docs.qoder.cn/user-guide/skills"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "ide-project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.qoder/skills"
+              }
+            ],
+            "sources": [
+              "https://docs.qoder.cn/user-guide/skills"
+            ],
+            "confidence": "official"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://docs.qoder.cn/user-guide/guide-for-using-mcp"
+          ],
+          "confidence": "official",
+          "notes": "Qoder CN IDE stores manually added servers under mcpServers in ~/.qoder-cn/mcp.json."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://docs.qoder.cn/user-guide/guide-for-using-mcp",
+          "https://help.aliyun.com/en/lingma/agent"
+        ],
+        "confidence": "official",
+        "notes": "MCP is supported in agent mode. The standalone IDE and extensions have different setup instructions; automated translation is not advertised."
       },
       "acp": {
         "status": "unknown",
