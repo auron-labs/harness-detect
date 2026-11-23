@@ -14602,6 +14602,34 @@
       }
     },
     {
+      "id": "check-reef-codex-wrapper-without-pi",
+      "operation": "checkHarness",
+      "input": "reef",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/bin/reef-codex"
+        }
+      ],
+      "expect": {
+        "key": "reef",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "codex-wrapper"
+        ]
+      }
+    },
+    {
       "id": "check-reef-ignores-shared-cli-and-layout",
       "operation": "checkHarness",
       "input": "reef",

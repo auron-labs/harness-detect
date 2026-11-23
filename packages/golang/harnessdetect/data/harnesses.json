@@ -39355,6 +39355,56 @@
           "category": "install"
         },
         {
+          "id": "claude-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-claude",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "codex-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-codex",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "dsh-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-dsh",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "hermes-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-hermes",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "opencode-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-opencode",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
           "id": "pi-wrapper",
           "kind": "file",
           "template": "${HOME}/.local/bin/reef-pi",
