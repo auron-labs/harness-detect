@@ -38924,7 +38924,7 @@
       "env": [
         {
           "name": "STATE_DIR",
-          "description": "Overrides the CLI state directory. The override is exposed for support lookup only; a generic agents.json under this root is not standalone installation evidence."
+          "description": "Overrides the CLI state directory. Use an absolute path: 5dive treats a quoted leading tilde literally, but the detector expands it. The override is for support lookup only; a generic agents.json under this root is not standalone installation evidence."
         }
       ],
       "sources": [
@@ -39229,7 +39229,7 @@
               "https://github.com/orbi-build/orbi/blob/v0.7.61/docs/configuration.mdx#L6-L8"
             ],
             "confidence": "source",
-            "notes": "Use a nonempty absolute ORBI_CONFIG override. The detector falls back on an empty value; Orbi does not. One-off --config flags and configs found by reading scheduler unit contents are not modeled."
+            "notes": "Use a nonempty absolute ORBI_CONFIG override. Orbi interprets an empty value as the current directory and a quoted leading tilde literally; the detector falls back to orbi.toml on an empty value and expands a leading tilde. One-off --config flags and configs found by reading scheduler unit contents are not modeled."
           },
           "local": {
             "status": "supported",
@@ -39333,6 +39333,402 @@
         "sources": [],
         "confidence": "unknown",
         "notes": "No published Orbi ACP agent launch was verified; Pi's ACP integration is separate."
+      }
+    },
+    {
+      "key": "reef",
+      "name": "Reef",
+      "version": "0.1.3",
+      "aliases": [
+        "Human-Agent-Society/reef",
+        "reef-infra",
+        "reef-native"
+      ],
+      "executables": [
+        "reef-native"
+      ],
+      "paths": [
+        {
+          "id": "release-manifest",
+          "kind": "file",
+          "template": "${CWD}/.reef-harness-release",
+          "category": "install"
+        },
+        {
+          "id": "claude-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-claude",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "codex-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-codex",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "dsh-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-dsh",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "hermes-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-hermes",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "opencode-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-opencode",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "pi-wrapper",
+          "kind": "file",
+          "template": "${HOME}/.local/bin/reef-pi",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "env": [
+        {
+          "name": "REEF_NATIVE_DIR",
+          "description": "Overrides the native episode runner's composition directory, which defaults to native under the working directory. Use an absolute path; Reef leaves a quoted tilde literal. This variable is for support lookup only."
+        }
+      ],
+      "sources": [
+        "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/pyproject.toml#L103-L109",
+        "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/docs/user-guide/evolve-your-harness.rst#L1044-L1056",
+        "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/docs/user-guide/evolve-your-harness.rst#L1152-L1159",
+        "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/service/install_script.py#L219-L229",
+        "https://www.npmjs.com/package/@reef-tui/cli/v/0.45.2"
+      ],
+      "installations": [
+        {
+          "method": "pip",
+          "package": "reef-infra",
+          "command": "uv pip install reef-infra",
+          "url": "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/README.md#L86-L95",
+          "notes": "Requires Python 3.12 or newer and a virtual environment. Activate the environment to detect reef-native on PATH."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "native-tree",
+                "kind": "file",
+                "template": "${REEF_NATIVE_ROOT}/tree.json"
+              },
+              {
+                "id": "native-models",
+                "kind": "file",
+                "template": "${REEF_NATIVE_ROOT}/models.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/__init__.py#L654-L665",
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/__init__.py#L865-L869"
+            ],
+            "confidence": "source",
+            "notes": "Native episode runner only. Other Reef adapters have different layouts, and the resident server selects the pulled tree with --tree."
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "native-skills",
+                "kind": "dir",
+                "template": "${REEF_NATIVE_ROOT}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/host.py#L289-L310",
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/__init__.py#L865-L869"
+            ],
+            "confidence": "source",
+            "notes": "Native fallback layout when tree.json is absent. Other adapters use their own layouts."
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "native-agents",
+                "kind": "dir",
+                "template": "${REEF_NATIVE_ROOT}/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/host.py#L289-L300",
+              "https://github.com/Human-Agent-Society/reef/blob/v0.1.3/reef/harness/runners/native/__init__.py#L446-L456"
+            ],
+            "confidence": "source",
+            "notes": "Native fallback layout when tree.json is absent."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "confidence": "unknown",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [],
+        "status": "unknown",
+        "notes": "MCP client support was not verified for the native runner. Capabilities of managed adapters are not Reef-native configuration."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "No standalone Reef ACP launch was verified."
+      },
+      "roots": [
+        {
+          "name": "REEF_NATIVE_ROOT",
+          "env": "REEF_NATIVE_DIR",
+          "fallback": "${CWD}/native"
+        }
+      ]
+    },
+    {
+      "key": "agent-qa",
+      "name": "agent-qa",
+      "version": "0.3.10",
+      "aliases": [
+        "vostride/agent-qa"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "npm-cli",
+          "kind": "file",
+          "template": "${CWD}/node_modules/agent-qa/dist/cli.js",
+          "category": "install"
+        },
+        {
+          "id": "runs-db",
+          "kind": "file",
+          "template": "${CWD}/.agent-qa/runs.db",
+          "category": "state"
+        },
+        {
+          "id": "legacy-dashboard-db",
+          "kind": "file",
+          "template": "${CWD}/.agent-qa/dashboard.db",
+          "category": "state"
+        }
+      ],
+      "env": [],
+      "sources": [
+        "https://www.npmjs.com/package/agent-qa/v/0.3.10",
+        "https://github.com/vostride/agent-qa/blob/v0.3.10/packages/cli/package.json#L49-L55",
+        "https://github.com/vostride/agent-qa/blob/v0.3.10/packages/core/src/runtime-paths.ts#L4-L24",
+        "https://github.com/vostride/agent-qa/blob/v0.3.10/packages/cli/src/commands/run.ts#L1154-L1166",
+        "https://www.npmjs.com/package/sf-agent-qa/v/0.0.0"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "agent-qa",
+          "command": "npm install -D agent-qa",
+          "url": "https://github.com/vostride/agent-qa/blob/v0.3.10/README.md#L62-L71",
+          "notes": "Requires Node.js 24 or newer. Use the project directory as detection cwd; global npm and transient npx installs are not checked."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/agent-qa.config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/vostride/agent-qa/blob/v0.3.10/packages/cli/src/config.ts#L310-L321"
+            ],
+            "confidence": "source",
+            "notes": "An explicit --config path and custom run database paths are not inferred. A committed project config alone does not prove installation."
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "confidence": "unknown",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/vostride/agent-qa/blob/v0.3.10/packages/cli/src/commands/mcp.ts#L40-L46"
+        ],
+        "status": "unknown",
+        "notes": "The agent-qa mcp command exposes QA tools to other clients. Native MCP client configuration was not verified."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "No standalone agent-qa ACP launch was verified."
       }
     }
   ]
