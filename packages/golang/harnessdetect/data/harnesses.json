@@ -42021,6 +42021,763 @@
           }
         }
       }
+    },
+    {
+      "key": "holaos",
+      "name": "holaOS",
+      "version": "2026.822.1",
+      "aliases": [
+        "holaboss-ai/holaOS",
+        "holaboss-local"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "linux-packaged-runtime-config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "linux-packaged-control-plane-db",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "linux-packaged-host-state-db",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local/sandbox-host/state/host-state.db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "linux-source-runtime-config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "linux-source-control-plane-db",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local-dev/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "linux-source-host-state-db",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/holaboss-local-dev/sandbox-host/state/host-state.db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-packaged-runtime-config",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-packaged-control-plane-db",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-packaged-host-state-db",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local/sandbox-host/state/host-state.db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-source-runtime-config",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-source-control-plane-db",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local-dev/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-source-host-state-db",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/holaboss-local-dev/sandbox-host/state/host-state.db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-packaged-runtime-config",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-packaged-control-plane-db",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-packaged-host-state-db",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local/sandbox-host/state/host-state.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-source-runtime-config",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-source-control-plane-db",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local-dev/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-source-host-state-db",
+          "kind": "file",
+          "template": "${HOLAOS_APPDATA}/holaboss-local-dev/sandbox-host/state/host-state.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "relocated-runtime-config",
+          "kind": "file",
+          "template": "${HOLAOS_USER_DATA}/sandbox-host/state/runtime-config.json",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "relocated-control-plane-db",
+          "kind": "file",
+          "template": "${HOLAOS_USER_DATA}/sandbox-host/state/control-plane.db",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "relocated-host-state-db",
+          "kind": "file",
+          "template": "${HOLAOS_USER_DATA}/sandbox-host/state/host-state.db",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "HOLABOSS_DESKTOP_USER_DATA_PATH",
+          "description": "Overrides the Electron user data root. For detection pass an absolute, unpadded path."
+        },
+        {
+          "name": "HOLABOSS_DESKTOP_USER_DATA_DIR",
+          "description": "Upstream can change and sanitize the folder name under Electron appData. Detection checks standard names; pass the full directory via HOLABOSS_DESKTOP_USER_DATA_PATH for a custom name."
+        }
+      ],
+      "roots": [
+        {
+          "name": "HOLAOS_WINDOWS_PROFILE",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "HOLAOS_APPDATA",
+          "env": "APPDATA",
+          "fallback": "${HOLAOS_WINDOWS_PROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "HOLAOS_USER_DATA",
+          "env": "HOLABOSS_DESKTOP_USER_DATA_PATH",
+          "fallback": ""
+        }
+      ],
+      "sources": [
+        "https://github.com/holaboss-ai/holaOS-releases/releases/tag/holaOS-2026.822.1",
+        "https://github.com/holaboss-ai/holaOS-releases/releases/download/holaOS-2026.822.1/holaOS-runtime-linux-x64.json",
+        "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/apps/desktop/electron/main.ts#L1631-L1636",
+        "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/apps/desktop/electron/main.ts#L1973-L1984",
+        "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/apps/desktop/electron/main.ts#L4415-L4440",
+        "https://www.electronjs.org/docs/latest/api/app#appgetpathname"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin",
+            "win32"
+          ],
+          "url": "https://github.com/holaboss-ai/holaOS-releases/releases/tag/holaOS-2026.822.1",
+          "notes": "Download a packaged macOS DMG or Windows installer. The Linux release asset is a runtime bundle, not a desktop installer."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "url": "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/README.md#L165-L175",
+          "notes": "Bootstraps the source checkout and development desktop; Linux detection checks the source and packaged runtime state layouts."
+        }
+      ],
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-apps.ts#L387-L395",
+            "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-apps.ts#L589-L625"
+          ],
+          "confidence": "source",
+          "notes": "Configure servers through the workspace runtime. It persists standalone servers under mcp_registry.servers in workspace.yaml."
+        },
+        "sources": [
+          "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-apps.ts#L589-L625"
+        ],
+        "confidence": "source",
+        "notes": "The workspace registry supports local command and remote URL servers. Standalone and app-owned servers use different sections and tool access can be managed separately; no automatic .mcp.json translation is offered."
+      },
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "linux-packaged-runtime-config",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/holaboss-local/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "linux-source-runtime-config",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "macos-packaged-runtime-config",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/holaboss-local/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "macos-source-runtime-config",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-packaged-runtime-config",
+                "kind": "file",
+                "template": "${HOLAOS_APPDATA}/holaboss-local/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-source-runtime-config",
+                "kind": "file",
+                "template": "${HOLAOS_APPDATA}/holaboss-local-dev/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "relocated-runtime-config",
+                "kind": "file",
+                "template": "${HOLAOS_USER_DATA}/sandbox-host/state/runtime-config.json",
+                "platforms": [
+                  "darwin",
+                  "linux",
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/apps/desktop/electron/main.ts#L1973-L1984",
+              "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/apps/desktop/electron/main.ts#L4415-L4421"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-yaml",
+                "kind": "file",
+                "template": "${CWD}/workspace.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-apps.ts#L387-L395"
+            ],
+            "confidence": "source",
+            "notes": "Relative to the holaOS workspace root; a generic workspace.yaml is not installation evidence."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-skills",
+                "kind": "dir",
+                "template": "${CWD}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-skills.ts#L38-L41",
+              "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/runtime/api-server/src/workspace-skills.ts#L407-L425"
+            ],
+            "confidence": "source",
+            "notes": "Relative to the holaOS workspace root; the shared .agents/skills path is not verified."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
+    },
+    {
+      "key": "continuum",
+      "name": "Continuum",
+      "version": "0.97.8",
+      "aliases": [
+        "Continuumcodeapp/continuum-updates",
+        "clawdmeter",
+        "continuum-agent"
+      ],
+      "executables": [],
+      "paths": [
+        {
+          "id": "macos-usage-cache",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/Clawdmeter/analytics-cache.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "cache"
+        },
+        {
+          "id": "linux-desktop-daemon",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/Continuum/agent/agent-token",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-desktop-daemon",
+          "kind": "file",
+          "template": "${CONTINUUM_APPDATA}/Continuum/agent/agent-token",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "unix-standalone-daemon",
+          "kind": "file",
+          "template": "${HOME}/.clawdmeter/agent-token",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-standalone-daemon",
+          "kind": "file",
+          "template": "${CONTINUUM_WINDOWS_PROFILE}/.clawdmeter/agent-token",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "relocated-daemon",
+          "kind": "file",
+          "template": "${CONTINUUM_DAEMON_DATA}/agent-token",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "unix-system-agent",
+          "kind": "file",
+          "template": "/usr/local/lib/continuum/agent/continuum-agent",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-user-agent",
+          "kind": "file",
+          "template": "${HOME}/.continuum/agent/continuum-agent",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-user-agent",
+          "kind": "file",
+          "template": "${HOME}/.local/lib/continuum/agent/continuum-agent",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-user-agent",
+          "kind": "file",
+          "template": "${CONTINUUM_LOCALAPPDATA}/Continuum/Agent/bin/continuum-agent.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "env": [
+        {
+          "name": "CLAWDMETER_DATA_DIR",
+          "description": "Overrides the standalone daemon data directory. Detection checks only for the presence of its agent-token marker; it does not read credentials."
+        }
+      ],
+      "roots": [
+        {
+          "name": "CONTINUUM_WINDOWS_PROFILE",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "CONTINUUM_APPDATA",
+          "env": "APPDATA",
+          "fallback": "${CONTINUUM_WINDOWS_PROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "CONTINUUM_LOCALAPPDATA",
+          "env": "LOCALAPPDATA",
+          "fallback": "${CONTINUUM_WINDOWS_PROFILE}/AppData/Local"
+        },
+        {
+          "name": "CONTINUUM_DAEMON_DATA",
+          "env": "CLAWDMETER_DATA_DIR",
+          "fallback": ""
+        }
+      ],
+      "sources": [
+        "https://github.com/Continuumcodeapp/continuum-updates/releases/tag/v0.97.8-mac",
+        "https://continuumcode.ai/docs/privacy#what-stays-local",
+        "https://continuumcode.ai/docs/surfaces/cli#connecting-to-a-daemon",
+        "https://continuumcode.ai/docs/surfaces/desktop#where-things-live-on-disk",
+        "https://github.com/Continuumcodeapp/continuum-updates/releases/download/v0.97.8-mac/install.sh",
+        "https://github.com/Continuumcodeapp/continuum-updates/releases/download/v0.97.8-mac/install.ps1"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/Continuumcodeapp/continuum-updates/releases/tag/v0.97.8-mac",
+          "notes": "Native macOS desktop release."
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "linux",
+            "win32"
+          ],
+          "url": "https://github.com/Continuumcodeapp/continuum-updates/releases/tag/desktop-latest",
+          "notes": "Windows and Linux desktop beta builds with a bundled daemon."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "url": "https://github.com/Continuumcodeapp/continuum-updates/releases/download/v0.97.8-mac/install.sh",
+          "notes": "Headless agent installer for macOS and Linux."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "win32"
+          ],
+          "url": "https://github.com/Continuumcodeapp/continuum-updates/releases/download/v0.97.8-mac/install.ps1",
+          "notes": "Headless agent installer for Windows."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "url": "https://continuumcode.ai/docs/surfaces/cli#install",
+          "notes": "Standalone control CLI. Profiles or a bare continuum command can point to a remote host and do not establish a local harness."
+        }
+      ],
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "mcp": {
+        "status": "unknown",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "macos-cli-profiles",
+                "kind": "file",
+                "template": "${HOME}/Library/Application Support/continuum/config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "linux-cli-profiles",
+                "kind": "file",
+                "template": "${XDG_CONFIG_HOME}/continuum/config.json",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-cli-profiles",
+                "kind": "file",
+                "template": "${CONTINUUM_APPDATA}/continuum/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://continuumcode.ai/docs/surfaces/cli#named-profiles"
+            ],
+            "confidence": "official",
+            "notes": "CLI connection profiles and session defaults; a profile alone does not establish a local execution host."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      }
     }
   ]
 }
