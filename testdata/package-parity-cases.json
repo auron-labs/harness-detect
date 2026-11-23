@@ -12101,68 +12101,38 @@
       }
     },
     {
-      "id": "translate-tianshu-project-stdio-http-and-sse",
+      "id": "translate-tianshu-withholds-project-translation",
       "operation": "translateMcpJson",
       "input": "tianshu",
       "scope": "local",
       "mcpJson": {
         "mcpServers": {
-          "local": {
-            "command": "example-tool",
-            "args": [
-              "--stdio"
-            ],
-            "env": {
-              "MODE": "local"
-            }
+          "a__b": {
+            "url": "https://example.com/mcp"
           },
-          "http": {
-            "type": "http",
-            "url": "https://example.com/mcp",
-            "headers": {
-              "X-Mode": "test"
-            }
-          },
-          "legacy": {
-            "type": "sse",
-            "url": "https://example.com/sse"
+          "a_b": {
+            "url": "https://example.com/mcp"
           }
         }
       },
       "expect": {
-        "scope": "local",
-        "format": "json",
-        "keyPath": [
-          "mcp",
-          "servers"
-        ],
-        "config": {
-          "mcp": {
-            "servers": {
-              "http": {
-                "transportHint": "streamableHttp",
-                "url": "https://example.com/mcp",
-                "headers": {
-                  "X-Mode": "test"
-                }
-              },
-              "legacy": {
-                "transportHint": "sse",
-                "url": "https://example.com/sse"
-              },
-              "local": {
-                "command": "example-tool",
-                "args": [
-                  "--stdio"
-                ],
-                "env": {
-                  "MODE": "local"
-                }
-              }
-            }
+        "error": "Harness tianshu has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-tianshu-withholds-user-translation",
+      "operation": "translateMcpJson",
+      "input": "tianshu",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "__proto__": {
+            "url": "https://example.com/mcp"
           }
-        },
-        "skipped": []
+        }
+      },
+      "expect": {
+        "error": "Harness tianshu has no file-based MCP config for scope global"
       }
     }
   ]

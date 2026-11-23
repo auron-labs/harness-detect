@@ -251,7 +251,7 @@ MCP client status: supported: 89; unsupported: 10; unknown: 24. Project-root `.m
 | `speakeasy-kit` | supported | supported | supported (no config file) | supported (no config file) | — |
 | `stakpak` | supported | unsupported | supported (no config file) | supported (no config file) | — |
 | `swe-agent` | unsupported | unsupported | unsupported | unsupported | — |
-| `tianshu` | supported | unsupported | `${TIANSHU_EXPLICIT_CONFIG}`<br>`${TIANSHU_DATA_ROOT}/config.json` (darwin, linux)<br>`${TIANSHU_WINDOWS_ROOT}/config.json` (win32)<br>json: `mcp` → `servers` | `${CWD}/.rivet-config.json`<br>json: `mcp` → `servers` | map; stdio, http, sse |
+| `tianshu` | supported | unsupported | supported (no config file) | supported (no config file) | — |
 | `toad` | unsupported | unknown | unsupported | unsupported | — |
 | `trae-agent` | supported | unsupported | unsupported | `${CWD}/trae_config.yaml`<br>yaml: `mcp_servers` | map; stdio |
 | `tuios` | unknown | unknown | unknown | unknown | — |

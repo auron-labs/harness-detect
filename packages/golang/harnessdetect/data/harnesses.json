@@ -36240,90 +36240,34 @@
         "sources": [
           "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L39-L66",
           "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
+          "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/wrapper.ts#L7-L10",
+          "https://github.com/colinhacks/zod/blob/v3.25.76/packages/zod/src/v3/helpers/parseUtil.ts#L134-L156",
           "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L2875-L2905"
         ],
         "confidence": "source",
-        "notes": "Tianshu uses mcp.servers in JSON. MCP in project settings is ignored until the project is trusted.",
+        "notes": "Tianshu uses mcp.servers in JSON and ignores project MCP settings until the project is trusted. Automated translation is unavailable because the native parser drops the server name __proto__ and tool naming can collapse distinct server names such as a__b and a_b.",
         "mcpJson": "unsupported",
         "global": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "explicit-user-config",
-              "kind": "file",
-              "template": "${TIANSHU_EXPLICIT_CONFIG}"
-            },
-            {
-              "id": "unix-user-config",
-              "kind": "file",
-              "template": "${TIANSHU_DATA_ROOT}/config.json",
-              "platforms": [
-                "darwin",
-                "linux"
-              ]
-            },
-            {
-              "id": "windows-user-config",
-              "kind": "file",
-              "template": "${TIANSHU_WINDOWS_ROOT}/config.json",
-              "platforms": [
-                "win32"
-              ]
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L112-L128",
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L2875-L2905"
           ],
           "confidence": "source",
-          "notes": "The CLI prefers RIVET_CONFIG_PATH, then the data root chosen by RIVET_HOME, launcher.json, or the platform default. Detection does not follow launcher.json contents or use arbitrary config overrides as proof of installation.",
-          "format": "json",
-          "keyPath": [
-            "mcp",
-            "servers"
-          ]
+          "notes": "Configure mcp.servers in the user JSON file listed under global config support."
         },
         "local": {
           "status": "supported",
-          "paths": [
-            {
-              "id": "project-config",
-              "kind": "file",
-              "template": "${CWD}/.rivet-config.json"
-            }
-          ],
+          "paths": [],
           "sources": [
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L105-L118",
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
             "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/project-trust.ts#L271-L275"
           ],
           "confidence": "source",
-          "notes": "Use a trusted project's .rivet-config.json.",
-          "format": "json",
-          "keyPath": [
-            "mcp",
-            "servers"
-          ]
-        },
-        "serverFormat": {
-          "container": "map",
-          "typeField": "transportHint",
-          "stdio": {
-            "command": "command",
-            "args": "args",
-            "env": "env"
-          },
-          "http": {
-            "type": "streamableHttp",
-            "url": "url",
-            "headers": "headers"
-          },
-          "sse": {
-            "type": "sse",
-            "url": "url",
-            "headers": "headers"
-          }
+          "notes": "Use a trusted project's .rivet-config.json."
         }
       },
       "acp": {
