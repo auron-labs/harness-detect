@@ -12834,6 +12834,413 @@
       "id": "support-record-qoder-cn",
       "operation": "getHarnessSupport",
       "input": "qodercn"
+    },
+    {
+      "id": "check-sourcegraph-cody-custom-vscode-profile",
+      "operation": "checkHarness",
+      "input": "sourcegraph-cody",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.config/Code/User/profiles/team/globalStorage/sourcegraph.cody-ai/symf/indexroot"
+        }
+      ],
+      "expect": {
+        "key": "sourcegraph-cody",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-orkas-unix-default-state",
+      "operation": "checkHarness",
+      "input": "orkas-desktop",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.orkas/data/open-users.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-open-users"
+        ]
+      }
+    },
+    {
+      "id": "check-orkas-unix-data-override",
+      "operation": "checkHarness",
+      "input": "orkas",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "ORKAS_WORKSPACE_ROOT": "${TMP}/orkas-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/orkas-data/device.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.orkas/data/users.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-device"
+        ]
+      }
+    },
+    {
+      "id": "check-orkas-windows-data-override",
+      "operation": "checkHarness",
+      "input": "orkas",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "Orkas_Workspace_Root": "${TMP}/orkas-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/orkas-data/users.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-users"
+        ]
+      }
+    },
+    {
+      "id": "check-orkas-windows-install-pin",
+      "operation": "checkHarness",
+      "input": "orkas",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LocalAppData": "${TMP}/orkas-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/orkas-appdata/Orkas/install-pin.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-install-pin"
+        ]
+      }
+    },
+    {
+      "id": "check-orkas-windows-install-pin-profile-fallback",
+      "operation": "checkHarness",
+      "input": "orkas",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/orkas-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/orkas-profile/AppData/Local/Orkas/install-pin.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-install-pin"
+        ]
+      }
+    },
+    {
+      "id": "check-orkas-ignores-empty-state-and-generic-files",
+      "operation": "checkHarness",
+      "input": "orkas",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "${TMP}/orkas-appdata"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.orkas/data"
+        },
+        {
+          "type": "dir",
+          "path": "${TMP}/orkas-appdata/Orkas/install-pin.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/data/users.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/users.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/device.json"
+        }
+      ],
+      "expect": {
+        "key": "orkas",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-empryo-cli-on-unix-path",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/empryo"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": true,
+        "executablePath": "${BIN}/empryo",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-empryo-unix-installed-cli-not-on-path",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${HOME}/.empryo/bin/empryo"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-user-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-empryo-unix-user-config",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.empryo/config.json"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-global-config"
+        ]
+      }
+    },
+    {
+      "id": "check-empryo-windows-user-config",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LocalAppData": "${TMP}/empryo-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/empryo-appdata/Empryo/config.json"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-global-config"
+        ]
+      }
+    },
+    {
+      "id": "check-empryo-windows-installed-cli-not-on-path",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "${TMP}/empryo-appdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/empryo-appdata/Empryo/bin/empryo.exe"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-empryo-ignores-legacy-and-project-only-files",
+      "operation": "checkHarness",
+      "input": "empryo",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.soulforge/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.empryo/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "expect": {
+        "key": "empryo",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-orkas",
+      "operation": "getHarnessMcp",
+      "input": "orkas",
+      "expect": {
+        "key": "orkas"
+      }
+    },
+    {
+      "id": "support-record-orkas",
+      "operation": "getHarnessSupport",
+      "input": "orkas"
+    },
+    {
+      "id": "mcp-empryo",
+      "operation": "getHarnessMcp",
+      "input": "empryo",
+      "expect": {
+        "key": "empryo"
+      }
+    },
+    {
+      "id": "support-record-empryo",
+      "operation": "getHarnessSupport",
+      "input": "empryo"
     }
   ]
 }

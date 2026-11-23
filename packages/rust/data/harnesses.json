@@ -37006,7 +37006,9 @@
         "https://open-vsx.org/extension/sourcegraph/cody-ai/1.156.0",
         "https://marketplace.visualstudio.com/items?itemName=sourcegraph.cody-ai",
         "https://7.6.sourcegraph.com/cody/core-concepts/local-indexing",
-        "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support"
+        "https://7.6.sourcegraph.com/cody/capabilities/agentic-context-fetching#mcp-support",
+        "https://code.visualstudio.com/docs/configure/profiles",
+        "https://code.visualstudio.com/docs/configure/command-line#_isolating-vs-code-instances"
       ],
       "installations": [
         {
@@ -37019,7 +37021,7 @@
             "linux",
             "win32"
           ],
-          "notes": "Version refers to the VS Code extension. VS Code detection checks the standard local index, so an extension that never indexed a workspace may not match."
+          "notes": "Version refers to the VS Code extension. VS Code detection only checks the standard index under the default profile in the standard user-data directory. A separate profile or custom --user-data-dir can store the index elsewhere, and an extension that never indexed a workspace may not match."
         }
       ],
       "support": {
@@ -37386,6 +37388,554 @@
         "status": "unknown",
         "sources": [],
         "confidence": "unknown"
+      }
+    },
+    {
+      "key": "orkas",
+      "name": "Orkas",
+      "version": "2026.11.16",
+      "aliases": [
+        "orkas-desktop"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "ORKAS_UNIX_DATA",
+          "env": "ORKAS_WORKSPACE_ROOT",
+          "fallback": "${HOME}/.orkas/data"
+        },
+        {
+          "name": "ORKAS_WIN_DATA",
+          "env": "ORKAS_WORKSPACE_ROOT",
+          "fallback": ""
+        },
+        {
+          "name": "ORKAS_WIN_LOCAL_APPDATA",
+          "env": "LOCALAPPDATA",
+          "fallback": "${USERPROFILE}/AppData/Local"
+        }
+      ],
+      "paths": [
+        {
+          "id": "unix-users",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_UNIX_DATA}/users.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "unix-open-users",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_UNIX_DATA}/open-users.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "unix-device",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_UNIX_DATA}/device.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-users",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_WIN_DATA}/users.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "windows-open-users",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_WIN_DATA}/open-users.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "windows-device",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_WIN_DATA}/device.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "windows-install-pin",
+          "category": "state",
+          "kind": "file",
+          "template": "${ORKAS_WIN_LOCAL_APPDATA}/Orkas/install-pin.json",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "ORKAS_WORKSPACE_ROOT",
+          "description": "Overrides the data directory itself, not its parent container. Use an absolute path: Orkas resolves relative paths against its process working directory and does not expand a quoted tilde. Windows detection uses state under this override when set and otherwise does not guess the drive."
+        },
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Windows base directory for Orkas's per-user install pin; detection checks for the file, without reading it or probing its recorded drive."
+        }
+      ],
+      "sources": [
+        "https://github.com/Orkas-AI/Orkas/releases/tag/v2026.11.16",
+        "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/README.md#L167-L182",
+        "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/install-data-root.cjs#L61-L73",
+        "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/install-data-root.cjs#L360-L386",
+        "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/install-data-root.cjs#L258-L293",
+        "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L66-L89"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/Orkas-AI/Orkas/releases/tag/v2026.11.16",
+          "platforms": [
+            "darwin",
+            "win32"
+          ],
+          "notes": "Orkas 2.5.0 installers in release 2026.11.16: Intel and Apple Silicon DMGs and a Windows setup EXE."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/README.md#L167-L182",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Run ./run.sh on macOS or Linux, or run.cmd on Windows, from the source checkout. Linux currently runs from source."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L410-L419"
+            ],
+            "confidence": "source",
+            "notes": "Per-user preferences are stored under the selected data root in <user-id>/cloud/config/preferences.json."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L275-L285"
+            ],
+            "confidence": "source",
+            "notes": "User skill bundles live under <user-id>/cloud/skills in the selected data root."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L275-L285"
+            ],
+            "confidence": "source",
+            "notes": "Agent definitions live under <user-id>/cloud/agents/<agent-id>/agent.json in the selected data root."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L464-L483"
+          ],
+          "confidence": "source",
+          "notes": "Orkas manages account-scoped and device-scoped connectors with their own configuration and grants."
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "sources": [
+          "https://github.com/Orkas-AI/Orkas/blob/v2026.11.16/src/main/paths.ts#L464-L483"
+        ],
+        "confidence": "source",
+        "notes": "Orkas exposes MCP through its connector registry; its managed records are not advertised as an MCP translation target."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "empryo",
+      "name": "Empryo",
+      "version": "3.14.2-beta",
+      "aliases": [],
+      "executables": [
+        "empryo"
+      ],
+      "roots": [
+        {
+          "name": "EMPRYO_WIN_LOCAL_APPDATA",
+          "env": "LOCALAPPDATA",
+          "fallback": ""
+        }
+      ],
+      "paths": [
+        {
+          "id": "unix-user-cli",
+          "category": "install",
+          "kind": "file",
+          "template": "${HOME}/.empryo/bin/empryo",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-user-cli",
+          "category": "install",
+          "kind": "file",
+          "template": "${EMPRYO_WIN_LOCAL_APPDATA}/Empryo/bin/empryo.exe",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "unix-global-config",
+          "kind": "file",
+          "template": "${HOME}/.empryo/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-global-config",
+          "kind": "file",
+          "template": "${EMPRYO_WIN_LOCAL_APPDATA}/Empryo/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        }
+      ],
+      "env": [
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Windows base directory for Empryo's default per-user CLI and configuration."
+        }
+      ],
+      "sources": [
+        "https://dl.empryo.com/v3.14.2-beta/SHA256SUMS.txt",
+        "https://empryo.com/download",
+        "https://empryo.com/docs/installation",
+        "https://empryo.com/install.sh",
+        "https://empryo.com/install.ps1",
+        "https://empryo.com/docs/reference/configuration"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "url": "https://empryo.com/docs/installation",
+          "command": "curl -fsSL https://empryo.com/install.sh | bash",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "script",
+          "url": "https://empryo.com/docs/installation",
+          "command": "irm https://empryo.com/install.ps1 | iex",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "method": "binary",
+          "url": "https://empryo.com/download",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop downloads are separate from the CLI installers."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-global-config",
+                "kind": "file",
+                "template": "${HOME}/.empryo/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-global-config",
+                "kind": "file",
+                "template": "${EMPRYO_WIN_LOCAL_APPDATA}/Empryo/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/reference/configuration"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.empryo/config.json"
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/reference/configuration"
+            ],
+            "confidence": "official",
+            "notes": "A repository can carry this file without Empryo installed, so it is not an installation signal."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-empryo-skills",
+                "kind": "dir",
+                "template": "${HOME}/.empryo/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/skills"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-empryo-skills",
+                "kind": "dir",
+                "template": "${CWD}/.empryo/skills"
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/skills"
+            ],
+            "confidence": "official"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-empryo-agents",
+                "kind": "dir",
+                "template": "${HOME}/.empryo/agents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "unix-shared-agents",
+                "kind": "dir",
+                "template": "${HOME}/.agents/agents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/agents"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-empryo-agents",
+                "kind": "dir",
+                "template": "${CWD}/.empryo/agents"
+              },
+              {
+                "id": "project-shared-agents",
+                "kind": "dir",
+                "template": "${CWD}/.agents/agents"
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/agents"
+            ],
+            "confidence": "official"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/skills"
+            ],
+            "confidence": "official"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://empryo.com/docs/tools/skills"
+            ],
+            "confidence": "official"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://empryo.com/docs/tools/mcp"
+          ],
+          "confidence": "official",
+          "notes": "Configure mcpServers in the user config."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://empryo.com/docs/tools/mcp"
+          ],
+          "confidence": "official",
+          "notes": "Configure mcpServers in .empryo/config.json. Project servers override global servers with the same name."
+        },
+        "sources": [
+          "https://empryo.com/docs/tools/mcp"
+        ],
+        "confidence": "official",
+        "notes": "Empryo reads both array and map forms. Automated translation is not advertised because equivalent behavior for server and tool names is unverified."
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://empryo.com/docs/surfaces/acp"
+        ],
+        "confidence": "unknown",
+        "notes": "Upstream documents empryo acp for ACP development builds. Availability in the published CLI was not verified."
       }
     }
   ]
