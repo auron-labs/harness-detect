@@ -38118,7 +38118,9 @@
           "template": "${HOME}/.loopx/registry.global.json",
           "platforms": [
             "darwin",
-            "linux"
+            "freebsd",
+            "linux",
+            "openbsd"
           ],
           "category": "state"
         },
@@ -38128,7 +38130,9 @@
           "template": "${HOME}/.codex/loopx/registry.global.json",
           "platforms": [
             "darwin",
-            "linux"
+            "freebsd",
+            "linux",
+            "openbsd"
           ],
           "category": "state"
         },
@@ -38207,7 +38211,9 @@
                 "template": "${HOME}/.loopx/registry.global.json",
                 "platforms": [
                   "darwin",
-                  "linux"
+                  "freebsd",
+                  "linux",
+                  "openbsd"
                 ]
               },
               {
@@ -38216,7 +38222,9 @@
                 "template": "${HOME}/.codex/loopx/registry.global.json",
                 "platforms": [
                   "darwin",
-                  "linux"
+                  "freebsd",
+                  "linux",
+                  "openbsd"
                 ]
               },
               {

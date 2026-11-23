@@ -13385,7 +13385,9 @@
       "input": "loopx",
       "platforms": [
         "darwin",
-        "linux"
+        "freebsd",
+        "linux",
+        "openbsd"
       ],
       "cwd": "${CWD}",
       "env": {
@@ -13476,7 +13478,9 @@
       "input": "loopx",
       "platforms": [
         "darwin",
-        "linux"
+        "freebsd",
+        "linux",
+        "openbsd"
       ],
       "cwd": "${CWD}",
       "env": {
