@@ -16593,6 +16593,506 @@
       "expect": {
         "error": "Harness sandbase-harness has no file-based MCP config for scope local"
       }
+    },
+    {
+      "id": "check-talon-linux-system-npm-launcher",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [],
+      "expect": {
+        "key": "talon",
+        "executablePath": null,
+        "pathAssertions": [
+          {
+            "id": "linux-system-npm-launcher",
+            "path": "/usr/lib/node_modules/talon-agent/bin/talon.js"
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-talon-linux-homebrew-npm-launcher",
+      "operation": "checkHarness",
+      "input": "talon",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [],
+      "expect": {
+        "key": "talon",
+        "executablePath": null,
+        "pathAssertions": [
+          {
+            "id": "linux-homebrew-npm-launcher",
+            "path": "/home/linuxbrew/.linuxbrew/lib/node_modules/talon-agent/bin/talon.js"
+          }
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-linux-source",
+      "operation": "checkHarness",
+      "input": "holaboss-ai/holaOS",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": "${TMP}/hola-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/hola-xdg/holaboss-local-dev/sandbox-host/state/control-plane.db"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-source-control-plane-db"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-linux-packaged",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/holaboss-local/sandbox-host/state/runtime-config.json"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-packaged-runtime-config"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-macos-packaged",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/holaboss-local/sandbox-host/state/host-state.db"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "macos-packaged-host-state-db"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-windows-roaming",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/hola-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/hola-roaming/holaboss-local/sandbox-host/state/runtime-config.json"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-packaged-runtime-config"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-windows-profile-fallback",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/hola-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/hola-profile/AppData/Roaming/holaboss-local-dev/sandbox-host/state/host-state.db"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-source-host-state-db"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-relocated",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "HOLABOSS_DESKTOP_USER_DATA_PATH": "${TMP}/hola-desktop"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/hola-desktop/sandbox-host/state/runtime-config.json"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-runtime-config"
+        ]
+      }
+    },
+    {
+      "id": "check-holaos-ignores-generic-workspace",
+      "operation": "checkHarness",
+      "input": "holaos",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/workspace.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/sandbox-host/state/runtime-config.json"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/hola"
+        }
+      ],
+      "expect": {
+        "key": "holaos",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-holaos-withholds-workspace-target",
+      "operation": "translateMcpJson",
+      "input": "holaos",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "docs-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness holaos has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "check-continuum-standalone-daemon",
+      "operation": "checkHarness",
+      "input": "clawdmeter",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.clawdmeter/agent-token"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-standalone-daemon"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-relocated-daemon",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "CLAWDMETER_DATA_DIR": "${TMP}/continuum-agent-state"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/continuum-agent-state/agent-token"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "relocated-daemon"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-linux-user-agent",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/lib/continuum/agent/continuum-agent"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-user-agent"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-linux-desktop",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": "${TMP}/continuum-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/continuum-xdg/Continuum/agent/agent-token"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-desktop-daemon"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-macos-cache",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Library/Application Support/Clawdmeter/analytics-cache.json"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "macos-usage-cache"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-windows-desktop",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/continuum-roaming"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/continuum-roaming/Continuum/agent/agent-token"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-desktop-daemon"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-windows-agent",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "${TMP}/continuum-local"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/continuum-local/Continuum/Agent/bin/continuum-agent.exe"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-agent"
+        ]
+      }
+    },
+    {
+      "id": "check-continuum-ignores-remote-cli-profile",
+      "operation": "checkHarness",
+      "input": "continuum",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/continuum/config.json"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/continuum"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/continuum-agent"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/agent-token"
+        }
+      ],
+      "expect": {
+        "key": "continuum",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }

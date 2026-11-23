@@ -394,6 +394,10 @@ The following table lists harness-specific env vars that affect path resolution 
 | `cline` | `CLINE_DATA_DIR` | `CLINE_DATA_ROOT` | `${CLINE_ROOT}/data` |
 | `codebuff` | — | `CODEBUFF_CONFIG_ROOT` | `${HOME}/.config/manicode` |
 | `codex` | `CODEX_HOME` | `CODEX_ROOT` | `${HOME}/.codex` |
+| `continuum` | `USERPROFILE` | `CONTINUUM_WINDOWS_PROFILE` | `${HOME}` |
+| `continuum` | `APPDATA` | `CONTINUUM_APPDATA` | `${CONTINUUM_WINDOWS_PROFILE}/AppData/Roaming` |
+| `continuum` | `LOCALAPPDATA` | `CONTINUUM_LOCALAPPDATA` | `${CONTINUUM_WINDOWS_PROFILE}/AppData/Local` |
+| `continuum` | `CLAWDMETER_DATA_DIR` | `CONTINUUM_DAEMON_DATA` | (empty — path resolves to null) |
 | `cowagent` | `COW_DATA_DIR` | `COWAGENT_SOURCE_DATA` | `${CWD}` |
 | `crush` | `CRUSH_GLOBAL_CONFIG` | `CRUSH_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/crush` |
 | `crush` | — | `CRUSH_CONFIG_FILE` | `${CRUSH_CONFIG_ROOT}/crush.json` |
@@ -434,6 +438,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `happy-cli` | `HAPPY_HOME_DIR` | `HAPPY_ROOT` | `${HOME}/.happy` |
 | `herdr` | `APPDATA` | `HERDR_WINDOWS_CONFIG` | `${APPDATA}/herdr` (use) or `${USERPROFILE}/AppData/Roaming/herdr` |
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
+| `holaos` | `USERPROFILE` | `HOLAOS_WINDOWS_PROFILE` | `${HOME}` |
+| `holaos` | `APPDATA` | `HOLAOS_APPDATA` | `${HOLAOS_WINDOWS_PROFILE}/AppData/Roaming` |
+| `holaos` | `HOLABOSS_DESKTOP_USER_DATA_PATH` | `HOLAOS_USER_DATA` | (empty — path resolves to null) |
 | `jcode` | `JCODE_HOME` | `JCODE_ROOT` | `${HOME}/.jcode` |
 | `jcode` | `JCODE_HOME` | `JCODE_EXTERNAL_HOME` | `${JCODE_ROOT}/external` (use) or `${HOME}` |
 | `lime` | `XDG_CONFIG_HOME` | `LIME_LINUX_CONFIG_BASE` | `${HOME}/.config` |
@@ -619,7 +626,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 145
+console.log(harnesses.harnesses.length);  // 147
 ```
 
 <!-- /automd -->
