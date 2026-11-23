@@ -40132,7 +40132,7 @@
       "env": [
         {
           "name": "GRAPHCODE_SUPPORT_DIR",
-          "description": "Overrides the GraphCode workspace state directory. Use an absolute path or a home-relative tilde path: upstream resolves other relative values from the user home, while the detector resolves them from its process working directory. Named workspaces are not enumerated."
+          "description": "Overrides the GraphCode workspace state directory. Prefer an absolute path. GraphCode resolves a relative path without a tilde against HOME; the detector resolves it against its process working directory, not the supplied scan directory. Both expand a leading ~/ to HOME. Named workspaces are not enumerated."
         }
       ],
       "executables": [],
@@ -40367,7 +40367,7 @@
       "env": [
         {
           "name": "OPENAMER_HOME",
-          "description": "Overrides the runtime data and config directory. Set it explicitly for a non-default profile. Prefer absolute paths: OpenAmer uses a literal leading tilde and trims whitespace, unlike the detector."
+          "description": "Overrides the runtime data and config directory. Set it explicitly for a non-default profile. Prefer absolute paths: OpenAmer treats a quoted leading tilde as literal and trims whitespace; the detector expands the tilde and does not trim surrounding whitespace."
         },
         {
           "name": "LOCALAPPDATA",
@@ -40648,6 +40648,740 @@
           "name": "OPENAMER_WINDOWS_ROOT",
           "env": "OPENAMER_HOME",
           "fallback": "${OPENAMER_WINDOWS_LOCAL_DATA}/openamer"
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "No standalone ACP server launch verified; the installed CLI's App Server uses Lime JSON-RPC."
+      },
+      "aliases": [
+        "limecloud/lime"
+      ],
+      "env": [
+        {
+          "name": "LIME_CONFIG_PATH",
+          "description": "Overrides the YAML config file. Use an absolute path; upstream trims whitespace and keeps a literal leading tilde, while detection expands a leading tilde."
+        },
+        {
+          "name": "LIME_AGENT_RUNTIME_ROOT",
+          "description": "Overrides the App Server storage root. Use an absolute path; upstream trims whitespace and keeps a literal leading tilde, while detection expands a leading tilde."
+        }
+      ],
+      "executables": [],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "@limecloud/lime",
+          "command": "npm install -g @limecloud/lime",
+          "url": "https://registry.npmjs.org/@limecloud%2Flime/1.180.0",
+          "platforms": [
+            "darwin",
+            "win32"
+          ],
+          "notes": "The 1.180.0 npm package permits macOS and Windows only, despite broader CLI platform wording in the README."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/limecloud/lime/releases/tag/v1.180.0",
+          "platforms": [
+            "darwin",
+            "win32"
+          ],
+          "notes": "Download the macOS DMG or Windows installer."
+        }
+      ],
+      "key": "lime",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/services/src/mcp_service.rs#L58-L69"
+          ],
+          "confidence": "source",
+          "notes": "User servers are persisted in the product database, not in the YAML config. No file translation is offered."
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/limecloud/lime/blob/v1.180.0/internal/aiprompts/mcp.md#L21-L36"
+        ],
+        "status": "supported",
+        "notes": "MCP supports stdio and streamable HTTP. User servers are managed through the App Server; plugin manifests are not a standalone project .mcp.json target."
+      },
+      "name": "Lime",
+      "paths": [
+        {
+          "id": "linux-config",
+          "kind": "file",
+          "template": "${LIME_LINUX_CONFIG}",
+          "platforms": [
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-config",
+          "kind": "file",
+          "template": "${LIME_MAC_CONFIG}",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-config",
+          "kind": "file",
+          "template": "${LIME_WINDOWS_CONFIG}",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "linux-database",
+          "kind": "file",
+          "template": "${LIME_LINUX_RUNTIME}/lime.db",
+          "platforms": [
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-database",
+          "kind": "file",
+          "template": "${LIME_MAC_RUNTIME}/lime.db",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-database",
+          "kind": "file",
+          "template": "${LIME_WINDOWS_RUNTIME}/lime.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "macos-system-app-server-manifest",
+          "kind": "file",
+          "template": "/Applications/Lime.app/Contents/Resources/app-server.release.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-user-app-server-manifest",
+          "kind": "file",
+          "template": "${HOME}/Applications/Lime.app/Contents/Resources/app-server.release.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        }
+      ],
+      "sources": [
+        "https://github.com/limecloud/lime/releases/tag/v1.180.0",
+        "https://github.com/limecloud/lime/blob/v1.180.0/README.md#L41-L62",
+        "https://registry.npmjs.org/@limecloud%2Flime/1.180.0",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/config/yaml.rs#L246-L256",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/config/yaml.rs#L731-L738",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/config/yaml.rs#L771-L791",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L4-L20",
+        "https://github.com/limecloud/lime/blob/v1.180.0/forge.config.mjs#L256-L278",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L43-L58",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L203-L219",
+        "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L245-L258",
+        "https://github.com/openfl/lime/blob/8ee2143b07e1d8b990863804d4e253bc0146a329/templates/bin/lime.sh"
+      ],
+      "version": "1.180.0",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "linux-config",
+                "kind": "file",
+                "template": "${LIME_LINUX_CONFIG}",
+                "platforms": [
+                  "linux"
+                ]
+              },
+              {
+                "id": "macos-config",
+                "kind": "file",
+                "template": "${LIME_MAC_CONFIG}",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-config",
+                "kind": "file",
+                "template": "${LIME_WINDOWS_CONFIG}",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/config/yaml.rs#L246-L256"
+            ],
+            "confidence": "source",
+            "notes": "Windows uses the roaming known folder, represented by APPDATA with a profile fallback. Linux XDG roots should be absolute."
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "lime-skills",
+                "kind": "dir",
+                "template": "${HOME}/.lime/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L237-L239"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L260-L262"
+            ],
+            "confidence": "source"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L264-L276"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/limecloud/lime/blob/v1.180.0/lime-rs/crates/core/src/app_paths.rs#L260-L262"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "LIME_LINUX_CONFIG_BASE",
+          "env": "XDG_CONFIG_HOME",
+          "fallback": "${HOME}/.config"
+        },
+        {
+          "name": "LIME_LINUX_DATA_BASE",
+          "env": "XDG_DATA_HOME",
+          "fallback": "${HOME}/.local/share"
+        },
+        {
+          "name": "LIME_WINDOWS_PROFILE",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "LIME_WINDOWS_CONFIG_BASE",
+          "env": "APPDATA",
+          "fallback": "${LIME_WINDOWS_PROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "LIME_WINDOWS_DATA_BASE",
+          "env": "LOCALAPPDATA",
+          "fallback": "${LIME_WINDOWS_PROFILE}/AppData/Local"
+        },
+        {
+          "name": "LIME_LINUX_CONFIG",
+          "env": "LIME_CONFIG_PATH",
+          "fallback": "${LIME_LINUX_CONFIG_BASE}/lime/config.yaml"
+        },
+        {
+          "name": "LIME_MAC_CONFIG",
+          "env": "LIME_CONFIG_PATH",
+          "fallback": "${HOME}/Library/Application Support/lime/config.yaml"
+        },
+        {
+          "name": "LIME_WINDOWS_CONFIG",
+          "env": "LIME_CONFIG_PATH",
+          "fallback": "${LIME_WINDOWS_CONFIG_BASE}/lime/config.yaml"
+        },
+        {
+          "name": "LIME_LINUX_RUNTIME",
+          "env": "LIME_AGENT_RUNTIME_ROOT",
+          "fallback": "${LIME_LINUX_DATA_BASE}/lime/app-server"
+        },
+        {
+          "name": "LIME_MAC_RUNTIME",
+          "env": "LIME_AGENT_RUNTIME_ROOT",
+          "fallback": "${HOME}/Library/Application Support/lime/app-server"
+        },
+        {
+          "name": "LIME_WINDOWS_RUNTIME",
+          "env": "LIME_AGENT_RUNTIME_ROOT",
+          "fallback": "${LIME_WINDOWS_DATA_BASE}/LimeCloud/lime/app-server"
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "aliases": [
+        "boss",
+        "risa-labs-inc/bossconsole"
+      ],
+      "env": [
+        {
+          "name": "BOSS_DEV_MODE",
+          "description": "BOSS uses .boss_debug when this or its boss.dev.mode JVM property is truthy. Detection checks persisted settings in both profiles rather than selecting a running profile."
+        }
+      ],
+      "executables": [],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "boss",
+          "command": "brew install --cask boss",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/Homebrew/homebrew-cask/blob/fe5d531bf065b50e3ddcc77fabfce541c92ba9c4/Casks/b/boss.rb"
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin",
+            "win32",
+            "linux"
+          ],
+          "url": "https://github.com/risa-labs-inc/BossConsole/releases/tag/v9.5.45",
+          "notes": "Use the macOS DMG, Windows MSI, or Linux DEB, RPM, or JAR. Detection is based on preferences written by the app, not a bare boss command."
+        }
+      ],
+      "key": "bossconsole",
+      "mcp": {
+        "confidence": "unknown",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/README.md#L57-L63"
+        ],
+        "status": "unknown",
+        "notes": "BOSS exposes tools to connected agents through its local MCP server. No standalone native MCP client config was verified."
+      },
+      "name": "BossConsole",
+      "paths": [
+        {
+          "id": "unix-release-theme",
+          "kind": "file",
+          "template": "${HOME}/.boss/app-theme-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-release-performance",
+          "kind": "file",
+          "template": "${HOME}/.boss/performance-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-release-workspace",
+          "kind": "file",
+          "template": "${HOME}/.boss/workspace-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-dev-theme",
+          "kind": "file",
+          "template": "${HOME}/.boss_debug/app-theme-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-dev-performance",
+          "kind": "file",
+          "template": "${HOME}/.boss_debug/performance-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-dev-workspace",
+          "kind": "file",
+          "template": "${HOME}/.boss_debug/workspace-settings.json",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-release-theme",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/app-theme-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-release-performance",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/performance-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-release-workspace",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/workspace-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-dev-theme",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/app-theme-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-dev-performance",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/performance-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-dev-workspace",
+          "kind": "file",
+          "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/workspace-settings.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-bundle-preferences",
+          "kind": "file",
+          "template": "${HOME}/Library/Preferences/ai.rever.boss.plist",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        }
+      ],
+      "sources": [
+        "https://github.com/risa-labs-inc/BossConsole/releases/tag/v9.5.45",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/README.md#L132-L150",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/README.md#L194-L203",
+        "https://github.com/Homebrew/homebrew-cask/blob/fe5d531bf065b50e3ddcc77fabfce541c92ba9c4/Casks/b/boss.rb#L18-L25",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/plugin-platform/plugin-path-utils/src/commonMain/kotlin/ai/rever/boss/plugin/pathutils/BossDirectories.kt#L21-L50",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/theme/AppThemeSettingsManager.kt#L30-L43",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/performance/PerformanceSettingsManager.kt#L19-L34",
+        "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/components/workspaces/DesktopWorkspaceSettingsManager.kt#L18-L29"
+      ],
+      "version": "9.5.45",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-release-theme",
+                "kind": "file",
+                "template": "${HOME}/.boss/app-theme-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "unix-release-performance",
+                "kind": "file",
+                "template": "${HOME}/.boss/performance-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "unix-release-workspace",
+                "kind": "file",
+                "template": "${HOME}/.boss/workspace-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "unix-dev-theme",
+                "kind": "file",
+                "template": "${HOME}/.boss_debug/app-theme-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "unix-dev-performance",
+                "kind": "file",
+                "template": "${HOME}/.boss_debug/performance-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "unix-dev-workspace",
+                "kind": "file",
+                "template": "${HOME}/.boss_debug/workspace-settings.json",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-release-theme",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/app-theme-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-release-performance",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/performance-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-release-workspace",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss/workspace-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-dev-theme",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/app-theme-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-dev-performance",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/performance-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-dev-workspace",
+                "kind": "file",
+                "template": "${BOSSCONSOLE_WINDOWS_PROFILE}/.boss_debug/workspace-settings.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/plugin-platform/plugin-path-utils/src/commonMain/kotlin/ai/rever/boss/plugin/pathutils/BossDirectories.kt#L21-L50",
+              "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/theme/AppThemeSettingsManager.kt#L30-L43",
+              "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/performance/PerformanceSettingsManager.kt#L19-L34",
+              "https://github.com/risa-labs-inc/BossConsole/blob/v9.5.45/composeApp/src/desktopMain/kotlin/ai/rever/boss/components/workspaces/DesktopWorkspaceSettingsManager.kt#L18-L29"
+            ],
+            "confidence": "source",
+            "notes": "Settings are relative to JVM user.home. The detector uses HOME on Unix and USERPROFILE on Windows with a HOME fallback, and checks both normal and developer settings. A custom JVM user.home is not resolved."
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "BOSSCONSOLE_WINDOWS_PROFILE",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
         }
       ]
     }

@@ -382,6 +382,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `astrbot` | `ASTRBOT_ROOT` | `ASTRBOT_RUNTIME_ROOT` | `${CWD}` |
 | `atlas` | `APPDATA` | `ATLAS_ROAMING_DATA` | `${USERPROFILE}/AppData/Roaming` |
 | `autogenstudio` | `AUTOGENSTUDIO_APPDIR` | `AUTOGENSTUDIO_ROOT` | `${HOME}/.autogenstudio` |
+| `bossconsole` | `USERPROFILE` | `BOSSCONSOLE_WINDOWS_PROFILE` | `${HOME}` |
 | `browser-use` | `BROWSER_USE_CONFIG_DIR` | `BROWSER_USE_PROFILE_ROOT` | `${XDG_CONFIG_HOME}/browseruse` |
 | `browser-use` | `BROWSER_USE_CONFIG_PATH` | `BROWSER_USE_LEGACY_CONFIG` | `${BROWSER_USE_PROFILE_ROOT}/config.json` |
 | `cc-haha` | `CLAUDE_CONFIG_DIR` | `CC_HAHA_ROOT` | `${HOME}/.claude` |
@@ -435,6 +436,17 @@ The following table lists harness-specific env vars that affect path resolution 
 | `hermes-agent` | `HERMES_HOME` | `HERMES_ROOT` | `${HOME}/.hermes` |
 | `jcode` | `JCODE_HOME` | `JCODE_ROOT` | `${HOME}/.jcode` |
 | `jcode` | `JCODE_HOME` | `JCODE_EXTERNAL_HOME` | `${JCODE_ROOT}/external` (use) or `${HOME}` |
+| `lime` | `XDG_CONFIG_HOME` | `LIME_LINUX_CONFIG_BASE` | `${HOME}/.config` |
+| `lime` | `XDG_DATA_HOME` | `LIME_LINUX_DATA_BASE` | `${HOME}/.local/share` |
+| `lime` | `USERPROFILE` | `LIME_WINDOWS_PROFILE` | `${HOME}` |
+| `lime` | `APPDATA` | `LIME_WINDOWS_CONFIG_BASE` | `${LIME_WINDOWS_PROFILE}/AppData/Roaming` |
+| `lime` | `LOCALAPPDATA` | `LIME_WINDOWS_DATA_BASE` | `${LIME_WINDOWS_PROFILE}/AppData/Local` |
+| `lime` | `LIME_CONFIG_PATH` | `LIME_LINUX_CONFIG` | `${LIME_LINUX_CONFIG_BASE}/lime/config.yaml` |
+| `lime` | `LIME_CONFIG_PATH` | `LIME_MAC_CONFIG` | `${HOME}/Library/Application Support/lime/config.yaml` |
+| `lime` | `LIME_CONFIG_PATH` | `LIME_WINDOWS_CONFIG` | `${LIME_WINDOWS_CONFIG_BASE}/lime/config.yaml` |
+| `lime` | `LIME_AGENT_RUNTIME_ROOT` | `LIME_LINUX_RUNTIME` | `${LIME_LINUX_DATA_BASE}/lime/app-server` |
+| `lime` | `LIME_AGENT_RUNTIME_ROOT` | `LIME_MAC_RUNTIME` | `${HOME}/Library/Application Support/lime/app-server` |
+| `lime` | `LIME_AGENT_RUNTIME_ROOT` | `LIME_WINDOWS_RUNTIME` | `${LIME_WINDOWS_DATA_BASE}/LimeCloud/lime/app-server` |
 | `metagpt` | `METAGPT_PROJECT_ROOT` | `METAGPT_ROOT` | `${CWD}` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |
@@ -597,7 +609,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 141
+console.log(harnesses.harnesses.length);  // 143
 ```
 
 <!-- /automd -->
