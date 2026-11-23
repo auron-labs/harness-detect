@@ -41618,6 +41618,24 @@
           "category": "install"
         },
         {
+          "id": "linux-system-npm-launcher",
+          "kind": "file",
+          "template": "/usr/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-homebrew-npm-launcher",
+          "kind": "file",
+          "template": "/home/linuxbrew/.linuxbrew/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
           "id": "unix-npm-prefix-launcher",
           "kind": "file",
           "template": "${TALON_NPM_PREFIX}/lib/node_modules/talon-agent/bin/talon.js",
@@ -41670,6 +41688,7 @@
         "https://talonvoice.com/",
         "https://docs.npmjs.com/cli/v11/configuring-npm/folders#node-modules",
         "https://docs.npmjs.com/cli/v11/configuring-npm/folders#prefix",
+        "https://docs.brew.sh/Homebrew-on-Linux#install",
         "https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/n/node.rb#L225"
       ],
       "version": "5.39.5",
