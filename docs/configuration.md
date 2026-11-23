@@ -419,6 +419,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `flowise` | `DATABASE_PATH` | `FLOWISE_WINDOWS_SQLITE_DIR` | `${USERPROFILE}/.flowise` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
+| `gentle-shell` | `GENTLE_SHELL_HOME` | `GENTLE_SHELL_ROOT` | `${HOME}/.gentle-shell/agent` |
+| `gentle-shell` | `GENTLE_SHELL_HOME` | `GENTLE_SHELL_WIN_ROOT` | `${USERPROFILE}/.gentle-shell/agent` |
 | `github-copilot-cli` | `COPILOT_HOME` | `COPILOT_ROOT` | `${HOME}/.copilot` |
 | `github-copilot-cli` | `COPILOT_CACHE_HOME` | `COPILOT_CACHE_ROOT` | (empty — path resolves to null) |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_CONFIG_ROOT` | `${GOOSE_PATH_ROOT}/config` (use) or `${XDG_CONFIG_HOME}/goose` |
@@ -485,6 +487,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `qwenpaw` | `QWENPAW_WORKING_DIR` | `QWENPAW_ROOT` | `${HOME}/.qwenpaw` |
 | `qwenpaw` | `ProgramFiles` | `QWENPAW_PROGRAM_FILES` | (empty — path resolves to null) |
+| `raven` | `RAVEN_HOME` | `RAVEN_ROOT` | `${HOME}/.raven` |
+| `raven` | `RAVEN_HOME` | `RAVEN_WIN_ROOT` | `${USERPROFILE}/.raven` |
 | `reasonix` | `APPDATA` | `REASONIX_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
 | `reasonix` | `REASONIX_HOME` | `REASONIX_UNIX_HOME` | `${HOME}/.reasonix` |
 | `reasonix` | `REASONIX_HOME` | `REASONIX_WIN_HOME` | `${REASONIX_ROAMING}/reasonix` |
@@ -581,7 +585,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 131
+console.log(harnesses.harnesses.length);  // 133
 ```
 
 <!-- /automd -->

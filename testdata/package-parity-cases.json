@@ -13590,6 +13590,507 @@
       "id": "support-record-loopx",
       "operation": "getHarnessSupport",
       "input": "loopx"
+    },
+    {
+      "id": "check-raven-default-config",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.raven/config.json"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config"
+        ]
+      }
+    },
+    {
+      "id": "check-raven-relocated-home",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "RAVEN_HOME": "${TMP}/raven-home"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/raven-home/config.json"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "config"
+        ]
+      }
+    },
+    {
+      "id": "check-raven-windows-profile",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/raven-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/raven-profile/.raven/config.json"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-raven-windows-relocated-home",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "RAVEN_HOME": "${TMP}/raven-win-override",
+        "USERPROFILE": "${TMP}/raven-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/raven-win-override/config.json"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-raven-ignores-sentry-and-project-config",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/raven"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/config.json"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-raven-windows-ignores-sentry",
+      "operation": "checkHarness",
+      "input": "raven",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/raven-profile",
+        "PATHEXT": ".EXE"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/raven.exe"
+        }
+      ],
+      "expect": {
+        "key": "raven",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-gentle-shell-unix-path",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/gentle-shell"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": "${BIN}/gentle-shell",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-gentle-shell-windows-path",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "PATHEXT": ".cmd"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/gentle-shell.cmd"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": "${BIN}/gentle-shell.cmd",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-gentle-shell-launcher-config",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.gentle-shell/config.json"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "launcher-config"
+        ]
+      }
+    },
+    {
+      "id": "check-gentle-shell-isolated-marker",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.gentle-shell/agent/.gentle-shell-home"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "owned-home"
+        ]
+      }
+    },
+    {
+      "id": "check-gentle-shell-relocated-marker",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GENTLE_SHELL_HOME": "${TMP}/gentle-home"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/gentle-home/.gentle-shell-home"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "owned-home"
+        ]
+      }
+    },
+    {
+      "id": "check-gentle-shell-windows-profile",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/gentle-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/gentle-profile/.gentle-shell/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/gentle-profile/.gentle-shell/agent/.gentle-shell-home"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-launcher-config",
+          "windows-owned-home"
+        ]
+      }
+    },
+    {
+      "id": "check-gentle-shell-windows-relocated-marker",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GENTLE_SHELL_HOME": "${TMP}/gentle-win-override",
+        "USERPROFILE": "${TMP}/gentle-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/gentle-win-override/.gentle-shell-home"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-owned-home"
+        ]
+      }
+    },
+    {
+      "id": "check-gentle-shell-ignores-pi-and-generic-override",
+      "operation": "checkHarness",
+      "input": "gentle-shell",
+      "platforms": [
+        "darwin",
+        "freebsd",
+        "linux",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GENTLE_SHELL_HOME": "${TMP}/gentle-other"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/pi"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.pi/agent/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.pi/agent/mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/gentle-other/settings.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "expect": {
+        "key": "gentle-shell",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-raven",
+      "operation": "getHarnessMcp",
+      "input": "raven",
+      "expect": {
+        "key": "raven"
+      }
+    },
+    {
+      "id": "support-record-raven",
+      "operation": "getHarnessSupport",
+      "input": "raven"
+    },
+    {
+      "id": "acp-raven",
+      "operation": "getHarnessAcp",
+      "input": "raven",
+      "expect": {
+        "key": "raven"
+      }
+    },
+    {
+      "id": "acp-launches-raven-does-not-pick-sentry",
+      "operation": "detectInstalledAcpLaunches",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.raven/config.json"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/raven"
+        }
+      ],
+      "expect": {
+        "launches": []
+      }
+    },
+    {
+      "id": "mcp-gentle-shell",
+      "operation": "getHarnessMcp",
+      "input": "gentle-shell",
+      "expect": {
+        "key": "gentle-shell"
+      }
+    },
+    {
+      "id": "support-record-gentle-shell",
+      "operation": "getHarnessSupport",
+      "input": "gentle-shell"
+    },
+    {
+      "id": "acp-gentle-shell",
+      "operation": "getHarnessAcp",
+      "input": "gentle-shell",
+      "expect": {
+        "key": "gentle-shell"
+      }
     }
   ]
 }
