@@ -40672,7 +40672,7 @@
         },
         {
           "name": "NPM_CONFIG_PREFIX",
-          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes. On macOS the detector checks both NPM_CONFIG_PREFIX and npm_config_prefix if set; other spellings and npm configuration files are not read."
+          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes. macOS checks both NPM_CONFIG_PREFIX and npm_config_prefix if set; Windows prefers the nonempty uppercase key if both keys are explicitly provided. npm configuration files are not read."
         }
       ],
       "executables": [],
@@ -40845,7 +40845,7 @@
         {
           "id": "windows-npm-prefix-launcher",
           "kind": "file",
-          "template": "${LIME_NPM_PREFIX}/node_modules/@limecloud/lime/bin/lime.js",
+          "template": "${LIME_WINDOWS_NPM_PREFIX}/node_modules/@limecloud/lime/bin/lime.js",
           "platforms": [
             "win32"
           ],
@@ -41067,6 +41067,12 @@
         {
           "name": "LIME_NPM_LOWERCASE_PREFIX",
           "env": "npm_config_prefix",
+          "fallback": ""
+        },
+        {
+          "name": "LIME_WINDOWS_NPM_PREFIX",
+          "env": "NPM_CONFIG_PREFIX",
+          "fallbackEnv": "npm_config_prefix",
           "fallback": ""
         }
       ]

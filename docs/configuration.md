@@ -449,6 +449,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `lime` | `LIME_AGENT_RUNTIME_ROOT` | `LIME_WINDOWS_RUNTIME` | `${LIME_WINDOWS_DATA_BASE}/LimeCloud/lime/app-server` |
 | `lime` | `NPM_CONFIG_PREFIX` | `LIME_NPM_PREFIX` | (empty — path resolves to null) |
 | `lime` | `npm_config_prefix` | `LIME_NPM_LOWERCASE_PREFIX` | (empty — path resolves to null) |
+| `lime` | `NPM_CONFIG_PREFIX` | `LIME_WINDOWS_NPM_PREFIX` | (empty — path resolves to null) |
 | `metagpt` | `METAGPT_PROJECT_ROOT` | `METAGPT_ROOT` | `${CWD}` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_LINUX_ROOT` | `${XDG_CONFIG_HOME}/mini-swe-agent` |
 | `mini-swe-agent` | `MSWEA_GLOBAL_CONFIG_DIR` | `MINI_SWE_MACOS_ROOT` | `${HOME}/Library/Application Support/mini-swe-agent` |

@@ -15894,6 +15894,35 @@
       }
     },
     {
+      "id": "check-lime-windows-npm-lowercase-prefix",
+      "operation": "checkHarness",
+      "input": "lime",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "NPM_CONFIG_PREFIX": "",
+        "npm_config_prefix": "${TMP}/lime-win-lower"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/lime-win-lower/node_modules/@limecloud/lime/bin/lime.js"
+        }
+      ],
+      "expect": {
+        "key": "lime",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-npm-prefix-launcher"
+        ]
+      }
+    },
+    {
       "id": "check-lime-windows-local-state",
       "operation": "checkHarness",
       "input": "lime",
