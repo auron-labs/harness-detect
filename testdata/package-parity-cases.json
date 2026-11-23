@@ -14908,6 +14908,55 @@
       }
     },
     {
+      "id": "check-opencompany-source-runtime",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.opencompany/.lock"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-lock"
+        ]
+      }
+    },
+    {
+      "id": "check-opencompany-source-runtime-override",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OPENCOMPANY_DATA_DIR": "${TMP}/oc-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oc-data/.lock"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-lock"
+        ]
+      }
+    },
+    {
       "id": "check-opencompany-ignores-standalone-company",
       "operation": "checkHarness",
       "input": "opencompany",
@@ -14920,6 +14969,10 @@
         {
           "type": "file",
           "path": "${CWD}/company.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.lock"
         },
         {
           "type": "file",

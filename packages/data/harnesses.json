@@ -39813,6 +39813,12 @@
           "kind": "file",
           "template": "${OPENCOMPANY_DATA_ROOT}/config.toml",
           "category": "config"
+        },
+        {
+          "id": "instance-lock",
+          "kind": "file",
+          "template": "${OPENCOMPANY_DATA_ROOT}/.lock",
+          "category": "state"
         }
       ],
       "sources": [
@@ -39821,6 +39827,8 @@
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/tauri.conf.json#L2-L6",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/Cargo.toml#L39-L44",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/app/config.rs#L1156-L1194",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/bin/opencompany.rs#L1984-L1999",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/store/lock.rs#L65-L111",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/bin/opencompany.rs#L2003-L2016",
         "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/src/embedded.rs#L172-L176"
       ],
