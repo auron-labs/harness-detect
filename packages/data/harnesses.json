@@ -36169,31 +36169,10 @@
         },
         "agents": {
           "global": {
-            "status": "supported",
-            "paths": [
-              {
-                "id": "unix-subagent-state",
-                "kind": "dir",
-                "template": "${TIANSHU_DATA_ROOT}/subagents",
-                "platforms": [
-                  "darwin",
-                  "linux"
-                ]
-              },
-              {
-                "id": "windows-subagent-state",
-                "kind": "dir",
-                "template": "${TIANSHU_WINDOWS_ROOT}/subagents",
-                "platforms": [
-                  "win32"
-                ]
-              }
-            ],
-            "sources": [
-              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/agent/worker-session-persist.ts#L44-L47"
-            ],
-            "confidence": "source",
-            "notes": "Persisted subagent sessions, not user-authored agent definitions."
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
           },
           "local": {
             "status": "supported",
