@@ -146,7 +146,7 @@ Support leaf status totals: supported: 632; unsupported: 185; unknown: 533. Unkn
 
 ## MCP
 
-MCP client status: supported: 99; unsupported: 10; unknown: 26. Project-root `.mcp.json`: supported: 16; unsupported: 54; unknown: 65. The translation column lists the server container and the transports `translateMcpJson` can write.
+MCP client status: supported: 98; unsupported: 10; unknown: 27. Project-root `.mcp.json`: supported: 16; unsupported: 54; unknown: 65. The translation column lists the server container and the transports `translateMcpJson` can write.
 
 | Harness | MCP | `.mcp.json` | global config | local config | translation |
 | --- | --- | --- | --- | --- | --- |
@@ -199,7 +199,7 @@ MCP client status: supported: 99; unsupported: 10; unknown: 26. Project-root `.m
 | `emdash` | unsupported | unsupported | unknown | unknown | — |
 | `empryo` | supported | unknown | supported (no config file) | supported (no config file) | — |
 | `fast-agent` | supported | unsupported | unsupported | `${CWD}/.fast-agent/fast-agent.yaml`<br>`${CWD}/.fast-agent/fast-agent.config.yaml`<br>`${CWD}/.fast-agent/fastagent.config.yaml`<br>`${CWD}/fast-agent.yaml`<br>`${CWD}/fast-agent.config.yaml`<br>`${CWD}/fastagent.config.yaml`<br>yaml: `mcp` → `servers` | map; stdio, http, sse |
-| `fivedive` | supported | unknown | unknown | unknown | — |
+| `fivedive` | unknown | unknown | unknown | unknown | — |
 | `flowise` | supported | unsupported | supported (no config file) | supported (no config file) | — |
 | `gemini-cli` | supported | unknown | `${GEMINI_ROOT}/settings.json`<br>json: `mcpServers` | `${CWD}/.gemini/settings.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `gentle-shell` | supported | unknown | supported (no config file) | supported (no config file) | — |

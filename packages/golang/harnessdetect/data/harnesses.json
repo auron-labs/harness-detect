@@ -39075,7 +39075,7 @@
         }
       },
       "mcp": {
-        "status": "supported",
+        "status": "unknown",
         "mcpJson": "unknown",
         "global": {
           "status": "unknown",
@@ -39092,8 +39092,8 @@
         "sources": [
           "https://github.com/5dive-ai/5dive/blob/v0.141.1/docs/plugin-contract.md#L59-L70"
         ],
-        "confidence": "official",
-        "notes": "5dive registers declared plugin MCP capabilities for underlying runtimes. This does not establish a direct 5dive client configuration or translation target; the separate @5dive/mcp server exposes 5dive tools to other clients."
+        "confidence": "unknown",
+        "notes": "5dive registers declared plugin MCP capabilities for underlying runtimes. Direct 5dive MCP client support and configuration were not verified."
       },
       "acp": {
         "status": "supported",
