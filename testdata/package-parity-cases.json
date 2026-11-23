@@ -15258,6 +15258,34 @@
       }
     },
     {
+      "id": "check-graphcode-source-cli",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GRAPHCODE_SUPPORT_DIR": "~/.graphcode-work"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${HOME}/.graphcode/bin/graphcode"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-install-cli"
+        ]
+      }
+    },
+    {
       "id": "check-graphcode-named-workspace",
       "operation": "checkHarness",
       "input": "graphcode",
@@ -15344,6 +15372,10 @@
         {
           "type": "file",
           "path": "${HOME}/.graphcode/settings.json"
+        },
+        {
+          "type": "executable",
+          "path": "${HOME}/.graphcode/bin/graphcode"
         }
       ],
       "expect": {

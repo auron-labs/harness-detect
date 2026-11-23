@@ -40154,6 +40154,14 @@
           ],
           "url": "https://github.com/scgopi/GraphCode/releases/tag/v0.1.85",
           "notes": "Install graphcode.app from the signed arm64 DMG. The Windows preview is not covered."
+        },
+        {
+          "method": "manual",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/scgopi/GraphCode/blob/v0.1.85/README.md#L125-L144",
+          "notes": "The documented source build installs the CLI into ~/.graphcode/bin."
         }
       ],
       "key": "graphcode",
@@ -40211,6 +40219,15 @@
           "category": "install"
         },
         {
+          "id": "source-install-cli",
+          "kind": "file",
+          "template": "${HOME}/.graphcode/bin/graphcode",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
           "id": "workspace-settings",
           "kind": "file",
           "template": "${GRAPHCODE_ROOT}/settings.json",
@@ -40225,6 +40242,8 @@
         "https://github.com/scgopi/GraphCode/blob/v0.1.85/README.md#L43-L53",
         "https://github.com/scgopi/homebrew-graphcode/blob/39e1f25bbdea925260cb30623a0bf504fbbd2d83/Casks/graphcode.rb#L18-L26",
         "https://github.com/scgopi/GraphCode/blob/v0.1.85/Makefile#L424-L435",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/Makefile#L28-L31",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/Makefile#L182-L191",
         "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/SupportDirectory.swift#L32-L95",
         "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/SupportDirectory.swift#L167-L169",
         "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/DaemonBootstrap.swift#L212-L234",
