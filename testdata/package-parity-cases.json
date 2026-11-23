@@ -10638,6 +10638,240 @@
       "expect": {
         "launches": []
       }
+    },
+    {
+      "id": "check-agenticseek-checkout",
+      "operation": "checkHarness",
+      "input": "agentic-seek",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/frontend/agentic-seek-front/package.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.ini"
+        }
+      ],
+      "expect": {
+        "key": "agenticseek",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-checkout"
+        ]
+      }
+    },
+    {
+      "id": "check-agenticseek-ignores-generic-python-and-docker",
+      "operation": "checkHarness",
+      "input": "agenticseek",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/config.ini"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.env"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/cli.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/docker-compose.yml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/pyproject.toml"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/uv"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/python"
+        }
+      ],
+      "expect": {
+        "key": "agenticseek",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-workkit-engine-link-target",
+      "operation": "checkHarness",
+      "input": "workkit@workkit",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/workkit/workkit.sh"
+        }
+      ],
+      "expect": {
+        "key": "workkit",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "installed-engine"
+        ]
+      }
+    },
+    {
+      "id": "check-workkit-project-config",
+      "operation": "checkHarness",
+      "input": "workkit",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.workkit/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "workkit",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-workkit-user-settings",
+      "operation": "checkHarness",
+      "input": "workkit",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.workkit/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "workkit",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-user-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-workkit-relocated-roster",
+      "operation": "checkHarness",
+      "input": "workkit",
+      "platforms": [
+        "darwin",
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "WORKFLOW_HOME": "${HOME}/workflow-override"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/workflow-override/.repos.json"
+        }
+      ],
+      "expect": {
+        "key": "workkit",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-roster"
+        ]
+      }
+    },
+    {
+      "id": "check-workkit-ignores-unrelated-npm-cli-and-generic-override-files",
+      "operation": "checkHarness",
+      "input": "workkit",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "WORKFLOW_HOME": "${HOME}/workflow-override"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/workkit"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/workflow-override/settings.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/workflow-override/.cache.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.claude/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "workkit",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
     }
   ]
 }
