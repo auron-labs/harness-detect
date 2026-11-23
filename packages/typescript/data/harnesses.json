@@ -38116,12 +38116,38 @@
           "id": "global-registry",
           "kind": "file",
           "template": "${HOME}/.loopx/registry.global.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
           "category": "state"
         },
         {
           "id": "legacy-global-registry",
           "kind": "file",
           "template": "${HOME}/.codex/loopx/registry.global.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-global-registry",
+          "kind": "file",
+          "template": "${USERPROFILE}/.loopx/registry.global.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-legacy-global-registry",
+          "kind": "file",
+          "template": "${USERPROFILE}/.codex/loopx/registry.global.json",
+          "platforms": [
+            "win32"
+          ],
           "category": "state"
         },
         {
@@ -38143,6 +38169,7 @@
         "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L10-L17",
         "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236",
         "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L96-L100",
+        "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser",
         "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/getting-started.md#L684-L712",
         "https://github.com/loopx-project/loopx/blob/v2.4.0/docs/guides/installing-loopx.md#native-windows-powershell-7"
       ],
@@ -38177,20 +38204,45 @@
               {
                 "id": "global-registry",
                 "kind": "file",
-                "template": "${HOME}/.loopx/registry.global.json"
+                "template": "${HOME}/.loopx/registry.global.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
               },
               {
                 "id": "legacy-global-registry",
                 "kind": "file",
-                "template": "${HOME}/.codex/loopx/registry.global.json"
+                "template": "${HOME}/.codex/loopx/registry.global.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-global-registry",
+                "kind": "file",
+                "template": "${USERPROFILE}/.loopx/registry.global.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "windows-legacy-global-registry",
+                "kind": "file",
+                "template": "${USERPROFILE}/.codex/loopx/registry.global.json",
+                "platforms": [
+                  "win32"
+                ]
               }
             ],
             "sources": [
               "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L10-L17",
-              "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236"
+              "https://github.com/loopx-project/loopx/blob/v2.4.0/loopx/paths.py#L206-L236",
+              "https://docs.python.org/3.11/library/os.path.html#os.path.expanduser"
             ],
             "confidence": "source",
-            "notes": "Checks both known locations for evidence; does not select the active runtime root or validate the registry."
+            "notes": "Checks both known locations for evidence; does not select the active runtime root or validate the registry. On Windows it uses USERPROFILE when set; if it is missing, detection uses the detector's normalized home, which may differ from Python's HOMEDRIVE/HOMEPATH fallback."
           },
           "local": {
             "status": "supported",

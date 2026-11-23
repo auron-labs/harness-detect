@@ -13383,6 +13383,10 @@
       "id": "check-loopx-global-registry",
       "operation": "checkHarness",
       "input": "loopx",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
@@ -13420,6 +13424,10 @@
         {
           "type": "file",
           "path": "${TMP}/profile/.loopx/registry.global.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/profile/.codex/loopx/registry.global.json"
         }
       ],
       "expect": {
@@ -13427,14 +13435,49 @@
         "installed": true,
         "executablePath": null,
         "matchedPathIds": [
-          "global-registry"
+          "windows-global-registry",
+          "windows-legacy-global-registry"
         ]
+      }
+    },
+    {
+      "id": "check-loopx-windows-ignores-other-home",
+      "operation": "checkHarness",
+      "input": "loopx",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.loopx/registry.global.json"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.codex/loopx/registry.global.json"
+        }
+      ],
+      "expect": {
+        "key": "loopx",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
       }
     },
     {
       "id": "check-loopx-legacy-registry",
       "operation": "checkHarness",
       "input": "loopx",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
       "cwd": "${CWD}",
       "env": {
         "HOME": "${HOME}",
