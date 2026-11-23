@@ -39762,7 +39762,7 @@
         {
           "method": "manual",
           "url": "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/docs/running-locally.md#L32-L53",
-          "notes": "Build the opencompany host from the checkout with its vendored submodules. A container-only installation is not detected on the host."
+          "notes": "Build the opencompany host from the checkout with its vendored submodules. A container-only installation is not detected on the host. The retained instance lock shows past use, not whether an instance is running."
         }
       ],
       "key": "opencompany",
@@ -40116,6 +40116,519 @@
           "name": "TALE_SANDBOX_ROOT",
           "env": "TALE_SANDBOX_HOME",
           "fallback": "${HOME}/.tale/sandbox"
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "GraphCode launches other agent runtimes; no standalone GraphCode ACP server was verified."
+      },
+      "aliases": [
+        "scgopi/graphcode"
+      ],
+      "env": [
+        {
+          "name": "GRAPHCODE_SUPPORT_DIR",
+          "description": "Overrides the GraphCode workspace state directory. Use an absolute path or a home-relative tilde path: upstream resolves other relative values from the user home, while the detector resolves them from its process working directory. Named workspaces are not enumerated."
+        }
+      ],
+      "executables": [],
+      "installations": [
+        {
+          "method": "homebrew",
+          "package": "scgopi/graphcode/graphcode",
+          "command": "brew install --cask scgopi/graphcode/graphcode",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/scgopi/homebrew-graphcode/blob/39e1f25bbdea925260cb30623a0bf504fbbd2d83/Casks/graphcode.rb#L18-L26",
+          "notes": "Requires macOS 15 or later on Apple Silicon."
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/scgopi/GraphCode/releases/tag/v0.1.85",
+          "notes": "Install graphcode.app from the signed arm64 DMG. The Windows preview is not covered."
+        }
+      ],
+      "key": "graphcode",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/scgopi/GraphCode/blob/v0.1.85/NodRuntime/PROTOCOL.md#L123-L134"
+          ],
+          "confidence": "source",
+          "notes": "Nod reads .mcp.json from the loop working directory and ancestors. The nearer definition wins; disabled names and the reserved graphcode name are skipped."
+        },
+        "mcpJson": "supported",
+        "sources": [
+          "https://github.com/scgopi/GraphCode/blob/v0.1.85/NodRuntime/PROTOCOL.md#L123-L134"
+        ],
+        "status": "supported",
+        "notes": "Nod mounts project MCP servers through its Claude and Copilot engines. Other GraphCode loops delegate MCP behavior to their underlying CLI."
+      },
+      "name": "GraphCode",
+      "paths": [
+        {
+          "id": "system-app-daemon",
+          "kind": "file",
+          "template": "/Applications/graphcode.app/Contents/Resources/bin/graphcoded",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-app-daemon",
+          "kind": "file",
+          "template": "${HOME}/Applications/graphcode.app/Contents/Resources/bin/graphcoded",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "workspace-daemon",
+          "kind": "file",
+          "template": "${GRAPHCODE_ROOT}/bin/graphcoded",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "workspace-settings",
+          "kind": "file",
+          "template": "${GRAPHCODE_ROOT}/settings.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        }
+      ],
+      "sources": [
+        "https://github.com/scgopi/GraphCode/releases/tag/v0.1.85",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/README.md#L43-L53",
+        "https://github.com/scgopi/homebrew-graphcode/blob/39e1f25bbdea925260cb30623a0bf504fbbd2d83/Casks/graphcode.rb#L18-L26",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/Makefile#L424-L435",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/SupportDirectory.swift#L32-L95",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/SupportDirectory.swift#L167-L169",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/DaemonBootstrap.swift#L212-L234",
+        "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/GraphcodeSettingsStore.swift#L3-L23"
+      ],
+      "version": "0.1.85",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-settings",
+                "kind": "file",
+                "template": "${GRAPHCODE_ROOT}/settings.json",
+                "platforms": [
+                  "darwin"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/GraphcodeSettingsStore.swift#L3-L23",
+              "https://github.com/scgopi/GraphCode/blob/v0.1.85/GraphcodeKit/Sources/SupportDirectory.swift#L32-L95"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "GRAPHCODE_ROOT",
+          "env": "GRAPHCODE_SUPPORT_DIR",
+          "fallback": "${HOME}/.graphcode"
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "openamer",
+            "args": [
+              "acp"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/openamer/openamer/blob/v261122/website/docs/user-guide/features/acp.md#L34-L64",
+          "https://github.com/openamer/openamer/blob/v261122/pyproject.toml#L234-L238"
+        ],
+        "confidence": "official",
+        "notes": "Starts the ACP stdio server. A minimal installation needs the acp extra; configure the model provider before use."
+      },
+      "aliases": [
+        "openamer-agent",
+        "openamer/openamer"
+      ],
+      "env": [
+        {
+          "name": "OPENAMER_HOME",
+          "description": "Overrides the runtime data and config directory. Set it explicitly for a non-default profile. Prefer absolute paths: OpenAmer uses a literal leading tilde and trims whitespace, unlike the detector."
+        },
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Base directory for the default Windows openamer folder. If unset, OpenAmer falls back to the Windows home AppData/Local directory."
+        }
+      ],
+      "executables": [
+        "openamer"
+      ],
+      "installations": [
+        {
+          "method": "script",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "url": "https://github.com/openamer/openamer/blob/v261122/README.md#L24-L50",
+          "notes": "Use the official shell installer on Linux or macOS; the upstream also documents Termux."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "win32"
+          ],
+          "url": "https://github.com/openamer/openamer/blob/v261122/README.md#L24-L50",
+          "notes": "Use the official PowerShell installer."
+        },
+        {
+          "method": "binary",
+          "platforms": [
+            "win32"
+          ],
+          "url": "https://github.com/openamer/openamer/releases/tag/v261122",
+          "notes": "Download the published Windows x64 installer."
+        }
+      ],
+      "key": "openamer",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/openamer/openamer/blob/v261122/tools/mcp_tool.py#L4440-L4460",
+            "https://github.com/openamer/openamer/blob/v261122/openamer_constants.py#L88-L109"
+          ],
+          "confidence": "source",
+          "notes": "Set mcp_servers in the runtime home config.yaml. See global config support for its platform-specific paths."
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/openamer/openamer/blob/v261122/tools/mcp_tool.py#L4440-L4460",
+          "https://github.com/openamer/openamer/blob/v261122/tools/mcp_tool.py#L5206-L5235"
+        ],
+        "status": "supported",
+        "notes": "Global mcp_servers supports stdio and HTTP. Automatic translation is withheld because differently named servers can normalize to the same tool prefix."
+      },
+      "name": "OpenAmer",
+      "paths": [
+        {
+          "id": "unix-config",
+          "kind": "file",
+          "template": "${OPENAMER_ROOT}/config.yaml",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-config",
+          "kind": "file",
+          "template": "${OPENAMER_WINDOWS_ROOT}/config.yaml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-state",
+          "kind": "file",
+          "template": "${OPENAMER_ROOT}/state.db",
+          "platforms": [
+            "linux",
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-state",
+          "kind": "file",
+          "template": "${OPENAMER_WINDOWS_ROOT}/state.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-venv-cli",
+          "kind": "file",
+          "template": "${OPENAMER_WINDOWS_ROOT}/openamer-agent/venv/Scripts/openamer.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "sources": [
+        "https://github.com/openamer/openamer/releases/tag/v261122",
+        "https://github.com/openamer/openamer/blob/v261122/pyproject.toml#L332-L335",
+        "https://github.com/openamer/openamer/blob/v261122/openamer_constants.py#L88-L109",
+        "https://github.com/openamer/openamer/blob/v261122/openamer_constants.py#L278-L312",
+        "https://github.com/openamer/openamer/blob/v261122/openamer_cli/config.py#L681-L686",
+        "https://github.com/openamer/openamer/blob/v261122/openamer_state.py#L253-L261",
+        "https://github.com/openamer/openamer/blob/v261122/scripts/install.ps1#L26-L30",
+        "https://github.com/openamer/openamer/blob/v261122/scripts/install.ps1#L3693-L3705"
+      ],
+      "version": "2026.11.22",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-config",
+                "kind": "file",
+                "template": "${OPENAMER_ROOT}/config.yaml",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-config",
+                "kind": "file",
+                "template": "${OPENAMER_WINDOWS_ROOT}/config.yaml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/openamer/openamer/blob/v261122/openamer_constants.py#L88-L109",
+              "https://github.com/openamer/openamer/blob/v261122/openamer_cli/config.py#L681-L686"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-skills",
+                "kind": "dir",
+                "template": "${OPENAMER_ROOT}/skills",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-skills",
+                "kind": "dir",
+                "template": "${OPENAMER_WINDOWS_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/openamer/openamer/blob/v261122/openamer_constants.py#L1384-L1386",
+              "https://github.com/openamer/openamer/blob/v261122/website/docs/guides/work-with-skills.md#L98-L106"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-skill-commands",
+                "kind": "dir",
+                "template": "${OPENAMER_ROOT}/skills",
+                "platforms": [
+                  "linux",
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-skill-commands",
+                "kind": "dir",
+                "template": "${OPENAMER_WINDOWS_ROOT}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/openamer/openamer/blob/v261122/website/docs/guides/work-with-skills.md#L98-L106"
+            ],
+            "confidence": "source",
+            "notes": "Installed skills appear as slash commands; no separate commands directory is used for these."
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/openamer/openamer/blob/v261122/openamer_cli/config.py#L2561-L2565"
+            ],
+            "confidence": "source",
+            "notes": "Shared skill directories can be configured via skills.external_dirs but are not read by default."
+          },
+          "local": {
+            "status": "unsupported",
+            "paths": [],
+            "sources": [
+              "https://github.com/openamer/openamer/blob/v261122/openamer_cli/config.py#L2561-L2565"
+            ],
+            "confidence": "source",
+            "notes": "Shared skill directories can be configured via skills.external_dirs but are not read by default."
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "OPENAMER_ROOT",
+          "env": "OPENAMER_HOME",
+          "fallback": "${HOME}/.openamer"
+        },
+        {
+          "name": "OPENAMER_WINDOWS_LOCAL_DATA",
+          "env": "LOCALAPPDATA",
+          "fallback": "${USERPROFILE}/AppData/Local"
+        },
+        {
+          "name": "OPENAMER_WINDOWS_ROOT",
+          "env": "OPENAMER_HOME",
+          "fallback": "${OPENAMER_WINDOWS_LOCAL_DATA}/openamer"
         }
       ]
     }

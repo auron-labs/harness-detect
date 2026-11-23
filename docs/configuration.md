@@ -428,6 +428,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_DATA_ROOT` | `${GOOSE_PATH_ROOT}/data` (use) or `${XDG_DATA_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_STATE_ROOT` | `${GOOSE_PATH_ROOT}/state` (use) or `${XDG_STATE_HOME}/goose` |
 | `goose` | `GOOSE_PATH_ROOT` | `GOOSE_HISTORY_FILE` | `${GOOSE_PATH_ROOT}/state/history.txt` (use) or `${XDG_STATE_HOME}/goose/history.txt` |
+| `graphcode` | `GRAPHCODE_SUPPORT_DIR` | `GRAPHCODE_ROOT` | `${HOME}/.graphcode` |
 | `grok-build-cli` | `GROK_HOME` | `GROK_ROOT` | `${HOME}/.grok` |
 | `happy-cli` | `HAPPY_HOME_DIR` | `HAPPY_ROOT` | `${HOME}/.happy` |
 | `herdr` | `APPDATA` | `HERDR_WINDOWS_CONFIG` | `${APPDATA}/herdr` (use) or `${USERPROFILE}/AppData/Roaming/herdr` |
@@ -455,6 +456,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openagents-coder` | `CODER_BIN_DIR` | `OPENAGENTS_CODER_BIN` | `${OPENAGENTS_INSTALL_HOME}/bin` |
 | `openagents-coder` | `CODER_BIN_DIR` | `OPENAGENTS_CODER_WINDOWS_BIN` | `${OPENAGENTS_WINDOWS_INSTALL_HOME}/bin` |
 | `openagents-coder` | `CODER_HOME` | `OPENAGENTS_CODER_STATE_HOME` | `${HOME}` |
+| `openamer` | `OPENAMER_HOME` | `OPENAMER_ROOT` | `${HOME}/.openamer` |
+| `openamer` | `LOCALAPPDATA` | `OPENAMER_WINDOWS_LOCAL_DATA` | `${USERPROFILE}/AppData/Local` |
+| `openamer` | `OPENAMER_HOME` | `OPENAMER_WINDOWS_ROOT` | `${OPENAMER_WINDOWS_LOCAL_DATA}/openamer` |
 | `openclaw` | `OPENCLAW_HOME` | `OPENCLAW_ROOT` | `${HOME}/.openclaw` |
 | `openclaw` | `OPENCLAW_STATE_DIR` | `OPENCLAW_STATE_ROOT` | `${OPENCLAW_ROOT}` |
 | `opencode` | `OPENCODE_CONFIG_DIR` | `OPENCODE_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/opencode` |
@@ -593,7 +597,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 139
+console.log(harnesses.harnesses.length);  // 141
 ```
 
 <!-- /automd -->
