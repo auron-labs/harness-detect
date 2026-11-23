@@ -9899,6 +9899,203 @@
       "expect": {
         "error": "Harness khoj has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-openmanus-source-checkout",
+      "operation": "checkHarness",
+      "input": "foundationagents/openmanus",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/app/agent/manus.py"
+        }
+      ],
+      "expect": {
+        "key": "openmanus",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-agent-source"
+        ]
+      }
+    },
+    {
+      "id": "check-openmanus-ignores-generic-python-project",
+      "operation": "checkHarness",
+      "input": "openmanus",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/main.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/requirements.txt"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config/config.example.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config/mcp.json"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/workspace"
+        }
+      ],
+      "expect": {
+        "key": "openmanus",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-metagpt-executable",
+      "operation": "checkHarness",
+      "input": "metagpt",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/metagpt"
+        }
+      ],
+      "expect": {
+        "key": "metagpt",
+        "installed": true,
+        "executablePath": "${BIN}/metagpt",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-metagpt-home-config",
+      "operation": "checkHarness",
+      "input": "geekan/metagpt",
+      "platforms": [
+        "darwin",
+        "linux",
+        "freebsd",
+        "openbsd"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.metagpt/config2.yaml"
+        }
+      ],
+      "expect": {
+        "key": "metagpt",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "home-config"
+        ]
+      }
+    },
+    {
+      "id": "check-metagpt-windows-userprofile-config",
+      "operation": "checkHarness",
+      "input": "metagpt",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "USERPROFILE": "${CWD}/metagpt-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/metagpt-profile/.metagpt/config2.yaml"
+        }
+      ],
+      "expect": {
+        "key": "metagpt",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-home-config"
+        ]
+      }
+    },
+    {
+      "id": "check-metagpt-ignores-generic-project-config",
+      "operation": "checkHarness",
+      "input": "metagpt",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "",
+        "METAGPT_PROJECT_ROOT": "${CWD}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/.metagpt"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config/config2.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/workspace"
+        }
+      ],
+      "expect": {
+        "key": "metagpt",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "translate-openmanus-no-file-target",
+      "operation": "translateMcpJson",
+      "input": "openmanus",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "fixture-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness openmanus has no file-based MCP config for scope local"
+      }
     }
   ]
 }

@@ -33,7 +33,7 @@ keeping registry `version: 1` unless internal tooling truly requires a bump.
 
 <!-- automd:repo-stats section="harness-count-sentence" -->
 
-The registry currently covers **109 harnesses**.
+The registry currently covers **111 harnesses**.
 
 <!-- /automd -->
 
