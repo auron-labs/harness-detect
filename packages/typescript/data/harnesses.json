@@ -40672,7 +40672,7 @@
         },
         {
           "name": "NPM_CONFIG_PREFIX",
-          "description": "Set this to detect a global npm install outside the standard macOS and Windows prefixes. macOS checks both NPM_CONFIG_PREFIX and npm_config_prefix if set; Windows prefers the nonempty uppercase key if both keys are explicitly provided. npm configuration files are not read."
+          "description": "For a nonstandard global npm install, provide an absolute prefix without surrounding whitespace. npm trims whitespace, treats a bare tilde as a relative directory, and takes the last enumerated nonempty spelling. The detector does not trim and expands a bare tilde to HOME; macOS checks both documented spellings and Windows prefers the nonempty uppercase key. npm configuration files are not read."
         }
       ],
       "executables": [],
@@ -40867,6 +40867,8 @@
         "https://github.com/limecloud/lime/blob/v1.180.0/packages/cli/scripts/build_npm_package.py#L118-L134",
         "https://docs.npmjs.com/cli/v11/configuring-npm/folders#node-modules",
         "https://github.com/npm/cli/blob/787f1520fa412e91a5792468f1c7f25b166867a6/workspaces/config/lib/index.js#L367-L380",
+        "https://github.com/npm/cli/blob/787f1520fa412e91a5792468f1c7f25b166867a6/workspaces/config/lib/parse-field.js#L29-L30",
+        "https://github.com/npm/cli/blob/787f1520fa412e91a5792468f1c7f25b166867a6/workspaces/config/lib/parse-field.js#L61-L68",
         "https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/n/node.rb#L225",
         "https://github.com/openfl/lime/blob/8ee2143b07e1d8b990863804d4e253bc0146a329/templates/bin/lime.sh"
       ],
@@ -41462,6 +41464,563 @@
           "fallback": "${HOME}"
         }
       ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "aliases": [
+        "thefalconry/talon",
+        "talon-agent"
+      ],
+      "env": [
+        {
+          "name": "TALON_HOME",
+          "description": "Overrides the config, database, and workspace root. Use an absolute path: Talon resolves relative values from its process working directory and treats a quoted leading tilde literally, while detection expands it."
+        },
+        {
+          "name": "NPM_CONFIG_PREFIX",
+          "description": "For npm launcher detection outside the standard directories, pass an absolute prefix without surrounding whitespace. The detector checks both documented prefix spellings on Linux and macOS; on Windows, uppercase wins if both exact keys are nonempty."
+        }
+      ],
+      "executables": [],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/thefalconry/talon/releases/tag/v5.39.5",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Standalone upstream CLI binaries; DEB and RPM assets are also available for Linux."
+        },
+        {
+          "method": "homebrew",
+          "package": "thefalconry/talon/talon",
+          "command": "brew install thefalconry/talon/talon",
+          "url": "https://github.com/thefalconry/talon/blob/v5.39.5/README.md#L68-L82",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "method": "npm",
+          "package": "talon-agent",
+          "command": "npm install -g talon-agent",
+          "url": "https://registry.npmjs.org/talon-agent/5.33.1",
+          "notes": "The npm package release verified here is 5.33.1; the GitHub standalone release is 5.39.5."
+        }
+      ],
+      "key": "talon",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/thefalconry/talon/blob/v5.39.5/README.md#L267-L279",
+          "https://github.com/thefalconry/talon/blob/v5.39.5/src/core/plugin/mcp.ts#L31-L45",
+          "https://github.com/thefalconry/talon/blob/v5.39.5/src/core/plugin/mcp.ts#L70-L92"
+        ],
+        "status": "supported",
+        "notes": "Talon can connect to standalone MCP servers via installed plugins. No general .mcp.json translation target is verified."
+      },
+      "name": "Talon",
+      "paths": [
+        {
+          "id": "unix-config",
+          "kind": "file",
+          "template": "${TALON_ROOT}/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "unix-database",
+          "kind": "file",
+          "template": "${TALON_ROOT}/data/talon.db",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "unix-native-bridge",
+          "kind": "file",
+          "template": "${TALON_ROOT}/native-bridge.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-config",
+          "kind": "file",
+          "template": "${TALON_WINDOWS_ROOT}/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-database",
+          "kind": "file",
+          "template": "${TALON_WINDOWS_ROOT}/data/talon.db",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-native-bridge",
+          "kind": "file",
+          "template": "${TALON_WINDOWS_ROOT}/native-bridge.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "unix-default-npm-launcher",
+          "kind": "file",
+          "template": "/usr/local/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "macos-homebrew-npm-launcher",
+          "kind": "file",
+          "template": "/opt/homebrew/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-system-npm-launcher",
+          "kind": "file",
+          "template": "/usr/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "linux-homebrew-npm-launcher",
+          "kind": "file",
+          "template": "/home/linuxbrew/.linuxbrew/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "unix-npm-prefix-launcher",
+          "kind": "file",
+          "template": "${TALON_NPM_PREFIX}/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "unix-npm-lowercase-prefix-launcher",
+          "kind": "file",
+          "template": "${TALON_NPM_LOWERCASE_PREFIX}/lib/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-default-npm-launcher",
+          "kind": "file",
+          "template": "${TALON_WINDOWS_APPDATA}/npm/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "windows-npm-prefix-launcher",
+          "kind": "file",
+          "template": "${TALON_WINDOWS_NPM_PREFIX}/node_modules/talon-agent/bin/talon.js",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        }
+      ],
+      "sources": [
+        "https://github.com/thefalconry/talon/releases/tag/v5.39.5",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/README.md#L68-L98",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L34-L48",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/fs-path.ts#L124-L132",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L112-L125",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L154-L157",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/cli/config.ts#L164-L178",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/src/frontend/native/bridge/discovery.ts#L17-L50",
+        "https://github.com/thefalconry/talon/blob/v5.39.5/docs/server-install.md#L14-L27",
+        "https://registry.npmjs.org/talon-agent/5.33.1",
+        "https://talonvoice.com/",
+        "https://docs.npmjs.com/cli/v11/configuring-npm/folders#node-modules",
+        "https://docs.npmjs.com/cli/v11/configuring-npm/folders#prefix",
+        "https://docs.brew.sh/Homebrew-on-Linux#install",
+        "https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/n/node.rb#L225"
+      ],
+      "version": "5.39.5",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-config",
+                "kind": "file",
+                "template": "${TALON_ROOT}/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-config",
+                "kind": "file",
+                "template": "${TALON_WINDOWS_ROOT}/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L34-L48",
+              "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L112-L115"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-workspace-skills",
+                "kind": "dir",
+                "template": "${TALON_ROOT}/workspace/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-workspace-skills",
+                "kind": "dir",
+                "template": "${TALON_WINDOWS_ROOT}/workspace/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/thefalconry/talon/blob/v5.39.5/src/util/paths.ts#L83-L88",
+              "https://github.com/thefalconry/talon/blob/v5.39.5/docs/skills.md#L7-L24"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "TALON_ROOT",
+          "env": "TALON_HOME",
+          "fallback": "${HOME}/.talon"
+        },
+        {
+          "name": "TALON_WINDOWS_PROFILE",
+          "env": "USERPROFILE",
+          "fallback": "${HOME}"
+        },
+        {
+          "name": "TALON_WINDOWS_ROOT",
+          "env": "TALON_HOME",
+          "fallback": "${TALON_WINDOWS_PROFILE}/.talon"
+        },
+        {
+          "name": "TALON_NPM_PREFIX",
+          "env": "NPM_CONFIG_PREFIX",
+          "fallback": ""
+        },
+        {
+          "name": "TALON_NPM_LOWERCASE_PREFIX",
+          "env": "npm_config_prefix",
+          "fallback": ""
+        },
+        {
+          "name": "TALON_WINDOWS_APPDATA",
+          "env": "APPDATA",
+          "fallback": "${TALON_WINDOWS_PROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "TALON_WINDOWS_NPM_PREFIX",
+          "env": "NPM_CONFIG_PREFIX",
+          "fallbackEnv": "npm_config_prefix",
+          "fallback": ""
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "aliases": [
+        "sandbaseai/sandbase-harness"
+      ],
+      "env": [],
+      "executables": [],
+      "installations": [
+        {
+          "method": "manual",
+          "url": "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L14-L29",
+          "notes": "Build from the tagged GitHub source. The unscoped managed-agents npm package is unrelated."
+        }
+      ],
+      "key": "sandbase-harness",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "source",
+          "paths": [],
+          "sources": [
+            "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/schema.ts#L88-L100",
+            "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/store.ts#L18-L38"
+          ],
+          "status": "supported",
+          "notes": "MCP servers belong to individual agent definitions stored in the workspace SQLite database. There is no workspace-wide native MCP file to translate into."
+        },
+        "mcpJson": "unknown",
+        "sources": [
+          "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/schema.ts#L15-L30",
+          "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/schema.ts#L88-L100",
+          "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/session/tool-resolver.ts#L262-L278",
+          "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/spec/design.md#L221-L225"
+        ],
+        "status": "supported",
+        "notes": "Agent definitions declare MCP servers; live agent records are persisted in SQLite. A project-wide .mcp.json import or lossless translation target is not verified."
+      },
+      "name": "SandBase Harness",
+      "paths": [
+        {
+          "id": "workspace-config",
+          "kind": "file",
+          "template": "${CWD}/.managed-agents/config.yaml",
+          "category": "config"
+        },
+        {
+          "id": "workspace-database",
+          "kind": "file",
+          "template": "${CWD}/.managed-agents/data.db",
+          "category": "state"
+        }
+      ],
+      "sources": [
+        "https://github.com/sandbaseai/sandbase-harness/releases/tag/v0.3.8",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L14-L29",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L44-L55",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L115-L132",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L219-L232",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/config/paths.ts#L4-L26",
+        "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/runtime/bootstrap.ts#L35-L50",
+        "https://registry.npmjs.org/managed-agents/0.0.1"
+      ],
+      "version": "0.3.8",
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-config",
+                "kind": "file",
+                "template": "${CWD}/.managed-agents/config.yaml"
+              }
+            ],
+            "sources": [
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/config/paths.ts#L12-L26",
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/usage.md#L209-L212"
+            ],
+            "confidence": "source",
+            "notes": "The YAML seeds runtime configuration. Detect an alternate workspace by scanning from that workspace; individual CLI path overrides are not inspected."
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-seed-skills",
+                "kind": "dir",
+                "template": "${CWD}/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/usage.md#L15-L31",
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/installation.md#L219-L232",
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/skills.md#L1-L10"
+            ],
+            "confidence": "source",
+            "notes": "Optional workspace seed packages, not installation evidence."
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "workspace-seed-agents",
+                "kind": "dir",
+                "template": "${CWD}/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/usage.md#L41-L44",
+              "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/docs/usage.md#L214-L217"
+            ],
+            "confidence": "source",
+            "notes": "Optional YAML seed definitions. Live agent resources are stored in SQLite."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      }
     }
   ]
 }

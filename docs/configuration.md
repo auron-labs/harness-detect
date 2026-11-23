@@ -520,6 +520,13 @@ The following table lists harness-specific env vars that affect path resolution 
 | `sourcegraph-cody` | `APPDATA` | `CODY_WIN_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
 | `tale` | `LOCALAPPDATA` | `TALE_WIN_LOCAL_APP_DATA` | (empty — path resolves to null) |
 | `tale` | `TALE_SANDBOX_HOME` | `TALE_SANDBOX_ROOT` | `${HOME}/.tale/sandbox` |
+| `talon` | `TALON_HOME` | `TALON_ROOT` | `${HOME}/.talon` |
+| `talon` | `USERPROFILE` | `TALON_WINDOWS_PROFILE` | `${HOME}` |
+| `talon` | `TALON_HOME` | `TALON_WINDOWS_ROOT` | `${TALON_WINDOWS_PROFILE}/.talon` |
+| `talon` | `NPM_CONFIG_PREFIX` | `TALON_NPM_PREFIX` | (empty — path resolves to null) |
+| `talon` | `npm_config_prefix` | `TALON_NPM_LOWERCASE_PREFIX` | (empty — path resolves to null) |
+| `talon` | `APPDATA` | `TALON_WINDOWS_APPDATA` | `${TALON_WINDOWS_PROFILE}/AppData/Roaming` |
+| `talon` | `NPM_CONFIG_PREFIX` | `TALON_WINDOWS_NPM_PREFIX` | (empty — path resolves to null) |
 | `tianshu` | `LOCALAPPDATA` | `TIANSHU_LOCAL_DATA` | `${USERPROFILE}/AppData/Local` |
 | `tianshu` | `APPDATA` | `TIANSHU_ROAMING_DATA` | `${USERPROFILE}/AppData/Roaming` |
 | `tianshu` | `RIVET_HOME` | `TIANSHU_DATA_ROOT` | `${HOME}/.rivet` |
@@ -612,7 +619,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 143
+console.log(harnesses.harnesses.length);  // 145
 ```
 
 <!-- /automd -->
