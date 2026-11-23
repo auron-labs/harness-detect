@@ -287,7 +287,7 @@ MCP client status: supported: 104; unsupported: 11; unknown: 30. Project-root `.
 | `roo-code` | supported | unknown | supported (no config file) | `${CWD}/.roo/mcp.json`<br>json: `mcpServers` | map; stdio, http, sse |
 | `rovo-dev-cli` | supported | unknown | `${HOME}/.rovodev/mcp.json`<br>`${HOME}/.rovodev/mcp_config.json`<br>json: `mcpServers` | unknown | map; stdio, http, sse |
 | `san` | supported | unsupported | `${HOME}/.san/mcp.json`<br>json: `mcpServers` | `${CWD}/.san/mcp.json`<br>`${CWD}/.san/mcp.local.json`<br>json: `mcpServers` | map; stdio, http, sse |
-| `sandbase-harness` | supported | unknown | unknown | unknown | — |
+| `sandbase-harness` | supported | unknown | unknown | supported (no config file) | — |
 | `shai` | supported | unknown | `${XDG_CONFIG_HOME}/shai/auth.config.json`<br>json: `mcp_configs` | unknown | map; stdio, http, sse |
 | `sourcegraph-cody` | supported | unknown | supported (no config file) | supported (no config file) | — |
 | `speakeasy-kit` | supported | supported | supported (no config file) | supported (no config file) | — |

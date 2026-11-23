@@ -41873,10 +41873,14 @@
           "status": "unknown"
         },
         "local": {
-          "confidence": "unknown",
+          "confidence": "source",
           "paths": [],
-          "sources": [],
-          "status": "unknown"
+          "sources": [
+            "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/schema.ts#L88-L100",
+            "https://github.com/sandbaseai/sandbase-harness/blob/v0.3.8/src/core/agent/store.ts#L18-L38"
+          ],
+          "status": "supported",
+          "notes": "MCP servers belong to individual agent definitions stored in the workspace SQLite database. There is no workspace-wide native MCP file to translate into."
         },
         "mcpJson": "unknown",
         "sources": [

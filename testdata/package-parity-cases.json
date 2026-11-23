@@ -16569,6 +16569,30 @@
         "executablePath": null,
         "matchedPathIds": []
       }
+    },
+    {
+      "id": "mcp-sandbase-workspace",
+      "operation": "getHarnessMcp",
+      "input": "sandbase-harness",
+      "expect": {
+        "key": "sandbase-harness"
+      }
+    },
+    {
+      "id": "translate-sandbase-withholds-database-target",
+      "operation": "translateMcpJson",
+      "input": "sandbase-harness",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "command": "docs-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness sandbase-harness has no file-based MCP config for scope local"
+      }
     }
   ]
 }
