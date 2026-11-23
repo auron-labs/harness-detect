@@ -462,6 +462,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `opencode` | — | `OPENCODE_DATA_ROOT` | `${XDG_DATA_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_STATE_ROOT` | `${XDG_STATE_HOME}/opencode` |
 | `opencode` | — | `OPENCODE_CACHE_ROOT` | `${XDG_CACHE_HOME}/opencode` |
+| `opencompany` | `OPENCOMPANY_DATA_DIR` | `OPENCOMPANY_DATA_ROOT` | `${HOME}/.opencompany` |
 | `openfang` | `OPENFANG_HOME` | `OPENFANG_ROOT` | `${HOME}/.openfang` |
 | `openfang` | `OPENFANG_HOME` | `OPENFANG_WINDOWS_ROOT` | `${USERPROFILE}/.openfang` |
 | `openfang` | `OPENFANG_INSTALL_DIR` | `OPENFANG_INSTALL_ROOT` | `${HOME}/.openfang/bin` |
@@ -498,6 +499,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `reasonix` | `REASONIX_HOME` | `REASONIX_WIN_HOME` | `${REASONIX_ROAMING}/reasonix` |
 | `reef` | `REEF_NATIVE_DIR` | `REEF_NATIVE_ROOT` | `${CWD}/native` |
 | `sourcegraph-cody` | `APPDATA` | `CODY_WIN_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
+| `tale` | `LOCALAPPDATA` | `TALE_WIN_LOCAL_APP_DATA` | (empty — path resolves to null) |
+| `tale` | `TALE_SANDBOX_HOME` | `TALE_SANDBOX_ROOT` | `${HOME}/.tale/sandbox` |
 | `tianshu` | `LOCALAPPDATA` | `TIANSHU_LOCAL_DATA` | `${USERPROFILE}/AppData/Local` |
 | `tianshu` | `APPDATA` | `TIANSHU_ROAMING_DATA` | `${USERPROFILE}/AppData/Roaming` |
 | `tianshu` | `RIVET_HOME` | `TIANSHU_DATA_ROOT` | `${HOME}/.rivet` |
@@ -590,7 +593,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 137
+console.log(harnesses.harnesses.length);  // 139
 ```
 
 <!-- /automd -->

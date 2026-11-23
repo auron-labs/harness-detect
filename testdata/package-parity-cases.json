@@ -14803,6 +14803,327 @@
       "expect": {
         "key": "agent-qa"
       }
+    },
+    {
+      "id": "check-opencompany-cli",
+      "operation": "checkHarness",
+      "input": "tinyhumansai/opencompany",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/opencompany"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": "${BIN}/opencompany",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-opencompany-user-desktop-app",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/OpenCompany.app"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-desktop-app"
+        ]
+      }
+    },
+    {
+      "id": "check-opencompany-default-config",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OPENCOMPANY_DATA_DIR": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.opencompany/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-config"
+        ]
+      }
+    },
+    {
+      "id": "check-opencompany-data-override",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OPENCOMPANY_DATA_DIR": "${TMP}/oc-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/oc-data/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "instance-config"
+        ]
+      }
+    },
+    {
+      "id": "check-opencompany-ignores-standalone-company",
+      "operation": "checkHarness",
+      "input": "opencompany",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/company.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.toml"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/.openhuman"
+        },
+        {
+          "type": "executable",
+          "path": "${BIN}/openco"
+        }
+      ],
+      "expect": {
+        "key": "opencompany",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-tale-windows-default-cli",
+      "operation": "checkHarness",
+      "input": "tale",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "localappdata": "${TMP}/localappdata"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/localappdata/Programs/tale/tale.exe"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-tale-deployment-lock",
+      "operation": "checkHarness",
+      "input": "tale-project/tale",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.tale/deployment-lock.sqlite"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "deployment-lock"
+        ]
+      }
+    },
+    {
+      "id": "check-tale-cutover-state",
+      "operation": "checkHarness",
+      "input": "tale",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.tale/automation-cutover.json"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "automation-cutover"
+        ]
+      }
+    },
+    {
+      "id": "check-tale-sandbox-device",
+      "operation": "checkHarness",
+      "input": "tale",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "TALE_SANDBOX_HOME": ""
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.tale/sandbox/device.json"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sandbox-device"
+        ]
+      }
+    },
+    {
+      "id": "check-tale-sandbox-override",
+      "operation": "checkHarness",
+      "input": "tale",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "TALE_SANDBOX_HOME": "${TMP}/tale-sandbox"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tale-sandbox/device.json"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "sandbox-device"
+        ]
+      }
+    },
+    {
+      "id": "check-tale-ignores-shared-cli-and-project-files",
+      "operation": "checkHarness",
+      "input": "tale",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/tale"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/tale.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/compose.yaml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.tale"
+        }
+      ],
+      "expect": {
+        "key": "tale",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "support-record-opencompany",
+      "operation": "getHarnessSupport",
+      "input": "opencompany"
+    },
+    {
+      "id": "mcp-opencompany",
+      "operation": "getHarnessMcp",
+      "input": "opencompany"
+    },
+    {
+      "id": "support-record-tale",
+      "operation": "getHarnessSupport",
+      "input": "tale"
+    },
+    {
+      "id": "mcp-tale",
+      "operation": "getHarnessMcp",
+      "input": "tale"
     }
   ]
 }

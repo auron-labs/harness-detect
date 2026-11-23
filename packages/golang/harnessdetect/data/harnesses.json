@@ -39730,6 +39730,384 @@
         "confidence": "unknown",
         "notes": "No standalone agent-qa ACP launch was verified."
       }
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown",
+        "notes": "The desktop application connects to external ACP agents; no OpenCompany agent-side ACP launch was verified."
+      },
+      "aliases": [
+        "tinyhumansai/opencompany"
+      ],
+      "env": [
+        {
+          "name": "OPENCOMPANY_DATA_DIR",
+          "description": "Overrides the instance data root. Use an absolute path: OpenCompany takes the value literally, while the detector expands a leading tilde. The separate --home bundle override is not inferred."
+        }
+      ],
+      "executables": [
+        "opencompany"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "platforms": [
+            "darwin"
+          ],
+          "url": "https://github.com/tinyhumansai/opencompany/releases/tag/v0.3.0",
+          "notes": "Download the signed DMG for Apple Silicon or Intel and drag OpenCompany into Applications."
+        },
+        {
+          "method": "manual",
+          "url": "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/docs/running-locally.md#L32-L53",
+          "notes": "Build the opencompany host from the checkout with its vendored submodules. A container-only installation is not detected on the host."
+        }
+      ],
+      "key": "opencompany",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unsupported",
+        "sources": [
+          "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/docs/modules/mcp.md#L3-L47",
+          "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/company/mcp_file.rs#L44-L95"
+        ],
+        "status": "supported",
+        "notes": "OpenCompany loads HTTP MCP servers from instance defaults, a selected company bundle, or operator-managed settings. Bundle mcp.json is not a project-root .mcp.json. The native formats use separate secret references and tool grants; no automatic translation is offered."
+      },
+      "name": "OpenCompany",
+      "paths": [
+        {
+          "id": "desktop-app",
+          "kind": "dir",
+          "template": "/Applications/OpenCompany.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "user-desktop-app",
+          "kind": "dir",
+          "template": "${HOME}/Applications/OpenCompany.app",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "instance-config",
+          "kind": "file",
+          "template": "${OPENCOMPANY_DATA_ROOT}/config.toml",
+          "category": "config"
+        }
+      ],
+      "sources": [
+        "https://github.com/tinyhumansai/opencompany/releases/tag/v0.3.0",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/README.md#L45-L59",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/tauri.conf.json#L2-L6",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/Cargo.toml#L39-L44",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/app/config.rs#L1156-L1194",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/bin/opencompany.rs#L2003-L2016",
+        "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-app/src/embedded.rs#L172-L176"
+      ],
+      "version": "0.3.0",
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "instance-config",
+                "kind": "file",
+                "template": "${OPENCOMPANY_DATA_ROOT}/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/app/config.rs#L1156-L1194",
+              "https://github.com/tinyhumansai/opencompany/blob/v0.3.0/crates/opencompany-core/src/bin/opencompany.rs#L2003-L2016"
+            ],
+            "confidence": "source",
+            "notes": "OpenCompany chooses HOME before USERPROFILE, then falls back to a relative .opencompany when both are unset. The detector uses its resolved home instead of that last fallback."
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "OPENCOMPANY_DATA_ROOT",
+          "env": "OPENCOMPANY_DATA_DIR",
+          "fallback": "${HOME}/.opencompany"
+        }
+      ]
+    },
+    {
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      },
+      "aliases": [
+        "tale-project/tale"
+      ],
+      "env": [
+        {
+          "name": "TALE_SANDBOX_HOME",
+          "description": "Overrides Tale sandbox-device state. Use an absolute path without surrounding whitespace: Tale trims whitespace and does not expand a quoted tilde, unlike the detector."
+        }
+      ],
+      "executables": [],
+      "installations": [
+        {
+          "method": "binary",
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ],
+          "url": "https://github.com/tale-project/tale/releases/tag/v0.5.107",
+          "notes": "Release builds cover Linux and macOS on x64 and ARM64, and Windows on x64. Run the linked release binary or use the documented installer."
+        },
+        {
+          "method": "script",
+          "platforms": [
+            "linux",
+            "darwin",
+            "win32"
+          ],
+          "url": "https://github.com/tale-project/tale/blob/v0.5.107/docs/en/self-hosted/install/cli-install.md#L25-L49",
+          "notes": "Use the Unix shell or PowerShell installer for your platform. A bare tale command (including an install outside the default Windows path) is not a unique product signal."
+        }
+      ],
+      "key": "tale",
+      "mcp": {
+        "confidence": "source",
+        "global": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "local": {
+          "confidence": "unknown",
+          "paths": [],
+          "sources": [],
+          "status": "unknown"
+        },
+        "mcpJson": "unsupported",
+        "sources": [
+          "https://github.com/tale-project/tale/blob/v0.5.107/docs/en/develop/connectors.md#L122-L133"
+        ],
+        "status": "unsupported",
+        "notes": "Tale offers an inbound MCP endpoint for external clients; it does not register outbound MCP servers for its project agents."
+      },
+      "name": "Tale",
+      "paths": [
+        {
+          "id": "windows-cli",
+          "kind": "file",
+          "template": "${TALE_WIN_LOCAL_APP_DATA}/Programs/tale/tale.exe",
+          "platforms": [
+            "win32"
+          ],
+          "category": "install"
+        },
+        {
+          "id": "deployment-lock",
+          "kind": "file",
+          "template": "${CWD}/.tale/deployment-lock.sqlite",
+          "category": "state"
+        },
+        {
+          "id": "automation-cutover",
+          "kind": "file",
+          "template": "${CWD}/.tale/automation-cutover.json",
+          "category": "state"
+        },
+        {
+          "id": "sandbox-device",
+          "kind": "file",
+          "template": "${TALE_SANDBOX_ROOT}/device.json",
+          "category": "state"
+        }
+      ],
+      "sources": [
+        "https://github.com/tale-project/tale/releases/tag/v0.5.107",
+        "https://github.com/tale-project/tale/blob/v0.5.107/docs/en/self-hosted/install/cli-install.md#L25-L49",
+        "https://github.com/tale-project/tale/blob/v0.5.107/scripts/install-cli.ps1#L23-L27",
+        "https://github.com/tale-project/tale/blob/v0.5.107/tools/cli/src/lib/state/lock-guard.ts#L74-L84",
+        "https://github.com/tale-project/tale/blob/v0.5.107/tools/cli/src/lib/deployment/automation-cutover.ts#L237-L242",
+        "https://github.com/tale-project/tale/blob/v0.5.107/tools/cli/src/lib/sandbox-device/config.ts#L49-L56",
+        "https://www.npmjs.com/package/tale/v/3.0.2"
+      ],
+      "version": "0.5.107",
+      "support": {
+        "config": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/tale.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/tale-project/tale/blob/v0.5.107/tools/cli/src/lib/project/find-project.ts#L6-L19"
+            ],
+            "confidence": "source",
+            "notes": "Tale searches parent directories, but the detector reports only the supplied project root. A tracked tale.json or a generic Compose file alone does not prove installation."
+          }
+        },
+        "skills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          },
+          "local": {
+            "confidence": "unknown",
+            "paths": [],
+            "sources": [],
+            "status": "unknown"
+          }
+        }
+      },
+      "roots": [
+        {
+          "name": "TALE_WIN_LOCAL_APP_DATA",
+          "env": "LOCALAPPDATA",
+          "fallback": ""
+        },
+        {
+          "name": "TALE_SANDBOX_ROOT",
+          "env": "TALE_SANDBOX_HOME",
+          "fallback": "${HOME}/.tale/sandbox"
+        }
+      ]
     }
   ]
 }
