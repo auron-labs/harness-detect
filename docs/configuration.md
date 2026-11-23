@@ -412,6 +412,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_LINUX` | `${XDG_CONFIG_HOME}/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_DARWIN` | `${HOME}/Library/Application Support/emdash` |
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
+| `empryo` | `LOCALAPPDATA` | `EMPRYO_WIN_LOCAL_APPDATA` | (empty — path resolves to null) |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_ROOT` | `${CWD}/.fast-agent` |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_GLOBAL_PLUGIN_ROOT` | `${HOME}/.fast-agent` |
 | `flowise` | `DATABASE_PATH` | `FLOWISE_SQLITE_DIR` | `${HOME}/.flowise` |
@@ -473,6 +474,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `openjarvis` | `OPENJARVIS_HOME` | `OPENJARVIS_WINDOWS_INSTALL_ROOT` | `${LOCALAPPDATA}/OpenJarvis` |
 | `openrig` | `OPENRIG_HOME` | `OPENRIG_ROOT` | `${HOME}/.openrig` |
 | `openrig` | `OPENRIG_SKILLS_ROOT` | `OPENRIG_SKILLS` | `${OPENRIG_ROOT}/skills` |
+| `orkas` | `ORKAS_WORKSPACE_ROOT` | `ORKAS_UNIX_DATA` | `${HOME}/.orkas/data` |
+| `orkas` | `ORKAS_WORKSPACE_ROOT` | `ORKAS_WIN_DATA` | (empty — path resolves to null) |
+| `orkas` | `LOCALAPPDATA` | `ORKAS_WIN_LOCAL_APPDATA` | `${USERPROFILE}/AppData/Local` |
 | `paradev` | `SUPERSET_HOME_DIR` | `PARADEV_ROOT` | `${HOME}/.paradev` |
 | `paradev` | `SUPERSET_HOME` | `PARADEV_CLI_INSTALL_ROOT` | `${HOME}/superset` |
 | `pipali` | `APPDATA` | `PIPALI_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
@@ -577,7 +581,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 127
+console.log(harnesses.harnesses.length);  // 129
 ```
 
 <!-- /automd -->
