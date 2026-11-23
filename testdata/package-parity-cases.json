@@ -10586,6 +10586,10 @@
           "path": "${BIN}/openagents"
         },
         {
+          "type": "executable",
+          "path": "${BIN}/microcoder"
+        },
+        {
           "type": "file",
           "path": "${HOME}/.openagents/settings.json"
         }

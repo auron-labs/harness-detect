@@ -33955,7 +33955,8 @@
         "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/apps/openagents-web/cli/install.ps1#L35-L38",
         "https://github.com/OpenAgentsInc/openagents/blob/2c8b844538b26c6bd77cdb90d529ed8665477630/coax/lib/agent/session/writer.coax#L84-L101",
         "https://github.com/coder/coder",
-        "https://pypi.org/project/openagents/0.9.3.post20/"
+        "https://pypi.org/project/openagents/0.9.3.post20/",
+        "https://github.com/dpreil-ydlp/microcoder/blob/f60b16f7052aaa272b826b3c92ef343f1a507495/package.json"
       ],
       "installations": [
         {
@@ -33965,7 +33966,7 @@
             "darwin",
             "linux"
           ],
-          "notes": "OpenAgents' shell installer ships coder, openagents, and microcoder for macOS and Linux on x86-64 and ARM64."
+          "notes": "Ships coder, openagents, and microcoder for macOS and Linux on x86-64 and ARM64. For a relocated install without session state, pass CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
         },
         {
           "method": "script",
@@ -33973,7 +33974,7 @@
           "platforms": [
             "win32"
           ],
-          "notes": "OpenAgents' PowerShell installer ships the Windows x86-64 build, including in compatibility mode on Windows ARM64."
+          "notes": "Ships a Windows x86-64 build that also runs in compatibility mode on Windows ARM64. For a relocated install without session state, pass CODER_BIN_DIR or OPENAGENTS_HOME to detection; PATH alone cannot distinguish these commands from other projects."
         }
       ],
       "support": {
