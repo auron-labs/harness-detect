@@ -15202,6 +15202,446 @@
       "id": "mcp-tale",
       "operation": "getHarnessMcp",
       "input": "tale"
+    },
+    {
+      "id": "check-graphcode-user-app-daemon",
+      "operation": "checkHarness",
+      "input": "scgopi/graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Applications/graphcode.app/Contents/Resources/bin/graphcoded"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-app-daemon"
+        ]
+      }
+    },
+    {
+      "id": "check-graphcode-default-settings",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.graphcode/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "workspace-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-graphcode-source-cli",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GRAPHCODE_SUPPORT_DIR": "~/.graphcode-work"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${HOME}/.graphcode/bin/graphcode"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "source-install-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-graphcode-named-workspace",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "GRAPHCODE_SUPPORT_DIR": "~/.graphcode-work"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.graphcode-work/bin/graphcoded"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.graphcode-work/settings.json"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "workspace-daemon",
+          "workspace-settings"
+        ]
+      }
+    },
+    {
+      "id": "check-graphcode-ignores-unproven-markers",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/graphcode"
+        },
+        {
+          "type": "dir",
+          "path": "${HOME}/Applications/graphcode.app"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-graphcode-is-macos-only",
+      "operation": "checkHarness",
+      "input": "graphcode",
+      "platforms": [
+        "linux",
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/Applications/graphcode.app/Contents/Resources/bin/graphcoded"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.graphcode/settings.json"
+        },
+        {
+          "type": "executable",
+          "path": "${HOME}/.graphcode/bin/graphcode"
+        }
+      ],
+      "expect": {
+        "key": "graphcode",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openamer-cli",
+      "operation": "checkHarness",
+      "input": "openamer-agent",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/openamer"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": "${BIN}/openamer",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-openamer-unix-config",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openamer/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openamer-profile-state",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "OPENAMER_HOME": "${HOME}/.openamer/profiles/work"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.openamer/profiles/work/state.db"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-state"
+        ]
+      }
+    },
+    {
+      "id": "check-openamer-windows-localappdata",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "localappdata": "${TMP}/local-app-data"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/local-app-data/openamer/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/local-app-data/openamer/openamer-agent/venv/Scripts/openamer.exe"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-config",
+          "windows-venv-cli"
+        ]
+      }
+    },
+    {
+      "id": "check-openamer-windows-fallback",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/profile/AppData/Local/openamer/state.db"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-state"
+        ]
+      }
+    },
+    {
+      "id": "check-openamer-windows-overrides-localappdata",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "${TMP}/local-app-data",
+        "openamer_home": "${TMP}/relocated"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/relocated/config.yaml"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-openamer-ignores-hermes-and-generic-files",
+      "operation": "checkHarness",
+      "input": "openamer",
+      "platforms": [
+        "linux",
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/hermes"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.hermes/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.yaml"
+        },
+        {
+          "type": "file",
+          "path": "${HOME}/.openamer/.env"
+        }
+      ],
+      "expect": {
+        "key": "openamer",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "support-record-graphcode",
+      "operation": "getHarnessSupport",
+      "input": "graphcode"
+    },
+    {
+      "id": "mcp-graphcode",
+      "operation": "getHarnessMcp",
+      "input": "graphcode"
+    },
+    {
+      "id": "support-record-openamer",
+      "operation": "getHarnessSupport",
+      "input": "openamer"
+    },
+    {
+      "id": "acp-openamer",
+      "operation": "getHarnessAcp",
+      "input": "openamer",
+      "expect": {
+        "key": "openamer"
+      }
+    },
+    {
+      "id": "mcp-openamer",
+      "operation": "getHarnessMcp",
+      "input": "openamer"
+    },
+    {
+      "id": "translate-openamer-withholds-colliding-server-names",
+      "operation": "translateMcpJson",
+      "input": "openamer",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs-api": {
+            "url": "https://example.com/mcp"
+          },
+          "docs_api": {
+            "command": "docs-mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness openamer has no file-based MCP config for scope global"
+      }
     }
   ]
 }
