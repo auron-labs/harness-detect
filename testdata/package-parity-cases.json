@@ -12134,6 +12134,329 @@
       "expect": {
         "error": "Harness tianshu has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-reasonix-cli",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/reasonix"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": "${BIN}/reasonix",
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-reasonix-nested-project-config",
+      "operation": "checkHarness",
+      "input": "deepseek-reasonix",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.reasonix/reasonix.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "nested-project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-default-unix-config",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.reasonix/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-unix-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-windows-roaming-config",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/reasonix-roaming",
+        "USERPROFILE": "${TMP}/reasonix-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/reasonix-roaming/reasonix/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-windows-profile-fallback",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "",
+        "USERPROFILE": "${TMP}/reasonix-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/reasonix-profile/AppData/Roaming/reasonix/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "default-windows-config"
+        ]
+      }
+    },
+    {
+      "id": "check-reasonix-ignores-shared-files-and-generic-overrides",
+      "operation": "checkHarness",
+      "input": "reasonix",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "REASONIX_HOME": "${TMP}/reasonix-generic"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/reasonix-generic/config.toml"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        }
+      ],
+      "expect": {
+        "key": "reasonix",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "acp-reasonix",
+      "operation": "getHarnessAcp",
+      "input": "reasonix-studio",
+      "expect": {
+        "key": "reasonix"
+      }
+    },
+    {
+      "id": "mcp-reasonix",
+      "operation": "getHarnessMcp",
+      "input": "reasonix",
+      "expect": {
+        "key": "reasonix"
+      }
+    },
+    {
+      "id": "support-record-reasonix",
+      "operation": "getHarnessSupport",
+      "input": "reasonix"
+    },
+    {
+      "id": "check-cowagent-source-pid",
+      "operation": "checkHarness",
+      "input": "cowagent",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.cow.pid"
+        }
+      ],
+      "expect": {
+        "key": "cowagent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "checkout-pid"
+        ]
+      }
+    },
+    {
+      "id": "check-cowagent-macos-desktop-log",
+      "operation": "checkHarness",
+      "input": "cow-agent",
+      "platforms": [
+        "darwin"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.cow/run.log"
+        }
+      ],
+      "expect": {
+        "key": "cowagent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "macos-desktop-log"
+        ]
+      }
+    },
+    {
+      "id": "check-cowagent-windows-desktop-config",
+      "operation": "checkHarness",
+      "input": "cowagent",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "USERPROFILE": "${TMP}/cowagent-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/cowagent-profile/.cow/config.json"
+        }
+      ],
+      "expect": {
+        "key": "cowagent",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-desktop-config"
+        ]
+      }
+    },
+    {
+      "id": "check-cowagent-ignores-other-cow-cli-and-generic-files",
+      "operation": "checkHarness",
+      "input": "cowagent",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "COW_DATA_DIR": "${TMP}/cowagent-generic"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/cow"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/app.py"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.json"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/cowagent-generic/config.json"
+        }
+      ],
+      "expect": {
+        "key": "cowagent",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "mcp-cowagent",
+      "operation": "getHarnessMcp",
+      "input": "cow-agent",
+      "expect": {
+        "key": "cowagent"
+      }
+    },
+    {
+      "id": "support-record-cowagent",
+      "operation": "getHarnessSupport",
+      "input": "cowagent"
     }
   ]
 }

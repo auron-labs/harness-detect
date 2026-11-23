@@ -35997,7 +35997,7 @@
       "env": [
         {
           "name": "RIVET_HOME",
-          "description": "Data-root override. Use a non-empty absolute path; upstream trims whitespace. Detection can identify project-trust.json in the relocated root."
+          "description": "Data-root override. Use a non-empty absolute path. Upstream trims whitespace but resolves relative paths from its working directory and keeps a quoted tilde literal; the detector resolves relative paths from the supplied cwd and expands a leading tilde. Detection can identify project-trust.json in the relocated root."
         },
         {
           "name": "RIVET_CONFIG_PATH",
@@ -36269,6 +36269,675 @@
           "confidence": "source",
           "notes": "Use a trusted project's .rivet-config.json."
         }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
+    },
+    {
+      "key": "reasonix",
+      "name": "Reasonix",
+      "version": "2.61.0",
+      "aliases": [
+        "deepseek-reasonix",
+        "reasonix-studio"
+      ],
+      "executables": [
+        "reasonix"
+      ],
+      "roots": [
+        {
+          "name": "REASONIX_ROAMING",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "REASONIX_UNIX_HOME",
+          "env": "REASONIX_HOME",
+          "fallback": "${HOME}/.reasonix"
+        },
+        {
+          "name": "REASONIX_WIN_HOME",
+          "env": "REASONIX_HOME",
+          "fallback": "${REASONIX_ROAMING}/reasonix"
+        }
+      ],
+      "paths": [
+        {
+          "id": "default-unix-config",
+          "kind": "file",
+          "template": "${HOME}/.reasonix/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "default-windows-config",
+          "kind": "file",
+          "template": "${REASONIX_ROAMING}/reasonix/config.toml",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "project-config",
+          "kind": "file",
+          "template": "${CWD}/reasonix.toml",
+          "category": "config"
+        },
+        {
+          "id": "nested-project-config",
+          "kind": "file",
+          "template": "${CWD}/.reasonix/reasonix.toml",
+          "category": "config"
+        }
+      ],
+      "env": [
+        {
+          "name": "REASONIX_HOME",
+          "description": "Overrides the user config root, normally ~/.reasonix on macOS and Linux or APPDATA/reasonix on Windows. Use an absolute path; the override is resolved for configuration lookup, but a generic config.toml under an arbitrary override is not proof of installation."
+        },
+        {
+          "name": "APPDATA",
+          "description": "Windows roaming profile parent for the default Reasonix home; otherwise USERPROFILE/AppData/Roaming."
+        }
+      ],
+      "sources": [
+        "https://github.com/esengine/DeepSeek-Reasonix/releases/tag/v2.61.0",
+        "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/README.md#L133-L155",
+        "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/CONFIG_PATHS.md#L7-L37",
+        "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/CONFIG_PATHS.md#L241-L259",
+        "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/storage_roots.go#L252-L270",
+        "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/paths.go#L150-L174"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/esengine/DeepSeek-Reasonix/releases/tag/v2.61.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Final 2.x CLI release. Unpack the archive for your platform and put reasonix on PATH."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/esengine/DeepSeek-Reasonix/releases/tag/studio-v2.61.0",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Optional Reasonix Studio desktop install. Desktop packaging does not imply that the CLI is on PATH."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "resolved-unix-config",
+                "kind": "file",
+                "template": "${REASONIX_UNIX_HOME}/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "resolved-windows-config",
+                "kind": "file",
+                "template": "${REASONIX_WIN_HOME}/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/CONFIG_PATHS.md#L7-L37"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/reasonix.toml"
+              },
+              {
+                "id": "nested-project-config",
+                "kind": "file",
+                "template": "${CWD}/.reasonix/reasonix.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/CONFIG_PATHS.md#L241-L259"
+            ],
+            "confidence": "source",
+            "notes": "The root file wins. The nested file is a fallback, not an additional merged config."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-user-skills",
+                "kind": "dir",
+                "template": "${REASONIX_UNIX_HOME}/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-skills",
+                "kind": "dir",
+                "template": "${REASONIX_WIN_HOME}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/SKILLS.md#L18-L34"
+            ],
+            "confidence": "source",
+            "notes": "Product-specific roots. The loader can also read shared home conventions unless Reasonix home is isolated."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-skills",
+                "kind": "dir",
+                "template": "${CWD}/.reasonix/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/SKILLS.md#L18-L34"
+            ],
+            "confidence": "source",
+            "notes": "Canonical project skills; additional shared conventions are also scanned."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-user-commands",
+                "kind": "dir",
+                "template": "${REASONIX_UNIX_HOME}/commands",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-commands",
+                "kind": "dir",
+                "template": "${REASONIX_WIN_HOME}/commands",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/paths.go#L617-L637"
+            ],
+            "confidence": "source",
+            "notes": "Paths shown are the product-specific write locations; Reasonix also scans convention directories."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-commands",
+                "kind": "dir",
+                "template": "${CWD}/.reasonix/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/GUIDE.md#L1824-L1832"
+            ],
+            "confidence": "source"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "unix-user-subagent-profiles",
+                "kind": "dir",
+                "template": "${REASONIX_UNIX_HOME}/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-subagent-profiles",
+                "kind": "dir",
+                "template": "${REASONIX_WIN_HOME}/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/SUBAGENT_PROFILES.md#L8-L33"
+            ],
+            "confidence": "source",
+            "notes": "Subagent profiles are skills with runAs: subagent."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-subagent-profiles",
+                "kind": "dir",
+                "template": "${CWD}/.reasonix/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/SUBAGENT_PROFILES.md#L8-L33"
+            ],
+            "confidence": "source",
+            "notes": "Subagent profiles are skills with runAs: subagent."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "global-agents-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/ext/skill/skill.go#L427-L460"
+            ],
+            "confidence": "source",
+            "notes": "An isolated REASONIX_HOME disables OS-home convention discovery."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agents-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/SKILLS.md#L18-L34"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "supported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/load.go#L151-L159",
+            "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/plugin_entry.go#L3-L17"
+          ],
+          "confidence": "source",
+          "notes": "Use [[plugins]] in the Reasonix user config."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/load.go#L178-L192"
+          ],
+          "confidence": "source",
+          "notes": "Reads .mcp.json from the project root. A same-name entry in project TOML takes precedence."
+        },
+        "sources": [
+          "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/mcpjson.go#L16-L62",
+          "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/internal/contract/config/plugin_entry.go#L3-L17"
+        ],
+        "confidence": "source",
+        "notes": "Reasonix reads the project-root .mcp.json directly; no separate translation target is advertised."
+      },
+      "acp": {
+        "status": "supported",
+        "launches": [
+          {
+            "command": "reasonix",
+            "args": [
+              "acp"
+            ],
+            "platforms": [
+              "darwin",
+              "linux",
+              "win32"
+            ]
+          }
+        ],
+        "sources": [
+          "https://github.com/esengine/DeepSeek-Reasonix/blob/v2.61.0/docs/ACP.md#L9-L38"
+        ],
+        "confidence": "official",
+        "notes": "Launch the installed 2.x CLI over stdio. Run reasonix setup first if no provider is configured."
+      }
+    },
+    {
+      "key": "cowagent",
+      "name": "CowAgent",
+      "version": "2.2.2",
+      "aliases": [
+        "cow-agent"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "COWAGENT_SOURCE_DATA",
+          "env": "COW_DATA_DIR",
+          "fallback": "${CWD}"
+        }
+      ],
+      "paths": [
+        {
+          "id": "macos-desktop-config",
+          "kind": "file",
+          "template": "${HOME}/.cow/config.json",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "windows-desktop-config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.cow/config.json",
+          "platforms": [
+            "win32"
+          ],
+          "category": "config"
+        },
+        {
+          "id": "macos-desktop-log",
+          "kind": "file",
+          "template": "${HOME}/.cow/run.log",
+          "platforms": [
+            "darwin"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "windows-desktop-log",
+          "kind": "file",
+          "template": "${USERPROFILE}/.cow/run.log",
+          "platforms": [
+            "win32"
+          ],
+          "category": "state"
+        },
+        {
+          "id": "checkout-pid",
+          "kind": "file",
+          "template": "${CWD}/.cow.pid",
+          "category": "state"
+        }
+      ],
+      "env": [
+        {
+          "name": "COW_DATA_DIR",
+          "description": "CowAgent backend data directory override. Source mode otherwise uses the checkout directory, and packaged desktop sets the variable to ~/.cow. A generic config.json under an arbitrary override is not a detection signal."
+        }
+      ],
+      "sources": [
+        "https://github.com/zhayujie/CowAgent/releases/tag/2.2.2",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/README.md#L74-L113",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L568-L574",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L937-L951",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/desktop/src/main/index.ts#L20-L38",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/desktop/src/main/python-manager.ts#L788-L805",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/cli/commands/process.py#L37-L42",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/cli/utils.py#L8-L11",
+        "https://github.com/zhayujie/CowAgent/blob/2.2.2/pyproject.toml#L15-L16"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/zhayujie/CowAgent/releases/tag/2.2.2",
+          "platforms": [
+            "darwin",
+            "win32"
+          ],
+          "notes": "Desktop bundles the backend and writes config and logs under ~/.cow."
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/zhayujie/CowAgent/blob/2.2.2/README.md#L74-L95",
+          "platforms": [
+            "darwin",
+            "linux"
+          ],
+          "notes": "Use the upstream Linux/macOS setup instructions from a shell. The release's server is not the PyPI package of the same name."
+        },
+        {
+          "method": "script",
+          "url": "https://github.com/zhayujie/CowAgent/blob/2.2.2/README.md#L84-L101",
+          "platforms": [
+            "win32"
+          ],
+          "notes": "Use the upstream PowerShell setup instructions for a source/server install."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "macos-desktop-user-config",
+                "kind": "file",
+              "template": "${HOME}/.cow/config.json",
+                "platforms": [
+                  "darwin"
+                ]
+              },
+              {
+                "id": "windows-desktop-user-config",
+                "kind": "file",
+              "template": "${USERPROFILE}/.cow/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L937-L951",
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/desktop/src/main/python-manager.ts#L788-L805"
+            ],
+            "confidence": "source",
+            "notes": "The packaged launcher sets its own COW_DATA_DIR before starting the backend."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "checkout-user-config",
+                "kind": "file",
+                "template": "${COWAGENT_SOURCE_DATA}/config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L568-L574",
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L937-L951",
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/config.py#L902-L904"
+            ],
+            "confidence": "source",
+            "notes": "Pass the source checkout as cwd; otherwise the source-relative path does not describe the install."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-workspace-skills",
+                "kind": "dir",
+                "template": "${HOME}/cow/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-default-workspace-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/cow/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/team.py#L38-L46",
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/common/state_dir.py#L145-L164"
+            ],
+            "confidence": "source",
+            "notes": "The shared skill folder defaults to ~/cow/skills; individual agents can use their own workspace skills."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "default-team",
+                "kind": "file",
+                "template": "${HOME}/cow/agents/team.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-default-team",
+                "kind": "file",
+                "template": "${USERPROFILE}/cow/agents/team.json",
+                "platforms": [
+                  "win32"
+                ]
+              },
+              {
+                "id": "default-subagent-templates",
+                "kind": "dir",
+                "template": "${HOME}/cow/subagents",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-default-subagent-templates",
+                "kind": "dir",
+                "template": "${USERPROFILE}/cow/subagents",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/team.py#L38-L46",
+              "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/subagent/templates.py#L170-L195"
+            ],
+            "confidence": "source",
+            "notes": "These are the default workspace paths; change agent_workspace to relocate them."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/tools/tool_manager.py#L320-L346",
+            "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/team.py#L38-L46"
+          ],
+          "confidence": "source",
+          "notes": "The source/server runtime reads mcpServers in the default agent workspace's mcp.json (no leading dot), falling back to mcp_servers in the runtime config."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/tools/tool_manager.py#L292-L298",
+            "https://github.com/zhayujie/CowAgent/blob/2.2.2/common/state_dir.py#L145-L164"
+          ],
+          "confidence": "source",
+          "notes": "A configured agent workspace can have an mcp.json of its own and otherwise inherits the shared file."
+        },
+        "sources": [
+          "https://github.com/zhayujie/CowAgent/blob/2.2.2/agent/tools/tool_manager.py#L320-L346",
+          "https://github.com/zhayujie/CowAgent/blob/2.2.2/app.py#L832-L836"
+        ],
+        "confidence": "source",
+        "notes": "The established target belongs to a configured CowAgent workspace, not the caller's project root. The desktop runtime skips MCP startup warmup; automatic translation is not advertised."
       },
       "acp": {
         "status": "unknown",

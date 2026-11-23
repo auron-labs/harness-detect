@@ -393,6 +393,7 @@ The following table lists harness-specific env vars that affect path resolution 
 | `cline` | `CLINE_DATA_DIR` | `CLINE_DATA_ROOT` | `${CLINE_ROOT}/data` |
 | `codebuff` | — | `CODEBUFF_CONFIG_ROOT` | `${HOME}/.config/manicode` |
 | `codex` | `CODEX_HOME` | `CODEX_ROOT` | `${HOME}/.codex` |
+| `cowagent` | `COW_DATA_DIR` | `COWAGENT_SOURCE_DATA` | `${CWD}` |
 | `crush` | `CRUSH_GLOBAL_CONFIG` | `CRUSH_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/crush` |
 | `crush` | — | `CRUSH_CONFIG_FILE` | `${CRUSH_CONFIG_ROOT}/crush.json` |
 | `crush` | `CRUSH_GLOBAL_DATA` | `CRUSH_DATA_ROOT` | `${XDG_DATA_HOME}/crush` |
@@ -480,6 +481,9 @@ The following table lists harness-specific env vars that affect path resolution 
 | `prime-agent` | `PRIME_AGENT_SESSION_DIR` | `PRIME_AGENT_SESSION_ROOT` | `${PRIME_AGENT_ROOT}/sessions` |
 | `qwenpaw` | `QWENPAW_WORKING_DIR` | `QWENPAW_ROOT` | `${HOME}/.qwenpaw` |
 | `qwenpaw` | `ProgramFiles` | `QWENPAW_PROGRAM_FILES` | (empty — path resolves to null) |
+| `reasonix` | `APPDATA` | `REASONIX_ROAMING` | `${USERPROFILE}/AppData/Roaming` |
+| `reasonix` | `REASONIX_HOME` | `REASONIX_UNIX_HOME` | `${HOME}/.reasonix` |
+| `reasonix` | `REASONIX_HOME` | `REASONIX_WIN_HOME` | `${REASONIX_ROAMING}/reasonix` |
 | `tianshu` | `LOCALAPPDATA` | `TIANSHU_LOCAL_DATA` | `${USERPROFILE}/AppData/Local` |
 | `tianshu` | `APPDATA` | `TIANSHU_ROAMING_DATA` | `${USERPROFILE}/AppData/Roaming` |
 | `tianshu` | `RIVET_HOME` | `TIANSHU_DATA_ROOT` | `${HOME}/.rivet` |
@@ -572,7 +576,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 123
+console.log(harnesses.harnesses.length);  // 125
 ```
 
 <!-- /automd -->
