@@ -409,6 +409,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `emdash` | `EMDASH_USER_DATA_DIR` | `EMDASH_PROFILE_WIN32` | `${APPDATA}/emdash` |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_ROOT` | `${CWD}/.fast-agent` |
 | `fast-agent` | `FAST_AGENT_HOME` | `FAST_AGENT_GLOBAL_PLUGIN_ROOT` | `${HOME}/.fast-agent` |
+| `flowise` | `DATABASE_PATH` | `FLOWISE_SQLITE_DIR` | `${HOME}/.flowise` |
+| `flowise` | `DATABASE_PATH` | `FLOWISE_WINDOWS_SQLITE_DIR` | `${USERPROFILE}/.flowise` |
 | `gemini-cli` | `GEMINI_CLI_HOME` | `GEMINI_ROOT` | `${GEMINI_CLI_HOME}/.gemini` (use) or `${HOME}/.gemini` |
 | `gemini-cli` | `GEMINI_CLI_TRUSTED_FOLDERS_PATH` | `GEMINI_TRUSTED_FOLDERS_FILE` | `${GEMINI_ROOT}/trustedFolders.json` |
 | `github-copilot-cli` | `COPILOT_HOME` | `COPILOT_ROOT` | `${HOME}/.copilot` |
@@ -430,6 +432,8 @@ The following table lists harness-specific env vars that affect path resolution 
 | `mirix` | `MEMGPT_CONFIG_PATH` | `MIRIX_CONFIG_FILE` | `${HOME}/.mirix/config` |
 | `mirix` | `MEMGPT_CONFIG_PATH` | `MIRIX_WINDOWS_CONFIG_FILE` | `${USERPROFILE}/.mirix/config` |
 | `mistral-vibe` | `VIBE_HOME` | `VIBE_HOME` | `${HOME}/.vibe` |
+| `n8n` | `N8N_USER_FOLDER` | `N8N_STATE_PARENT` | `${HOME}` |
+| `n8n` | `N8N_USER_FOLDER` | `N8N_WINDOWS_STATE_PARENT` | `${USERPROFILE}` |
 | `nac` | `NAC_HOME` | `NAC_CONFIG_ROOT` | `${XDG_CONFIG_HOME}/nac` |
 | `oh-my-pi` | `PI_CODING_AGENT_DIR` | `OMP_ROOT` | `${HOME}/.omp/agent` |
 | `omnigent` | `OMNIGENT_CONFIG_HOME` | `OMNIGENT_CONFIG_ROOT` | `${HOME}/.omnigent` |
@@ -559,7 +563,7 @@ const require = createRequire(import.meta.url);
 const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
-console.log(harnesses.harnesses.length);  // 117
+console.log(harnesses.harnesses.length);  // 119
 ```
 
 <!-- /automd -->
