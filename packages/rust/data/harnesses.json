@@ -35574,6 +35574,707 @@
         "sources": [],
         "confidence": "unknown"
       }
+    },
+    {
+      "key": "atlas",
+      "name": "Atlas",
+      "version": "0.5.1",
+      "aliases": [
+        "tryatlas",
+        "tryatlas/atlas",
+        "pacifio/atlas"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "ATLAS_ROAMING_DATA",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        }
+      ],
+      "paths": [
+        {
+          "id": "user-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.config/atlas/config.toml",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-user-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${USERPROFILE}/.config/atlas/config.toml",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "project-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${CWD}/.atlas/config.toml"
+        },
+        {
+          "id": "project-session-db",
+          "category": "state",
+          "kind": "file",
+          "template": "${CWD}/.atlas/sessions.db"
+        },
+        {
+          "id": "macos-app-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/dev.atlas.ide/state.json",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "linux-app-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${HOME}/.local/share/dev.atlas.ide/state.json",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-app-state",
+          "category": "state",
+          "kind": "file",
+          "template": "${ATLAS_ROAMING_DATA}/dev.atlas.ide/state.json",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "XDG_CONFIG_HOME",
+          "description": "Atlas accepts an absolute XDG_CONFIG_HOME for preferences. Detection lists the default home config path rather than treating relative XDG values as paths."
+        },
+        {
+          "name": "APPDATA",
+          "description": "Windows roaming application data containing Atlas state."
+        }
+      ],
+      "sources": [
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/tauri.conf.json#L1-L5",
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/atlas_config.rs#L2258-L2280",
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/project_config.rs#L58-L61",
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/app_state.rs#L361-L366",
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/mod.rs#L9-L12",
+        "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/architecture.md#L368-L376",
+        "https://github.com/tryatlas/atlas/releases/tag/alpha-0.5.1",
+        "https://atlasgo.io/getting-started"
+      ],
+      "installations": [
+        {
+          "method": "binary",
+          "url": "https://github.com/tryatlas/atlas/releases/tag/alpha-0.5.1",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop DMG, MSI, or Linux archives and packages. A bare atlas executable is ambiguous with Ariga Atlas; the separate session-recording Atlas CLI is not a detector signal."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-config",
+                "kind": "file",
+                "template": "${HOME}/.config/atlas/config.toml",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-config",
+                "kind": "file",
+                "template": "${USERPROFILE}/.config/atlas/config.toml",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/atlas_config.rs#L2258-L2280"
+            ],
+            "confidence": "source",
+            "notes": "Atlas honors absolute XDG_CONFIG_HOME; this entry reports default preferences paths. It does not detect arbitrary XDG config or Linux data relocations."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.atlas/config.toml"
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/src-tauri/src/state/project_config.rs#L58-L61"
+            ],
+            "confidence": "source"
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "shared-agent-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-shared-agent-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agents/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/crates/atlas-skills/src/lib.rs#L1-L19"
+            ],
+            "confidence": "source",
+            "notes": "Atlas manages the shared store and projects skills into discovered agents."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agent-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/crates/atlas-skills/src/lib.rs#L1-L19"
+            ],
+            "confidence": "source",
+            "notes": "The selected agent advertises its skills."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/adr/0005-agents-skills-is-the-canonical-store-acp-advertisement-is-the-picker.md#L1-L7"
+            ],
+            "confidence": "source",
+            "notes": "The selected agent advertises slash commands over ACP; Atlas does not use this store as a separate command directory."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "supported",
+            "paths": [],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/architecture.md#L231-L235"
+            ],
+            "confidence": "source",
+            "notes": "The desktop hosts an in-process native agent and independently installed external ACP agents."
+          },
+          "local": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "shared-agent-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-shared-agent-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agents/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/crates/atlas-skills/src/lib.rs#L1-L19"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agent-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/crates/atlas-skills/src/lib.rs#L1-L19"
+            ],
+            "confidence": "source"
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "sources": [
+          "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/architecture.md#L280-L290"
+        ],
+        "confidence": "source",
+        "notes": "Atlas offers app-owned MCP services to its native and external ACP sessions. No user-configurable file translation target was verified.",
+        "mcpJson": "unknown",
+        "global": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        },
+        "local": {
+          "status": "unknown",
+          "paths": [],
+          "sources": [],
+          "confidence": "unknown"
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [
+          "https://github.com/tryatlas/atlas/blob/alpha-0.5.1/docs/architecture.md#L231-L235"
+        ],
+        "confidence": "source",
+        "notes": "Atlas is an ACP client for external agents; no standalone Atlas ACP agent launch was verified."
+      }
+    },
+    {
+      "key": "tianshu",
+      "name": "Tianshu Harness",
+      "version": "3.37.4",
+      "aliases": [
+        "tianshu-harness",
+        "huiliyi37/tianshu-harness"
+      ],
+      "executables": [],
+      "roots": [
+        {
+          "name": "TIANSHU_LOCAL_DATA",
+          "env": "LOCALAPPDATA",
+          "fallback": "${USERPROFILE}/AppData/Local"
+        },
+        {
+          "name": "TIANSHU_ROAMING_DATA",
+          "env": "APPDATA",
+          "fallback": "${USERPROFILE}/AppData/Roaming"
+        },
+        {
+          "name": "TIANSHU_DATA_ROOT",
+          "env": "RIVET_HOME",
+          "fallback": "${HOME}/.rivet"
+        },
+        {
+          "name": "TIANSHU_WINDOWS_ROOT",
+          "env": "RIVET_HOME",
+          "fallback": "${TIANSHU_LOCAL_DATA}/.rivet"
+        },
+        {
+          "name": "TIANSHU_EXPLICIT_CONFIG",
+          "env": "RIVET_CONFIG_PATH",
+          "fallback": ""
+        }
+      ],
+      "paths": [
+        {
+          "id": "unix-user-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/.rivet/config.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-user-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${TIANSHU_LOCAL_DATA}/.rivet/config.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "project-config",
+          "category": "config",
+          "kind": "file",
+          "template": "${CWD}/.rivet-config.json"
+        },
+        {
+          "id": "project-memory",
+          "category": "state",
+          "kind": "file",
+          "template": "${CWD}/.rivet/knowledge/memory.jsonl"
+        },
+        {
+          "id": "unix-project-trust",
+          "category": "state",
+          "kind": "file",
+          "template": "${TIANSHU_DATA_ROOT}/project-trust.json",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "id": "windows-project-trust",
+          "category": "state",
+          "kind": "file",
+          "template": "${TIANSHU_WINDOWS_ROOT}/project-trust.json",
+          "platforms": [
+            "win32"
+          ]
+        },
+        {
+          "id": "linux-desktop-launcher",
+          "category": "config",
+          "kind": "file",
+          "template": "${XDG_CONFIG_HOME}/app.tianshu.desktop/launcher.json",
+          "platforms": [
+            "linux"
+          ]
+        },
+        {
+          "id": "macos-desktop-launcher",
+          "category": "config",
+          "kind": "file",
+          "template": "${HOME}/Library/Application Support/app.tianshu.desktop/launcher.json",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "id": "windows-desktop-launcher",
+          "category": "config",
+          "kind": "file",
+          "template": "${TIANSHU_ROAMING_DATA}/app.tianshu.desktop/launcher.json",
+          "platforms": [
+            "win32"
+          ]
+        }
+      ],
+      "env": [
+        {
+          "name": "RIVET_HOME",
+          "description": "Data-root override. Use a non-empty absolute path; upstream trims whitespace. Detection can identify project-trust.json in the relocated root."
+        },
+        {
+          "name": "RIVET_CONFIG_PATH",
+          "description": "User config file override. Use an absolute path; an arbitrary file here is configuration metadata, not detection evidence."
+        },
+        {
+          "name": "LOCALAPPDATA",
+          "description": "Windows CLI default data parent; otherwise USERPROFILE/AppData/Local."
+        },
+        {
+          "name": "APPDATA",
+          "description": "Windows roaming parent for the desktop launcher configuration."
+        }
+      ],
+      "sources": [
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/package.json#L23-L42",
+        "https://registry.npmjs.org/tianshu-harness/3.37.4",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L26-L57",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L66-L88",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L112-L128",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L105-L118",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/memory/unified-memory.ts#L109-L112",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/project-trust.ts#L24-L30",
+        "https://github.com/huiliyi37/Tianshu-harness/blob/v4.1.54/src/config/paths.ts#L41-L57",
+        "https://registry.npmjs.org/tianshu/0.9.1",
+        "https://registry.npmjs.org/@rivetkit/cli/3.1.1"
+      ],
+      "installations": [
+        {
+          "method": "npm",
+          "package": "tianshu-harness",
+          "command": "npm install -g tianshu-harness@3.37.4",
+          "url": "https://registry.npmjs.org/tianshu-harness/3.37.4",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Requires Node.js 24.22.1+ on the 24 line or 26.12.1+ on the 26 line. The tianshu and legacy rivet commands both collide with unrelated npm packages. CLI-only installations without product-owned files are not detected."
+        },
+        {
+          "method": "binary",
+          "url": "https://github.com/huiliyi37/Tianshu-harness/releases/tag/v4.1.54",
+          "platforms": [
+            "darwin",
+            "linux",
+            "win32"
+          ],
+          "notes": "Desktop releases have a separate version series. Detection covers the app-specific launcher configuration, not a bare app name."
+        }
+      ],
+      "support": {
+        "config": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "explicit-user-config",
+                "kind": "file",
+                "template": "${TIANSHU_EXPLICIT_CONFIG}"
+              },
+              {
+                "id": "unix-user-config",
+                "kind": "file",
+                "template": "${TIANSHU_DATA_ROOT}/config.json",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-config",
+                "kind": "file",
+                "template": "${TIANSHU_WINDOWS_ROOT}/config.json",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L112-L128",
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L66-L88"
+            ],
+            "confidence": "source",
+            "notes": "The CLI prefers RIVET_CONFIG_PATH, then the data root chosen by RIVET_HOME, launcher.json, or the platform default. Detection does not follow launcher.json contents or use arbitrary config overrides as proof of installation."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-config",
+                "kind": "file",
+                "template": "${CWD}/.rivet-config.json"
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L105-L118"
+            ],
+            "confidence": "source",
+            "notes": "Upstream checks parent directories as well; pass the project root as cwd for detection."
+          }
+        },
+        "skills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "user-rivet-skills",
+                "kind": "dir",
+                "template": "${HOME}/.rivet/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-user-rivet-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.rivet/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/skills/skill-loader.ts#L990-L1028"
+            ],
+            "confidence": "source",
+            "notes": "The global skills loader uses the OS home, not RIVET_HOME."
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-rivet-skills",
+                "kind": "dir",
+                "template": "${CWD}/.rivet/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/skills/skill-loader.ts#L990-L1028"
+            ],
+            "confidence": "source",
+            "notes": "Project skills require workspace trust."
+          }
+        },
+        "commands": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-commands",
+                "kind": "dir",
+                "template": "${CWD}/.rivet/commands"
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/commands/loader.ts#L21-L33"
+            ],
+            "confidence": "source",
+            "notes": "Project command files require workspace trust."
+          }
+        },
+        "agents": {
+          "global": {
+            "status": "unknown",
+            "paths": [],
+            "sources": [],
+            "confidence": "unknown"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agent-profiles",
+                "kind": "dir",
+                "template": "${CWD}/.rivet/agents"
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/bootstrap.ts#L2230-L2239",
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/agent/profile-registry.ts#L530-L544"
+            ],
+            "confidence": "source",
+            "notes": "Project agent profiles require workspace trust."
+          }
+        },
+        "agentsSkills": {
+          "global": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "shared-agent-skills",
+                "kind": "dir",
+                "template": "${HOME}/.agents/skills",
+                "platforms": [
+                  "darwin",
+                  "linux"
+                ]
+              },
+              {
+                "id": "windows-shared-agent-skills",
+                "kind": "dir",
+                "template": "${USERPROFILE}/.agents/skills",
+                "platforms": [
+                  "win32"
+                ]
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/skills/skill-loader.ts#L990-L1028"
+            ],
+            "confidence": "source"
+          },
+          "local": {
+            "status": "supported",
+            "paths": [
+              {
+                "id": "project-agent-skills",
+                "kind": "dir",
+                "template": "${CWD}/.agents/skills"
+              }
+            ],
+            "sources": [
+              "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/skills/skill-loader.ts#L990-L1028"
+            ],
+            "confidence": "source",
+            "notes": "Project skills require workspace trust."
+          }
+        }
+      },
+      "mcp": {
+        "status": "supported",
+        "sources": [
+          "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L39-L66",
+          "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
+          "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/wrapper.ts#L7-L10",
+          "https://github.com/colinhacks/zod/blob/v3.25.76/packages/zod/src/v3/helpers/parseUtil.ts#L134-L156",
+          "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L2875-L2905"
+        ],
+        "confidence": "source",
+        "notes": "Tianshu uses mcp.servers in JSON and ignores project MCP settings until the project is trusted. Automated translation is unavailable because the native parser drops the server name __proto__ and tool naming can collapse distinct server names such as a__b and a_b.",
+        "mcpJson": "unsupported",
+        "global": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/paths.ts#L112-L128",
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L2875-L2905"
+          ],
+          "confidence": "source",
+          "notes": "Configure mcp.servers in the user JSON file listed under global config support."
+        },
+        "local": {
+          "status": "supported",
+          "paths": [],
+          "sources": [
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/manager.ts#L105-L118",
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/mcp/config.ts#L82-L85",
+            "https://github.com/huiliyi37/Tianshu-harness/blob/v3.37.4/src/config/project-trust.ts#L271-L275"
+          ],
+          "confidence": "source",
+          "notes": "Use a trusted project's .rivet-config.json."
+        }
+      },
+      "acp": {
+        "status": "unknown",
+        "sources": [],
+        "confidence": "unknown"
+      }
     }
   ]
 }

@@ -11615,6 +11615,525 @@
       "expect": {
         "error": "Harness nausicaa has no file-based MCP config for scope global"
       }
+    },
+    {
+      "id": "check-atlas-project-sessions",
+      "operation": "checkHarness",
+      "input": "tryatlas/atlas",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.atlas/sessions.db"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-session-db"
+        ]
+      }
+    },
+    {
+      "id": "check-atlas-project-config",
+      "operation": "checkHarness",
+      "input": "atlas",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.atlas/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-atlas-default-home-config",
+      "operation": "checkHarness",
+      "input": "atlas",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": "relative-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.config/atlas/config.toml"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-atlas-linux-app-state",
+      "operation": "checkHarness",
+      "input": "atlas",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.local/share/dev.atlas.ide/state.json"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-app-state"
+        ]
+      }
+    },
+    {
+      "id": "check-atlas-windows-roaming-state",
+      "operation": "checkHarness",
+      "input": "atlas",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "APPDATA": "${TMP}/atlas-roaming",
+        "USERPROFILE": "${TMP}/atlas-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/atlas-roaming/dev.atlas.ide/state.json"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-app-state"
+        ]
+      }
+    },
+    {
+      "id": "check-atlas-ignores-unrelated-cli-and-generic-files",
+      "operation": "checkHarness",
+      "input": "atlas",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/atlas"
+        },
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/atlas.hcl"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/sessions.db"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/config.toml"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        }
+      ],
+      "expect": {
+        "key": "atlas",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-tianshu-project-config",
+      "operation": "checkHarness",
+      "input": "tianshu-harness",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.rivet-config.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-config"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-project-memory",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${CWD}/.rivet/knowledge/memory.jsonl"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "project-memory"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-home-config",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${HOME}/.rivet/config.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-relocated-trust-state",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "RIVET_HOME": "${TMP}/tianshu-relocated"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tianshu-relocated/project-trust.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "unix-project-trust"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-windows-localappdata-config",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "${TMP}/tianshu-local",
+        "USERPROFILE": "${TMP}/tianshu-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tianshu-local/.rivet/config.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-windows-userprofile-fallback",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "win32"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "LOCALAPPDATA": "",
+        "USERPROFILE": "${TMP}/tianshu-profile"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tianshu-profile/AppData/Local/.rivet/config.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "windows-user-config"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-linux-desktop-launcher",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "XDG_CONFIG_HOME": "${TMP}/tianshu-xdg"
+      },
+      "setup": [
+        {
+          "type": "file",
+          "path": "${TMP}/tianshu-xdg/app.tianshu.desktop/launcher.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": true,
+        "executablePath": null,
+        "matchedPathIds": [
+          "linux-desktop-launcher"
+        ]
+      }
+    },
+    {
+      "id": "check-tianshu-ignores-unrelated-tianshu-executable",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/tianshu"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-tianshu-ignores-unrelated-rivet-executable",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}"
+      },
+      "setup": [
+        {
+          "type": "executable",
+          "path": "${BIN}/rivet"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "check-tianshu-ignores-generic-config-overrides-and-skills",
+      "operation": "checkHarness",
+      "input": "tianshu",
+      "platforms": [
+        "darwin",
+        "linux"
+      ],
+      "cwd": "${CWD}",
+      "env": {
+        "HOME": "${HOME}",
+        "PATH": "${BIN}",
+        "RIVET_CONFIG_PATH": "${TMP}/tianshu-generic/config.json",
+        "RIVET_HOME": "${TMP}/tianshu-generic"
+      },
+      "setup": [
+        {
+          "type": "dir",
+          "path": "${CWD}/.agents/skills"
+        },
+        {
+          "type": "file",
+          "path": "${CWD}/.mcp.json"
+        },
+        {
+          "type": "file",
+          "path": "${TMP}/tianshu-generic/config.json"
+        }
+      ],
+      "expect": {
+        "key": "tianshu",
+        "installed": false,
+        "executablePath": null,
+        "matchedPathIds": []
+      }
+    },
+    {
+      "id": "support-record-atlas",
+      "operation": "getHarnessSupport",
+      "input": "atlas"
+    },
+    {
+      "id": "support-record-tianshu",
+      "operation": "getHarnessSupport",
+      "input": "tianshu"
+    },
+    {
+      "id": "translate-atlas-has-no-user-mcp-file-target",
+      "operation": "translateMcpJson",
+      "input": "atlas",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "docs": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness atlas has no file-based MCP config for scope global"
+      }
+    },
+    {
+      "id": "translate-tianshu-withholds-project-translation",
+      "operation": "translateMcpJson",
+      "input": "tianshu",
+      "scope": "local",
+      "mcpJson": {
+        "mcpServers": {
+          "a__b": {
+            "url": "https://example.com/mcp"
+          },
+          "a_b": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness tianshu has no file-based MCP config for scope local"
+      }
+    },
+    {
+      "id": "translate-tianshu-withholds-user-translation",
+      "operation": "translateMcpJson",
+      "input": "tianshu",
+      "scope": "global",
+      "mcpJson": {
+        "mcpServers": {
+          "__proto__": {
+            "url": "https://example.com/mcp"
+          }
+        }
+      },
+      "expect": {
+        "error": "Harness tianshu has no file-based MCP config for scope global"
+      }
     }
   ]
 }
