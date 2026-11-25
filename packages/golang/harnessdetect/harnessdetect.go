@@ -163,7 +163,11 @@ func (a HarnessACP) MarshalJSON() ([]byte, error) {
 	if a.InstalledLaunches != nil {
 		out.InstalledLaunches = &a.InstalledLaunches
 	}
-	return json.Marshal(out)
+	data, err := json.Marshal(out)
+	if err != nil {
+		return nil, fmt.Errorf("marshal HarnessACP: %w", err)
+	}
+	return data, nil
 }
 
 // InstalledACPLaunch is a runnable ACP launch for an installed harness.
@@ -540,6 +544,19 @@ func CheckHarness(input string, options CheckOptions) (HarnessCheckResult, error
 	}, nil
 }
 
+// ResolveHarnessTemplate resolves a registry path template, such as a support
+// or MCP path, for one harness, using the same base variables and harness roots
+// as CheckHarness. It returns "" when a placeholder cannot be resolved. Nothing
+// is checked on disk.
+func ResolveHarnessTemplate(input, template string, options CheckOptions) (string, error) {
+	harness, ok := getHarnessDefinition(input)
+	if !ok {
+		return "", errors.New("Unknown harness: " + input)
+	}
+	env := resolveHarnessRoots(harness, withDefaults(options.Env, options.CWD))
+	return resolveTemplate(template, env), nil
+}
+
 // DetectHarnesses checks every harness in the matrix.
 func DetectHarnesses(options CheckOptions) ([]HarnessCheckResult, error) {
 	loadMatrix()
@@ -557,7 +574,7 @@ func DetectHarnesses(options CheckOptions) ([]HarnessCheckResult, error) {
 // DetectInstalledHarnesses returns the subset of DetectHarnesses
 // results whose Installed field is true. It is equivalent to
 // DetectHarnesses followed by a filter on Installed, but more
-// ergonomic for the common case of "give me the installed harnesses."
+// ergonomic for the common case of "give me the installed harnesses.".
 func DetectInstalledHarnesses(options CheckOptions) ([]HarnessCheckResult, error) {
 	all, err := DetectHarnesses(options)
 	if err != nil {
@@ -710,7 +727,8 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 			fallbackEnvVal = envValue(baseEnv, root.FallbackEnv)
 		}
 
-		if root.Env != "" && envVal != "" {
+		switch {
+		case root.Env != "" && envVal != "":
 			// Env var is set. Resolve the "use" template if provided,
 			// otherwise use the env var value directly.
 			if root.Use != "" {
@@ -724,10 +742,10 @@ func resolveHarnessRoots(harness HarnessDefinition, baseEnv map[string]string) m
 			} else {
 				value = envVal
 			}
-		} else if root.FallbackEnv != "" && fallbackEnvVal != "" {
+		case root.FallbackEnv != "" && fallbackEnvVal != "":
 			// Use the documented legacy override before the static fallback.
 			value = fallbackEnvVal
-		} else {
+		default:
 			// Env vars are not set. Resolve the fallback template.
 			value = resolveTemplate(root.Fallback, out)
 		}

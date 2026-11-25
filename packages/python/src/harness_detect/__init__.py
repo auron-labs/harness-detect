@@ -66,6 +66,7 @@ __all__ = [
     "list_harness_mcp",
     "list_harness_support",
     "list_harnesses",
+    "resolve_harness_template",
     "translate_mcp_json",
 ]
 
@@ -914,6 +915,26 @@ def check_harness(
         matched_paths=matched_paths,
         reasons=reasons,
     )
+
+
+def resolve_harness_template(
+    input: str, template: str, options: CheckOptions | None = None
+) -> str | None:
+    """Resolve a registry path template, such as a support or MCP path, for one
+    harness, using the same base variables and harness roots as
+    :func:`check_harness`. Return ``None`` when a placeholder cannot be
+    resolved. Nothing is checked on disk.
+
+    Raises :class:`HarnessError` with the message ``"Unknown harness: <input>"``
+    if the key/alias is not found.
+    """
+    opts = options or CheckOptions()
+    harness = _find_harness_definition(input)
+    if harness is None:
+        raise HarnessError(f"Unknown harness: {input}")
+
+    env = _resolve_harness_roots(harness, _with_defaults(opts.env, opts.cwd))
+    return _resolve_template(template, env)
 
 
 def detect_harnesses(

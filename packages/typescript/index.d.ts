@@ -1,9 +1,40 @@
-export type HarnessPathCategory = "install" | "config" | "state" | "cache" | "project";
-export type HarnessSupportArea = "config" | "skills" | "commands" | "agents" | "agentsSkills";
+export type HarnessPathCategory =
+  | "install"
+  | "config"
+  | "state"
+  | "cache"
+  | "project";
+
+export type HarnessSupportArea =
+  | "config"
+  | "skills"
+  | "commands"
+  | "agents"
+  | "agentsSkills";
+
 export type HarnessSupportScope = "global" | "local";
+
 export type HarnessSupportStatus = "supported" | "unsupported" | "unknown";
-export type HarnessSupportConfidence = "official" | "source" | "observed" | "inferred" | "unknown";
-export type HarnessPlatform = "aix" | "android" | "cygwin" | "darwin" | "freebsd" | "haiku" | "linux" | "netbsd" | "openbsd" | "sunos" | "win32";
+
+export type HarnessSupportConfidence =
+  | "official"
+  | "source"
+  | "observed"
+  | "inferred"
+  | "unknown";
+
+export type HarnessPlatform =
+  | "aix"
+  | "android"
+  | "cygwin"
+  | "darwin"
+  | "freebsd"
+  | "haiku"
+  | "linux"
+  | "netbsd"
+  | "openbsd"
+  | "sunos"
+  | "win32";
 
 export interface HarnessEnvVar {
   name: string;
@@ -34,7 +65,10 @@ export interface HarnessSupportLeaf {
   notes?: string;
 }
 
-export type HarnessSupport = Record<HarnessSupportArea, Record<HarnessSupportScope, HarnessSupportLeaf>>;
+export type HarnessSupport = Record<
+  HarnessSupportArea,
+  Record<HarnessSupportScope, HarnessSupportLeaf>
+>;
 
 export interface HarnessAcpLaunch {
   command: string;
@@ -53,8 +87,18 @@ export type HarnessAcp = {
       installedLaunches?: HarnessAcpLaunch[];
       adapter?: never;
     }
-  | { status: "supported"; adapter: string; launches?: never; installedLaunches?: never }
-  | { status: "unsupported" | "unknown"; launches?: never; installedLaunches?: never; adapter?: never }
+  | {
+      status: "supported";
+      adapter: string;
+      launches?: never;
+      installedLaunches?: never;
+    }
+  | {
+      status: "unsupported" | "unknown";
+      launches?: never;
+      installedLaunches?: never;
+      adapter?: never;
+    }
 );
 
 export interface HarnessAcpRecord {
@@ -72,6 +116,7 @@ export interface InstalledAcpLaunch {
 }
 
 export type McpConfigFormat = "json" | "jsonc" | "toml" | "yaml";
+
 export type McpScope = "global" | "local";
 
 export interface HarnessMcpScope {
@@ -134,6 +179,15 @@ export interface HarnessMcpRecord {
   mcp: HarnessMcp;
 }
 
+/** Any value representable in a JSON document. */
+export type McpJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | McpJsonValue[]
+  | { [field: string]: McpJsonValue };
+
 /** A server as written in a project .mcp.json file. */
 export interface McpJsonServer {
   type?: "stdio" | "http" | "sse";
@@ -142,12 +196,12 @@ export interface McpJsonServer {
   env?: Record<string, string>;
   url?: string;
   headers?: Record<string, string>;
-  [field: string]: unknown;
+  [field: string]: McpJsonValue | undefined;
 }
 
 export interface McpJsonDocument {
   mcpServers: Record<string, McpJsonServer>;
-  [field: string]: unknown;
+  [field: string]: McpJsonValue | Record<string, McpJsonServer> | undefined;
 }
 
 export interface TranslateMcpJsonOptions {
@@ -167,9 +221,11 @@ export interface McpTranslation {
   format: McpConfigFormat;
   keyPath: [string, ...string[]];
   /** Native servers: an object keyed by name, or an array for array containers. */
-  servers: Record<string, Record<string, unknown>> | Array<Record<string, unknown>>;
+  servers:
+    | Record<string, Record<string, McpJsonValue>>
+    | Record<string, McpJsonValue>[];
   /** servers nested under keyPath, ready to merge into the native config file. */
-  config: Record<string, unknown>;
+  config: Record<string, McpJsonValue>;
   skipped: McpSkippedServer[];
 }
 
@@ -262,10 +318,28 @@ export declare function getHarnessAcp(input: string): HarnessAcpRecord;
 export declare function listHarnessAcp(): HarnessAcpRecord[];
 export declare function getHarnessMcp(input: string): HarnessMcpRecord;
 export declare function listHarnessMcp(): HarnessMcpRecord[];
-export declare function translateMcpJson(input: string, mcpJson: McpJsonDocument | string, options?: TranslateMcpJsonOptions): McpTranslation;
+export declare function translateMcpJson(
+  input: string,
+  mcpJson: McpJsonDocument | string,
+  options?: TranslateMcpJsonOptions
+): McpTranslation;
 export declare function getHarnessSupport(input: string): HarnessSupportRecord;
 export declare function listHarnessSupport(): HarnessSupportRecord[];
-export declare function checkHarness(input: string, options?: CheckHarnessOptions): HarnessCheckResult;
-export declare function detectHarnesses(options?: CheckHarnessOptions): HarnessCheckResult[];
-export declare function detectInstalledHarnesses(options?: CheckHarnessOptions): HarnessCheckResult[];
-export declare function detectInstalledAcpLaunches(options?: CheckHarnessOptions): InstalledAcpLaunch[];
+export declare function checkHarness(
+  input: string,
+  options?: CheckHarnessOptions
+): HarnessCheckResult;
+export declare function resolveHarnessTemplate(
+  input: string,
+  template: string,
+  options?: CheckHarnessOptions
+): string | null;
+export declare function detectHarnesses(
+  options?: CheckHarnessOptions
+): HarnessCheckResult[];
+export declare function detectInstalledHarnesses(
+  options?: CheckHarnessOptions
+): HarnessCheckResult[];
+export declare function detectInstalledAcpLaunches(
+  options?: CheckHarnessOptions
+): InstalledAcpLaunch[];

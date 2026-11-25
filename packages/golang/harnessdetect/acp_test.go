@@ -126,10 +126,10 @@ func TestDetectInstalledACPLaunchesIgnoresRelativePathEntries(t *testing.T) {
 	}
 	root := t.TempDir()
 	for _, dir := range []string{"relative-bin", "absolute-bin"} {
-		if err := os.MkdirAll(filepath.Join(root, dir), 0o755); err != nil {
+		if err := os.MkdirAll(filepath.Join(root, dir), 0o750); err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(filepath.Join(root, dir, "gemini"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+		if err := os.WriteFile(filepath.Join(root, dir, "gemini"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 			t.Fatal(err)
 		}
 	}
@@ -156,16 +156,16 @@ func TestDetectInstalledACPLaunchesNeverReportsAiderACPFromNode(t *testing.T) {
 	}
 	root := t.TempDir()
 	bin := filepath.Join(root, "bin")
-	if err := os.MkdirAll(bin, 0o755); err != nil {
+	if err := os.MkdirAll(bin, 0o750); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(bin, "node"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(bin, "node"), []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 		t.Fatal(err)
 	}
-	if err := os.MkdirAll(filepath.Join(root, "dist"), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, "dist"), 0o750); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(root, "dist", "index.js"), nil, 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(root, "dist", "index.js"), nil, 0o600); err != nil {
 		t.Fatal(err)
 	}
 	found, err := DetectInstalledACPLaunches(CheckOptions{CWD: root, Env: map[string]string{"HOME": root, "PATH": bin}})

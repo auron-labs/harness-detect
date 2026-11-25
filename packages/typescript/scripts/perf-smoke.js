@@ -1,16 +1,16 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import process from "node:process";
 import { performance } from "node:perf_hooks";
+import process from "node:process";
 
 import { detectHarnesses, listHarnesses } from "../src/index.js";
 
-function makeDir(dirPath) {
+const makeDir = (dirPath) => {
   fs.mkdirSync(dirPath, { recursive: true });
-}
+};
 
-function buildEnv(rootDir) {
+const buildEnv = (rootDir) => {
   const home = path.join(rootDir, "home");
   const cwd = path.join(rootDir, "cwd");
 
@@ -43,24 +43,28 @@ function buildEnv(rootDir) {
       HERMES_HOME: path.join(rootDir, "overrides", "hermes"),
       OPENCLAW_HOME: path.join(rootDir, "overrides", "openclaw"),
       OPENCLAW_STATE_DIR: path.join(rootDir, "overrides", "openclaw-state"),
-      AUTOGENSTUDIO_APPDIR: path.join(rootDir, "overrides", "autogenstudio")
-    }
+      AUTOGENSTUDIO_APPDIR: path.join(rootDir, "overrides", "autogenstudio"),
+    },
   };
-}
+};
 
-function readIterations() {
+const readIterations = () => {
   const raw = process.env.HARNESS_DETECT_PERF_ITERATIONS;
+
   if (!raw) {
     return 250;
   }
 
-  const parsed = Number.parseInt(raw, 10);
+  const parsed = Math.trunc(Number(raw));
+
   if (!Number.isFinite(parsed) || parsed <= 0) {
-    throw new Error(`HARNESS_DETECT_PERF_ITERATIONS must be a positive integer, got ${raw}`);
+    throw new Error(
+      `HARNESS_DETECT_PERF_ITERATIONS must be a positive integer, got ${raw}`
+    );
   }
 
   return parsed;
-}
+};
 
 const iterations = readIterations();
 const harnessCount = listHarnesses().length;
@@ -69,21 +73,31 @@ const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "harness-detect-perf-"));
 try {
   const { cwd, env } = buildEnv(rootDir);
   const warmup = detectHarnesses({ env, cwd });
+
   if (warmup.length !== harnessCount) {
-    throw new Error(`warmup detect count mismatch: got ${warmup.length}, want ${harnessCount}`);
+    throw new Error(
+      `warmup detect count mismatch: got ${warmup.length}, want ${harnessCount}`
+    );
   }
 
   const startedAt = performance.now();
+
   for (let i = 0; i < iterations; i += 1) {
     const results = detectHarnesses({ env, cwd });
+
     if (results.length !== harnessCount) {
-      throw new Error(`detect count mismatch on iteration ${i + 1}: got ${results.length}, want ${harnessCount}`);
+      throw new Error(
+        `detect count mismatch on iteration ${i + 1}: got ${results.length}, want ${harnessCount}`
+      );
     }
   }
+
   const elapsedMs = performance.now() - startedAt;
   const opsPerSec = iterations / (elapsedMs / 1000);
 
-  console.log(`typescript perf: ${iterations} iterations, ${opsPerSec.toFixed(2)} ops/sec, ${elapsedMs.toFixed(2)} ms elapsed, ${harnessCount} harnesses/run, PATH=empty, hermetic env`);
+  console.log(
+    `typescript perf: ${iterations} iterations, ${opsPerSec.toFixed(2)} ops/sec, ${elapsedMs.toFixed(2)} ms elapsed, ${harnessCount} harnesses/run, PATH=empty, hermetic env`
+  );
 } finally {
   fs.rmSync(rootDir, { recursive: true, force: true });
 }

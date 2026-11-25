@@ -45,19 +45,14 @@ var (
 
 func tempDir(t *testing.T) string {
 	t.Helper()
-	dir, err := os.MkdirTemp("", "harness-detect-*")
-	if err != nil {
-		t.Fatalf("create temp dir: %v", err)
-	}
-	t.Cleanup(func() { _ = os.RemoveAll(dir) })
-	return dir
+	return t.TempDir()
 }
 
 func TestEmbeddedDataMatchesSharedFile(t *testing.T) {
 	// Read the shared harnesses.json from the monorepo root.
 	// This test ensures we keep the embedded copy in sync.
 	sharedPath := filepath.Join("..", "..", "data", "harnesses.json")
-	sharedData, err := os.ReadFile(sharedPath)
+	sharedData, err := os.ReadFile(sharedPath) //nolint:gosec // fixed repository path
 	if err != nil {
 		t.Fatalf("could not read shared harnesses.json at %s: %v", sharedPath, err)
 	}
@@ -518,7 +513,6 @@ func TestConcurrentRegistryAccessAndChecks(t *testing.T) {
 	errCh := make(chan error, workers)
 
 	for worker := range workers {
-		worker := worker
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -527,15 +521,15 @@ func TestConcurrentRegistryAccessAndChecks(t *testing.T) {
 			binDir := filepath.Join(tmp, fmt.Sprintf("bin-%d", worker))
 			cwd := filepath.Join(tmp, fmt.Sprintf("repo-%d", worker))
 
-			if err := os.MkdirAll(home, 0o755); err != nil {
+			if err := os.MkdirAll(home, 0o750); err != nil {
 				errCh <- fmt.Errorf("worker %d mkdir home: %w", worker, err)
 				return
 			}
-			if err := os.MkdirAll(binDir, 0o755); err != nil {
+			if err := os.MkdirAll(binDir, 0o750); err != nil {
 				errCh <- fmt.Errorf("worker %d mkdir bin: %w", worker, err)
 				return
 			}
-			if err := os.MkdirAll(cwd, 0o755); err != nil {
+			if err := os.MkdirAll(cwd, 0o750); err != nil {
 				errCh <- fmt.Errorf("worker %d mkdir cwd: %w", worker, err)
 				return
 			}
@@ -618,7 +612,7 @@ func writeTempCodexExecutable(t *testing.T) (string, string) {
 
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	exePath := filepath.Join(binDir, "codex")
@@ -735,10 +729,10 @@ func TestDetectHarnesses_ChecksAll(t *testing.T) {
 func TestDetectInstalledHarnesses_OnlyInstalled(t *testing.T) {
 	tmp := tempDir(t)
 	claudeDir := filepath.Join(tmp, ".claude")
-	if err := os.MkdirAll(claudeDir, 0o755); err != nil {
+	if err := os.MkdirAll(claudeDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(claudeDir, "settings.json"), []byte("{}"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(claudeDir, "settings.json"), []byte("{}"), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -845,10 +839,10 @@ func TestCheckHarness_PlatformGated(t *testing.T) {
 func TestCheckHarness_PathMatchInstalls(t *testing.T) {
 	tmp := tempDir(t)
 	claudeDir := filepath.Join(tmp, ".claude")
-	if err := os.MkdirAll(claudeDir, 0o755); err != nil {
+	if err := os.MkdirAll(claudeDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(claudeDir, "settings.json"), []byte("{}"), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(claudeDir, "settings.json"), []byte("{}"), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -878,11 +872,11 @@ func TestCheckHarness_PathMatchInstalls(t *testing.T) {
 func TestCheckHarness_ExecutableMatchInstalls(t *testing.T) {
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	exePath := filepath.Join(binDir, "codex")
-	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -909,11 +903,11 @@ func TestCheckHarness_NonExecutableDoesNotMatch(t *testing.T) {
 
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	exePath := filepath.Join(binDir, "codex")
-	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o644); err != nil {
+	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -944,19 +938,19 @@ func TestCheckHarness_NonExecutableDoesNotMatch(t *testing.T) {
 func TestCheckHarness_ReasonsAndMatchedPaths(t *testing.T) {
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	exePath := filepath.Join(binDir, "codex")
-	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil {
+	if err := os.WriteFile(exePath, []byte("#!/bin/sh\nexit 0\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 		t.Fatalf("write file: %v", err)
 	}
 
 	codexHome := filepath.Join(tmp, "codex-home")
-	if err := os.MkdirAll(codexHome, 0o755); err != nil {
+	if err := os.MkdirAll(codexHome, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(codexHome, "config.toml"), []byte(""), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(codexHome, "config.toml"), []byte(""), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -1261,11 +1255,11 @@ func TestFindExecutable_WindowsExe(t *testing.T) {
 	}
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	exePath := filepath.Join(binDir, "codex.exe")
-	if err := os.WriteFile(exePath, []byte(""), 0o644); err != nil {
+	if err := os.WriteFile(exePath, []byte(""), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -1294,11 +1288,11 @@ func TestFindExecutable_WindowsBat(t *testing.T) {
 	}
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	batPath := filepath.Join(binDir, "codex.bat")
-	if err := os.WriteFile(batPath, []byte(""), 0o644); err != nil {
+	if err := os.WriteFile(batPath, []byte(""), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -1327,10 +1321,10 @@ func TestFindExecutable_WindowsNoMatch(t *testing.T) {
 	}
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
-	if err := os.WriteFile(filepath.Join(binDir, "codex"), []byte(""), 0o644); err != nil {
+	if err := os.WriteFile(filepath.Join(binDir, "codex"), []byte(""), 0o600); err != nil {
 		t.Fatalf("write file: %v", err)
 	}
 
@@ -1359,7 +1353,7 @@ func TestRegistryValidatesAgainstSchema(t *testing.T) {
 		t.Fatalf("schema not found at %s: %v", schemaPath, err)
 	}
 	canonical := filepath.Join("..", "..", "data", "harnesses.json")
-	data, err := os.ReadFile(canonical)
+	data, err := os.ReadFile(canonical) //nolint:gosec // fixed repository path
 	if err != nil {
 		t.Fatalf("read canonical: %v", err)
 	}
@@ -1637,7 +1631,7 @@ func TestRegistryValidatesAgainstSchema(t *testing.T) {
 
 func readJSONFile(t *testing.T, path string) map[string]interface{} {
 	t.Helper()
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) //nolint:gosec // callers pass repository paths
 	if err != nil {
 		t.Fatalf("read %s: %v", path, err)
 	}
@@ -1714,13 +1708,13 @@ func TestCheckHarnessFindsExecutableWithMixedCasePathKey(t *testing.T) {
 	}
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(binDir, "claude"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(binDir, "claude"), []byte("#!/bin/sh\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(binDir, "gemini"), []byte("#!/bin/sh\n"), 0o755); err != nil {
+	if err := os.WriteFile(filepath.Join(binDir, "gemini"), []byte("#!/bin/sh\n"), 0o755); err != nil { //nolint:gosec // fake executable needs the exec bit
 		t.Fatal(err)
 	}
 	env := map[string]string{"Home": tmp, "Path": binDir}
@@ -1751,11 +1745,11 @@ func TestFindExecutable_WindowsMixedCaseKeys(t *testing.T) {
 	}
 	tmp := tempDir(t)
 	binDir := filepath.Join(tmp, "bin")
-	if err := os.MkdirAll(binDir, 0o755); err != nil {
+	if err := os.MkdirAll(binDir, 0o750); err != nil {
 		t.Fatal(err)
 	}
 	exePath := filepath.Join(binDir, "codex.cmd")
-	if err := os.WriteFile(exePath, nil, 0o644); err != nil {
+	if err := os.WriteFile(exePath, nil, 0o600); err != nil {
 		t.Fatal(err)
 	}
 	result, err := CheckHarness("codex", CheckOptions{

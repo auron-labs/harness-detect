@@ -1,14 +1,10 @@
 # harness-detect
 
-[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
-[![CI](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE) [![CI](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml/badge.svg)](https://github.com/auron-labs/harness-detect/actions/workflows/ci.yml)
 
-Detect installed LLM harnesses (Codex, Claude Code, Gemini CLI, Cursor, and
-others) and resolve their config/state paths from an embedded JSON registry.
+Detect installed LLM harnesses (Codex, Claude Code, Gemini CLI, Cursor, and others) and resolve their config/state paths from an embedded JSON registry.
 
-This is the Rust port of `@auron-labs/harness-detect`. It shares the same harness
-registry as the TypeScript, Go, and Python packages and exposes the same API
-surface, adapted to idiomatic Rust naming.
+This is the Rust port of `@auron-labs/harness-detect`. It shares the same harness registry as the TypeScript, Go, and Python packages and exposes the same API surface, adapted to idiomatic Rust naming.
 
 ## Installation
 
@@ -65,6 +61,7 @@ A harness counts as installed when either of these is true:
 - `translate_mcp_json(input, &mcp_json, &McpTranslateOptions::default())` translates a `.mcp.json` `serde_json::Value` into the harness's native server entries for one scope (`None` means `local`), returning `format`, `key_path`, `servers`, `config`, and `skipped`. Nothing is read or written.
 - `get_harness_support(input) -> Result<HarnessSupportRecord, HarnessError>` returns support metadata for one harness key or alias.
 - `list_harness_support() -> Vec<HarnessSupportRecord>` returns support metadata for every harness.
+- `resolve_harness_template(input, template, options) -> Result<Option<String>, HarnessError>` resolves a registry path template, such as a support or MCP path like `${CLAUDE_ROOT}/skills`, to a concrete path using the harness's roots and the same `CheckOptions` as `check_harness`. It returns `None` when a placeholder cannot be resolved and does not check the disk.
 - `check_harness(input, options) -> Result<HarnessCheckResult, HarnessError>` checks one harness key or alias.
 - `detect_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>` checks every registry entry.
 - `detect_installed_harnesses(options) -> Result<Vec<HarnessCheckResult>, HarnessError>` returns only installed harnesses.
@@ -75,31 +72,24 @@ A harness counts as installed when either of these is true:
 
 ## Dependencies
 
-The only runtime dependencies are `serde` and `serde_json`. The registry is
-embedded at compile time via `include_str!`, so there are no filesystem reads
-of the JSON at runtime.
+The only runtime dependencies are `serde` and `serde_json`. The registry is embedded at compile time via `include_str!`, so there are no filesystem reads of the JSON at runtime.
 
 ## Development
 
 Run from `packages/rust`:
 
-| Purpose | Command |
-|---|---|
-| Run tests | `cargo test` |
-| Lint | `cargo clippy --all-targets -- -D warnings` |
-| Format check | `cargo fmt --check` |
-| Format apply | `cargo fmt` |
-| Build | `cargo build` |
+| Purpose      | Command                                     |
+| ------------ | ------------------------------------------- |
+| Run tests    | `cargo test`                                |
+| Lint         | `cargo clippy --all-targets -- -D warnings` |
+| Format check | `cargo fmt --check`                         |
+| Format apply | `cargo fmt`                                 |
+| Build        | `cargo build`                               |
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the full
-command reference and registry editing procedure.
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command reference and registry editing procedure.
 
 ## License
 
 [MIT](../../LICENSE)
 
-ACP metadata describes local stdio launches and optional adapter registry keys,
-independently of file-location support. Read `acp.status`, follow `acp.adapter`
-when present, and select a platform-matching recipe from `acp.launches`. Read the
-owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
-for the optional stored shape and adapter lookup rules.
+ACP metadata describes local stdio launches and optional adapter registry keys, independently of file-location support. Read `acp.status`, follow `acp.adapter` when present, and select a platform-matching recipe from `acp.launches`. Read the owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp) for the optional stored shape and adapter lookup rules.

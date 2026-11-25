@@ -25,12 +25,15 @@ for (const [id, launcher] of [
         if (candidate === launcher) {
           return { isFile: () => true };
         }
+
         throw new Error("No other installation markers in this fixture");
       };
+
       try {
         const result = checkHarness("talon", {
           env: { HOME: "/unused", PATH: "" },
         });
+
         assert.equal(result.installed, true);
         assert.equal(result.executablePath, null);
         assert.deepEqual(
@@ -48,14 +51,18 @@ test("shared parity fixtures produce the expected detection results", async (t) 
   const fixturePath = fileURLToPath(
     new URL("../../../testdata/package-parity-cases.json", import.meta.url)
   );
+
   const snapshotPath = fileURLToPath(
     new URL("../scripts/parity-snapshot.js", import.meta.url)
   );
+
   const fixture = JSON.parse(fs.readFileSync(fixturePath, "utf-8"));
+
   const output = spawnSync("node", [snapshotPath, fixturePath], {
     encoding: "utf-8",
     maxBuffer: 256 * 1024 * 1024,
   });
+
   assert.equal(output.status, 0, output.stderr || String(output.error));
   const snapshot = JSON.parse(output.stdout);
 
@@ -64,6 +71,7 @@ test("shared parity fixtures produce the expected detection results", async (t) 
     expectationCases.map((testCase) => {
       const actual = snapshot.cases.find((entry) => entry.id === testCase.id);
       assert.ok(actual, `Missing snapshot for ${testCase.id}`);
+
       return t.test(testCase.id, { skip: actual.skipped === true }, () => {
         for (const [field, expected] of Object.entries(testCase.expect)) {
           if (field === "pathAssertions") {
@@ -71,10 +79,12 @@ test("shared parity fixtures produce the expected detection results", async (t) 
               const actualPath = actual.result.paths.find(
                 (entry) => entry.id === expectedPath.id
               );
+
               assert.ok(
                 actualPath,
                 `${testCase.id}: missing path ${expectedPath.id}`
               );
+
               for (const [key, value] of Object.entries(expectedPath)) {
                 assert.deepEqual(
                   actualPath[key],

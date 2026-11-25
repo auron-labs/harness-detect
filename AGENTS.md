@@ -44,33 +44,21 @@ See [docs/maintainers.md](./docs/maintainers.md) for the full command reference,
 
 ## Finding ACP records
 
-ACP (Agent Client Protocol) metadata lives in each harness's top-level `acp`
-field in `packages/data/harnesses.json`, separately from file-location `support`.
-For package consumers, use the public getters rather than reading bundled JSON:
+ACP (Agent Client Protocol) metadata lives in each harness's top-level `acp` field in `packages/data/harnesses.json`, separately from file-location `support`. For package consumers, use the public getters rather than reading bundled JSON:
 
-| Package | One key or alias | All ACP records |
-| --- | --- | --- |
-| TypeScript | `getHarnessAcp(input)` | `listHarnessAcp()` |
-| Go | `GetHarnessACP(input)` | `ListHarnessACP()` |
+| Package       | One key or alias         | All ACP records      |
+| ------------- | ------------------------ | -------------------- |
+| TypeScript    | `getHarnessAcp(input)`   | `listHarnessAcp()`   |
+| Go            | `GetHarnessACP(input)`   | `ListHarnessACP()`   |
 | Rust / Python | `get_harness_acp(input)` | `list_harness_acp()` |
 
-Check `acp.status` first. For supported entries, follow `acp.adapter` once by its
-exact registry key if present; the target owns `acp.launches`. Select the launch
-whose `platforms` includes the caller's platform, or the sole launch without a
-platform restriction. Read the host and adapter `acp.notes`, plus the owning
-entry's `installations` and `env`, for dependencies, authentication, and working
-directory requirements. `unknown` is not `unsupported`; installed does not imply
-ACP-ready, and ACP support does not imply installed.
+Check `acp.status` first. For supported entries, follow `acp.adapter` once by its exact registry key if present; the target owns `acp.launches`. Select the launch whose `platforms` includes the caller's platform, or the sole launch without a platform restriction. Read the host and adapter `acp.notes`, plus the owning entry's `installations` and `env`, for dependencies, authentication, and working directory requirements. `unknown` is not `unsupported`; installed does not imply ACP-ready, and ACP support does not imply installed.
 
-See [the ACP lookup and research workflow](docs/harness-guide.md#finding-and-updating-acp-records)
-for an executable lookup example, source-only adapters, and evidence rules.
+See [the ACP lookup and research workflow](docs/harness-guide.md#finding-and-updating-acp-records) for an executable lookup example, source-only adapters, and evidence rules.
 
 ## Finding MCP records
 
-MCP client metadata lives in each harness's required top-level `mcp` field in
-`packages/data/harnesses.json`: `status` (MCP support), `mcpJson` (reads the
-project-root `.mcp.json` by default), `global`/`local` config files with
-`format` and `keyPath`, and a `serverFormat` describing one native server entry.
+MCP client metadata lives in each harness's required top-level `mcp` field in `packages/data/harnesses.json`: `status` (MCP support), `mcpJson` (reads the project-root `.mcp.json` by default), `global`/`local` config files with `format` and `keyPath`, and a `serverFormat` describing one native server entry.
 
 | Package | One key or alias | All MCP records | `.mcp.json` → native config |
 | --- | --- | --- | --- |
@@ -78,13 +66,13 @@ project-root `.mcp.json` by default), `global`/`local` config files with
 | Go | `GetHarnessMCP(input)` | `ListHarnessMCP()` | `TranslateMCPJSON(input, mcpJSON, options)` |
 | Rust / Python | `get_harness_mcp(input)` | `list_harness_mcp()` | `translate_mcp_json(...)` |
 
-Translation is generic: it interprets `serverFormat`, so new harnesses need no
-code. See [MCP metadata](docs/configuration.md#mcp-metadata-mcp) and
-[the MCP workflow](docs/harness-guide.md#finding-and-updating-mcp-records).
+Translation is generic: it interprets `serverFormat`, so new harnesses need no code. See [MCP metadata](docs/configuration.md#mcp-metadata-mcp) and [the MCP workflow](docs/harness-guide.md#finding-and-updating-mcp-records).
 
-Each harness also records the upstream `version` its data was verified against,
-and `support.agentsSkills` reports discovery of the shared `.agents/skills`
-directory.
+Each harness also records the upstream `version` its data was verified against, and `support.agentsSkills` reports discovery of the shared `.agents/skills` directory.
+
+## Resolving support and MCP paths
+
+Detection resolves only `paths[]`. Support and MCP path templates such as `${CLAUDE_ROOT}/skills` come back unresolved; resolve them with `resolveHarnessTemplate(input, template, options?)` (Go `ResolveHarnessTemplate`, Rust/Python `resolve_harness_template`). It applies the same base variables and harness `roots` as detection, returns null (`""` in Go) for an unresolvable placeholder, and does not touch the disk. Filter by the path's `platforms` first. Consumers must not reimplement root resolution.
 
 ## Monorepo layout
 

@@ -7,7 +7,5 @@
     "strict": true,
     "verbatimModuleSyntax": true
   },
-  "files": [
-    "test/types-consumer.ts"
-  ]
+  "files": ["test/types-consumer.ts"]
 }

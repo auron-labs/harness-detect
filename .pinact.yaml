@@ -1,3 +1,9 @@
 version: 3
 min_age:
   value: 7
+rules:
+  # rust-toolchain publishes channel branches, not version tags.
+  - ignore: true
+    conditions:
+      - expr: |
+          ActionName == "dtolnay/rust-toolchain"

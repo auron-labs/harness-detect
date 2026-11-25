@@ -17,10 +17,17 @@ import { checkHarness, listHarnesses } from "../src/index.js";
 
 const repoRoot = fileURLToPath(new URL("../../..", import.meta.url));
 const registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
+
 const minimal = () => ({
-  harnesses: [{ ...structuredClone(registry.harnesses[0]), acp: { status: "unknown", sources: [], confidence: "unknown" } }],
+  harnesses: [
+    {
+      ...structuredClone(registry.harnesses[0]),
+      acp: { status: "unknown", sources: [], confidence: "unknown" },
+    },
+  ],
   version: 1,
 });
+
 const cli = (script, args = []) =>
   spawnSync("node", [path.join(repoRoot, "scripts", script), ...args], {
     cwd: repoRoot,
@@ -97,6 +104,7 @@ test("schema validation rejects invalid structure and evidence claims", () => {
       /sources|confidence/u,
     ],
   ];
+
   for (const [name, mutate, pattern] of cases) {
     const candidate = minimal();
     mutate(candidate.harnesses[0]);
@@ -132,29 +140,42 @@ test("semantic validation rejects ambiguous lookup and repeated path/root IDs", 
 test("global shared skills accept a derived home with the standard default", () => {
   const candidate = minimal();
   const [harness] = candidate.harnesses;
+
   const root = {
     env: "TEST_HOME_OVERRIDE",
     fallback: `\${HOME}`,
     name: "SHARED_SKILLS_HOME",
     use: `\${TEST_HOME_OVERRIDE}/external`,
   };
+
   harness.roots.push(root);
   harness.support.agentsSkills.global = {
     confidence: "source",
-    paths: [{ id: "global-agents-skills", kind: "dir", template: `\${SHARED_SKILLS_HOME}/.agents/skills` }],
+    paths: [
+      {
+        id: "global-agents-skills",
+        kind: "dir",
+        template: `\${SHARED_SKILLS_HOME}/.agents/skills`,
+      },
+    ],
     sources: ["https://example.com/skills"],
     status: "supported",
   };
 
   assert.deepEqual(validateRegistry(candidate), []);
   root.fallback = `\${HOME}/.vendor`;
-  assert.match(validateRegistry(candidate).join("\n"), /support\.agentsSkills\.global/u);
+  assert.match(
+    validateRegistry(candidate).join("\n"),
+    /support\.agentsSkills\.global/u
+  );
 });
 
 test("validation CLI rejects malformed and invalid files without changing them", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "registry-cli-"));
+
   try {
     const filename = path.join(dir, "registry.json");
+
     for (const text of ["{", JSON.stringify({ harnesses: [], version: 1 })]) {
       fs.writeFileSync(filename, text);
       const result = cli("validate-registry.mjs", [filename]);
@@ -175,6 +196,7 @@ test("scaffold emits an incomplete independent draft and rejects existing identi
     "Example Harness",
     ["example-alias"]
   );
+
   assert.deepEqual(draft.executables, []);
   assert.deepEqual(draft.sources, []);
   assert.deepEqual(draft.installations, []);
@@ -203,12 +225,14 @@ test("scaffold emits an incomplete independent draft and rejects existing identi
     /unique/u
   );
   const before = fs.readFileSync(registryPath, "utf-8");
+
   const result = cli("scaffold-harness.mjs", [
     "example-harness",
     "Example Harness",
     "--alias",
     "example-alias",
   ]);
+
   assert.equal(result.status, 0, result.stderr);
   assert.equal(JSON.parse(result.stdout).key, "example-harness");
   assert.match(result.stderr, /Draft only/u);
@@ -229,6 +253,7 @@ test("change summary includes additions, removals, detection rules and support c
   h.roots[0].fallback = `\${HOME}/changed-root`;
   h.support.config.global.status = "unknown";
   const summary = summarizeHarnessChanges(before, after);
+
   for (const field of [
     "aliases",
     "executables",
@@ -238,6 +263,7 @@ test("change summary includes additions, removals, detection rules and support c
   ]) {
     assert.ok(summary.includes(`- ${field}:`), field);
   }
+
   assert.ok(!summary.includes("- support.skills.global:"));
   assert.match(
     summarizeHarnessChanges({ harnesses: [], version: 1 }, after),
@@ -294,6 +320,7 @@ test("smoke isolates every signal and catches a broken path-only resolver", () =
     () =>
       runSmoke([codex], (key, options) => {
         const result = checkHarness(key, options);
+
         return { ...result, installed: Boolean(result.executablePath) };
       }),
     /path-only detection must work/u
@@ -302,6 +329,7 @@ test("smoke isolates every signal and catches a broken path-only resolver", () =
     () =>
       runSmoke([codex], (key, options) => {
         const result = checkHarness(key, options);
+
         return { ...result, installed: result.matchedPaths.length > 0 };
       }),
     /executable-only detection must work/u
@@ -310,6 +338,7 @@ test("smoke isolates every signal and catches a broken path-only resolver", () =
 
 test("stats checker rejects stale content without writing files or consulting Git", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "doc-stats-check-"));
+
   try {
     fs.mkdirSync(path.join(dir, "scripts"));
     fs.mkdirSync(path.join(dir, "packages", "typescript"), { recursive: true });
@@ -327,14 +356,17 @@ test("stats checker rejects stale content without writing files or consulting Gi
       'export default { input: ["README.md"], generators: { example: { name: "example", generate: () => ({ contents: "fresh" }) } } };'
     );
     const filename = path.join(dir, "README.md");
+
     for (const content of ["fresh", "stale"]) {
       const text = `Uncommitted prose\n<!-- automd:example -->\n\n${content}\n\n<!-- /automd -->\n`;
       fs.writeFileSync(filename, text);
+
       const result = spawnSync(
         "node",
         [path.join(dir, "scripts/check-doc-stats.mjs")],
         { cwd: dir, encoding: "utf-8" }
       );
+
       assert.equal(result.status, content === "fresh" ? 0 : 1, result.stderr);
       assert.equal(fs.readFileSync(filename, "utf-8"), text);
     }
@@ -343,7 +375,13 @@ test("stats checker rejects stale content without writing files or consulting Gi
   }
 });
 
-const acpFixture = () => JSON.parse(fs.readFileSync(new URL("../../../testdata/acp-registry.json", import.meta.url), "utf8"));
+const acpFixture = () =>
+  JSON.parse(
+    fs.readFileSync(
+      new URL("../../../testdata/acp-registry.json", import.meta.url),
+      "utf-8"
+    )
+  );
 
 test("ACP schema accepts staged omission, direct argv launches and adapters", () => {
   assert.deepEqual(validateRegistry(acpFixture()), []);
@@ -353,9 +391,16 @@ test("ACP schema accepts staged omission, direct argv launches and adapters", ()
   sourceOnly.harnesses[0].acp.notes = "Run from the built adapter checkout.";
   assert.deepEqual(validateRegistry(sourceOnly), []);
   delete sourceOnly.harnesses[0].acp.notes;
-  assert.ok(validateRegistry(sourceOnly).length, "source-only records need setup notes");
+  assert.ok(
+    validateRegistry(sourceOnly).length,
+    "source-only records need setup notes"
+  );
   const draft = scaffoldHarness(registry, "example-acp", "Example ACP");
-  assert.deepEqual(draft.acp, { status: "unknown", sources: [], confidence: "unknown" });
+  assert.deepEqual(draft.acp, {
+    status: "unknown",
+    sources: [],
+    confidence: "unknown",
+  });
   const before = acpFixture();
   const after = acpFixture();
   after.harnesses[0].acp.launches[0].args.push("--new");
@@ -366,65 +411,198 @@ test("ACP installedLaunches require launches and reject package runners", () => 
   const withInstalled = (installedLaunches) => {
     const candidate = acpFixture();
     candidate.harnesses[0].acp.installedLaunches = installedLaunches;
+
     return candidate;
   };
-  assert.deepEqual(validateRegistry(withInstalled([{ command: "example-agent", args: ["--acp"] }])), []);
+
+  assert.deepEqual(
+    validateRegistry(
+      withInstalled([{ command: "example-agent", args: ["--acp"] }])
+    ),
+    []
+  );
+
   for (const launch of [
     { command: "npx", args: ["-y", "example"] },
     { command: "bunx", args: ["example"] },
     { command: "uvx", args: ["example"] },
     { command: "pnpm", args: ["dlx", "example"] },
   ]) {
-    assert.match(validateRegistry(withInstalled([launch])).join("\n"), /installedLaunches must not use a package runner/u, launch.command);
+    assert.match(
+      validateRegistry(withInstalled([launch])).join("\n"),
+      /installedLaunches must not use a package runner/u,
+      launch.command
+    );
   }
-  assert.deepEqual(validateRegistry(withInstalled([{ command: "pnpm", args: ["run", "acp"] }])), []);
-  assert.deepEqual(validateRegistry(withInstalled([])), [], "empty list opts out of installed detection");
+
+  assert.deepEqual(
+    validateRegistry(
+      withInstalled([{ command: "pnpm", args: ["run", "acp"] }])
+    ),
+    []
+  );
+  assert.deepEqual(
+    validateRegistry(withInstalled([])),
+    [],
+    "empty list opts out of installed detection"
+  );
   const adapter = acpFixture();
-  adapter.harnesses[2].acp.installedLaunches = [{ command: "example-agent", args: [] }];
-  assert.ok(validateRegistry(adapter).length, "adapter records cannot declare installedLaunches");
+  adapter.harnesses[2].acp.installedLaunches = [
+    { command: "example-agent", args: [] },
+  ];
+  assert.ok(
+    validateRegistry(adapter).length,
+    "adapter records cannot declare installedLaunches"
+  );
 });
 
 test("ACP validation rejects invalid claims, launch shapes and adapter targets", () => {
   const cases = [
-    ["empty launches", (h) => { h.acp.launches = []; }],
-    ["ambiguous default", (h) => { delete h.acp.launches[0].platforms; }],
-    ["overlapping platforms", (h) => { h.acp.launches[1].platforms = ["linux"]; }],
-    ["missing supported launch", (h) => { delete h.acp.launches; }],
-    ["both launch and adapter", (h) => { h.acp.adapter = "bridge"; }],
-    ["unsupported launch", (h) => { h.acp.status = "unsupported"; }],
-    ["unknown launch", (h) => { h.acp.status = "unknown"; }],
-    ["missing evidence", (h) => { h.acp.sources = []; }],
-    ["unknown confidence", (h) => { h.acp.confidence = "unknown"; }],
-    ["non-HTTPS evidence", (h) => { h.acp.sources = ["http://example.com"]; }],
-    ["blank command", (h) => { h.acp.launches[0].command = " "; }],
-    ["missing argv", (h) => { delete h.acp.launches[0].args; }],
-    ["shell string argv", (h) => { h.acp.launches[0].args = "--acp"; }],
-    ["nonstring argv", (h) => { h.acp.launches[0].args = [1]; }],
-    ["empty platforms", (h) => { h.acp.launches[0].platforms = []; }],
-    ["duplicate platforms", (h) => { h.acp.launches[0].platforms = ["linux", "linux"]; }],
-    ["invalid platform", (h) => { h.acp.launches[0].platforms = ["plan9"]; }],
-    ["unknown property", (h) => { h.acp.transport = "stdio"; }],
+    [
+      "empty launches",
+      (h) => {
+        h.acp.launches = [];
+      },
+    ],
+    [
+      "ambiguous default",
+      (h) => {
+        delete h.acp.launches[0].platforms;
+      },
+    ],
+    [
+      "overlapping platforms",
+      (h) => {
+        h.acp.launches[1].platforms = ["linux"];
+      },
+    ],
+    [
+      "missing supported launch",
+      (h) => {
+        delete h.acp.launches;
+      },
+    ],
+    [
+      "both launch and adapter",
+      (h) => {
+        h.acp.adapter = "bridge";
+      },
+    ],
+    [
+      "unsupported launch",
+      (h) => {
+        h.acp.status = "unsupported";
+      },
+    ],
+    [
+      "unknown launch",
+      (h) => {
+        h.acp.status = "unknown";
+      },
+    ],
+    [
+      "missing evidence",
+      (h) => {
+        h.acp.sources = [];
+      },
+    ],
+    [
+      "unknown confidence",
+      (h) => {
+        h.acp.confidence = "unknown";
+      },
+    ],
+    [
+      "non-HTTPS evidence",
+      (h) => {
+        h.acp.sources = ["http://example.com"];
+      },
+    ],
+    [
+      "blank command",
+      (h) => {
+        h.acp.launches[0].command = " ";
+      },
+    ],
+    [
+      "missing argv",
+      (h) => {
+        delete h.acp.launches[0].args;
+      },
+    ],
+    [
+      "shell string argv",
+      (h) => {
+        h.acp.launches[0].args = "--acp";
+      },
+    ],
+    [
+      "nonstring argv",
+      (h) => {
+        h.acp.launches[0].args = [1];
+      },
+    ],
+    [
+      "empty platforms",
+      (h) => {
+        h.acp.launches[0].platforms = [];
+      },
+    ],
+    [
+      "duplicate platforms",
+      (h) => {
+        h.acp.launches[0].platforms = ["linux", "linux"];
+      },
+    ],
+    [
+      "invalid platform",
+      (h) => {
+        h.acp.launches[0].platforms = ["plan9"];
+      },
+    ],
+    [
+      "unknown property",
+      (h) => {
+        h.acp.transport = "stdio";
+      },
+    ],
   ];
+
   for (const [label, mutate] of cases) {
     const candidate = acpFixture();
     mutate(candidate.harnesses[0]);
     assert.ok(validateRegistry(candidate).length, label);
   }
-  for (const adapter of ["absent", "bridge-alias", "host", "unknown", "unsupported", "missing"]) {
+
+  for (const adapter of [
+    "absent",
+    "bridge-alias",
+    "host",
+    "unknown",
+    "unsupported",
+    "missing",
+  ]) {
     const candidate = acpFixture();
     candidate.harnesses[2].acp.adapter = adapter;
-    assert.match(validateRegistry(candidate).join("\n"), /acp.adapter/u, adapter);
+    assert.match(
+      validateRegistry(candidate).join("\n"),
+      /acp.adapter/u,
+      adapter
+    );
   }
+
   const chain = acpFixture();
   chain.harnesses[1].acp = { ...chain.harnesses[2].acp, adapter: "native" };
   assert.match(validateRegistry(chain).join("\n"), /host.acp.adapter/u);
   chain.harnesses[1].acp.adapter = "host";
   assert.match(validateRegistry(chain).join("\n"), /acp.adapter/u);
+
   for (const status of ["unsupported", "unknown"]) {
     const candidate = acpFixture();
     candidate.harnesses[2].acp.status = status;
     assert.ok(validateRegistry(candidate).length, `${status} adapter`);
   }
+
   const unsupported = acpFixture();
   unsupported.harnesses[3].acp.sources = [];
   assert.ok(validateRegistry(unsupported).length, "unsupported needs evidence");

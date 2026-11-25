@@ -110,6 +110,7 @@ Checklist:
 - Support `status` must be one of `supported`, `unsupported`, `unknown`.
 - Support `confidence` must be one of `official`, `source`, `observed`, `inferred`, `unknown`.
 - Support path entries reuse the existing path vocabulary where possible: `id`, `kind`, `template`, optional `platforms`, optional `description`.
+- Support and MCP templates are resolved by consumers with `resolveHarnessTemplate` (`ResolveHarnessTemplate`, `resolve_harness_template`), which knows only built-in variables, the caller's environment, and the entry's own `roots`. Give a location with a default and an override a root with `env` and `fallback`, even when no detection path uses it.
 - Unknown support data must be explicit: prefer `status: "unknown"`, `confidence: "unknown"`, and empty `paths` / `sources` arrays instead of partial or omitted leaves.
 - Keep top-level registry `version` at `1`. The per-harness `version` string is different: set it to the upstream release you verified against (no leading `v`) and update it whenever you re-verify the entry.
 - `support.agentsSkills` covers only the shared `.agents/skills` directory, read by default. Supported leaves list `${HOME}/.agents/skills` (global) or `${CWD}/.agents/skills` (local). A documented override can replace `${HOME}` in the global path with a derived root that defaults to `${HOME}`. Opt-in discovery is `unsupported` with a note.
@@ -212,17 +213,9 @@ This is the canonical-first workflow. If you follow it, you do not need to guess
 
 ## Finding and updating ACP records
 
-ACP records describe the agent/server side of Agent Client Protocol. They live
-at `harness.acp` in the canonical registry, independently of file-location
-`support`. Use `getHarnessAcp` / `listHarnessAcp` in TypeScript,
-`GetHarnessACP` / `ListHarnessACP` in Go, or `get_harness_acp` /
-`list_harness_acp` in Rust and Python. Getters accept a harness key or alias and
-return `{key, name, acp}`; list APIs include adapters and entries with unknown
-support. A known harness with omitted metadata reads as `unknown`; an unknown
-harness key is a lookup error.
+ACP records describe the agent/server side of Agent Client Protocol. They live at `harness.acp` in the canonical registry, independently of file-location `support`. Use `getHarnessAcp` / `listHarnessAcp` in TypeScript, `GetHarnessACP` / `ListHarnessACP` in Go, or `get_harness_acp` / `list_harness_acp` in Rust and Python. Getters accept a harness key or alias and return `{key, name, acp}`; list APIs include adapters and entries with unknown support. A known harness with omitted metadata reads as `unknown`; an unknown harness key is a lookup error.
 
-From the repository root, inspect Codex's adapter and the launch for this OS
-without installing or executing an agent:
+From the repository root, inspect Codex's adapter and the launch for this OS without installing or executing an agent:
 
 ```sh
 node --input-type=module <<'JS'
@@ -237,77 +230,31 @@ console.log({ host, owner, launch, installations: definition.installations, env:
 JS
 ```
 
-To list the agents that can be launched on a machine without fetching packages,
-use `detectInstalledAcpLaunches` (TypeScript), `DetectInstalledACPLaunches`
-(Go), or `detect_installed_acp_launches` (Rust and Python). It returns absolute
-command paths and argv for supported, non-adapter entries whose launch for the
-current platform resolves on `PATH`. See [the API reference](api.md#detectinstalledacplaunchesoptions).
+To list the agents that can be launched on a machine without fetching packages, use `detectInstalledAcpLaunches` (TypeScript), `DetectInstalledACPLaunches` (Go), or `detect_installed_acp_launches` (Rust and Python). It returns absolute command paths and argv for supported, non-adapter entries whose launch for the current platform resolves on `PATH`. See [the API reference](api.md#detectinstalledacplaunchesoptions).
 
 Interpret and maintain the records as follows:
 
-- Check `status` before using a launch. `supported` has either a nonempty
-  `launches` list or one `adapter` key. `unknown` and `unsupported` have neither.
-  No matching platform means no recorded launch for that platform.
-- Add `installedLaunches` when upstream documentation or the package manifest
-  confirms that a binary already on `PATH` serves ACP. It uses the same shape and
-  platform rules as `launches`, must not use a package runner, and requires
-  `launches`. Without it, only `launches` that avoid package runners are
-  returned by the installed-launch API. Use `installedLaunches: []` for a launch
-  that pairs a generic interpreter with a relative path (`aider-acp`), so it is
-  never reported as installed.
-- Follow an adapter by its exact registry key once. Adapter chains are invalid.
-  Examples are `codex` → `codex-acp` and `claude-code` → `claude-agent-acp`.
-  The target owns launch commands and installation requirements; the host's
-  detection result does not establish that its adapter is installed.
-- Read `acp.notes` on both records and the launch owner's `installations` and
-  `env`. These document separate or bundled CLIs, provider authentication,
-  optional dependencies, and working directories. Preserve argv boundaries;
-  these are literal arguments, not shell commands or expandable templates.
-- Multiple launches must have explicit, non-overlapping `platforms` using
-  `darwin`, `linux`, `win32`, or another schema-approved value. Antigravity's
-  Linux, macOS, and Windows recipes differ. Do not reuse the first launch on
-  every platform or treat an OS restriction as an architecture guarantee.
-- Source-only adapters may lack an unambiguous detection signal. `aider-acp`
-  records `node dist/index.js` with a required built-checkout working directory;
-  callers can instead configure the absolute script path. Its empty
-  `executables` and `paths`, plus `installedLaunches: []`, deliberately prevent
-  false installation claims.
-  Do not use `node`, `npx`, or a generic `dist/index.js` as detection evidence.
-- Research the exact registered product using upstream documentation, source,
-  and ACP distribution manifests. Client-only integration, an RFC, a similarly
-  named product, or absence from the ACP registry does not establish agent-side
-  support or explicit non-support. For example, `warp-acp` requires the separate
-  Warp Agent CLI; the `warp` key detects Warp Terminal and remains unknown.
-- Record HTTPS evidence in `acp.sources`, its `confidence`, and material caveats
-  in `acp.notes`. Keep unresolved results explicitly `unknown`. Only use
-  `unsupported` with evidence. Pinned runner versions are verified recipes,
-  not inferred minimum supported versions.
-- Add adapters as ordinary registry entries with verified detection signals
-  where available, installation metadata, and explicit support leaves. A
-  documented source-only adapter can have no detection signals if its notes
-  explain the limitation. Never invent a portable install path.
+- Check `status` before using a launch. `supported` has either a nonempty `launches` list or one `adapter` key. `unknown` and `unsupported` have neither. No matching platform means no recorded launch for that platform.
+- Add `installedLaunches` when upstream documentation or the package manifest confirms that a binary already on `PATH` serves ACP. It uses the same shape and platform rules as `launches`, must not use a package runner, and requires `launches`. Without it, only `launches` that avoid package runners are returned by the installed-launch API. Use `installedLaunches: []` for a launch that pairs a generic interpreter with a relative path (`aider-acp`), so it is never reported as installed.
+- Follow an adapter by its exact registry key once. Adapter chains are invalid. Examples are `codex` → `codex-acp` and `claude-code` → `claude-agent-acp`. The target owns launch commands and installation requirements; the host's detection result does not establish that its adapter is installed.
+- Read `acp.notes` on both records and the launch owner's `installations` and `env`. These document separate or bundled CLIs, provider authentication, optional dependencies, and working directories. Preserve argv boundaries; these are literal arguments, not shell commands or expandable templates.
+- Multiple launches must have explicit, non-overlapping `platforms` using `darwin`, `linux`, `win32`, or another schema-approved value. Antigravity's Linux, macOS, and Windows recipes differ. Do not reuse the first launch on every platform or treat an OS restriction as an architecture guarantee.
+- Source-only adapters may lack an unambiguous detection signal. `aider-acp` records `node dist/index.js` with a required built-checkout working directory; callers can instead configure the absolute script path. Its empty `executables` and `paths`, plus `installedLaunches: []`, deliberately prevent false installation claims. Do not use `node`, `npx`, or a generic `dist/index.js` as detection evidence.
+- Research the exact registered product using upstream documentation, source, and ACP distribution manifests. Client-only integration, an RFC, a similarly named product, or absence from the ACP registry does not establish agent-side support or explicit non-support. For example, `warp-acp` requires the separate Warp Agent CLI; the `warp` key detects Warp Terminal and remains unknown.
+- Record HTTPS evidence in `acp.sources`, its `confidence`, and material caveats in `acp.notes`. Keep unresolved results explicitly `unknown`. Only use `unsupported` with evidence. Pinned runner versions are verified recipes, not inferred minimum supported versions.
+- Add adapters as ordinary registry entries with verified detection signals where available, installation metadata, and explicit support leaves. A documented source-only adapter can have no detection signals if its notes explain the limitation. Never invent a portable install path.
 
-Use the same canonical edit, `mise run harness:refresh`, and
-`mise run harness:check` workflow as other registry changes. The APIs only return
-metadata: they do not launch agents, install dependencies, authenticate, or
-verify an ACP handshake. See the [schema reference](configuration.md#acp-metadata-acp)
-and [API reference](api.md#getharnessacpinput-and-listharnessacp).
+Use the same canonical edit, `mise run harness:refresh`, and `mise run harness:check` workflow as other registry changes. The APIs only return metadata: they do not launch agents, install dependencies, authenticate, or verify an ACP handshake. See the [schema reference](configuration.md#acp-metadata-acp) and [API reference](api.md#getharnessacpinput-and-listharnessacp).
 
 ## Finding and updating MCP records
 
-MCP records describe a harness as an MCP client. They live at `harness.mcp` in
-the canonical registry and never affect detection. Use `getHarnessMcp` /
-`listHarnessMcp` in TypeScript, `GetHarnessMCP` / `ListHarnessMCP` in Go, or
-`get_harness_mcp` / `list_harness_mcp` in Rust and Python. To write servers from
-a project `.mcp.json` into a harness's own config, call `translateMcpJson`
-(`TranslateMCPJSON`, `translate_mcp_json`) and merge the returned `config` into
-one of the scope's `paths` with your own JSON/TOML/YAML writer:
+MCP records describe a harness as an MCP client. They live at `harness.mcp` in the canonical registry and never affect detection. Use `getHarnessMcp` / `listHarnessMcp` in TypeScript, `GetHarnessMCP` / `ListHarnessMCP` in Go, or `get_harness_mcp` / `list_harness_mcp` in Rust and Python. To write servers from a project `.mcp.json` into a harness's own config, call `translateMcpJson` (`TranslateMCPJSON`, `translate_mcp_json`) and merge the returned `config` into one of the scope's `paths` with your own JSON/TOML/YAML writer. Resolve that path's template with `resolveHarnessTemplate` (`ResolveHarnessTemplate`, `resolve_harness_template`):
 
 ```sh
 node --input-type=module <<'JS'
-import { getHarnessMcp, translateMcpJson } from './packages/typescript/src/index.js';
+import { getHarnessMcp, resolveHarnessTemplate, translateMcpJson } from './packages/typescript/src/index.js';
 const { mcp } = getHarnessMcp('gemini-cli');
-console.log(mcp.mcpJson, mcp.local.paths.map((entry) => entry.template), mcp.local.keyPath);
+console.log(mcp.mcpJson, mcp.local.paths.map((entry) => resolveHarnessTemplate('gemini-cli', entry.template)), mcp.local.keyPath);
 const doc = { mcpServers: { docs: { type: 'http', url: 'https://example.com/mcp' } } };
 console.log(JSON.stringify(translateMcpJson('gemini-cli', doc).config));
 // {"mcpServers":{"docs":{"httpUrl":"https://example.com/mcp"}}}
@@ -316,17 +263,8 @@ JS
 
 When researching or updating a record:
 
-- `status` is about MCP client support at all; `mcpJson` is only about the
-  project-root `.mcp.json` read by default.
-- Model the harness's native files in `global` / `local` with `format` and
-  `keyPath`. Keep paths that need a different format or key path out of the
-  scope and mention them in `notes`.
-- Derive `serverFormat` from the docs' own stdio and remote examples: field
-  names, transport `type` values, argv-array commands, and `map` versus `array`
-  containers. Omit transports, `env`, or `headers` the harness cannot express;
-  translation then skips such servers instead of silently dropping fields.
-- ACP adapter records normally keep MCP `unknown`, because their MCP servers come
-  from the ACP client per session.
-- Any new `serverFormat` behavior must be added to every package and exercised
-  by `testdata/package-parity-cases.json`; the `translate-probe-every-harness`
-  case already runs a probe document through every harness and scope.
+- `status` is about MCP client support at all; `mcpJson` is only about the project-root `.mcp.json` read by default.
+- Model the harness's native files in `global` / `local` with `format` and `keyPath`. Keep paths that need a different format or key path out of the scope and mention them in `notes`.
+- Derive `serverFormat` from the docs' own stdio and remote examples: field names, transport `type` values, argv-array commands, and `map` versus `array` containers. Omit transports, `env`, or `headers` the harness cannot express; translation then skips such servers instead of silently dropping fields.
+- ACP adapter records normally keep MCP `unknown`, because their MCP servers come from the ACP client per session.
+- Any new `serverFormat` behavior must be added to every package and exercised by `testdata/package-parity-cases.json`; the `translate-probe-every-harness` case already runs a probe document through every harness and scope.

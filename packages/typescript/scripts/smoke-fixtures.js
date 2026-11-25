@@ -17,18 +17,22 @@ const makeFile = (filePath, content = "fixture") => {
 
 const makeExecutable = (binDir, name) => {
   assert.equal(path.basename(name), name, "executable must be a basename");
+
   const executablePath = path.join(
     binDir,
     process.platform === "win32" ? `${name}.EXE` : name
   );
+
   makeFile(executablePath, "#!/bin/sh\nexit 0\n");
   fs.chmodSync(executablePath, 0o755);
+
   return executablePath;
 };
 
 const makeFixtureForPath = (entry) => {
   if (entry.kind === "dir") {
     makeDir(entry.path);
+
     return;
   }
 
@@ -83,7 +87,9 @@ const isWithinRoot = (rootDir, candidate) => {
   if (!candidate) {
     return false;
   }
+
   const relative = path.relative(rootDir, candidate);
+
   return (
     relative !== ".." &&
     !relative.startsWith(`..${path.sep}`) &&
@@ -95,6 +101,7 @@ const isolated = (run) => {
   const rootDir = fs.mkdtempSync(
     path.join(os.tmpdir(), "harness-detect-smoke-")
   );
+
   try {
     return run(rootDir, buildEnv(rootDir));
   } finally {
@@ -110,9 +117,11 @@ export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
   for (const harness of harnesses) {
     const signals = isolated((rootDir, { env, cwd }) => {
       const initial = check(harness.key, { cwd, env });
+
       const fixtureable = initial.paths.filter((entry) =>
         isWithinRoot(rootDir, entry.path)
       );
+
       for (const entry of initial.paths.filter(
         (candidate) => !isWithinRoot(rootDir, candidate.path)
       )) {
@@ -122,6 +131,7 @@ export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
           reason: entry.path ? "path outside fixture tree" : "unresolved path",
         });
       }
+
       return [
         ...harness.executables.map((name) => ({ executable: name })),
         ...fixtureable.map((entry) => ({ pathId: entry.id })),
@@ -170,6 +180,7 @@ export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
           const entry = before.paths.find(
             (candidate) => candidate.id === signal.pathId
           );
+
           assert.ok(
             isWithinRoot(rootDir, entry?.path),
             "fixture path must remain inside its temporary tree"
@@ -193,11 +204,14 @@ export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
             `${harness.key}: expected path match ${signal.pathId}`
           );
         }
+
         scenarios.push({ key: harness.key, ...signal });
       });
     }
+
     exercised.push(harness.key);
   }
+
   return {
     exercised,
     exercisedCount: exercised.length,
@@ -211,6 +225,7 @@ export const runSmoke = (harnesses = listHarnesses(), check = checkHarness) => {
 
 // eslint-disable-next-line unicorn/prefer-import-meta-properties -- Keep Node 18 support for the smoke script.
 const scriptPath = fileURLToPath(import.meta.url);
+
 if (process.argv[1] && path.resolve(process.argv[1]) === scriptPath) {
   console.log(JSON.stringify(runSmoke(), null, 2));
 }

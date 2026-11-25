@@ -6,11 +6,7 @@ Please do **not** open a public GitHub issue for suspected security problems.
 
 - Use this repository's GitHub **Report a vulnerability** / private vulnerability reporting flow.
 - Include: affected package/version, impact, reproduction steps, and any proposed mitigation.
-- Redact detection-result values before attaching evidence. `paths` (the
-  resolved paths), `matchedPaths`, and `executablePath` can contain absolute
-  usernames, home directories, project paths, executable paths, and harness
-  config/state paths; this also applies to logs, telemetry, bug reports,
-  screenshots, and analytics.
+- Redact detection-result values before attaching evidence. `paths` (the resolved paths), `matchedPaths`, and `executablePath` can contain absolute usernames, home directories, project paths, executable paths, and harness config/state paths; this also applies to logs, telemetry, bug reports, screenshots, and analytics.
 
 We will acknowledge reports as soon as practical and coordinate a fix and disclosure plan privately.
 
@@ -25,5 +21,4 @@ All four supported distribution targets are covered:
 - `harness-detect` (`packages/rust`) — Rust crate
 - `harness-detect` (`packages/python`) — Python package
 
-The shared registry at `packages/data/harnesses.json` is also in scope since
-it is embedded into all four packages.
+The shared registry at `packages/data/harnesses.json` is also in scope since it is embedded into all four packages.

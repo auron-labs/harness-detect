@@ -5,12 +5,8 @@
       "key": "native",
       "name": "Native",
       "version": "unknown",
-      "aliases": [
-        "native-alias"
-      ],
-      "executables": [
-        "missing-native"
-      ],
+      "aliases": ["native-alias"],
+      "executables": ["missing-native"],
       "installations": [
         {
           "method": "manual",
@@ -19,9 +15,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {
@@ -96,31 +90,18 @@
       },
       "acp": {
         "status": "supported",
-        "sources": [
-          "https://example.com/acp"
-        ],
+        "sources": ["https://example.com/acp"],
         "confidence": "official",
         "launches": [
           {
             "command": "example-agent",
-            "args": [
-              "--acp",
-              "two words",
-              ""
-            ],
-            "platforms": [
-              "linux",
-              "darwin"
-            ]
+            "args": ["--acp", "two words", ""],
+            "platforms": ["linux", "darwin"]
           },
           {
             "command": "example-agent.exe",
-            "args": [
-              "--acp-windows"
-            ],
-            "platforms": [
-              "win32"
-            ]
+            "args": ["--acp-windows"],
+            "platforms": ["win32"]
           }
         ]
       },
@@ -147,12 +128,8 @@
       "key": "bridge",
       "name": "Bridge",
       "version": "unknown",
-      "aliases": [
-        "bridge-alias"
-      ],
-      "executables": [
-        "missing-bridge"
-      ],
+      "aliases": ["bridge-alias"],
+      "executables": ["missing-bridge"],
       "installations": [
         {
           "method": "manual",
@@ -161,9 +138,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {
@@ -238,9 +213,7 @@
       },
       "acp": {
         "status": "supported",
-        "sources": [
-          "https://example.com/acp"
-        ],
+        "sources": ["https://example.com/acp"],
         "confidence": "official",
         "launches": [
           {
@@ -272,12 +245,8 @@
       "key": "host",
       "name": "Host",
       "version": "unknown",
-      "aliases": [
-        "host-alias"
-      ],
-      "executables": [
-        "missing-host"
-      ],
+      "aliases": ["host-alias"],
+      "executables": ["missing-host"],
       "installations": [
         {
           "method": "manual",
@@ -286,9 +255,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {
@@ -363,9 +330,7 @@
       },
       "acp": {
         "status": "supported",
-        "sources": [
-          "https://example.com/acp"
-        ],
+        "sources": ["https://example.com/acp"],
         "confidence": "official",
         "adapter": "bridge"
       },
@@ -392,12 +357,8 @@
       "key": "unsupported",
       "name": "Unsupported",
       "version": "unknown",
-      "aliases": [
-        "unsupported-alias"
-      ],
-      "executables": [
-        "missing-unsupported"
-      ],
+      "aliases": ["unsupported-alias"],
+      "executables": ["missing-unsupported"],
       "installations": [
         {
           "method": "manual",
@@ -406,9 +367,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {
@@ -483,9 +442,7 @@
       },
       "acp": {
         "status": "unsupported",
-        "sources": [
-          "https://example.com/acp"
-        ],
+        "sources": ["https://example.com/acp"],
         "confidence": "source"
       },
       "mcp": {
@@ -511,12 +468,8 @@
       "key": "unknown",
       "name": "Unknown",
       "version": "unknown",
-      "aliases": [
-        "unknown-alias"
-      ],
-      "executables": [
-        "missing-unknown"
-      ],
+      "aliases": ["unknown-alias"],
+      "executables": ["missing-unknown"],
       "installations": [
         {
           "method": "manual",
@@ -525,9 +478,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {
@@ -628,12 +579,8 @@
       "key": "missing",
       "name": "Missing",
       "version": "unknown",
-      "aliases": [
-        "missing-alias"
-      ],
-      "executables": [
-        "missing-missing"
-      ],
+      "aliases": ["missing-alias"],
+      "executables": ["missing-missing"],
       "installations": [
         {
           "method": "manual",
@@ -642,9 +589,7 @@
       ],
       "paths": [],
       "env": [],
-      "sources": [
-        "https://example.com"
-      ],
+      "sources": ["https://example.com"],
       "support": {
         "config": {
           "global": {

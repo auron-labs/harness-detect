@@ -19,11 +19,7 @@ Supported distribution targets are npm (`@auron-labs/harness-detect`), Go module
 
 ## Before opening an issue
 
-> **Privacy:** Detection results can contain absolute usernames, home
-> directories, project paths, executable paths, and harness config/state paths
-> in `paths` (the resolved paths), `matchedPaths`, and `executablePath`. Redact
-> these values before posting logs, telemetry, bug reports, screenshots, or
-> analytics.
+> **Privacy:** Detection results can contain absolute usernames, home directories, project paths, executable paths, and harness config/state paths in `paths` (the resolved paths), `matchedPaths`, and `executablePath`. Redact these values before posting logs, telemetry, bug reports, screenshots, or analytics.
 
 Please include this sanitized information:
 
@@ -33,11 +29,7 @@ Please include this sanitized information:
 - harness key or alias involved
 - expected result and actual result
 - sanitized `reasons`
-- sanitized summaries of `matchedPaths` and `paths` (resolved paths), such as
-  path IDs and whether each path existed; do not paste the paths themselves
-- names and redacted values of any environment-root overrides you set (for
-  example, `CODEX_HOME=<redacted>`)
+- sanitized summaries of `matchedPaths` and `paths` (resolved paths), such as path IDs and whether each path existed; do not paste the paths themselves
+- names and redacted values of any environment-root overrides you set (for example, `CODEX_HOME=<redacted>`)
 
-Do **not** include full environment dumps, token or secret values, or
-unredacted absolute paths, usernames, or project names. Redact values before
-posting, including environment-root override values.
+Do **not** include full environment dumps, token or secret values, or unredacted absolute paths, usernames, or project names. Redact values before posting, including environment-root override values.

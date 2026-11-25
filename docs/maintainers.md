@@ -27,7 +27,7 @@ Run each command from the working directory shown. The repo root has no `package
 | --- | --- |
 | Run tests | `go test ./...` |
 | Vet | `go vet ./...` |
-| Vulnerability check | `go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...` |
+| Vulnerability check | `go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...` |
 | Hermetic benchmark report (reporting only) | `go test -run '^$' -bench BenchmarkDetectHarnesses -benchmem ./harnessdetect` |
 | External local consumer check | `mise run go:consumer` |
 
@@ -104,7 +104,7 @@ The direct command order documented in `.github/workflows/ci.yml` is:
 12. `cd packages/golang && go test ./...`
 13. `cd packages/golang && go vet ./...`
 14. `node scripts/check-go-consumer.mjs`
-15. `cd packages/golang && go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...`
+15. `cd packages/golang && go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...`
 16. `cd packages/rust && cargo fmt --check`
 17. `cd packages/rust && cargo clippy --all-targets`
 18. `cd packages/rust && cargo test`

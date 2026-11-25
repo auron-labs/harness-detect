@@ -1,56 +1,78 @@
-import { lstat, mkdir, readFile, realpath, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { lstat, mkdir, readFile, realpath, writeFile } from "node:fs/promises";
+import path from "node:path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '..');
+const __filename = import.meta.filename;
+const __dirname = import.meta.dirname;
+const repoRoot = path.resolve(__dirname, "..");
 
-const sourcePath = path.join(repoRoot, 'packages', 'data', 'harnesses.json');
+const sourcePath = path.join(repoRoot, "packages", "data", "harnesses.json");
+
 const targetPaths = [
-  path.join(repoRoot, 'packages', 'typescript', 'data', 'harnesses.json'),
-  path.join(repoRoot, 'packages', 'golang', 'harnessdetect', 'data', 'harnesses.json'),
-  path.join(repoRoot, 'packages', 'rust', 'data', 'harnesses.json'),
-  path.join(repoRoot, 'packages', 'python', 'src', 'harness_detect', 'data', 'harnesses.json'),
+  path.join(repoRoot, "packages", "typescript", "data", "harnesses.json"),
+  path.join(
+    repoRoot,
+    "packages",
+    "golang",
+    "harnessdetect",
+    "data",
+    "harnesses.json"
+  ),
+  path.join(repoRoot, "packages", "rust", "data", "harnesses.json"),
+  path.join(
+    repoRoot,
+    "packages",
+    "python",
+    "src",
+    "harness_detect",
+    "data",
+    "harnesses.json"
+  ),
 ];
 
 const args = new Set(process.argv.slice(2));
-const checkOnly = args.has('--check');
-const invalidArgs = [...args].filter((arg) => arg !== '--check');
+const checkOnly = args.has("--check");
+const invalidArgs = [...args].filter((arg) => arg !== "--check");
 const repoRootRealPath = await realpath(repoRoot);
 
 if (invalidArgs.length > 0) {
-  console.error(`Unknown argument(s): ${invalidArgs.join(', ')}`);
+  console.error(`Unknown argument(s): ${invalidArgs.join(", ")}`);
   process.exit(2);
 }
 
 const relativeToRoot = (filePath) => path.relative(repoRoot, filePath);
 
-function isWithinRoot(rootPath, candidatePath) {
+const isWithinRoot = (rootPath, candidatePath) => {
   const relativePath = path.relative(rootPath, candidatePath);
-  return relativePath === '' || (!relativePath.startsWith('..') && !path.isAbsolute(relativePath));
-}
 
-async function pathExists(targetPath) {
+  return (
+    relativePath === "" ||
+    (!relativePath.startsWith("..") && !path.isAbsolute(relativePath))
+  );
+};
+
+const pathExists = async (targetPath) => {
   try {
     await lstat(targetPath);
+
     return true;
   } catch (error) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+    if (error?.code === "ENOENT") {
       return false;
     }
 
     throw error;
   }
-}
+};
 
-async function resolveTargetPath(targetPath) {
+const resolveTargetPath = async (targetPath) => {
   const absoluteTargetPath = path.resolve(targetPath);
   const missingSegments = [];
   let existingPath = absoluteTargetPath;
 
+  // oxlint-disable-next-line no-await-in-loop -- each step depends on the previous parent lookup
   while (!(await pathExists(existingPath))) {
     const parentPath = path.dirname(existingPath);
+
     if (parentPath === existingPath) {
       throw new Error(`Could not resolve an existing parent for ${targetPath}`);
     }
@@ -60,28 +82,33 @@ async function resolveTargetPath(targetPath) {
   }
 
   const resolvedExistingPath = await realpath(existingPath);
-  return path.join(resolvedExistingPath, ...missingSegments);
-}
 
-async function assertSafeTarget(targetPath) {
+  return path.join(resolvedExistingPath, ...missingSegments);
+};
+
+const assertSafeTarget = async (targetPath) => {
   const relativeTargetPath = relativeToRoot(targetPath);
 
   if (await pathExists(targetPath)) {
     const targetStat = await lstat(targetPath);
+
     if (targetStat.isSymbolicLink()) {
-      throw new Error(`Refusing symlink registry target: ${relativeTargetPath}`);
+      throw new Error(
+        `Refusing symlink registry target: ${relativeTargetPath}`
+      );
     }
   }
 
   const resolvedTargetPath = await resolveTargetPath(targetPath);
+
   if (!isWithinRoot(repoRootRealPath, resolvedTargetPath)) {
     throw new Error(
       `Refusing registry target outside repo root: ${relativeTargetPath} -> ${resolvedTargetPath}`
     );
   }
-}
+};
 
-async function assertSafeSource(sourcePathValue) {
+const assertSafeSource = async (sourcePathValue) => {
   const relativeSourcePath = relativeToRoot(sourcePathValue);
   const sourceStat = await lstat(sourcePathValue);
 
@@ -90,17 +117,20 @@ async function assertSafeSource(sourcePathValue) {
   }
 
   const resolvedSourcePath = await realpath(sourcePathValue);
+
   if (!isWithinRoot(repoRootRealPath, resolvedSourcePath)) {
     throw new Error(
       `Refusing registry source outside repo root: ${relativeSourcePath} -> ${resolvedSourcePath}`
     );
   }
-}
+};
 
 await assertSafeSource(sourcePath);
+
 const sourceBytes = await readFile(sourcePath);
 let driftCount = 0;
 
+/* oxlint-disable no-await-in-loop -- targets are checked and written in order so output and failures are deterministic */
 for (const targetPath of targetPaths) {
   await assertSafeTarget(targetPath);
   const targetBytes = await readFile(targetPath);
@@ -124,11 +154,12 @@ for (const targetPath of targetPaths) {
   await writeFile(targetPath, sourceBytes);
   console.log(`Synced: ${relativeToRoot(targetPath)}`);
 }
+/* oxlint-enable no-await-in-loop */
 
 if (checkOnly) {
   if (driftCount > 0) {
     process.exit(1);
   }
 
-  console.log('Registry copies are in sync.');
+  console.log("Registry copies are in sync.");
 }

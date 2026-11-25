@@ -2,12 +2,12 @@
 name = "harness-detect"
 version = "0.5.0"
 edition = "2021"
-license = "MIT"
 description = "Detect installed LLM harnesses and resolve their config/state paths from an embedded JSON registry."
-repository = "https://github.com/auron-labs/harness-detect"
-keywords = ["llm", "harness", "detect", "codex", "claude"]
-categories = ["filesystem"]
 readme = "README.md"
+repository = "https://github.com/auron-labs/harness-detect"
+license = "MIT"
+keywords = ["claude", "codex", "detect", "harness", "llm"]
+categories = ["filesystem"]
 
 [lib]
 name = "harness_detect"

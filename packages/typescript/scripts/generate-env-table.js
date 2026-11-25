@@ -2,20 +2,23 @@ import fs from "node:fs";
 
 const REGISTRY_URL = new URL("../../data/harnesses.json", import.meta.url);
 
-function formatFallback(root) {
+const formatFallback = (root) => {
   if (root.use && root.fallback) {
     return `\`${root.use}\` (use) or \`${root.fallback}\``;
   }
+
   if (root.fallback) {
     return `\`${root.fallback}\``;
   }
-  return "(empty — path resolves to null)";
-}
 
-function generateEnvTable() {
-  const registry = JSON.parse(fs.readFileSync(REGISTRY_URL, "utf8"));
+  return "(empty — path resolves to null)";
+};
+
+const generateEnvTable = () => {
+  const registry = JSON.parse(fs.readFileSync(REGISTRY_URL, "utf-8"));
 
   const rows = [];
+
   for (const harness of registry.harnesses) {
     for (const root of harness.roots || []) {
       rows.push({
@@ -33,14 +36,18 @@ function generateEnvTable() {
     "| Harness key | Override env var | Derived root | Default fallback |",
     "|---|---|---|---|",
   ];
+
   for (const row of rows) {
-    lines.push(`| \`${row.key}\` | ${row.env} | ${row.name} | ${row.fallback} |`);
+    lines.push(
+      `| \`${row.key}\` | ${row.env} | ${row.name} | ${row.fallback} |`
+    );
   }
+
   return lines.join("\n");
-}
+};
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  process.stdout.write(generateEnvTable() + "\n");
+  process.stdout.write(`${generateEnvTable()}\n`);
 }
 
 export { generateEnvTable };

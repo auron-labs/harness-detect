@@ -55,6 +55,7 @@ A harness counts as installed when either of these is true:
 - `TranslateMCPJSON(input, mcpJSON, MCPTranslateOptions{Scope: "local"})` translates `.mcp.json` bytes into the harness's native server entries for one scope (empty scope means `local`), returning `Format`, `KeyPath`, `Servers`, `Config`, and `Skipped`. Nothing is read or written.
 - `GetHarnessSupport` returns the support metadata for one harness key or alias.
 - `ListHarnessSupport()` returns support metadata for every harness.
+- `ResolveHarnessTemplate(input, template, options)` resolves a registry path template, such as a support or MCP path like `${CLAUDE_ROOT}/skills`, to a concrete path using the harness's roots and the same `CheckOptions` as `CheckHarness`. It returns `""` when a placeholder cannot be resolved and does not check the disk.
 - `CheckHarness(input, options)` checks one harness key or alias and returns resolved paths, matches, and reasons.
 - `DetectHarnesses(options)` checks every registry entry and returns all results.
 - `DetectInstalledHarnesses(options)` returns only installed results.
@@ -80,16 +81,11 @@ if result.ExecutablePath == nil {
 
 ## Development commands
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the full
-command reference, the registry editing procedure, and change-aware
-validation.
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command reference, the registry editing procedure, and change-aware validation.
 
 ## External-consumer smoke test
 
-Validate the real consumer experience from a temporary module outside this
-repo. The `require`/`replace` target is the Go module root
-`github.com/auron-labs/harness-detect/packages/golang`; the import in Go source is
-the subpackage `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`.
+Validate the real consumer experience from a temporary module outside this repo. The `require`/`replace` target is the Go module root `github.com/auron-labs/harness-detect/packages/golang`; the import in Go source is the subpackage `github.com/auron-labs/harness-detect/packages/golang/harnessdetect`.
 
 ```sh
 REPO_ROOT="/absolute/path/to/harness-detect"
@@ -121,9 +117,7 @@ EOF
 go run .
 ```
 
-Run that from any shell once `REPO_ROOT` points at the local checkout. After a
-Go release tag such as `packages/golang/v0.1.1` exists, replace the local
-`go mod edit -require ...@v0.0.0` / `-replace ...` steps with:
+Run that from any shell once `REPO_ROOT` points at the local checkout. After a Go release tag such as `packages/golang/v0.1.1` exists, replace the local `go mod edit -require ...@v0.0.0` / `-replace ...` steps with:
 
 ```sh
 go get github.com/auron-labs/harness-detect/packages/golang/harnessdetect@v0.1.1
@@ -136,8 +130,4 @@ Related guides:
 
 When editing registry data, update `packages/data/harnesses.json`, run `mise run registry:sync`, then `mise run registry:check`. CI uses the read-only `registry:check` step to verify the embedded package copy stays aligned.
 
-ACP metadata describes local stdio launches and optional adapter registry keys,
-independently of file-location support. Read `acp.status`, follow `acp.adapter`
-when present, and select a platform-matching recipe from `acp.launches`. Read the
-owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
-for the optional stored shape and adapter lookup rules.
+ACP metadata describes local stdio launches and optional adapter registry keys, independently of file-location support. Read `acp.status`, follow `acp.adapter` when present, and select a platform-matching recipe from `acp.launches`. Read the owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp) for the optional stored shape and adapter lookup rules.

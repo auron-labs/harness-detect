@@ -1,15 +1,21 @@
-amends "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Config.pkl"
 
-import "package://github.com/jdx/hk/releases/download/v2.0.1/hk@2.0.1#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
   ["betterleaks"] = Builtins.betterleaks
   ["byte_order_marker"] = Builtins.byte_order_marker
-  ["cargo_check"] = Builtins.cargo_check
+  ["cargo_check"] = (Builtins.cargo_check) {
+    workspace_indicator = "Cargo.toml"
+    dir = "{{workspace}}"
+  }
   ["cargo_clippy"] = Builtins.cargo_clippy
   ["cargo_deny"] = Builtins.cargo_deny
   ["cargo_fmt"] = Builtins.cargo_fmt
-  ["check_added_large_files"] = Builtins.check_added_large_files
+  // The shared registry and its package copies are intentionally large.
+  ["check_added_large_files"] = (Builtins.check_added_large_files) {
+    exclude = List("**/harnesses.json")
+  }
   ["check_case_conflict"] = Builtins.check_case_conflict
   ["check_executables_have_shebangs"] = Builtins.check_executables_have_shebangs
   ["check_merge_conflict"] = Builtins.check_merge_conflict

@@ -36,12 +36,14 @@ const LOCKED_RUNTIME_EXPORTS = [
   "getHarnessMcp",
   "listHarnessMcp",
   "translateMcpJson",
+  "resolveHarnessTemplate",
 ];
 
 const SHARED_REGISTRY_URL = new URL(
   "../../data/harnesses.json",
   import.meta.url
 );
+
 const PACKAGED_REGISTRY_URL = new URL(
   "../data/harnesses.json",
   import.meta.url
@@ -91,14 +93,17 @@ test("getHarnessMatrix remains a compatibility alias for raw harness data", () =
 
 test("public registry surfaces expose defensive installation clones", () => {
   const canonical = getRawHarnessData();
+
   const canonicalCodex = canonical.harnesses.find(
     (harness) => harness.key === "codex"
   );
+
   assert.ok(canonicalCodex, "codex must exist in canonical registry");
 
   const matrixCodex = getHarnessMatrix().harnesses.find(
     (harness) => harness.key === "codex"
   );
+
   const listedCodex = listHarnesses().find(
     (harness) => harness.key === "codex"
   );
@@ -120,6 +125,7 @@ test("public registry surfaces expose defensive installation clones", () => {
   const matrixAgain = getHarnessMatrix().harnesses.find(
     (harness) => harness.key === "codex"
   );
+
   const listedAgain = listHarnesses().find(
     (harness) => harness.key === "codex"
   );
@@ -140,6 +146,7 @@ test("support APIs return defensive deep clones", () => {
   const canonicalCodex = getRawHarnessData().harnesses.find(
     (harness) => harness.key === "codex"
   );
+
   assert.ok(canonicalCodex?.support, "codex must expose support metadata");
 
   const first = getHarnessSupport("codex");
@@ -164,6 +171,7 @@ test("support APIs return defensive deep clones", () => {
   });
 
   const third = getHarnessSupport("codex");
+
   const listedAgain = listHarnessSupport().find(
     (harness) => harness.key === "codex"
   );
@@ -278,13 +286,23 @@ test("checkHarness resolves harness-specific derived roots", () => {
 test("checkHarness resolves Windows root overrides without case sensitivity", () => {
   const platform = Object.getOwnPropertyDescriptor(process, "platform");
   Object.defineProperty(process, "platform", { value: "win32" });
+
   try {
     const options = {
       cwd: "/repo",
-      env: { HOME: "/home", PATH: "", aiwg_artifacts_path: "/primary", aiwg_project_artifacts_path: "/legacy" }
+      env: {
+        HOME: "/home",
+        PATH: "",
+        aiwg_artifacts_path: "/primary",
+        aiwg_project_artifacts_path: "/legacy",
+      },
     };
+
     const getPath = () =>
-      checkHarness("aiwg", options).paths.find((entry) => entry.id === "relocated-project-config")?.path;
+      checkHarness("aiwg", options).paths.find(
+        (entry) => entry.id === "relocated-project-config"
+      )?.path;
+
     assert.equal(getPath(), path.normalize("/primary/aiwg.config"));
     options.env.AIWG_ARTIFACTS_PATH = "";
     assert.equal(getPath(), path.normalize("/legacy/aiwg.config"));
@@ -327,6 +345,7 @@ test("aliases map to the same harness", () => {
     cwd: "/repo",
     env: { HOME: "/Users/test", PATH: "" },
   });
+
   const byAlias = checkHarness("claude", {
     cwd: "/repo",
     env: { HOME: "/Users/test", PATH: "" },
@@ -340,11 +359,13 @@ test("detectHarnesses checks the whole registry", () => {
     cwd: "/repo",
     env: { HOME: "/Users/test", PATH: "" },
   });
+
   assert.equal(all.length, listHarnesses().length);
 });
 
 test("detectInstalledHarnesses returns only installed harnesses", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
   try {
     const claudeDir = path.join(tmp, ".claude");
     fs.mkdirSync(claudeDir, { recursive: true });
@@ -354,6 +375,7 @@ test("detectInstalledHarnesses returns only installed harnesses", () => {
       cwd: "/repo",
       env: { HOME: tmp, PATH: "" },
     });
+
     const all = detectHarnesses({ cwd: "/repo", env: { HOME: tmp, PATH: "" } });
     const installedViaFilter = all.filter((r) => r.installed);
 
@@ -362,6 +384,7 @@ test("detectInstalledHarnesses returns only installed harnesses", () => {
       installedViaFilter.length,
       "detectInstalledHarnesses must match detectHarnesses().filter(installed)"
     );
+
     for (const r of installed) {
       assert.equal(
         r.installed,
@@ -369,6 +392,7 @@ test("detectInstalledHarnesses returns only installed harnesses", () => {
         "every entry in detectInstalledHarnesses must be installed"
       );
     }
+
     assert.ok(
       installed.some((r) => r.key === "claude-code"),
       "claude-code should be installed in this fixture"
@@ -390,6 +414,7 @@ test("unresolved env placeholder yields null path", () => {
     cwd: "/repo",
     env: { HOME: "/Users/test", PATH: "" },
   });
+
   const dataRoot = result.paths.find((p) => p.id === "data-root-env");
   assert.equal(dataRoot.path, null);
   assert.equal(dataRoot.exists, false);
@@ -400,11 +425,13 @@ test("platform-gated entries are included on matching platform", () => {
     cwd: "/repo",
     env: { HOME: "/Users/test", PATH: "" },
   });
+
   const appMacos = result.paths.find((p) => p.id === "app-macos");
 
   if (process.platform === "darwin") {
     assert.ok(appMacos, "app-macos entry should not be filtered on darwin");
     assert.equal(appMacos.path, "/Applications/Cursor.app");
+
     return;
   }
 
@@ -417,6 +444,7 @@ test("platform-gated entries are included on matching platform", () => {
 
 test("path-only match makes harness installed", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
   try {
     const claudeDir = path.join(tmp, ".claude");
     fs.mkdirSync(claudeDir, { recursive: true });
@@ -426,6 +454,7 @@ test("path-only match makes harness installed", () => {
       cwd: "/repo",
       env: { HOME: tmp, PATH: "" },
     });
+
     assert.equal(result.installed, true);
     assert.equal(result.executablePath, null);
     assert.ok(result.matchedPaths.length > 0);
@@ -439,6 +468,7 @@ test("path-only match makes harness installed", () => {
 
 test("executable match makes harness installed", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
   try {
     const binDir = path.join(tmp, "bin");
     fs.mkdirSync(binDir, { recursive: true });
@@ -450,6 +480,7 @@ test("executable match makes harness installed", () => {
       cwd: "/repo",
       env: { HOME: "/Users/test", PATH: binDir },
     });
+
     assert.equal(result.installed, true);
     assert.equal(result.executablePath, exePath);
   } finally {
@@ -462,6 +493,7 @@ test(
   { skip: process.platform === "win32" },
   () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
     try {
       const binDir = path.join(tmp, "bin");
       fs.mkdirSync(binDir, { recursive: true });
@@ -484,6 +516,7 @@ test(
 
 test("reasons and matchedPaths are populated for executable and path matches", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
   try {
     const binDir = path.join(tmp, "bin");
     fs.mkdirSync(binDir, { recursive: true });
@@ -519,6 +552,7 @@ test("reasons and matchedPaths are populated for executable and path matches", (
 
 test("mutation of CheckHarness result does not affect subsequent calls", () => {
   const options = { cwd: "/repo", env: { HOME: "/Users/test", PATH: "" } };
+
   const platformFixture = {
     darwin: { harness: "cursor", pathId: "app-macos" },
     linux: { harness: "warp", pathId: "config-linux" },
@@ -526,9 +560,11 @@ test("mutation of CheckHarness result does not affect subsequent calls", () => {
 
   const first = checkHarness("claude-code", options);
   const second = checkHarness("claude-code", options);
+
   const platformFirst = platformFixture
     ? checkHarness(platformFixture.harness, options)
     : null;
+
   const platformSecond = platformFixture
     ? checkHarness(platformFixture.harness, options)
     : null;
@@ -578,6 +614,7 @@ test("mutation of CheckHarness result does not affect subsequent calls", () => {
   const platformPath = platformFirst?.paths.find(
     (p) => p.id === platformFixture?.pathId
   );
+
   if (platformFixture) {
     assert.ok(
       platformPath?.platforms,
@@ -650,9 +687,11 @@ test("mutation of CheckHarness result does not affect subsequent calls", () => {
 test("env-var table in docs/configuration.md is in sync with the registry", () => {
   const docsUrl = new URL("../../../docs/configuration.md", import.meta.url);
   const docs = fs.readFileSync(docsUrl, "utf-8");
+
   const match = docs.match(
     /<!-- BEGIN: env-var-table -->(?<table>[\s\S]*?)<!-- END: env-var-table -->/u
   );
+
   assert.ok(match, "docs/configuration.md must contain env-var table markers");
   const tableInDoc = match.groups.table.trim();
 
@@ -660,6 +699,7 @@ test("env-var table in docs/configuration.md is in sync with the registry", () =
     cwd: new URL("..", import.meta.url),
     encoding: "utf-8",
   });
+
   assert.equal(result.status, 0, "generator must exit 0");
   const expected = result.stdout.trim();
 
@@ -674,6 +714,7 @@ const isWindows = process.platform === "win32";
 
 test("Windows: .exe in PATH is detected", { skip: !isWindows }, () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
   try {
     const binDir = path.join(tmp, "bin");
     fs.mkdirSync(binDir, { recursive: true });
@@ -688,6 +729,7 @@ test("Windows: .exe in PATH is detected", { skip: !isWindows }, () => {
         PATHEXT: ".EXE;.CMD;.BAT;.COM",
       },
     });
+
     assert.equal(result.installed, true);
     assert.equal(result.executablePath, exePath);
   } finally {
@@ -700,6 +742,7 @@ test(
   { skip: !isWindows },
   () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
     try {
       const binDir = path.join(tmp, "bin");
       fs.mkdirSync(binDir, { recursive: true });
@@ -714,6 +757,7 @@ test(
           PATHEXT: ".EXE;.CMD;.BAT;.COM",
         },
       });
+
       assert.equal(result.installed, true);
       assert.equal(result.executablePath, batPath);
     } finally {
@@ -727,6 +771,7 @@ test(
   { skip: !isWindows },
   () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "harness-test-"));
+
     try {
       const binDir = path.join(tmp, "bin");
       fs.mkdirSync(binDir, { recursive: true });
@@ -736,6 +781,7 @@ test(
         cwd: "/repo",
         env: { HOME: "/Users/test", PATH: binDir, PATHEXT: ".EXE" },
       });
+
       assert.equal(result.installed, false);
       assert.equal(result.executablePath, null);
     } finally {
@@ -749,6 +795,7 @@ test("canonical registry passes schema and semantic validation", () => {
     cwd: new URL("..", import.meta.url),
     encoding: "utf-8",
   });
+
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
 
@@ -772,51 +819,87 @@ test("registry retains verified installation metadata", () => {
   );
 });
 
-test("detectInstalledAcpLaunches ignores relative PATH entries", { skip: process.platform === "win32" }, () => {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-launches-")));
-  const originalCwd = process.cwd();
-  try {
-    for (const dir of ["relative-bin", "absolute-bin"]) {
-      fs.mkdirSync(path.join(root, dir));
-      fs.writeFileSync(path.join(root, dir, "gemini"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
+test(
+  "detectInstalledAcpLaunches ignores relative PATH entries",
+  { skip: process.platform === "win32" },
+  () => {
+    const root = fs.realpathSync(
+      fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-launches-"))
+    );
+
+    const originalCwd = process.cwd();
+
+    try {
+      for (const dir of ["relative-bin", "absolute-bin"]) {
+        fs.mkdirSync(path.join(root, dir));
+        fs.writeFileSync(
+          path.join(root, dir, "gemini"),
+          "#!/bin/sh\nexit 0\n",
+          { mode: 0o755 }
+        );
+      }
+
+      process.chdir(root);
+
+      const only = detectInstalledAcpLaunches({
+        env: { HOME: root, PATH: "relative-bin" },
+      });
+
+      assert.deepEqual(only, []);
+
+      const both = detectInstalledAcpLaunches({
+        env: {
+          HOME: root,
+          PATH: ["relative-bin", path.join(root, "absolute-bin")].join(
+            path.delimiter
+          ),
+        },
+      });
+
+      assert.deepEqual(
+        both.map(({ key, command }) => [key, command]),
+        [["gemini-cli", path.join(root, "absolute-bin", "gemini")]]
+      );
+    } finally {
+      process.chdir(originalCwd);
+      fs.rmSync(root, { recursive: true, force: true });
     }
-    process.chdir(root);
-
-    const only = detectInstalledAcpLaunches({ env: { HOME: root, PATH: "relative-bin" } });
-    assert.deepEqual(only, []);
-
-    const both = detectInstalledAcpLaunches({
-      env: { HOME: root, PATH: ["relative-bin", path.join(root, "absolute-bin")].join(path.delimiter) }
-    });
-    assert.deepEqual(both.map(({ key, command }) => [key, command]), [
-      ["gemini-cli", path.join(root, "absolute-bin", "gemini")]
-    ]);
-  } finally {
-    process.chdir(originalCwd);
-    fs.rmSync(root, { recursive: true, force: true });
   }
-});
+);
 
-test("detectInstalledAcpLaunches never reports aider-acp from node alone", { skip: process.platform === "win32" }, () => {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-aider-")));
-  try {
-    fs.mkdirSync(path.join(root, "bin"));
-    fs.writeFileSync(path.join(root, "bin", "node"), "#!/bin/sh\nexit 0\n", { mode: 0o755 });
-    fs.mkdirSync(path.join(root, "dist"));
-    fs.writeFileSync(path.join(root, "dist", "index.js"), "");
-    const found = detectInstalledAcpLaunches({
-      cwd: root,
-      env: { HOME: root, PATH: path.join(root, "bin") }
-    });
-    assert.deepEqual(found, []);
-    const record = getHarnessAcp("aider-acp");
-    assert.equal(record.acp.status, "supported");
-    assert.deepEqual(record.acp.launches, [{ command: "node", args: ["dist/index.js"] }]);
-    assert.deepEqual(record.acp.installedLaunches, []);
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
+test(
+  "detectInstalledAcpLaunches never reports aider-acp from node alone",
+  { skip: process.platform === "win32" },
+  () => {
+    const root = fs.realpathSync(
+      fs.mkdtempSync(path.join(os.tmpdir(), "harness-acp-aider-"))
+    );
+
+    try {
+      fs.mkdirSync(path.join(root, "bin"));
+      fs.writeFileSync(path.join(root, "bin", "node"), "#!/bin/sh\nexit 0\n", {
+        mode: 0o755,
+      });
+      fs.mkdirSync(path.join(root, "dist"));
+      fs.writeFileSync(path.join(root, "dist", "index.js"), "");
+
+      const found = detectInstalledAcpLaunches({
+        cwd: root,
+        env: { HOME: root, PATH: path.join(root, "bin") },
+      });
+
+      assert.deepEqual(found, []);
+      const record = getHarnessAcp("aider-acp");
+      assert.equal(record.acp.status, "supported");
+      assert.deepEqual(record.acp.launches, [
+        { command: "node", args: ["dist/index.js"] },
+      ]);
+      assert.deepEqual(record.acp.installedLaunches, []);
+    } finally {
+      fs.rmSync(root, { recursive: true, force: true });
+    }
   }
-});
+);
 
 test("MCP metadata and .mcp.json translation", () => {
   const claude = getHarnessMcp(" Claude ");
@@ -832,22 +915,37 @@ test("MCP metadata and .mcp.json translation", () => {
     JSON.stringify({
       mcpServers: {
         fs: { command: "npx", args: ["-y", "fs"] },
-        legacy: { type: "sse", url: "https://example.com/sse" }
-      }
+        legacy: { type: "sse", url: "https://example.com/sse" },
+      },
     }),
     { scope: "global" }
   );
+
   assert.equal(translation.format, "toml");
-  assert.deepEqual(translation.config, { mcp_servers: { fs: { command: "npx", args: ["-y", "fs"] } } });
-  assert.deepEqual(translation.skipped, [{ name: "legacy", reason: "unsupported transport: sse" }]);
-  assert.throws(() => translateMcpJson("aider", { mcpServers: {} }), /has no file-based MCP config for scope local/);
-  assert.throws(() => translateMcpJson("codex", { servers: {} }), /must be an object with an mcpServers object/);
+  assert.deepEqual(translation.config, {
+    mcp_servers: { fs: { command: "npx", args: ["-y", "fs"] } },
+  });
+  assert.deepEqual(translation.skipped, [
+    { name: "legacy", reason: "unsupported transport: sse" },
+  ]);
+  assert.throws(
+    () => translateMcpJson("aider", { mcpServers: {} }),
+    /has no file-based MCP config for scope local/u
+  );
+  assert.throws(
+    () => translateMcpJson("codex", { servers: {} }),
+    /must be an object with an mcpServers object/u
+  );
 });
 
 test("harness entries expose version and .agents/skills support", () => {
   for (const harness of listHarnesses()) {
-    assert.match(harness.version, /^\S+$/, harness.key);
+    assert.match(harness.version, /^\S+$/u, harness.key);
     assert.ok(harness.support.agentsSkills.global.status, harness.key);
   }
-  assert.equal(getHarnessSupport("codex").support.agentsSkills.local.status, "supported");
+
+  assert.equal(
+    getHarnessSupport("codex").support.agentsSkills.local.status,
+    "supported"
+  );
 });

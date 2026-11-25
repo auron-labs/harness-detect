@@ -2,9 +2,7 @@
 
 ## Overview
 
-harness-detect is a monorepo with four library implementations that share one
-JSON registry. The design principle is **data-driven detection**: most
-new-harness work is a data edit, not a code change.
+harness-detect is a monorepo with four library implementations that share one JSON registry. The design principle is **data-driven detection**: most new-harness work is a data edit, not a code change.
 
 ## Monorepo layout
 
@@ -64,14 +62,13 @@ harness-detect/
 ## Package boundaries
 
 | Package | Language | Module | Registry access | Dependencies |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | TypeScript | JS (ESM) | `@auron-labs/harness-detect` | Reads `data/harnesses.json` via relative path at import time | Zero runtime; `typescript` dev-only |
 | Go | Go | `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` | Embeds `data/harnesses.json` via `//go:embed` | Zero external |
 | Rust | Rust | `harness-detect` | Embeds `data/harnesses.json` via `include_str!` | `serde` + `serde_json` (stdlib has no JSON) |
 | Python | Python | `harness-detect` | Bundles `data/harnesses.json`, reads at load time via `importlib.resources` | Zero runtime (stdlib only); `pytest` + `ruff` dev |
 
-Shared data lives only under `packages/data/`. Each package maintains its own
-copy that must stay byte-for-byte aligned with the canonical file.
+Shared data lives only under `packages/data/`. Each package maintains its own copy that must stay byte-for-byte aligned with the canonical file.
 
 ## Detection flow
 
@@ -132,29 +129,18 @@ checkHarness(input, options)
 Path templates use `${VAR_NAME}` syntax. The resolution function:
 
 1. Replaces all `${...}` placeholders with values from the env map.
-2. If any placeholder value is undefined, null, or empty → the **entire
-   template resolves to null** in public APIs.
+2. If any placeholder value is undefined, null, or empty → the **entire template resolves to null** in public APIs.
 3. Normalizes the result (`path.normalize` / `filepath.Clean`).
 
-This means a path like `${Q_CLI_DATA_ROOT}/amazon-q/data.sqlite3` resolves to
-null when `Q_CLI_DATA_DIR` is not set (because `Q_CLI_DATA_ROOT`'s fallback is
-empty).
+This means a path like `${Q_CLI_DATA_ROOT}/amazon-q/data.sqlite3` resolves to null when `Q_CLI_DATA_DIR` is not set (because `Q_CLI_DATA_ROOT`'s fallback is empty).
 
 ## Design constraints
 
-- **Generic code, specific data.** `src/index.js`, `harnessdetect.go`,
-  `src/lib.rs`, and `__init__.py` contain no harness-specific logic. All
-  harness-specific behavior is encoded in the registry JSON.
-- **Registry is public API.** The JSON is exported by the TS package (`./data`
-  subpath) and embedded or bundled into package artifacts. Schema changes are
-  breaking changes for every package.
-- **Keys are immutable.** A harness `key` is part of the public API and must
-  never be renamed.
-- **Evidence-based detection.** A harness counts as installed from either an
-  executable match or existing paths — no version checks, no process
-  inspection, no network calls.
-- **No side effects.** Detection is read-only: it checks the filesystem and
-  PATH. It does not modify anything.
+- **Generic code, specific data.** `src/index.js`, `harnessdetect.go`, `src/lib.rs`, and `__init__.py` contain no harness-specific logic. All harness-specific behavior is encoded in the registry JSON.
+- **Registry is public API.** The JSON is exported by the TS package (`./data` subpath) and embedded or bundled into package artifacts. Schema changes are breaking changes for every package.
+- **Keys are immutable.** A harness `key` is part of the public API and must never be renamed.
+- **Evidence-based detection.** A harness counts as installed from either an executable match or existing paths — no version checks, no process inspection, no network calls.
+- **No side effects.** Detection is read-only: it checks the filesystem and PATH. It does not modify anything.
 
 ## CI pipeline
 

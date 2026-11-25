@@ -114,7 +114,14 @@
   "$defs": {
     "HarnessMcp": {
       "type": "object",
-      "required": ["status", "mcpJson", "global", "local", "sources", "confidence"],
+      "required": [
+        "status",
+        "mcpJson",
+        "global",
+        "local",
+        "sources",
+        "confidence"
+      ],
       "additionalProperties": false,
       "properties": {
         "status": {
@@ -220,7 +227,9 @@
           },
           "then": { "required": ["format", "keyPath"] },
           "else": {
-            "not": { "anyOf": [{ "required": ["format"] }, { "required": ["keyPath"] }] }
+            "not": {
+              "anyOf": [{ "required": ["format"] }, { "required": ["keyPath"] }]
+            }
           }
         }
       ]
@@ -334,7 +343,10 @@
           },
           "else": {
             "not": {
-              "anyOf": [{ "required": ["launches"] }, { "required": ["adapter"] }]
+              "anyOf": [
+                { "required": ["launches"] },
+                { "required": ["adapter"] }
+              ]
             }
           }
         },

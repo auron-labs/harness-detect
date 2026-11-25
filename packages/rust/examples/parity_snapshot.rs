@@ -8,8 +8,9 @@ use harness_detect::{
     check_harness, detect_harnesses, detect_installed_acp_launches, detect_installed_harnesses,
     get_harness_acp, get_harness_matrix, get_harness_mcp, get_harness_support,
     get_raw_harness_data, list_harness_acp, list_harness_mcp, list_harness_support, list_harnesses,
-    translate_mcp_json, CheckOptions, HarnessCheckResult, HarnessSupport, HarnessSupportArea,
-    HarnessSupportPath, HarnessSupportRecord, HarnessSupportScope, McpTranslateOptions,
+    resolve_harness_template, translate_mcp_json, CheckOptions, HarnessCheckResult, HarnessSupport,
+    HarnessSupportArea, HarnessSupportPath, HarnessSupportRecord, HarnessSupportScope,
+    McpTranslateOptions,
 };
 use serde_json::{json, Value};
 
@@ -158,6 +159,15 @@ fn run_case(raw_case: &Value, roots: &SandboxRoots) -> Result<Value, String> {
                     })
                     .collect();
                 json!({ "launches": launches })
+            }
+            "resolveHarnessTemplate" => {
+                let input = required_string(&expanded_case, "input")?;
+                // Registry templates are passed through unexpanded.
+                let template = required_string(raw_case, "template")?;
+                match resolve_harness_template(&input, &template, options) {
+                    Ok(path) => json!({ "path": normalize_path_value(path.as_deref(), roots) }),
+                    Err(error) => json!({ "error": error.to_string() }),
+                }
             }
             "getHarnessSupport" => {
                 let input = required_string(&expanded_case, "input")?;

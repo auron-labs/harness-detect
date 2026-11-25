@@ -1,37 +1,37 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "harness-detect"
 version = "0.5.0"
 description = "Detect installed LLM harnesses and resolve their config/state paths from a JSON registry."
 readme = "README.md"
-license = "MIT"
 requires-python = ">=3.10"
+license = "MIT"
 authors = [
-    { name = "Auron" },
+  { name = "Auron" },
 ]
-keywords = ["llm", "harness", "detect", "codex", "claude", "gemini"]
+keywords = ["claude", "codex", "detect", "gemini", "harness", "llm"]
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Topic :: System :: Filesystems",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: System :: Filesystems",
 ]
 
 [project.urls]
-Repository = "https://github.com/auron-labs/harness-detect"
 Issues = "https://github.com/auron-labs/harness-detect/issues"
+Repository = "https://github.com/auron-labs/harness-detect"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/harness_detect"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "src/harness_detect/data/harnesses.json" = "harness_detect/data/harnesses.json"
-
-[dependency-groups]
-dev = [
-    "pytest>=8.0",
-    "ruff>=0.6",
-]

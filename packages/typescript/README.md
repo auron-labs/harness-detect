@@ -44,6 +44,7 @@ A harness counts as installed when either of these is true:
 - `detectInstalledAcpLaunches(options?)` lists ACP agents launchable from installed binaries, as absolute `command` paths with `args`.
 - `getHarnessSupport` returns support metadata for one harness key or alias.
 - `listHarnessSupport()` returns support metadata for every harness.
+- `resolveHarnessTemplate(input, template, options?)` resolves a registry path template, such as a support or MCP path like `${CLAUDE_ROOT}/skills`, to a concrete path using the harness's roots and the same `{ env, cwd }` options as `checkHarness`. It returns `null` when a placeholder cannot be resolved and does not check the disk.
 - `checkHarness(input, options?)` checks one harness key or alias and returns resolved paths, matches, and reasons.
 - `detectHarnesses(options?)` checks every registry entry and returns all results.
 - `detectInstalledHarnesses(options?)` returns only installed results.
@@ -68,8 +69,7 @@ The package exports its local copy at `data/harnesses.json`, and the canonical m
 
 ## Development commands
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the full
-command reference, smoke test details, and the registry editing procedure.
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command reference, smoke test details, and the registry editing procedure.
 
 Related guides:
 
@@ -84,8 +84,4 @@ When editing registry data, update `packages/data/harnesses.json`, run `mise run
 - Support expectations: [../../SUPPORT.md](../../SUPPORT.md)
 - Contribution and registry evidence requirements: [../../CONTRIBUTING.md](../../CONTRIBUTING.md)
 
-ACP metadata describes local stdio launches and optional adapter registry keys,
-independently of file-location support. Read `acp.status`, follow `acp.adapter`
-when present, and select a platform-matching recipe from `acp.launches`. Read the
-owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
-for the optional stored shape and adapter lookup rules.
+ACP metadata describes local stdio launches and optional adapter registry keys, independently of file-location support. Read `acp.status`, follow `acp.adapter` when present, and select a platform-matching recipe from `acp.launches`. Read the owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp) for the optional stored shape and adapter lookup rules.

@@ -28,7 +28,7 @@ Run from `packages/golang`:
 | --- | --- |
 | Unit tests | `go test ./...` |
 | Vet | `go vet ./...` |
-| Vulnerability check | `go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...` |
+| Vulnerability check | `go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...` |
 
 ### Rust
 
@@ -99,7 +99,7 @@ These checks validate local package artifacts and an external Go consumer. They 
 12. `go test ./...` (Go)
 13. `go vet ./...` (Go)
 14. `node scripts/check-go-consumer.mjs` (repo root)
-15. `go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...` (Go)
+15. `go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...` (Go)
 16. `cargo fmt --check` (Rust)
 17. `cargo clippy --all-targets` (Rust)
 18. `cargo test` (Rust)
@@ -115,28 +115,14 @@ These checks validate local package artifacts and an external Go consumer. They 
 
 ## Cross-package parity smoke test
 
-`node scripts/check-package-parity.mjs` (`mise run parity:check`) runs every case in
-`testdata/package-parity-cases.json` through the TypeScript, Go, Rust, and Python
-snapshot runners in fresh temporary trees and compares the normalized output. It
-fails when:
+`node scripts/check-package-parity.mjs` (`mise run parity:check`) runs every case in `testdata/package-parity-cases.json` through the TypeScript, Go, Rust, and Python snapshot runners in fresh temporary trees and compares the normalized output. It fails when:
 
 - any package's output differs from TypeScript's for any case;
-- a function listed in `testdata/public-api-parity.json` has no parity case, so a
-  new public function cannot skip cross-package comparison;
-- `getRawHarnessData`, `getHarnessMatrix`, or `listHarnesses` does not reproduce
-  `packages/data/harnesses.json` exactly, which catches a package that drops or
-  renames a registry field when decoding it;
-- a case's `expect` block disagrees with the TypeScript output (checked by
-  `packages/typescript/test/parity-fixtures.test.js`), so agreement is also
-  checked against intended behavior.
+- a function listed in `testdata/public-api-parity.json` has no parity case, so a new public function cannot skip cross-package comparison;
+- `getRawHarnessData`, `getHarnessMatrix`, or `listHarnesses` does not reproduce `packages/data/harnesses.json` exactly, which catches a package that drops or renames a registry field when decoding it;
+- a case's `expect` block disagrees with the TypeScript output (checked by `packages/typescript/test/parity-fixtures.test.js`), so agreement is also checked against intended behavior.
 
-`translate-probe-every-harness` runs a probe `.mcp.json` with valid and malformed
-servers through every harness and both scopes, exercising every registry
-`serverFormat`. When adding an operation, support it in all four runners:
-`packages/typescript/scripts/parity-snapshot.js`,
-`packages/golang/internal/paritysnapshot/main.go`,
-`packages/rust/examples/parity_snapshot.rs`, and
-`packages/python/scripts/parity_snapshot.py`.
+`translate-probe-every-harness` runs a probe `.mcp.json` with valid and malformed servers through every harness and both scopes, exercising every registry `serverFormat`. When adding an operation, support it in all four runners: `packages/typescript/scripts/parity-snapshot.js`, `packages/golang/internal/paritysnapshot/main.go`, `packages/rust/examples/parity_snapshot.rs`, and `packages/python/scripts/parity_snapshot.py`.
 
 Locally, `mise run verify` also runs `mise run docs:check` near the start of the sequence, so generated-doc freshness — including the support matrix — is a required verification gate before handoff.
 
@@ -300,7 +286,7 @@ cd packages/typescript && bun run smoke:fixtures:local
 cd packages/typescript && bun run smoke:fixtures
 ```
 
-- **Prerequisites:** Docker running locally; may pull `oven/bun:1.3`.
+- **Prerequisites:** Docker running locally; may pull `oven/bun:1.4`.
 - **Expected output:** Exit 0 and the same JSON summary shape.
 - **What it proves:** The same fixture smoke inside Linux/Docker.
 - **Note:** This path has not been confirmed to run successfully in all local environments. Use the local smoke test for routine verification.

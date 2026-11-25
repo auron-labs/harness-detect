@@ -1,9 +1,34 @@
-import { getHarnessMcp, listHarnessMcp, translateMcpJson, type HarnessMcp, type McpTranslation, detectInstalledAcpLaunches, type InstalledAcpLaunch, getHarnessAcp, listHarnessAcp, type HarnessAcp, type HarnessAcpLaunch, checkHarness, detectHarnesses, detectInstalledHarnesses, getHarnessMatrix, getRawHarnessData, listHarnesses, type HarnessPlatform } from "@auron-labs/harness-detect";
+import {
+  getHarnessMcp,
+  listHarnessMcp,
+  translateMcpJson,
+  detectInstalledAcpLaunches,
+  getHarnessAcp,
+  listHarnessAcp,
+  checkHarness,
+  resolveHarnessTemplate,
+  detectHarnesses,
+  detectInstalledHarnesses,
+  getHarnessMatrix,
+  getRawHarnessData,
+  listHarnesses,
+} from "@auron-labs/harness-detect";
+import type {
+  HarnessMcp,
+  McpTranslation,
+  InstalledAcpLaunch,
+  HarnessAcp,
+  HarnessAcpLaunch,
+  HarnessPlatform,
+} from "@auron-labs/harness-detect";
 
 type Assert<T extends true> = T;
+
 type IsExact<T, U> =
-  (<G>() => G extends T ? 1 : 2) extends (<G>() => G extends U ? 1 : 2)
-    ? ((<G>() => G extends U ? 1 : 2) extends (<G>() => G extends T ? 1 : 2) ? true : false)
+  (<G>() => G extends T ? 1 : 2) extends <G>() => G extends U ? 1 : 2
+    ? (<G>() => G extends U ? 1 : 2) extends <G>() => G extends T ? 1 : 2
+      ? true
+      : false
     : false;
 
 const matrix = getHarnessMatrix();
@@ -17,30 +42,39 @@ const checkResult = checkHarness("codex", {
   cwd: "/repo",
   env: {
     HOME: "/tmp/home",
-    PATH: ""
-  }
+    PATH: "",
+  },
 });
+
+const skillsDir: string | null = resolveHarnessTemplate(
+  "claude-code",
+  // oxlint-disable-next-line no-template-curly-in-string -- registry template syntax, not a JS template
+  "${CLAUDE_ROOT}/skills",
+  { env: { HOME: "/tmp/home" } }
+);
 
 const detected = detectHarnesses({
   cwd: "/repo",
   env: {
     HOME: "/tmp/home",
-    PATH: ""
-  }
+    PATH: "",
+  },
 });
 
 const detectedInstalled = detectInstalledHarnesses({
   cwd: "/repo",
   env: {
     HOME: "/tmp/home",
-    PATH: ""
-  }
+    PATH: "",
+  },
 });
 
 const checkResultKey: string = checkResult.key;
 const checkResultName: string = checkResult.name;
 const installed: boolean = checkResult.installed;
 const executablePath: string | null = checkResult.executablePath;
+
+// oxlint-disable-next-line typescript/no-non-null-assertion -- type test: the registry is nonempty and indexed access is checked
 const firstResolvedPath = checkResult.paths[0]!;
 const resolvedPathValue: string | null = firstResolvedPath.path;
 const resolvedPathExists: boolean = firstResolvedPath.exists;
@@ -48,76 +82,197 @@ const matchedPathId: string | undefined = checkResult.matchedPaths[0]?.id;
 const reason: string | undefined = checkResult.reasons[0];
 const harnessAliases: string[] = checkResult.harness.aliases;
 const harnessOptionalRoots = checkResult.harness.roots;
-const firstInstallation = checkResult.harness.installations[0];
+const [firstInstallation] = checkResult.harness.installations;
 const firstInstallationMethod = firstInstallation?.method;
 const firstInstallationPackage = firstInstallation?.package;
 const firstInstallationMarketplace = firstInstallation?.marketplace;
 const firstInstallationId = firstInstallation?.id;
-const firstInstallationPlatforms: HarnessPlatform[] | undefined = firstInstallation?.platforms;
+
+const firstInstallationPlatforms: HarnessPlatform[] | undefined =
+  firstInstallation?.platforms;
+
 const harnessMatrixInstallationUrl = matrix.harnesses[0]?.installations[0]?.url;
-const firstResolvedPathPlatforms: HarnessPlatform[] | undefined = firstResolvedPath.platforms;
+
+const firstResolvedPathPlatforms: HarnessPlatform[] | undefined =
+  firstResolvedPath.platforms;
+
 const linuxPlatform: HarnessPlatform = "linux";
 const firstDetectedKey: string | undefined = detected[0]?.key;
 const firstInstalledDetectedKey: string | undefined = detectedInstalled[0]?.key;
 
-type _CheckResultExecutablePathIsNullable = Assert<IsExact<typeof checkResult.executablePath, string | null>>;
-type _ResolvedPathPathIsNullable = Assert<IsExact<typeof firstResolvedPath.path, string | null>>;
-type _HarnessRootsStayOptional = Assert<IsExact<typeof checkResult.harness.roots, { name: string; env?: string; use?: string; fallbackEnv?: string; fallback: string }[] | undefined>>;
+type _CheckResultExecutablePathIsNullable = Assert<
+  IsExact<typeof checkResult.executablePath, string | null>
+>;
+
+type _ResolvedPathPathIsNullable = Assert<
+  IsExact<typeof firstResolvedPath.path, string | null>
+>;
+
+type _HarnessRootsStayOptional = Assert<
+  IsExact<
+    typeof checkResult.harness.roots,
+    | {
+        name: string;
+        env?: string;
+        use?: string;
+        fallbackEnv?: string;
+        fallback: string;
+      }[]
+    | undefined
+  >
+>;
+
+void skillsDir;
 
 void version;
+
 void rawVersion;
+
 void firstHarnessName;
+
 void checkResultKey;
+
 void checkResultName;
+
 void installed;
+
 void executablePath;
+
 void resolvedPathValue;
+
 void resolvedPathExists;
+
 void matchedPathId;
+
 void reason;
+
 void harnessAliases;
+
 void harnessOptionalRoots;
+
 void firstInstallationMethod;
+
 void firstInstallationPackage;
+
 void firstInstallationMarketplace;
+
 void firstInstallationId;
+
 void firstInstallationPlatforms;
+
 void harnessMatrixInstallationUrl;
+
 void firstResolvedPathPlatforms;
+
 void linuxPlatform;
+
 void firstDetectedKey;
+
 void firstInstalledDetectedKey;
 
-const acp = getHarnessAcp("codex").acp;
+const { acp } = getHarnessAcp("codex");
 const acpRecords = listHarnessAcp();
 const optionalAcp: HarnessAcp | undefined = rawMatrix.harnesses[0]?.acp;
-const directAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", launches: [{ command: "example", args: [] }] };
-const adapterAcp: HarnessAcp = { status: "supported", sources: [], confidence: "official", adapter: "example-bridge" };
-// @ts-expect-error supported ACP needs exactly one launch or adapter
-const invalidAcp: HarnessAcp = { status: "supported", sources: [], confidence: "unknown" };
-// @ts-expect-error unsupported ACP has no launch
-const invalidLaunch: HarnessAcp = { status: "unsupported", sources: [], confidence: "source", launches: [{ command: "example", args: [] }] };
-const optionalLaunch: HarnessAcpLaunch | undefined = acp.launches?.[0];
-void [acpRecords, optionalAcp, directAcp, adapterAcp, invalidAcp, invalidLaunch, optionalLaunch];
 
-// @ts-expect-error supported ACP requires a nonempty launch list
-const emptyLaunches: HarnessAcp = { status: "supported", sources: [], confidence: "source", launches: [] };
+const directAcp: HarnessAcp = {
+  status: "supported",
+  sources: [],
+  confidence: "official",
+  launches: [{ command: "example", args: [] }],
+};
+
+const adapterAcp: HarnessAcp = {
+  status: "supported",
+  sources: [],
+  confidence: "official",
+  adapter: "example-bridge",
+};
+
+// @ts-expect-error supported ACP needs exactly one launch or adapter
+const invalidAcp: HarnessAcp = {
+  status: "supported",
+  sources: [],
+  confidence: "unknown",
+};
+
+const invalidLaunch: HarnessAcp = {
+  status: "unsupported",
+  sources: [],
+  confidence: "source",
+  // @ts-expect-error unsupported ACP has no launch
+  launches: [{ command: "example", args: [] }],
+};
+
+const optionalLaunch: HarnessAcpLaunch | undefined = acp.launches?.[0];
+
+void [
+  acpRecords,
+  optionalAcp,
+  directAcp,
+  adapterAcp,
+  invalidAcp,
+  invalidLaunch,
+  optionalLaunch,
+];
+
+const emptyLaunches: HarnessAcp = {
+  status: "supported",
+  sources: [],
+  confidence: "source",
+  // @ts-expect-error supported ACP requires a nonempty launch list
+  launches: [],
+};
+
 void emptyLaunches;
 
-const installedAcpLaunches: InstalledAcpLaunch[] = detectInstalledAcpLaunches({ env: { PATH: "/usr/bin" } });
-const installedAcpCommand: string | undefined = installedAcpLaunches[0]?.command;
+const installedAcpLaunches: InstalledAcpLaunch[] = detectInstalledAcpLaunches({
+  env: { PATH: "/usr/bin" },
+});
+
+const installedAcpCommand: string | undefined =
+  installedAcpLaunches[0]?.command;
+
 void installedAcpCommand;
 
+// oxlint-disable-next-line typescript/no-non-null-assertion -- type test: the registry is nonempty and indexed access is checked
 const harnessVersion: string = harnesses[0]!.version;
 const mcpRecord = getHarnessMcp("claude-code");
 const mcpMetadata: HarnessMcp = mcpRecord.mcp;
-const mcpJsonStatus: "supported" | "unsupported" | "unknown" = mcpMetadata.mcpJson;
+
+const mcpJsonStatus: "supported" | "unsupported" | "unknown" =
+  mcpMetadata.mcpJson;
+
 const mcpGlobalKeyPath: string[] | undefined = mcpMetadata.global.keyPath;
 const allMcp: string[] = listHarnessMcp().map((record) => record.key);
-const translation: McpTranslation = translateMcpJson("codex", { mcpServers: { fs: { command: "npx", args: ["-y", "fs"] } } }, { scope: "global" });
-const translationFromText: McpTranslation = translateMcpJson("cursor", "{\"mcpServers\":{}}");
-const translationSkipped: string[] = translation.skipped.map((entry) => entry.reason);
-const agentsSkillsStatus: "supported" | "unsupported" | "unknown" = harnesses[0]!.support.agentsSkills.local.status;
+
+const translation: McpTranslation = translateMcpJson(
+  "codex",
+  { mcpServers: { fs: { command: "npx", args: ["-y", "fs"] } } },
+  { scope: "global" }
+);
+
+const translationFromText: McpTranslation = translateMcpJson(
+  "cursor",
+  '{"mcpServers":{}}'
+);
+
+const translationSkipped: string[] = translation.skipped.map(
+  (entry) => entry.reason
+);
+
+const agentsSkillsStatus: "supported" | "unsupported" | "unknown" =
+  // oxlint-disable-next-line typescript/no-non-null-assertion -- type test: the registry is nonempty and indexed access is checked
+  harnesses[0]!.support.agentsSkills.local.status;
+
 // @ts-expect-error scope must be global or local
 translateMcpJson("codex", { mcpServers: {} }, { scope: "project" });
-void [harnessVersion, mcpJsonStatus, mcpGlobalKeyPath, allMcp, translationFromText, translationSkipped, agentsSkillsStatus];
+
+void [
+  harnessVersion,
+  mcpJsonStatus,
+  mcpGlobalKeyPath,
+  allMcp,
+  translationFromText,
+  translationSkipped,
+  agentsSkillsStatus,
+];

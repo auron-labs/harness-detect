@@ -16,6 +16,7 @@ var (
 	_ func(string) (harnessdetect.HarnessSupportRecord, error)                                      = harnessdetect.GetHarnessSupport
 	_ func() []harnessdetect.HarnessSupportRecord                                                   = harnessdetect.ListHarnessSupport
 	_ func(string, harnessdetect.CheckOptions) (harnessdetect.HarnessCheckResult, error)            = harnessdetect.CheckHarness
+	_ func(string, string, harnessdetect.CheckOptions) (string, error)                              = harnessdetect.ResolveHarnessTemplate
 	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)                  = harnessdetect.DetectHarnesses
 	_ func(harnessdetect.CheckOptions) ([]harnessdetect.HarnessCheckResult, error)                  = harnessdetect.DetectInstalledHarnesses
 	_ func(harnessdetect.CheckOptions) ([]harnessdetect.InstalledACPLaunch, error)                  = harnessdetect.DetectInstalledACPLaunches

@@ -21,7 +21,7 @@ func benchmarkCheckOptions(b *testing.B) CheckOptions {
 		filepath.Join(home, ".local", "state"),
 		filepath.Join(home, ".cache"),
 	} {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
+		if err := os.MkdirAll(dir, 0o750); err != nil {
 			b.Fatalf("mkdir %s: %v", dir, err)
 		}
 	}
@@ -69,7 +69,7 @@ func BenchmarkDetectHarnesses(b *testing.B) {
 	b.ReportMetric(float64(harnessCount), "harnesses/op")
 	b.ResetTimer()
 
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		results, err := DetectHarnesses(options)
 		if err != nil {
 			b.Fatalf("detect: %v", err)

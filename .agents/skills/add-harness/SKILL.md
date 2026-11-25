@@ -31,33 +31,13 @@ Distinguish evidence that a product reads a shared file from evidence that it is
 
 ## Find and research ACP records
 
-Read [the ACP lookup workflow](../../../docs/harness-guide.md#finding-and-updating-acp-records).
-The canonical record is the harness's top-level `acp`, separate from `support`.
-Package consumers use `getHarnessAcp` / `listHarnessAcp` (TypeScript),
-`GetHarnessACP` / `ListHarnessACP` (Go), or `get_harness_acp` /
-`list_harness_acp` (Rust/Python). These return all registered records, including
-adapters and unknowns; missing metadata becomes `unknown` in dedicated getters.
+Read [the ACP lookup workflow](../../../docs/harness-guide.md#finding-and-updating-acp-records). The canonical record is the harness's top-level `acp`, separate from `support`. Package consumers use `getHarnessAcp` / `listHarnessAcp` (TypeScript), `GetHarnessACP` / `ListHarnessACP` (Go), or `get_harness_acp` / `list_harness_acp` (Rust/Python). These return all registered records, including adapters and unknowns; missing metadata becomes `unknown` in dedicated getters.
 
-Check `status`. A supported record has either `launches` or one exact `adapter`
-registry key. Follow that key once; the target owns the launch list. Select the
-launch matching the caller's platform and read both records' `acp.notes` plus
-the owner's `installations` and `env` before describing how to run it. Commands
-and argv are literal; the library does not execute them or expand placeholders.
+Check `status`. A supported record has either `launches` or one exact `adapter` registry key. Follow that key once; the target owns the launch list. Select the launch matching the caller's platform and read both records' `acp.notes` plus the owner's `installations` and `env` before describing how to run it. Commands and argv are literal; the library does not execute them or expand placeholders.
 
-Verify agent/server-side ACP, not merely client integration, MCP, an RFC, or a
-similarly named product. Cite upstream documentation, source, or distribution
-manifests in `acp.sources` with appropriate `confidence`. Record requirements
-such as optional dependencies, bundled versus separate CLIs, authentication,
-working directories, and architecture limits in notes. Keep absent evidence
-`unknown`; only mark `unsupported` with evidence.
+Verify agent/server-side ACP, not merely client integration, MCP, an RFC, or a similarly named product. Cite upstream documentation, source, or distribution manifests in `acp.sources` with appropriate `confidence`. Record requirements such as optional dependencies, bundled versus separate CLIs, authentication, working directories, and architecture limits in notes. Keep absent evidence `unknown`; only mark `unsupported` with evidence.
 
-Add a separate adapter entry for a verified adapter launch. Use its own
-executable for detection, never the host CLI or a generic runtime such as
-`node` or `npx`. Exception to the detection-entry rule above: a documented ACP
-launch record can have empty `executables` and `paths` when there is no portable,
-unambiguous signal, provided `acp.notes` explains the setup limitation. This is
-how the source-only `aider-acp` record is represented. Such records remain
-discoverable through ACP APIs but never count as installed from metadata.
+Add a separate adapter entry for a verified adapter launch. Use its own executable for detection, never the host CLI or a generic runtime such as `node` or `npx`. Exception to the detection-entry rule above: a documented ACP launch record can have empty `executables` and `paths` when there is no portable, unambiguous signal, provided `acp.notes` explains the setup limitation. This is how the source-only `aider-acp` record is represented. Such records remain discoverable through ACP APIs but never count as installed from metadata.
 
 ## Research `.agents/skills` and MCP
 
@@ -92,11 +72,9 @@ Populate all ten support leaves: `config`, `skills`, `commands`, `agents`, and `
 
 Support paths use `id`, `kind`, and `template`, with optional `platforms` and `description`; they do not have a detection `category`. Anchor local/project support at `${CWD}` and apply documented root overrides to global support paths. Attach supporting URLs and a non-unknown confidence to established support claims.
 
-For supported ACP, use a nonempty `launches` list of `{command, args, platforms?}`
-or an `adapter` key pointing directly to another supported launch record. Multiple
-launches require explicit, non-overlapping platforms. Unknown/unsupported records
-have neither launches nor an adapter. Do not turn a version-pinned example into
-an inferred minimum version or use a local-path placeholder as executable argv.
+Consumers turn support and MCP templates into paths with `resolveHarnessTemplate` (Go `ResolveHarnessTemplate`, Rust/Python `resolve_harness_template`), which uses only the built-in variables, the caller's environment, and the `roots` declared on the same entry. A support or MCP location with a default and an override therefore needs a root with `env` and `fallback` even when no detection path uses it; referencing the raw override variable directly resolves to null whenever it is unset. Check the global skills and MCP paths you add, with and without each override, for example `node --input-type=module -e 'import { resolveHarnessTemplate } from "./packages/typescript/src/index.js"; console.log(resolveHarnessTemplate("<key>", "${<ROOT>}/skills", { env: { HOME: "/tmp/h" } }))'`.
+
+For supported ACP, use a nonempty `launches` list of `{command, args, platforms?}` or an `adapter` key pointing directly to another supported launch record. Multiple launches require explicit, non-overlapping platforms. Unknown/unsupported records have neither launches nor an adapter. Do not turn a version-pinned example into an inferred minimum version or use a local-path placeholder as executable argv.
 
 If the current schema cannot model verified behavior, explain the limitation and make the smallest shared extension needed for the requested harness. Update the schema, all affected implementations/types, and parity fixtures together; avoid a harness-specific branch in one language. Keep version 1 unless tooling actually requires a document-version change.
 

@@ -1,12 +1,8 @@
 # harness-detect (Python)
 
-Detect installed LLM harnesses (Codex, Claude Code, Gemini CLI, Cursor, and many
-others) and resolve their config/state/install paths from a shared JSON
-registry.
+Detect installed LLM harnesses (Codex, Claude Code, Gemini CLI, Cursor, and many others) and resolve their config/state/install paths from a shared JSON registry.
 
-This is the Python port of `@auron-labs/harness-detect`. It shares the same harness
-registry as the TypeScript, Go, and Rust packages and exposes the same API
-surface, adapted to idiomatic Python naming.
+This is the Python port of `@auron-labs/harness-detect`. It shares the same harness registry as the TypeScript, Go, and Rust packages and exposes the same API surface, adapted to idiomatic Python naming.
 
 ## Installation
 
@@ -48,15 +44,11 @@ print(len(list_harness_support()))
 - `translate_mcp_json(input, mcp_json, scope="local")` translates a `.mcp.json` mapping or JSON text into the harness's native server entries for one scope, returning `format`, `key_path`, `servers`, `config`, and `skipped`. Nothing is read or written.
 - `get_harness_support(input)` returns support metadata for one harness key or alias.
 - `list_harness_support()` returns support metadata for every harness.
+- `resolve_harness_template(input, template, options=None)` resolves a registry path template, such as a support or MCP path like `${CLAUDE_ROOT}/skills`, to a concrete path using the harness's roots and the same `CheckOptions` as `check_harness`. It returns `None` when a placeholder cannot be resolved and does not check the disk.
 - `check_harness(input, options=None)` checks one harness key or alias.
 - `detect_harnesses(options=None)` checks every registry entry.
 - `detect_installed_harnesses(options=None)` returns only installed harnesses.
 
-See the [package docs](https://github.com/auron-labs/harness-detect) for the full
-API reference.
+See the [package docs](https://github.com/auron-labs/harness-detect) for the full API reference.
 
-ACP metadata describes local stdio launches and optional adapter registry keys,
-independently of file-location support. Read `acp.status`, follow `acp.adapter`
-when present, and select a platform-matching recipe from `acp.launches`. Read the
-owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp)
-for the optional stored shape and adapter lookup rules.
+ACP metadata describes local stdio launches and optional adapter registry keys, independently of file-location support. Read `acp.status`, follow `acp.adapter` when present, and select a platform-matching recipe from `acp.launches`. Read the owner's installation requirements and notes before launching. See the [ACP contract](../../docs/configuration.md#acp-metadata-acp) for the optional stored shape and adapter lookup rules.

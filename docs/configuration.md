@@ -269,7 +269,7 @@ Roots are resolved in declaration order, so later roots can reference earlier on
 
 ## Path template syntax
 
-Templates use `${VAR_NAME}` placeholders. At resolution time:
+Templates use `${VAR_NAME}` placeholders. Detection resolves `paths[]` templates itself. Support and MCP path templates are returned unresolved; pass one to `resolveHarnessTemplate` (Go `ResolveHarnessTemplate`, Rust/Python `resolve_harness_template`) to resolve it with the same variables and harness roots. At resolution time:
 
 - If a placeholder's value is undefined, null, or empty string, the **entire template resolves to null** in public APIs, and the path is marked as non-existent.
 - Resolved paths are normalized (`path.normalize` in TS, `filepath.Clean` in Go).
@@ -647,6 +647,19 @@ console.log(codexSupport.support.agentsSkills.local.status);
 ```
 
 Use `global` to answer user-level support questions. Use `local` to answer workspace/project questions rooted at `${CWD}`.
+
+Support templates such as `${CLAUDE_ROOT}/skills` reference harness roots, so resolve them through the package rather than expanding them yourself:
+
+```js
+import {
+  getHarnessSupport,
+  resolveHarnessTemplate,
+} from "@auron-labs/harness-detect";
+
+const [skills] = getHarnessSupport("claude-code").support.skills.global.paths;
+console.log(resolveHarnessTemplate("claude-code", skills.template));
+// ~/.claude/skills, or $CLAUDE_CONFIG_DIR/skills when that variable is set
+```
 
 ## Where each setting is consumed
 

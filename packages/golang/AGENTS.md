@@ -20,9 +20,7 @@ The consumable Go package import path is `github.com/auron-labs/harness-detect/p
 
 ## Commands
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the full
-command reference, the registry editing procedure, and change-aware
-validation.
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the full command reference, the registry editing procedure, and change-aware validation.
 
 ## Working Rules
 
@@ -35,6 +33,7 @@ validation.
   - `ListHarnesses()`
   - `GetHarnessSupport()`
   - `ListHarnessSupport()`
+  - `ResolveHarnessTemplate(input, template, options)`
   - `GetHarnessACP(input)`
   - `ListHarnessACP()`
   - `GetHarnessMCP(input)`
@@ -44,20 +43,13 @@ validation.
   - `CheckHarness()`
   - `DetectHarnesses()`
   - `DetectInstalledHarnesses()`
-- Raw-registry APIs, `ListHarnesses()`, and detection results that embed
-  `Harness` now expose required `Support` metadata wherever they expose full
-  harness definitions.
-- `Support` is descriptive only. Detection still depends on executable matches
-  and existing resolved `paths[]` entries.
-- The repo is still unpublished, so prefer a clean aligned API/schema over
-  compatibility-only layers. Keep registry `version: 1` unless internal
-  tooling truly requires a bump.
+- Raw-registry APIs, `ListHarnesses()`, and detection results that embed `Harness` now expose required `Support` metadata wherever they expose full harness definitions.
+- `Support` is descriptive only. Detection still depends on executable matches and existing resolved `paths[]` entries.
+- The repo is still unpublished, so prefer a clean aligned API/schema over compatibility-only layers. Keep registry `version: 1` unless internal tooling truly requires a bump.
 
 ## Matrix Editing
 
-See [../../docs/maintainers.md](../../docs/maintainers.md) for the
-registry editing rules and post-edit verification. Package-specific
-notes:
+See [../../docs/maintainers.md](../../docs/maintainers.md) for the registry editing rules and post-edit verification. Package-specific notes:
 
 - Follow [../../docs/harness-guide.md](../../docs/harness-guide.md) for the canonical edit flow: edit `packages/data/harnesses.json`, run `mise run registry:sync`, then `mise run registry:check`.
 - `harnessdetect/data/harnesses.json` is a derived embedded copy. Do not hand-edit it.
@@ -78,20 +70,10 @@ notes:
 
 ## Finding ACP metadata
 
-Use `GetHarnessACP(input)` for a key or alias and `ListHarnessACP()` to list all
-ACP records, including adapters and unknowns. Read the record's `acp` metadata
-(`ACP` in Go), and check `status` before using a launch. Follow `adapter` once to the owning
-registry record, then select from `launches` for the caller's platform. Read both
-records' notes and the owner's installation requirements; ACP support and
-installation detection are independent.
+Use `GetHarnessACP(input)` for a key or alias and `ListHarnessACP()` to list all ACP records, including adapters and unknowns. Read the record's `acp` metadata (`ACP` in Go), and check `status` before using a launch. Follow `adapter` once to the owning registry record, then select from `launches` for the caller's platform. Read both records' notes and the owner's installation requirements; ACP support and installation detection are independent.
 
-See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records)
-for examples, platform selection, evidence rules, and source-only adapters.
+See [the shared ACP lookup workflow](../../docs/harness-guide.md#finding-and-updating-acp-records) for examples, platform selection, evidence rules, and source-only adapters.
 
 ## MCP metadata and translation
 
-Every harness has required `mcp` metadata (see the root `AGENTS.md`). The
-`.mcp.json` translator is generic: it only interprets the registry's
-`mcp.serverFormat`, so keep it free of harness-specific branches. Its skip
-reasons, error messages, and output must stay identical across packages; the
-`translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.
+Every harness has required `mcp` metadata (see the root `AGENTS.md`). The `.mcp.json` translator is generic: it only interprets the registry's `mcp.serverFormat`, so keep it free of harness-specific branches. Its skip reasons, error messages, and output must stay identical across packages; the `translateMcpJson` cases in `testdata/package-parity-cases.json` enforce that.

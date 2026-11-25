@@ -5,7 +5,7 @@ This guide gets you from a fresh clone to a working detection call in minutes.
 ## Prerequisites
 
 | Requirement | Version | Why |
-|---|---|---|
+| --- | --- | --- |
 | Node.js | >= 18 | TypeScript package runtime (`package.json` `engines.node`) |
 | Go | 1.26.9 | Go package (`go.mod`); only needed for Go development |
 | Rust | stable | Rust package (`packages/rust`); only needed for Rust development |
@@ -15,10 +15,7 @@ This guide gets you from a fresh clone to a working detection call in minutes.
 | Docker | optional | Only for the Docker smoke test (`bun run smoke:fixtures`) |
 | [mise](https://mise.jdx.dev/) | optional | Provides task shortcuts from the repo root |
 
-The TypeScript package has **zero runtime dependencies**. The only dev
-dependency is `typescript` (for type-checking). The Go package has **no external
-dependencies**. The Rust crate depends on `serde` and `serde_json` (Rust's
-stdlib has no JSON support). The Python package is **stdlib-only at runtime**.
+The TypeScript package has **zero runtime dependencies**. The only dev dependency is `typescript` (for type-checking). The Go package has **no external dependencies**. The Rust crate depends on `serde` and `serde_json` (Rust's stdlib has no JSON support). The Python package is **stdlib-only at runtime**.
 
 ## Install the TypeScript package (consumer)
 
@@ -53,16 +50,13 @@ cd packages/typescript
 bun install
 ```
 
-No install step is needed for the Go package — `go test` fetches modules
-automatically. For Rust, `cargo test` fetches crates automatically. For Python,
-install dev dependencies with `uv sync --dev` from `packages/python`.
+No install step is needed for the Go package — `go test` fetches modules automatically. For Rust, `cargo test` fetches crates automatically. For Python, install dev dependencies with `uv sync --dev` from `packages/python`.
 
 ## First successful run
 
 ### TypeScript
 
-From `packages/typescript`, run a one-off detection against your real
-environment:
+From `packages/typescript`, run a one-off detection against your real environment:
 
 ```sh
 cd packages/typescript
@@ -80,8 +74,7 @@ cd packages/golang
 go test ./...
 ```
 
-This is the quickest verification path in this repository. For consumer code,
-import `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` and call the public API.
+This is the quickest verification path in this repository. For consumer code, import `github.com/auron-labs/harness-detect/packages/golang/harnessdetect` and call the public API.
 
 ### Rust
 
@@ -140,17 +133,14 @@ Expected: all tests pass, exit 0.
 
 ### Run the local smoke test
 
-This is the hermetic fixture test that CI runs. It creates fake executables and
-fake config/state paths in a temp directory — it does **not** install real
-harnesses.
+This is the hermetic fixture test that CI runs. It creates fake executables and fake config/state paths in a temp directory — it does **not** install real harnesses.
 
 ```sh
 cd packages/typescript
 bun run smoke:fixtures:local
 ```
 
-Expected: exit 0 and a JSON summary with fields `platform`, `exercisedCount`,
-`skippedCount`, `exercised`, and `skipped`.
+Expected: exit 0 and a JSON summary with fields `platform`, `exercisedCount`, `skippedCount`, `exercised`, and `skipped`.
 
 ### Verify registry sync
 
@@ -167,8 +157,7 @@ Each command should print `OK`. This is also available as `mise run registry:che
 
 ## Using mise shortcuts (optional)
 
-If you use [mise](https://mise.jdx.dev/), the root `mise.toml` provides
-package-scoped tasks that run from the correct working directories:
+If you use [mise](https://mise.jdx.dev/), the root `mise.toml` provides package-scoped tasks that run from the correct working directories:
 
 ```sh
 mise run test          # Package tests
@@ -180,8 +169,6 @@ mise tasks             # List all available tasks
 ## Common next steps
 
 - Read [api.md](./api.md) for the full function signatures and return types.
-- Read [configuration.md](./configuration.md) to understand path templates,
-  env overrides, and the registry schema.
-- Read [development.md](./development.md) for the repository layout and
-  contribution workflow.
+- Read [configuration.md](./configuration.md) to understand path templates, env overrides, and the registry schema.
+- Read [development.md](./development.md) for the repository layout and contribution workflow.
 - Read [testing.md](./testing.md) for the full test strategy.

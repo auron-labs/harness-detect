@@ -765,6 +765,25 @@ pub fn check_harness(
     })
 }
 
+/// Resolves a registry path template, such as a support or MCP path, for one
+/// harness, using the same base variables and harness roots as
+/// [`check_harness`]. Returns `None` when a placeholder cannot be resolved.
+/// Nothing is checked on disk.
+///
+/// Returns [`HarnessError`] with the message `"Unknown harness: <input>"` if
+/// the key/alias is not found.
+pub fn resolve_harness_template(
+    input: &str,
+    template: &str,
+    options: CheckOptions,
+) -> Result<Option<String>, HarnessError> {
+    let harness = find_harness_definition(input)
+        .ok_or_else(|| HarnessError(format!("Unknown harness: {}", input)))?;
+    let base_env = with_defaults(options.env.as_ref(), options.cwd.as_deref());
+    let env = resolve_harness_roots(&harness, &base_env);
+    Ok(resolve_template(template, &env))
+}
+
 /// Checks every harness in the registry, returning one result per entry.
 pub fn detect_harnesses(options: CheckOptions) -> Result<Vec<HarnessCheckResult>, HarnessError> {
     let keys: Vec<String> = matrix().harnesses.iter().map(|h| h.key.clone()).collect();

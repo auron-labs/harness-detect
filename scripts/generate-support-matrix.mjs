@@ -1,116 +1,137 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const repoRoot = path.resolve(__dirname, '..');
-const registryPath = path.join(repoRoot, 'packages', 'data', 'harnesses.json');
-const outputPath = path.join(repoRoot, 'docs', 'support-matrix.md');
+const __filename = import.meta.filename;
+const __dirname = import.meta.dirname;
+const repoRoot = path.resolve(__dirname, "..");
+const registryPath = path.join(repoRoot, "packages", "data", "harnesses.json");
+const outputPath = path.join(repoRoot, "docs", "support-matrix.md");
 
 const SUPPORT_AREAS = [
-  { key: 'config', label: 'config' },
-  { key: 'skills', label: 'skills' },
-  { key: 'commands', label: 'commands' },
-  { key: 'agents', label: 'agents' },
-  { key: 'agentsSkills', label: '`.agents/skills`' }
+  { key: "config", label: "config" },
+  { key: "skills", label: "skills" },
+  { key: "commands", label: "commands" },
+  { key: "agents", label: "agents" },
+  { key: "agentsSkills", label: "`.agents/skills`" },
 ];
-const SUPPORT_SCOPES = ['global', 'local'];
-const STATUS_ORDER = ['supported', 'unsupported', 'unknown'];
-const CONFIDENCE_ORDER = ['official', 'source', 'observed', 'inferred', 'unknown'];
 
-function fail(message, exitCode = 1) {
+const SUPPORT_SCOPES = ["global", "local"];
+const STATUS_ORDER = ["supported", "unsupported", "unknown"];
+
+const CONFIDENCE_ORDER = [
+  "official",
+  "source",
+  "observed",
+  "inferred",
+  "unknown",
+];
+
+const fail = (message, exitCode = 1) => {
   console.error(message);
   process.exit(exitCode);
-}
+};
 
-function parseArgs(argv) {
+const parseArgs = (argv) => {
   const args = new Set(argv.slice(2));
-  const checkOnly = args.has('--check');
-  const printSummary = args.has('--summary');
-  const invalidArgs = [...args].filter((arg) => arg !== '--check' && arg !== '--summary');
+  const checkOnly = args.has("--check");
+  const printSummary = args.has("--summary");
+
+  const invalidArgs = [...args].filter(
+    (arg) => arg !== "--check" && arg !== "--summary"
+  );
 
   if (invalidArgs.length > 0) {
-    fail(`Unknown argument(s): ${invalidArgs.join(', ')}`, 2);
+    fail(`Unknown argument(s): ${invalidArgs.join(", ")}`, 2);
   }
 
   return { checkOnly, printSummary };
-}
+};
 
-function assertArray(value, label) {
+const assertArray = (value, label) => {
   if (!Array.isArray(value)) {
     fail(`${label} must be an array`);
   }
-}
+};
 
-function assertObject(value, label) {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+const assertObject = (value, label) => {
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- registry JSON is untrusted input validated at this boundary
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
     fail(`${label} must be an object`);
   }
-}
+};
 
-function assertNonEmptyString(value, label) {
-  if (typeof value !== 'string' || value.length === 0) {
+const assertNonEmptyString = (value, label) => {
+  // oxlint-disable-next-line anti-slop/no-runtime-typeof -- registry JSON is untrusted input validated at this boundary
+  if (typeof value !== "string" || value.length === 0) {
     fail(`${label} must be a non-empty string`);
   }
-}
+};
 
-function escapeCell(value) {
-  return value.replace(/\r?\n/g, '<br>').replaceAll('|', '\\|');
-}
+const escapeCell = (value) =>
+  value.replaceAll(/\r?\n/gu, "<br>").replaceAll("|", "\\|");
 
-function readRegistry() {
-  const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
-  assertObject(registry, 'Registry root');
-  assertArray(registry.harnesses, 'Registry harnesses');
+const readRegistry = () => {
+  const registry = JSON.parse(fs.readFileSync(registryPath, "utf-8"));
+  assertObject(registry, "Registry root");
+  assertArray(registry.harnesses, "Registry harnesses");
+
   return registry;
-}
+};
 
-function validateSupportPath(pathSpec, label) {
+const validateSupportPath = (pathSpec, label) => {
   assertObject(pathSpec, label);
   assertNonEmptyString(pathSpec.id, `${label}.id`);
   assertNonEmptyString(pathSpec.kind, `${label}.kind`);
   assertNonEmptyString(pathSpec.template, `${label}.template`);
-}
+};
 
-function validateSupportLeaf(leaf, label) {
+const validateSupportLeaf = (leaf, label) => {
   assertObject(leaf, label);
   assertNonEmptyString(leaf.status, `${label}.status`);
+
   if (!STATUS_ORDER.includes(leaf.status)) {
-    fail(`${label}.status must be one of: ${STATUS_ORDER.join(', ')}`);
+    fail(`${label}.status must be one of: ${STATUS_ORDER.join(", ")}`);
   }
 
   assertArray(leaf.paths, `${label}.paths`);
+
   for (const [index, pathSpec] of leaf.paths.entries()) {
     validateSupportPath(pathSpec, `${label}.paths[${index}]`);
   }
 
   assertArray(leaf.sources, `${label}.sources`);
+
   for (const [index, source] of leaf.sources.entries()) {
     assertNonEmptyString(source, `${label}.sources[${index}]`);
   }
 
   assertNonEmptyString(leaf.confidence, `${label}.confidence`);
+
   if (!CONFIDENCE_ORDER.includes(leaf.confidence)) {
-    fail(`${label}.confidence must be one of: ${CONFIDENCE_ORDER.join(', ')}`);
+    fail(`${label}.confidence must be one of: ${CONFIDENCE_ORDER.join(", ")}`);
   }
 
-  if (leaf.notes !== undefined && (typeof leaf.notes !== 'string' || leaf.notes.length === 0)) {
+  if (
+    leaf.notes !== undefined &&
+    // oxlint-disable-next-line anti-slop/no-runtime-typeof -- registry JSON is untrusted input validated at this boundary
+    (typeof leaf.notes !== "string" || leaf.notes.length === 0)
+  ) {
     fail(`${label}.notes must be a non-empty string when present`);
   }
-}
+};
 
-function validateHarness(harness, index) {
+const validateHarness = (harness, index) => {
   const label = `harnesses[${index}]`;
   assertObject(harness, label);
   assertNonEmptyString(harness.key, `${label}.key`);
   assertNonEmptyString(harness.name, `${label}.name`);
 
-  if (!('support' in harness)) {
+  if (!("support" in harness)) {
     fail(`${label} (${harness.key}) is missing required support metadata`);
   }
 
   assertObject(harness.support, `${label}.support`);
+
   for (const area of SUPPORT_AREAS) {
     const supportArea = harness.support[area.key];
     const areaLabel = `${label}.support.${area.key}`;
@@ -120,9 +141,9 @@ function validateHarness(harness, index) {
       validateSupportLeaf(supportArea[scope], `${areaLabel}.${scope}`);
     }
   }
-}
+};
 
-function summarizeStatuses(harnesses) {
+const summarizeStatuses = (harnesses) => {
   const counts = Object.fromEntries(STATUS_ORDER.map((status) => [status, 0]));
 
   for (const harness of harnesses) {
@@ -134,34 +155,34 @@ function summarizeStatuses(harnesses) {
   }
 
   return counts;
-}
+};
 
-function formatStatusSummary(counts) {
-  return STATUS_ORDER.map((status) => `${status}: ${counts[status]}`).join('; ');
-}
+const formatStatusSummary = (counts) =>
+  STATUS_ORDER.map((status) => `${status}: ${counts[status]}`).join("; ");
 
-function formatLeaf(leaf) {
-  if (leaf.status === 'unsupported') {
-    return 'no';
+const formatLeaf = (leaf) => {
+  if (leaf.status === "unsupported") {
+    return "no";
   }
 
-  if (leaf.status === 'unknown') {
-    return 'unknown';
+  if (leaf.status === "unknown") {
+    return "unknown";
   }
 
-  const parts = ['yes'];
+  const parts = ["yes"];
+
   if (leaf.paths.length === 0) {
-    parts.push('path unknown');
+    parts.push("path unknown");
   } else {
     for (const pathSpec of leaf.paths) {
       parts.push(`\`${pathSpec.template}\``);
     }
   }
 
-  return escapeCell(parts.join('<br>'));
-}
+  return escapeCell(parts.join("<br>"));
+};
 
-function formatSummaryCell(harness) {
+const formatSummaryCell = (harness) => {
   const confidenceCounts = new Map();
   const sources = new Set();
   const notes = [];
@@ -170,7 +191,11 @@ function formatSummaryCell(harness) {
   for (const area of SUPPORT_AREAS) {
     for (const scope of SUPPORT_SCOPES) {
       const leaf = harness.support[area.key][scope];
-      confidenceCounts.set(leaf.confidence, (confidenceCounts.get(leaf.confidence) ?? 0) + 1);
+      confidenceCounts.set(
+        leaf.confidence,
+        (confidenceCounts.get(leaf.confidence) ?? 0) + 1
+      );
+
       for (const source of leaf.sources) {
         sources.add(source);
       }
@@ -183,138 +208,174 @@ function formatSummaryCell(harness) {
   }
 
   const summary = [
-    CONFIDENCE_ORDER
-      .filter((confidence) => (confidenceCounts.get(confidence) ?? 0) > 0)
-      .map((confidence) => {
-        const count = confidenceCounts.get(confidence);
-        return `${confidence}: ${count} area${count === 1 ? '' : 's'}`;
-      })
-      .join('; '),
-    `sources: ${sources.size}`
-  ].join('; ');
+    CONFIDENCE_ORDER.flatMap((confidence) => {
+      const count = confidenceCounts.get(confidence) ?? 0;
+
+      return count > 0
+        ? [`${confidence}: ${count} area${count === 1 ? "" : "s"}`]
+        : [];
+    }).join("; "),
+    `sources: ${sources.size}`,
+  ].join("; ");
 
   const lines = [summary, ...notes];
 
-  return escapeCell(lines.join('<br>'));
-}
+  return escapeCell(lines.join("<br>"));
+};
 
-function generateSupportMatrix(registry) {
+const generateSupportMatrix = (registry) => {
   const harnesses = [...registry.harnesses];
-  harnesses.forEach(validateHarness);
+
+  for (const [index, harness] of harnesses.entries()) {
+    validateHarness(harness, index);
+  }
+
   harnesses.sort((left, right) => left.key.localeCompare(right.key));
+
   const statusCounts = summarizeStatuses(harnesses);
 
   const headerLines = [
-    '<!-- Generated by scripts/generate-support-matrix.mjs; do not edit by hand. -->',
-    '',
-    '# Support matrix',
-    '',
-    'Generated from `packages/data/harnesses.json`. Rows are sorted by `harness.key`.',
-    '',
+    "<!-- Generated by scripts/generate-support-matrix.mjs; do not edit by hand. -->",
+    "",
+    "# Support matrix",
+    "",
+    "Generated from `packages/data/harnesses.json`. Rows are sorted by `harness.key`.",
+    "",
     `Support leaf status totals: ${formatStatusSummary(statusCounts)}. Unknown leaves stay explicit until the registry support metadata is verified.`,
-    '',
-    `| Harness | ${SUPPORT_AREAS.flatMap((area) => SUPPORT_SCOPES.map((scope) => `${scope} ${area.label}`)).join(' | ')} | notes/source confidence |`,
-    `| --- | ${SUPPORT_AREAS.flatMap(() => SUPPORT_SCOPES.map(() => '---')).join(' | ')} | --- |`
+    "",
+    `| Harness | ${SUPPORT_AREAS.flatMap((area) => SUPPORT_SCOPES.map((scope) => `${scope} ${area.label}`)).join(" | ")} | notes/source confidence |`,
+    `| --- | ${SUPPORT_AREAS.flatMap(() => SUPPORT_SCOPES.map(() => "---")).join(" | ")} | --- |`,
   ];
 
   const rowLines = harnesses.map((harness) => {
     const cells = [
       `\`${harness.key}\` — ${escapeCell(harness.name)} (${escapeCell(harness.version)})`,
-      ...SUPPORT_AREAS.flatMap((area) => SUPPORT_SCOPES.map((scope) => formatLeaf(harness.support[area.key][scope]))),
-      formatSummaryCell(harness)
+      ...SUPPORT_AREAS.flatMap((area) =>
+        SUPPORT_SCOPES.map((scope) =>
+          formatLeaf(harness.support[area.key][scope])
+        )
+      ),
+      formatSummaryCell(harness),
     ];
 
-    return `| ${cells.join(' | ')} |`;
+    return `| ${cells.join(" | ")} |`;
   });
 
-  return `${[...headerLines, ...rowLines, '', ...mcpTableLines(harnesses)].join('\n')}\n`;
-}
+  return `${[...headerLines, ...rowLines, "", ...mcpTableLines(harnesses)].join("\n")}\n`;
+};
 
-function formatMcpScope(leaf) {
-  if (leaf.status !== 'supported' || leaf.paths.length === 0) {
-    return leaf.status === 'supported' ? 'supported (no config file)' : leaf.status;
+const formatMcpScope = (leaf) => {
+  if (leaf.status !== "supported" || leaf.paths.length === 0) {
+    return leaf.status === "supported"
+      ? "supported (no config file)"
+      : leaf.status;
   }
-  const keyPath = leaf.keyPath.map((segment) => `\`${segment}\``).join(' → ');
+
+  const keyPath = leaf.keyPath.map((segment) => `\`${segment}\``).join(" → ");
+
   const paths = leaf.paths.map((entry) => {
-    const platforms = entry.platforms?.length ? ` (${entry.platforms.join(', ')})` : '';
+    const platforms = entry.platforms?.length
+      ? ` (${entry.platforms.join(", ")})`
+      : "";
+
     return `\`${entry.template}\`${platforms}`;
   });
-  return escapeCell([...paths, `${leaf.format}: ${keyPath}`].join('<br>'));
-}
 
-function formatServerFormat(mcp) {
+  return escapeCell([...paths, `${leaf.format}: ${keyPath}`].join("<br>"));
+};
+
+const formatServerFormat = (mcp) => {
   const format = mcp.serverFormat;
-  if (!format) {
-    return '—';
-  }
-  const transports = ['stdio', 'http', 'sse'].filter((transport) => format[transport]);
-  return escapeCell(`${format.container}; ${transports.join(', ')}`);
-}
 
-function mcpTableLines(harnesses) {
+  if (!format) {
+    return "—";
+  }
+
+  const transports = ["stdio", "http", "sse"].filter(
+    (transport) => format[transport]
+  );
+
+  return escapeCell(`${format.container}; ${transports.join(", ")}`);
+};
+
+const mcpTableLines = (harnesses) => {
   const counts = { supported: 0, unsupported: 0, unknown: 0 };
   const mcpJsonCounts = { supported: 0, unsupported: 0, unknown: 0 };
+
   for (const harness of harnesses) {
     counts[harness.mcp.status] += 1;
     mcpJsonCounts[harness.mcp.mcpJson] += 1;
   }
 
   return [
-    '## MCP',
-    '',
+    "## MCP",
+    "",
     `MCP client status: ${formatStatusSummary(counts)}. Project-root \`.mcp.json\`: ${formatStatusSummary(mcpJsonCounts)}. The translation column lists the server container and the transports \`translateMcpJson\` can write.`,
-    '',
-    '| Harness | MCP | `.mcp.json` | global config | local config | translation |',
-    '| --- | --- | --- | --- | --- | --- |',
+    "",
+    "| Harness | MCP | `.mcp.json` | global config | local config | translation |",
+    "| --- | --- | --- | --- | --- | --- |",
     ...harnesses.map((harness) => {
       const { mcp } = harness;
+
       const cells = [
         `\`${harness.key}\``,
         mcp.status,
         mcp.mcpJson,
         formatMcpScope(mcp.global),
         formatMcpScope(mcp.local),
-        formatServerFormat(mcp)
+        formatServerFormat(mcp),
       ];
-      return `| ${cells.join(' | ')} |`;
-    })
-  ];
-}
 
-function main() {
+      return `| ${cells.join(" | ")} |`;
+    }),
+  ];
+};
+
+const main = () => {
   const { checkOnly, printSummary } = parseArgs(process.argv);
   const registry = readRegistry();
   const expected = generateSupportMatrix(registry);
   const statusCounts = summarizeStatuses(registry.harnesses);
 
   if (checkOnly) {
-    const actual = fs.readFileSync(outputPath, 'utf8');
+    const actual = fs.readFileSync(outputPath, "utf-8");
+
     if (actual !== expected) {
-      console.error('docs/support-matrix.md is stale. Run: node scripts/generate-support-matrix.mjs');
+      console.error(
+        "docs/support-matrix.md is stale. Run: node scripts/generate-support-matrix.mjs"
+      );
       process.exit(1);
     }
 
-    console.log('docs/support-matrix.md is up to date.');
+    console.log("docs/support-matrix.md is up to date.");
+
     if (printSummary) {
       console.log(formatStatusSummary(statusCounts));
     }
+
     return;
   }
 
-  const current = fs.existsSync(outputPath) ? fs.readFileSync(outputPath, 'utf8') : null;
+  const current = fs.existsSync(outputPath)
+    ? fs.readFileSync(outputPath, "utf-8")
+    : null;
+
   if (current === expected) {
-    console.log('docs/support-matrix.md is already up to date.');
+    console.log("docs/support-matrix.md is already up to date.");
+
     if (printSummary) {
       console.log(formatStatusSummary(statusCounts));
     }
+
     return;
   }
 
   fs.writeFileSync(outputPath, expected);
-  console.log('Wrote docs/support-matrix.md');
+  console.log("Wrote docs/support-matrix.md");
+
   if (printSummary) {
     console.log(formatStatusSummary(statusCounts));
   }
-}
+};
 
 main();

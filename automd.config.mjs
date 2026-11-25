@@ -1,11 +1,12 @@
 import { readFile } from "node:fs/promises";
 
-const registryUrl = new URL("./packages/data/harnesses.json", import.meta.url);
+const registryUrl = new URL("packages/data/harnesses.json", import.meta.url);
 
-async function getHarnessCount() {
-  const registry = JSON.parse(await readFile(registryUrl, "utf8"));
+const getHarnessCount = async () => {
+  const registry = JSON.parse(await readFile(registryUrl, "utf-8"));
+
   return registry.harnesses.length;
-}
+};
 
 export default {
   input: ["README.md", "docs/index.md", "docs/api.md", "docs/configuration.md"],
@@ -16,9 +17,13 @@ export default {
         const harnessCount = await getHarnessCount();
 
         switch (args.section) {
-          case "harness-count-sentence":
-            return { contents: `The registry currently covers **${harnessCount} harnesses**.` };
-          case "get-harness-matrix-example":
+          case "harness-count-sentence": {
+            return {
+              contents: `The registry currently covers **${harnessCount} harnesses**.`,
+            };
+          }
+
+          case "get-harness-matrix-example": {
             return {
               contents: `\`\`\`js
 import { getHarnessMatrix } from "@auron-labs/harness-detect";
@@ -26,9 +31,11 @@ import { getHarnessMatrix } from "@auron-labs/harness-detect";
 const matrix = getHarnessMatrix();
 console.log(matrix.version);           // 1
 console.log(matrix.harnesses.length);  // ${harnessCount}
-\`\`\``
+\`\`\``,
             };
-          case "data-export-example":
+          }
+
+          case "data-export-example": {
             return {
               contents: `\`\`\`js
 import { createRequire } from "node:module";
@@ -38,12 +45,15 @@ const harnesses = require("@auron-labs/harness-detect/data");
 
 console.log(harnesses.version);
 console.log(harnesses.harnesses.length);  // ${harnessCount}
-\`\`\``
+\`\`\``,
             };
-          default:
+          }
+
+          default: {
             throw new Error(`Unsupported repo-stats section: ${args.section}`);
+          }
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };

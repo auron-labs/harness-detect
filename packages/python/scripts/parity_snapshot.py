@@ -35,6 +35,7 @@ from harness_detect import (
     list_harness_mcp,
     list_harness_support,
     list_harnesses,
+    resolve_harness_template,
     translate_mcp_json,
 )
 
@@ -120,6 +121,18 @@ def run_case(raw_case: dict[str, Any], roots: dict[str, str]) -> dict[str, Any]:
                     for launch in detect_installed_acp_launches(options)
                 ]
             }
+        elif operation == "resolveHarnessTemplate":
+            # The registry template is passed through unexpanded.
+            result = error_result(
+                lambda: {
+                    "path": normalize_path_value(
+                        resolve_harness_template(
+                            case["input"], raw_case["template"], options
+                        ),
+                        roots,
+                    )
+                }
+            )
         elif operation == "getHarnessSupport":
             result = normalize_support_record(get_harness_support(case["input"]))
         elif operation == "listHarnessSupport":

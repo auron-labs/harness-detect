@@ -7,39 +7,97 @@ import { parseArgs } from "node:util";
 const require = createRequire(
   new URL("../packages/typescript/package.json", import.meta.url)
 );
+
 const Ajv2020 = require("ajv/dist/2020");
+
 export const registryPath = fileURLToPath(
   new URL("../packages/data/harnesses.json", import.meta.url)
 );
+
 export const registrySchema = JSON.parse(
   readFileSync(
     new URL("../packages/data/harnesses.schema.json", import.meta.url),
     "utf-8"
   )
 );
+
 const ajv = new Ajv2020({ allErrors: true });
 const validate = ajv.compile(registrySchema);
 
 export const identifierErrors = (harnesses) => {
   const owners = new Map();
   const errors = [];
+
   for (const harness of harnesses) {
     for (const identifier of [harness.key, ...harness.aliases]) {
       const normalized = identifier.trim().toLowerCase();
       const owner = owners.get(normalized);
+
       if (owner && owner !== harness) {
         errors.push(
           `Identifier ${JSON.stringify(identifier)} collides between ${owner.key} and ${harness.key}`
         );
       }
+
       owners.set(normalized, harness);
     }
   }
+
   return errors;
 };
 
 const isPackageRunner = ({ command, args }) =>
-  ["npx", "bunx", "uvx"].includes(command) || (command === "pnpm" && args[0] === "dlx");
+  ["npx", "bunx", "uvx"].includes(command) ||
+  (command === "pnpm" && args[0] === "dlx");
+
+const acpErrors = (harness, byKey) => {
+  const errors = [];
+
+  if (harness.acp?.adapter !== undefined) {
+    const target = byKey.get(harness.acp.adapter);
+
+    if (
+      target === harness ||
+      target?.acp?.status !== "supported" ||
+      !target.acp.launches
+    ) {
+      errors.push(
+        `${harness.key}.acp.adapter must reference a different registry key with a supported direct ACP launch`
+      );
+    }
+  }
+
+  for (const field of ["launches", "installedLaunches"]) {
+    const launches = harness.acp?.[field] ?? [];
+    const platforms = new Set();
+
+    for (const launch of launches) {
+      if (launches.length > 1 && !launch.platforms) {
+        errors.push(
+          `${harness.key}.acp.${field} must specify platforms when there is more than one launch`
+        );
+      }
+
+      for (const platform of launch.platforms ?? []) {
+        if (platforms.has(platform)) {
+          errors.push(
+            `${harness.key}.acp.${field} has overlapping platform ${platform}`
+          );
+        }
+
+        platforms.add(platform);
+      }
+
+      if (field === "installedLaunches" && isPackageRunner(launch)) {
+        errors.push(
+          `${harness.key}.acp.installedLaunches must not use a package runner (${launch.command})`
+        );
+      }
+    }
+  }
+
+  return errors;
+};
 
 export const validateRegistry = (registry) => {
   if (!validate(registry)) {
@@ -50,66 +108,61 @@ export const validateRegistry = (registry) => {
   }
 
   const errors = identifierErrors(registry.harnesses);
+
   const checkIds = (entries, label, field = "id") => {
     const seen = new Set();
+
     for (const entry of entries) {
       if (seen.has(entry[field])) {
         errors.push(
           `${label}: duplicate ${field} ${JSON.stringify(entry[field])}`
         );
       }
+
       seen.add(entry[field]);
     }
   };
-  const byKey = new Map(registry.harnesses.map((harness) => [harness.key, harness]));
+
+  const byKey = new Map(
+    registry.harnesses.map((harness) => [harness.key, harness])
+  );
+
   for (const harness of registry.harnesses) {
-    if (harness.acp?.adapter !== undefined) {
-      const target = byKey.get(harness.acp.adapter);
-      if (target === harness || target?.acp?.status !== "supported" || !target.acp.launches) {
-        errors.push(`${harness.key}.acp.adapter must reference a different registry key with a supported direct ACP launch`);
-      }
-    }
-    for (const field of ["launches", "installedLaunches"]) {
-      const launches = harness.acp?.[field] ?? [];
-      const platforms = new Set();
-      for (const launch of launches) {
-        if (launches.length > 1 && !launch.platforms) {
-          errors.push(`${harness.key}.acp.${field} must specify platforms when there is more than one launch`);
-        }
-        for (const platform of launch.platforms ?? []) {
-          if (platforms.has(platform)) {
-            errors.push(`${harness.key}.acp.${field} has overlapping platform ${platform}`);
-          }
-          platforms.add(platform);
-        }
-        if (field === "installedLaunches" && isPackageRunner(launch)) {
-          errors.push(`${harness.key}.acp.installedLaunches must not use a package runner (${launch.command})`);
-        }
-      }
-    }
+    errors.push(...acpErrors(harness, byKey));
+
     checkIds(harness.paths, `${harness.key}.paths`);
     checkIds(harness.roots || [], `${harness.key}.roots`, "name");
+
     for (const [area, scopes] of Object.entries(harness.support)) {
       for (const [scope, leaf] of Object.entries(scopes)) {
         checkIds(leaf.paths, `${harness.key}.support.${area}.${scope}.paths`);
       }
     }
-    errors.push(...agentsSkillsErrors(harness), ...mcpErrors(harness, checkIds));
+
+    errors.push(
+      ...agentsSkillsErrors(harness),
+      ...mcpErrors(harness, checkIds)
+    );
   }
+
   return errors;
 };
 
 const agentsSkillsTemplates = {
+  // oxlint-disable-next-line no-template-curly-in-string -- registry path templates use literal ${VAR} placeholders
   global: "${HOME}/.agents/skills",
+  // oxlint-disable-next-line no-template-curly-in-string -- registry path templates use literal ${VAR} placeholders
   local: "${CWD}/.agents/skills",
 };
 
 // A global skills path may use a derived home when it defaults to HOME.
-function agentsSkillsErrors(harness) {
+const agentsSkillsErrors = (harness) => {
   const errors = [];
+
   for (const [scope, template] of Object.entries(agentsSkillsTemplates)) {
     const leaf = harness.support.agentsSkills[scope];
     const templates = new Set([template]);
+
     if (scope === "global") {
       for (const root of harness.roots ?? []) {
         if (root.env && !root.fallbackEnv && root.fallback === `\${HOME}`) {
@@ -117,44 +170,67 @@ function agentsSkillsErrors(harness) {
         }
       }
     }
-    if (leaf.status === "supported" && !leaf.paths.some((entry) => templates.has(entry.template))) {
-      errors.push(`${harness.key}.support.agentsSkills.${scope} is supported but does not list ${template}`);
+
+    if (
+      leaf.status === "supported" &&
+      !leaf.paths.some((entry) => templates.has(entry.template))
+    ) {
+      errors.push(
+        `${harness.key}.support.agentsSkills.${scope} is supported but does not list ${template}`
+      );
     }
   }
-  return errors;
-}
 
-function mcpErrors(harness, checkIds) {
+  return errors;
+};
+
+const isLocalTemplate = (template) =>
+  // oxlint-disable-next-line no-template-curly-in-string -- registry path templates use literal ${VAR} placeholders
+  template === "${CWD}" || template.startsWith("${CWD}/");
+
+const mcpErrors = (harness, checkIds) => {
   const { mcp, key } = harness;
   const errors = [];
+
   for (const scope of ["global", "local"]) {
     checkIds(mcp[scope].paths, `${key}.mcp.${scope}.paths`);
   }
-  const isLocalTemplate = (template) => template === "${CWD}" || template.startsWith("${CWD}/");
 
   for (const scope of ["global", "local"]) {
     const leaf = mcp[scope];
+
     for (const entry of leaf.paths) {
       if (isLocalTemplate(entry.template) !== (scope === "local")) {
-        errors.push(`${key}.mcp.${scope}.paths ${entry.id} must ${scope === "local" ? "" : "not "}be anchored at \${CWD}`);
+        errors.push(
+          `${key}.mcp.${scope}.paths ${entry.id} must ${scope === "local" ? "" : "not "}be anchored at \${CWD}`
+        );
       }
     }
+
     if (leaf.format !== undefined && mcp.serverFormat === undefined) {
-      errors.push(`${key}.mcp.serverFormat is required when mcp.${scope} has a config file format`);
+      errors.push(
+        `${key}.mcp.serverFormat is required when mcp.${scope} has a config file format`
+      );
     }
   }
 
   const format = mcp.serverFormat;
+
   if (format !== undefined) {
     for (const transport of ["stdio", "http", "sse"]) {
-      if (format[transport]?.type !== undefined && format.typeField === undefined) {
-        errors.push(`${key}.mcp.serverFormat.${transport}.type requires serverFormat.typeField`);
+      if (
+        format[transport]?.type !== undefined &&
+        format.typeField === undefined
+      ) {
+        errors.push(
+          `${key}.mcp.serverFormat.${transport}.type requires serverFormat.typeField`
+        );
       }
     }
   }
 
   return errors;
-}
+};
 
 if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
   try {
@@ -162,6 +238,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
       allowPositionals: true,
       options: { help: { type: "boolean" } },
     });
+
     if (values.help) {
       console.log(
         "Usage: node scripts/validate-registry.mjs [registry.json]\nValidate JSON Schema and registry identifier/path invariants. Defaults to the canonical registry."
@@ -172,13 +249,17 @@ if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
           "Expected at most one registry JSON file. Use --help for usage."
         );
       }
+
       const filename = positionals[0] || registryPath;
+
       const errors = validateRegistry(
         JSON.parse(readFileSync(filename, "utf-8"))
       );
+
       if (errors.length) {
         throw new Error(errors.join("\n"));
       }
+
       console.log(`Registry valid: ${filename}`);
     }
   } catch (error) {

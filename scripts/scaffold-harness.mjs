@@ -19,12 +19,15 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
       "Key must start with a lowercase letter and contain only lowercase letters, digits, or hyphens."
     );
   }
+
   if (!name?.trim()) {
     throw new Error("A non-empty harness name is required.");
   }
+
   if (aliases.some((alias) => !alias.trim())) {
     throw new Error("Aliases must not be blank.");
   }
+
   if (
     new Set(aliases.map((alias) => alias.trim().toLowerCase())).size !==
     aliases.length
@@ -33,6 +36,7 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
       "Aliases must be unique after trimming and case normalization."
     );
   }
+
   const draft = {
     acp: { status: "unknown", sources: [], confidence: "unknown" },
     aliases,
@@ -42,8 +46,18 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
     key,
     mcp: {
       confidence: "unknown",
-      global: { confidence: "unknown", paths: [], sources: [], status: "unknown" },
-      local: { confidence: "unknown", paths: [], sources: [], status: "unknown" },
+      global: {
+        confidence: "unknown",
+        paths: [],
+        sources: [],
+        status: "unknown",
+      },
+      local: {
+        confidence: "unknown",
+        paths: [],
+        sources: [],
+        status: "unknown",
+      },
       mcpJson: "unknown",
       sources: [],
       status: "unknown",
@@ -69,10 +83,13 @@ export const scaffoldHarness = (registry, key, name, aliases = []) => {
       ])
     ),
   };
+
   const errors = identifierErrors([...registry.harnesses, draft]);
+
   if (errors.length) {
     throw new Error(errors.join("\n"));
   }
+
   return draft;
 };
 
@@ -85,6 +102,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
         help: { type: "boolean" },
       },
     });
+
     if (values.help) {
       console.log(
         "Usage: node scripts/scaffold-harness.mjs <key> <name> [--alias <alias>]\nPrint an incomplete JSON entry to stdout. Does not edit the registry. --alias may be repeated."
@@ -95,6 +113,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename) {
           "Expected a key and quoted harness name. Use --help for usage."
         );
       }
+
       const registry = JSON.parse(readFileSync(registryPath, "utf-8"));
       console.log(
         JSON.stringify(

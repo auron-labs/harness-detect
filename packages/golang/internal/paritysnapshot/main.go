@@ -1,7 +1,10 @@
+// Command paritysnapshot runs the shared parity fixtures against the Go package
+// and prints normalized results as JSON for scripts/check-package-parity.mjs.
 package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -33,14 +36,20 @@ type fixtureCase struct {
 	CWD       string            `json:"cwd,omitempty"`
 	Env       map[string]string `json:"env,omitempty"`
 	Setup     []fixtureSetup    `json:"setup,omitempty"`
-	// Scope and MCPJSON parameterize translateMcpJson cases; MCPJSON is
-	// passed through unexpanded.
-	Scope   string          `json:"scope,omitempty"`
-	MCPJSON json.RawMessage `json:"mcpJson,omitempty"`
+	// Template parameterizes resolveHarnessTemplate cases. Scope and MCPJSON
+	// parameterize translateMcpJson cases. Template and MCPJSON are passed
+	// through unexpanded.
+	Template string          `json:"template,omitempty"`
+	Scope    string          `json:"scope,omitempty"`
+	MCPJSON  json.RawMessage `json:"mcpJson,omitempty"`
 }
 
 type errorResult struct {
 	Error string `json:"error"`
+}
+
+type normalizedTemplateResult struct {
+	Path *string `json:"path"`
 }
 
 type fixtureSetup struct {
@@ -154,7 +163,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(roots.TMP)
+	defer func() { _ = os.RemoveAll(roots.TMP) }()
 
 	out := snapshot{
 		Cases:   make([]snapshotCase, 0, len(input.Cases)),
@@ -172,7 +181,10 @@ func run() error {
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetEscapeHTML(false)
 	encoder.SetIndent("", "  ")
-	return encoder.Encode(out)
+	if err := encoder.Encode(out); err != nil {
+		return fmt.Errorf("write snapshot: %w", err)
+	}
+	return nil
 }
 
 func createSandbox() (sandboxRoots, error) {
@@ -189,7 +201,7 @@ func createSandbox() (sandboxRoots, error) {
 	}
 
 	for _, dirPath := range []string{roots.TMP, roots.HOME, roots.CWD, roots.BIN} {
-		if err := os.MkdirAll(dirPath, 0o755); err != nil {
+		if err := os.MkdirAll(dirPath, 0o750); err != nil {
 			_ = os.RemoveAll(tempRoot)
 			return sandboxRoots{}, fmt.Errorf("create parity sandbox dir %s: %w", dirPath, err)
 		}
@@ -200,7 +212,7 @@ func createSandbox() (sandboxRoots, error) {
 
 func readInput() ([]byte, error) {
 	if len(os.Args) > 1 && os.Args[1] != "-" {
-		data, err := os.ReadFile(os.Args[1])
+		data, err := os.ReadFile(os.Args[1]) //nolint:gosec // reads the fixture file named by the caller
 		if err != nil {
 			return nil, fmt.Errorf("read input file: %w", err)
 		}
@@ -216,7 +228,7 @@ func readInput() ([]byte, error) {
 
 func parseInput(raw []byte) (parityInput, error) {
 	if len(raw) == 0 || len(bytesTrimSpace(raw)) == 0 {
-		return parityInput{}, fmt.Errorf("expected JSON parity cases from stdin or a file path argument")
+		return parityInput{}, errors.New("expected JSON parity cases from stdin or a file path argument")
 	}
 
 	var objectInput parityInput
@@ -226,7 +238,7 @@ func parseInput(raw []byte) (parityInput, error) {
 
 	var arrayInput []fixtureCase
 	if err := json.Unmarshal(raw, &arrayInput); err != nil {
-		return parityInput{}, fmt.Errorf("parity input must be an array of cases or an object with a cases array")
+		return parityInput{}, errors.New("parity input must be an array of cases or an object with a cases array")
 	}
 
 	return parityInput{Cases: arrayInput}, nil
@@ -294,6 +306,18 @@ func runCase(rawCase fixtureCase, roots sandboxRoots) (snapshotCase, error) {
 			return snapshotCase{}, fmt.Errorf("detectInstalledAcpLaunches: %w", err)
 		}
 		result.Result = normalizeInstalledACPLaunches(actual, roots)
+		return result, nil
+	case "resolveHarnessTemplate":
+		actual, err := harnessdetect.ResolveHarnessTemplate(c.Input, c.Template, options)
+		if err != nil {
+			result.Result = errorResult{Error: err.Error()}
+		} else {
+			var path *string
+			if actual != "" {
+				path = normalizePathValue(&actual, roots)
+			}
+			result.Result = normalizedTemplateResult{Path: path}
+		}
 		return result, nil
 	case "getHarnessSupport":
 		actual, err := harnessdetect.GetHarnessSupport(c.Input)
@@ -371,6 +395,7 @@ func expandCase(c fixtureCase, roots sandboxRoots) fixtureCase {
 		Input:     expandString(c.Input, roots),
 		CWD:       expandString(c.CWD, roots),
 		Platforms: append([]string(nil), c.Platforms...),
+		Template:  c.Template,
 		Scope:     c.Scope,
 		MCPJSON:   c.MCPJSON,
 	}
@@ -413,8 +438,8 @@ func normalizePathValue(value *string, roots sandboxRoots) *string {
 
 	resolvedValue, err := filepath.Abs(*value)
 	if err != nil {
-		copy := *value
-		return &copy
+		unchanged := *value
+		return &unchanged
 	}
 
 	replacements := []struct {
@@ -439,27 +464,26 @@ func normalizePathValue(value *string, roots sandboxRoots) *string {
 		}
 	}
 
-	copy := normalized
-	return &copy
+	return &normalized
 }
 
 func applySetup(step fixtureSetup) error {
 	switch step.Type {
 	case "dir":
-		if err := os.MkdirAll(step.Path, 0o755); err != nil {
+		if err := os.MkdirAll(step.Path, 0o750); err != nil {
 			return fmt.Errorf("setup dir %s: %w", step.Path, err)
 		}
 		return nil
 	case "file":
-		if err := os.MkdirAll(filepath.Dir(step.Path), 0o755); err != nil {
+		if err := os.MkdirAll(filepath.Dir(step.Path), 0o750); err != nil {
 			return fmt.Errorf("setup file parent %s: %w", filepath.Dir(step.Path), err)
 		}
-		if err := os.WriteFile(step.Path, []byte(step.Content), 0o644); err != nil {
+		if err := os.WriteFile(step.Path, []byte(step.Content), 0o600); err != nil {
 			return fmt.Errorf("setup file %s: %w", step.Path, err)
 		}
 		return nil
 	case "executable":
-		if err := os.MkdirAll(filepath.Dir(step.Path), 0o755); err != nil {
+		if err := os.MkdirAll(filepath.Dir(step.Path), 0o750); err != nil {
 			return fmt.Errorf("setup executable parent %s: %w", filepath.Dir(step.Path), err)
 		}
 		mode := os.FileMode(0o644)
@@ -490,7 +514,7 @@ func prepareSetup(setup []fixtureSetup, tempRoot string) ([]fixtureSetup, error)
 
 func resolveSandboxPath(targetPath string, tempRoot string) (string, error) {
 	if targetPath == "" {
-		return "", fmt.Errorf("parity setup entries must include a non-empty path")
+		return "", errors.New("parity setup entries must include a non-empty path")
 	}
 	if tempRoot == "" {
 		return "", fmt.Errorf("parity setup path requires a tempRoot sandbox: %s", targetPath)
@@ -645,8 +669,8 @@ func normalizeSupportPath(path harnessdetect.HarnessSupportPath) normalizedSuppo
 
 	var description *string
 	if path.Description != "" {
-		copy := path.Description
-		description = &copy
+		value := path.Description
+		description = &value
 	}
 
 	return normalizedSupportPath{
@@ -673,8 +697,8 @@ func normalizeSupportLeaf(leaf harnessdetect.HarnessSupportScope) normalizedSupp
 
 	var notes *string
 	if leaf.Notes != "" {
-		copy := leaf.Notes
-		notes = &copy
+		value := leaf.Notes
+		notes = &value
 	}
 
 	return normalizedSupportLeaf{
