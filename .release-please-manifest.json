@@ -1,6 +1,6 @@
 {
-  "packages/typescript": "0.5.0",
-  "packages/golang": "0.5.0",
-  "packages/rust": "0.5.0",
-  "packages/python": "0.5.0"
+  "packages/typescript": "0.6.0",
+  "packages/golang": "0.6.0",
+  "packages/rust": "0.6.0",
+  "packages/python": "0.6.0"
 }
